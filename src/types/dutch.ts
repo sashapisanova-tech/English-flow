@@ -1,0 +1,96 @@
+export type WordStatus = 'new' | 'learning' | 'known';
+
+export interface DutchWord {
+  dutch: string;
+  english: string;
+  plural?: string;
+  example?: string;
+  exampleTranslation?: string;
+  status: WordStatus;
+  timesEncountered: number;
+  nextReview?: Date;
+  reviewInterval: number; // days (computed by FSRS, kept for display)
+  // FSRS fields
+  stability?:  number;  // days until retrievability drops to 90%
+  difficulty?: number;  // 1–10
+  fsrsState?:  'new' | 'learning' | 'review' | 'relearning';
+  lastReview?: string;  // ISO date string of the most recent review
+}
+
+export type Level = 'A0' | 'A1' | 'A2' | 'B1' | 'B2';
+
+export type Module =
+  | 'daily-survival'
+  | 'social-life'
+  | 'shopping-food'
+  | 'transport-city'
+  | 'work-study'
+  | 'everyday-conversations';
+
+export interface ReadingText {
+  id: string;
+  title: string;
+  titleTranslation: string;
+  level: Level;
+  module?: Module;
+  moduleTitle?: string;
+  content: string;
+  words: Record<string, { english: string; plural?: string; example?: string; exampleTranslation?: string }>;
+  comprehensionQuestions?: {
+    question: string;
+    options: string[];
+    correctIndex: number;
+  }[];
+  completed: boolean;
+  lastRead?: Date;
+}
+
+export interface DailyGoal {
+  textsRead: number;
+  textsGoal: number;
+  flashcardsReviewed: number;
+  flashcardsGoal: number;
+  streak: number;
+  lastPractice?: Date;
+}
+
+export interface FlashcardSession {
+  word: DutchWord;
+  showAnswer: boolean;
+}
+
+export interface VerbConjugation {
+  ik: string;
+  jij: string;
+  hij: string;
+  wij: string;
+  jullie: string;
+  zij: string;
+}
+
+export interface FlashcardSetWord {
+  dutch: string;
+  english: string;
+  example?: string;
+  exampleTranslation?: string;
+  plural?: string;
+  article?: 'de' | 'het';
+  nounTip?: string;
+  verbType?: 'reg' | 'irr' | 'sep' | 'mod';
+  verbNote?: string;
+  conjugation?: VerbConjugation;
+  inflected?: string;
+  neverInflects?: boolean;
+}
+
+export type FlashcardSetCategory = 'verbs' | 'adjectives' | 'nouns' | 'numbers' | 'location';
+
+export interface FlashcardSet {
+  id: string;
+  title: string;
+  category: FlashcardSetCategory;
+  emoji: string;
+  words: FlashcardSetWord[];
+  level?: string;
+  folder?: string;
+}

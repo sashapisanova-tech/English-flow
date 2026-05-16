@@ -1,0 +1,112 @@
+import { getOpenAIKey, getOpenAIVoiceId } from '@/utils/ttsSettings';
+
+export interface PlayDutchOptions {
+  rate?: number;
+  onStart?: () => void;
+  onEnd?: () => void;
+}
+
+// ─── Audio cache: avoids re-fetching the same text+voice combination ─────────
+const audioCache = new Map<string, string>(); // key → object URL
+
+let currentAudio: HTMLAudioElement | null = null;
+
+export function stopDutch() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  window.speechSynthesis?.cancel();
+}
+
+// ─── OpenAI TTS ───────────────────────────────────────────────────────────────
+async function playWithOpenAI(text: string, options?: PlayDutchOptions): Promise<void> {
+  const apiKey = getOpenAIKey();
+  const voice  = getOpenAIVoiceId();
+  const cacheKey = `${voice}:${text}`;
+
+  stopDutch();
+  options?.onStart?.(); // fire immediately so UI shows Stop button while fetching
+
+  let url = audioCache.get(cacheKey);
+  if (!url) {
+    const res = await fetch('https://api.openai.com/v1/audio/speech', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'tts-1',
+        voice,
+        input: text,
+        speed: 0.9,
+      }),
+    });
+    if (!res.ok) throw new Error(`OpenAI TTS error ${res.status}`);
+    const blob = await res.blob();
+    url = URL.createObjectURL(blob);
+    audioCache.set(cacheKey, url);
+  }
+
+  const audio = new Audio(url);
+  currentAudio = audio;
+  audio.play();
+  audio.onended = () => { currentAudio = null; options?.onEnd?.(); };
+  audio.onerror = () => { currentAudio = null; options?.onEnd?.(); };
+}
+
+// ─── Browser TTS fallback ─────────────────────────────────────────────────────
+let dutchVoice: SpeechSynthesisVoice | null | undefined = undefined;
+
+function resolveDutchVoice(): SpeechSynthesisVoice | null {
+  if (dutchVoice !== undefined) return dutchVoice;
+  const voices = window.speechSynthesis.getVoices();
+  dutchVoice =
+    voices.find(v => v.lang === 'nl-NL') ??
+    voices.find(v => v.lang.startsWith('nl')) ??
+    null;
+  return dutchVoice;
+}
+
+function playWithBrowser(text: string, options?: PlayDutchOptions): void {
+  if (!('speechSynthesis' in window)) return;
+  window.speechSynthesis.cancel();
+
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'nl-NL';
+  utt.rate = options?.rate ?? 0.85;
+
+  const voice = resolveDutchVoice();
+  if (voice) utt.voice = voice;
+
+  if (options?.onStart) utt.onstart = options.onStart;
+  if (options?.onEnd) { utt.onend = options.onEnd; utt.onerror = options.onEnd; }
+
+  if (!voice && window.speechSynthesis.getVoices().length === 0) {
+    window.speechSynthesis.addEventListener('voiceschanged', () => {
+      dutchVoice = undefined;
+      const v = resolveDutchVoice();
+      if (v) utt.voice = v;
+      window.speechSynthesis.speak(utt);
+    }, { once: true });
+    return;
+  }
+
+  window.speechSynthesis.speak(utt);
+}
+
+// ─── Public API ───────────────────────────────────────────────────────────────
+export function playDutch(text: string, options?: PlayDutchOptions): void {
+  const openAIKey = getOpenAIKey();
+  if (openAIKey) {
+    // OpenAI TTS is async — fire and forget; callers use onStart/onEnd callbacks
+    playWithOpenAI(text, options).catch(() => {
+      // If OpenAI fails, fall back to browser TTS
+      playWithBrowser(text, options);
+    });
+  } else {
+    playWithBrowser(text, options);
+  }
+}

@@ -1,0 +1,247 @@
+import { useState, useEffect, useRef } from 'react';
+import { Card } from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import { useLearning } from '@/context/LearningContext';
+import { useAuth } from '@/context/AuthContext';
+import { BookOpen, Brain, BarChart3, Target, Zap, LogOut, Cloud } from 'lucide-react';
+import { TextList } from '@/components/TextList';
+import { ReadingView } from '@/components/ReadingView';
+import { FlashcardView } from '@/components/FlashcardView';
+import { ProgressView } from '@/components/ProgressView';
+import { TasksView } from '@/components/TasksView';
+import { ReadingText, Level, Module } from '@/types/dutch';
+import heroImage from '@/assets/hero-dutch.jpg';
+import { getLevelInfo, getXPProgress } from '@/utils/levels';
+
+type Tab = 'home' | 'reading' | 'flashcards' | 'progress' | 'tasks';
+
+export default function DashboardPage() {
+  const [activeTab, setActiveTab] = useState<Tab>('home');
+  const [selectedText, setSelectedText] = useState<ReadingText | null>(null);
+  const [openLevel, setOpenLevel] = useState<Level | null>(null);
+  const [openModule, setOpenModule] = useState<Module | null>(null);
+  const { dailyGoal, vocabulary, xp, level, syncing } = useLearning();
+  const { user, signOut } = useAuth();
+
+  const wordCount = Object.keys(vocabulary).length;
+  const readingProgress   = dailyGoal.textsGoal > 0         ? (dailyGoal.textsRead         / dailyGoal.textsGoal)         * 100 : 0;
+  const flashcardProgress = dailyGoal.flashcardsGoal > 0    ? (dailyGoal.flashcardsReviewed / dailyGoal.flashcardsGoal)    * 100 : 0;
+
+  const levelInfo = getLevelInfo(xp);
+  const xpProgress = getXPProgress(xp);
+
+  // Level-up celebration
+  const prevLevelRef = useRef(level);
+  const [showLevelUp, setShowLevelUp] = useState(false);
+  useEffect(() => {
+    if (level > prevLevelRef.current) {
+      setShowLevelUp(true);
+      setTimeout(() => setShowLevelUp(false), 3000);
+    }
+    prevLevelRef.current = level;
+  }, [level]);
+
+  const tabs: { key: Tab; icon: typeof BookOpen; label: string }[] = [
+    { key: 'home', icon: Zap, label: 'Home' },
+    { key: 'reading', icon: BookOpen, label: 'Read' },
+    { key: 'flashcards', icon: Brain, label: 'Cards' },
+    { key: 'tasks', icon: Target, label: 'Tasks' },
+    { key: 'progress', icon: BarChart3, label: 'Progress' },
+  ];
+
+  const { texts } = useLearning();
+
+  const handleSelectText = (text: ReadingText) => {
+    setSelectedText(text);
+    setActiveTab('reading');
+  };
+
+  const handleNextText = () => {
+    if (!selectedText) return;
+    const idx = texts.findIndex(t => t.id === selectedText.id);
+    if (idx < texts.length - 1) setSelectedText(texts[idx + 1]);
+  };
+
+  const handlePrevText = () => {
+    if (!selectedText) return;
+    const idx = texts.findIndex(t => t.id === selectedText.id);
+    if (idx > 0) setSelectedText(texts[idx - 1]);
+  };
+
+  return (
+    <div className="min-h-screen bg-background pb-20">
+      {/* Header */}
+      <div className="relative overflow-hidden">
+        <div className="absolute inset-0">
+          <img src={heroImage} alt="Dutch landscape" className="h-full w-full object-cover opacity-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/50 to-background" />
+        </div>
+        <div className="relative mx-auto max-w-lg px-5 pt-8 pb-6">
+          <div className="flex items-start justify-between gap-2">
+            <div>
+              <h1 className="font-heading text-2xl font-bold text-foreground">
+                {activeTab === 'home' ? 'Goedendag! 👋' :
+                 activeTab === 'reading' && selectedText ? selectedText.title :
+                 activeTab === 'reading' ? 'Reading Library' :
+                 activeTab === 'flashcards' ? 'Flashcards' :
+                 activeTab === 'tasks' ? 'Tasks 🎯' : 'Your Progress'}
+              </h1>
+              {activeTab === 'home' && (
+                <p className="mt-1 text-sm text-muted-foreground">Ready for your daily Dutch practice?</p>
+              )}
+            </div>
+            <div className="flex items-center gap-2 mt-1 shrink-0">
+              {syncing && (
+                <Cloud className="h-4 w-4 text-primary animate-pulse" />
+              )}
+              <button
+                onClick={signOut}
+                title={`Sign out (${user?.email})`}
+                className="flex items-center gap-1 rounded-full border border-border bg-background/60 px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <LogOut className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">Sign out</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="mx-auto max-w-lg px-5">
+        {activeTab === 'home' && (
+          <div className="animate-fade-in space-y-5">
+            {/* Level-up toast */}
+            {showLevelUp && (
+              <div className="animate-fade-in fixed top-6 left-1/2 z-50 -translate-x-1/2 rounded-2xl bg-primary px-6 py-3 shadow-xl text-primary-foreground text-center">
+                <p className="text-lg font-bold">⬆️ Level Up!</p>
+                <p className="text-sm opacity-90">You reached {levelInfo.emoji} {levelInfo.title}</p>
+              </div>
+            )}
+
+            {/* Level card */}
+            <Card className={`border-2 p-5 ${levelInfo.color}`}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-3xl">{levelInfo.emoji}</span>
+                  <div>
+                    <p className={`font-heading text-lg font-bold leading-tight ${levelInfo.textColor}`}>
+                      Level {levelInfo.level} — {levelInfo.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground">{xp} XP total</p>
+                  </div>
+                </div>
+                <div className={`rounded-full px-2.5 py-1 text-xs font-bold ${levelInfo.textColor} bg-white/60`}>
+                  {levelInfo.maxXP === Infinity ? 'MAX' : `${xpProgress.current}/${xpProgress.needed} XP`}
+                </div>
+              </div>
+              {levelInfo.maxXP !== Infinity && (
+                <div className="space-y-1">
+                  <Progress value={xpProgress.pct} className="h-3 rounded-full" />
+                  <p className="text-xs text-muted-foreground text-right">
+                    {xpProgress.needed - xpProgress.current} XP to Level {levelInfo.level + 1}
+                  </p>
+                </div>
+              )}
+              {levelInfo.maxXP === Infinity && (
+                <p className={`text-xs font-semibold ${levelInfo.textColor}`}>🎉 Maximum level reached!</p>
+              )}
+            </Card>
+
+            {/* Today's Goals */}
+            <Card className="p-5 space-y-4">
+              <h3 className="font-heading font-semibold text-foreground">Today's Goals</h3>
+              <div className="space-y-3">
+                <div>
+                  <div className="flex justify-between text-sm mb-1.5">
+                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                      <BookOpen className="h-3.5 w-3.5" /> Read texts
+                    </span>
+                    <span className="font-medium">{dailyGoal.textsRead}/{dailyGoal.textsGoal}</span>
+                  </div>
+                  <Progress value={readingProgress} className="h-2.5" />
+                </div>
+                <div>
+                  <div className="flex justify-between text-sm mb-1.5">
+                    <span className="flex items-center gap-1.5 text-muted-foreground">
+                      <Brain className="h-3.5 w-3.5" /> Review flashcards
+                    </span>
+                    <span className="font-medium">{dailyGoal.flashcardsReviewed}/{dailyGoal.flashcardsGoal}</span>
+                  </div>
+                  <Progress value={flashcardProgress} className="h-2.5" />
+                </div>
+              </div>
+            </Card>
+
+            {/* Quick Stats */}
+            <div className="grid grid-cols-2 gap-3">
+              <Card className="card-hover cursor-pointer p-4 text-center" onClick={() => setActiveTab('reading')}>
+                <BookOpen className="mx-auto h-5 w-5 text-primary" />
+                <p className="mt-1.5 font-heading text-lg font-bold">{dailyGoal.textsRead}</p>
+                <p className="text-xs text-muted-foreground">Texts today</p>
+              </Card>
+              <Card className="card-hover cursor-pointer p-4 text-center" onClick={() => setActiveTab('flashcards')}>
+                <Brain className="mx-auto h-5 w-5 text-primary" />
+                <p className="mt-1.5 font-heading text-lg font-bold">{wordCount}</p>
+                <p className="text-xs text-muted-foreground">Words saved</p>
+              </Card>
+            </div>
+
+            {/* Continue Reading */}
+            <div>
+              <h3 className="mb-3 font-heading font-semibold text-foreground">Continue Reading</h3>
+              <TextList
+                onSelect={handleSelectText}
+                openLevel={openLevel}
+                setOpenLevel={setOpenLevel}
+                openModule={openModule}
+                setOpenModule={setOpenModule}
+              />
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'reading' && selectedText && (
+          <ReadingView
+            text={selectedText}
+            onBack={() => setSelectedText(null)}
+            onNext={texts.findIndex(t => t.id === selectedText.id) < texts.length - 1 ? handleNextText : undefined}
+            onPrev={texts.findIndex(t => t.id === selectedText.id) > 0 ? handlePrevText : undefined}
+          />
+        )}
+
+        {activeTab === 'reading' && !selectedText && (
+          <TextList
+            onSelect={handleSelectText}
+            openLevel={openLevel}
+            setOpenLevel={setOpenLevel}
+            openModule={openModule}
+            setOpenModule={setOpenModule}
+          />
+        )}
+
+        {activeTab === 'flashcards' && <FlashcardView />}
+        {activeTab === 'tasks' && <TasksView />}
+        {activeTab === 'progress' && <ProgressView />}
+      </div>
+
+      {/* Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md">
+        <div className="mx-auto flex max-w-lg">
+          {tabs.map(({ key, icon: Icon, label }) => (
+            <button
+              key={key}
+              onClick={() => { setActiveTab(key); if (key !== 'reading') setSelectedText(null); }}
+              className={`flex flex-1 flex-col items-center gap-0.5 py-3 text-xs transition-colors ${
+                activeTab === key ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Icon className="h-5 w-5" />
+              {label}
+            </button>
+          ))}
+        </div>
+      </nav>
+    </div>
+  );
+}
