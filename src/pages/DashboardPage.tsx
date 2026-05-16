@@ -71,12 +71,10 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
-      <div className="relative overflow-hidden">
-        <div className="absolute inset-0">
-          <img src={heroImage} alt="Dutch landscape" className="h-full w-full object-cover opacity-20" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/50 to-background" />
-        </div>
-        <div className="relative mx-auto max-w-lg px-5 pt-8 pb-6">
+      <div className="relative w-full overflow-hidden min-h-[220px] flex flex-col justify-end">
+        <img src={heroImage} alt="Dutch landscape" className="absolute inset-0 w-full h-full object-cover object-center opacity-30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/60 to-background" />
+        <div className="relative mx-auto w-full max-w-lg px-5 pt-10 pb-6">
           <div className="flex items-start justify-between gap-2">
             <div>
               <h1 className="font-heading text-2xl font-bold text-foreground">
