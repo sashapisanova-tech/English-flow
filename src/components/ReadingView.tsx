@@ -52,7 +52,7 @@ async function fetchPhraseTranslation(phrase: string): Promise<string> {
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 60,
-          system: 'You are a Dutch-to-English translator. Translate the given Dutch word or phrase into natural English. Reply with ONLY the English translation, nothing else.',
+          system: 'You are a Dutch-to-English translator. Translate the given Dutch word or phrase into natural English within its context. Reply with ONLY the English translation, nothing else.',
           messages: [{ role: 'user', content: phrase }],
         }),
       });

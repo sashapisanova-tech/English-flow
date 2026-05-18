@@ -21,10 +21,39 @@ interface WordPopoverProps {
 
 const translationCache: Record<string, string> = {};
 
-async function fetchTranslation(word: string): Promise<string> {
-  const key = word.toLowerCase();
+async function fetchTranslation(word: string, sentence?: string): Promise<string> {
+  // Include sentence in cache key so context-specific translations are stored separately
+  const key = sentence ? `${word.toLowerCase()}||${sentence}` : word.toLowerCase();
   if (translationCache[key]) return translationCache[key];
   try {
+    const apiKey = localStorage.getItem('dutch-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
+    if (apiKey && apiKey !== 'your_api_key_here') {
+      const userMsg = sentence
+        ? `Translate the Dutch word "${word}" as it is used in this sentence: "${sentence}"\n\nReply with ONLY the English translation of that specific word, 1–4 words max.`
+        : `Translate the Dutch word "${word}" to English. Reply with ONLY the English translation, 1–4 words max.`;
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 20,
+          system: 'You are a Dutch-to-English translator. Give concise, context-aware translations of individual words. Never add explanations — only the translation itself.',
+          messages: [{ role: 'user', content: userMsg }],
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json() as { content: { text: string }[] };
+        const t = data.content[0].text.trim();
+        translationCache[key] = t;
+        return t;
+      }
+    }
+    // Fallback: MyMemory (no API key set)
     const res = await fetch(
       `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=nl|en`
     );
@@ -61,10 +90,10 @@ export function WordPopover({
     if (separableVerb) return; // no external translation needed
     if (translation) { setLiveTranslation(translation); return; }
     setLoading(true);
-    fetchTranslation(word)
+    fetchTranslation(word, sentence)
       .then(t => setLiveTranslation(t || '—'))
       .finally(() => setLoading(false));
-  }, [open, word, translation, separableVerb]);
+  }, [open, word, translation, sentence, separableVerb]);
 
   const speak = () => {
     try { playDutch(separableVerb ? separableVerb.infinitive.split(' ')[0] : word); } catch {}
