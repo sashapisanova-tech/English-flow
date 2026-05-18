@@ -156,11 +156,12 @@ export function LearningProvider({ children }: { children: ReactNode }) {
           // No remote text progress yet — push local progress to Supabase
           const localProgress = (() => { try { return JSON.parse(localStorage.getItem(TEXT_PROGRESS_KEY) || '{}'); } catch { return {}; } })();
           if (Object.keys(localProgress).length > 0) {
-            await supabase.from('user_stats').upsert({
+            const { error } = await supabase.from('user_stats').upsert({
               user_id: user.id,
               text_progress: localProgress,
               updated_at: new Date().toISOString(),
-            });
+            }, { onConflict: 'user_id' });
+            if (error) console.error('[sync] text_progress push error:', error);
           }
         }
 
@@ -175,10 +176,12 @@ export function LearningProvider({ children }: { children: ReactNode }) {
           // Nothing in Supabase yet — push local vocabulary up
           const localWords = Object.values((() => { try { const r = localStorage.getItem(VOCAB_STORAGE_KEY); return r ? JSON.parse(r) : {}; } catch { return {}; } })()) as DutchWord[];
           if (localWords.length > 0) {
-            await supabase.from('vocabulary').upsert(localWords.map(w => wordToRow(user.id, w)), { onConflict: 'user_id,dutch' });
+            const { error } = await supabase.from('vocabulary').upsert(localWords.map(w => wordToRow(user.id, w)), { onConflict: 'user_id,dutch' });
+            if (error) console.error('[sync] initial vocab push error:', error);
           }
           const localXP: number = (() => { try { return JSON.parse(localStorage.getItem(STATS_STORAGE_KEY) || '{}').xp ?? 0; } catch { return 0; } })();
-          await supabase.from('user_stats').upsert({ user_id: user.id, xp: localXP, updated_at: new Date().toISOString() });
+          const { error: xpErr } = await supabase.from('user_stats').upsert({ user_id: user.id, xp: localXP, updated_at: new Date().toISOString() }, { onConflict: 'user_id' });
+          if (xpErr) console.error('[sync] initial xp push error:', xpErr);
         }
       } catch (e) {
         console.error('Supabase load error:', e);
@@ -194,9 +197,13 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!userRef.current) return;
     if (xpSyncTimer.current) clearTimeout(xpSyncTimer.current);
-    xpSyncTimer.current = setTimeout(() => {
+    xpSyncTimer.current = setTimeout(async () => {
       if (!userRef.current) return;
-      supabase.from('user_stats').upsert({ user_id: userRef.current.id, xp, updated_at: new Date().toISOString() });
+      const { error } = await supabase.from('user_stats').upsert(
+        { user_id: userRef.current.id, xp, updated_at: new Date().toISOString() },
+        { onConflict: 'user_id' }
+      );
+      if (error) console.error('[sync] xp upsert error:', error);
     }, 2000);
   }, [xp]);
 
@@ -205,7 +212,9 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   const syncWord = useCallback((word: DutchWord) => {
     const u = userRef.current;
     if (!u) return;
-    supabase.from('vocabulary').upsert(wordToRow(u.id, word), { onConflict: 'user_id,dutch' });
+    supabase.from('vocabulary')
+      .upsert(wordToRow(u.id, word), { onConflict: 'user_id,dutch' })
+      .then(({ error }) => { if (error) console.error('[sync] vocab upsert error:', error); });
   }, []);
 
   // ── Mutations ────────────────────────────────────────────────────────────
@@ -338,7 +347,8 @@ export function LearningProvider({ children }: { children: ReactNode }) {
             user_id: u.id,
             text_progress: progress,
             updated_at: new Date().toISOString(),
-          });
+          }, { onConflict: 'user_id' })
+          .then(({ error }) => { if (error) console.error('[sync] text_progress upsert error:', error); });
         }
       } catch {}
       return updated;
