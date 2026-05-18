@@ -449,8 +449,8 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
         return (
           <span
             key={i}
-            className=”word-expression word-clickable”
-            onClick={() => setExprPopup({ phrase: exprInfo.phrase, english: exprInfo.english, sentence: sentenceForExpr, savedState: ‘idle’ })}
+            className="word-expression word-clickable"
+            onClick={() => setExprPopup({ phrase: exprInfo.phrase, english: exprInfo.english, sentence: sentenceForExpr, savedState: 'idle' })}
           >
             {exprInfo.displayText}
           </span>
@@ -458,10 +458,10 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
       }
 
       // Separate leading punct, word body, trailing punct
-      const leadMatch = token.match(/^[.,!?;:’”«»””’’()\[\]]+/);
-      const trailMatch = token.match(/[.,!?;:’”«»””’’()\[\]]+$/);
-      const leadPunct = leadMatch?.[0] ?? ‘’;
-      const trailPunct = trailMatch?.[0] ?? ‘’;
+      const leadMatch = token.match(/^[.,!?;:'"«»""''()\[\]]+/);
+      const trailMatch = token.match(/[.,!?;:'"«»""''()\[\]]+$/);
+      const leadPunct = leadMatch?.[0] ?? '';
+      const trailPunct = trailMatch?.[0] ?? '';
       const wordOnly = token.slice(leadPunct.length, token.length - trailPunct.length);
       const clean = wordOnly.toLowerCase();
       if (!clean) return <span key={i}>{token}</span>;
@@ -472,14 +472,14 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
       const keywordEnglish = !sepVerb ? keywords[clean] : undefined;
       const isKeyword = !!keywordEnglish;
       const vocabEntry = vocabulary[clean];
-      const status = vocabEntry?.status || ‘new’;
+      const status = vocabEntry?.status || 'new';
       return (
         <span key={i}>
           {leadPunct}
           <WordPopover
             word={clean}
             display={wordOnly}
-            translation={keywordEnglish ?? ‘’}
+            translation={keywordEnglish ?? ''}
             status={status}
             highlighted={isKeyword}
             sentence={sent}
