@@ -2,8 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useLearning } from '@/context/LearningContext';
-import { useAuth } from '@/context/AuthContext';
-import { BookOpen, Brain, BarChart3, Target, Zap, LogOut, Cloud } from 'lucide-react';
+import { BookOpen, Brain, BarChart3, Target, Zap } from 'lucide-react';
 import { TextList } from '@/components/TextList';
 import { ReadingView } from '@/components/ReadingView';
 import { FlashcardView } from '@/components/FlashcardView';
@@ -20,8 +19,7 @@ export default function DashboardPage() {
   const [selectedText, setSelectedText] = useState<ReadingText | null>(null);
   const [openLevel, setOpenLevel] = useState<Level | null>(null);
   const [openModule, setOpenModule] = useState<Module | null>(null);
-  const { dailyGoal, vocabulary, xp, level, syncing } = useLearning();
-  const { user, signOut } = useAuth();
+  const { dailyGoal, vocabulary, xp, level, dueCount } = useLearning();
 
   const wordCount = Object.keys(vocabulary).length;
   const readingProgress   = dailyGoal.textsGoal > 0         ? (dailyGoal.textsRead         / dailyGoal.textsGoal)         * 100 : 0;
@@ -87,19 +85,6 @@ export default function DashboardPage() {
               {activeTab === 'home' && (
                 <p className="mt-1 text-sm text-muted-foreground">Ready for your daily Dutch practice?</p>
               )}
-            </div>
-            <div className="flex items-center gap-2 mt-1 shrink-0">
-              {syncing && (
-                <Cloud className="h-4 w-4 text-primary animate-pulse" />
-              )}
-              <button
-                onClick={signOut}
-                title={`Sign out (${user?.email})`}
-                className="flex items-center gap-1 rounded-full border border-border bg-background/60 px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Sign out</span>
-              </button>
             </div>
           </div>
         </div>
@@ -234,7 +219,14 @@ export default function DashboardPage() {
                 activeTab === key ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Icon className="h-5 w-5" />
+              <span className="relative">
+                <Icon className="h-5 w-5" />
+                {key === 'flashcards' && dueCount > 0 && (
+                  <span className="absolute -top-1 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-0.5 text-[10px] font-bold leading-none text-white">
+                    {dueCount > 99 ? '99+' : dueCount}
+                  </span>
+                )}
+              </span>
               {label}
             </button>
           ))}

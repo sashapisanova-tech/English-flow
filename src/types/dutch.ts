@@ -15,6 +15,9 @@ export interface DutchWord {
   difficulty?: number;  // 1–10
   fsrsState?:  'new' | 'learning' | 'review' | 'relearning';
   lastReview?: string;  // ISO date string of the most recent review
+  // SRS scheduling fields
+  dueDate?:  string;  // UTC date string e.g. "2026-05-18" — when this word is next due
+  interval?: number;  // current interval in days (for the simplified Again/Good/Easy system)
 }
 
 export type Level = 'A0' | 'A1' | 'A2' | 'B1' | 'B2';

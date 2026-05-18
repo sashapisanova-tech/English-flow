@@ -10,6 +10,8 @@ import type { CustomSet } from '@/hooks/useCustomSets';
 import { CustomSetEditor, CreateSetModal } from '@/components/CustomSetEditor';
 import { fsrsPreviewInterval, FSRSCard } from '@/utils/fsrs';
 
+type SRSRating = 'again' | 'good' | 'easy';
+
 type FlashcardMode = 'browse' | 'my-words' | 'set-practice' | 'learned' | 'custom-editor' | 'create-set';
 type Direction = 'dutch-to-english' | 'english-to-dutch';
 
@@ -22,7 +24,7 @@ const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: strin
 };
 
 export function FlashcardView() {
-  const { getWordsForReview, reviewWord, vocabulary, dailyGoal, addWord, updateWordStatus } = useLearning();
+  const { getWordsForReview, getWordsDueForReview, reviewWord, reviewWordSRS, enrollWord, vocabulary, dailyGoal, addWord, updateWordStatus, dueCount } = useLearning();
   const { sets: customSets, createSet, deleteSet, addWordToSet, removeWordFromSet } = useCustomSets();
 
   const [flipped, setFlipped]           = useState(false);
@@ -34,6 +36,7 @@ export function FlashcardView() {
   const [a1Open, setA1Open]             = useState(false);
   const [a1VerbsOpen, setA1VerbsOpen]   = useState(false);
   const [a1NounsOpen, setA1NounsOpen]   = useState(false);
+  const [a1AdjOpen, setA1AdjOpen]       = useState(false);
   const [practiceQueue, setPracticeQueue] = useState<FlashcardSetWord[]>([]);
   const [isShuffled, setIsShuffled]     = useState(false);
   const [savedWords, setSavedWords]     = useState<Set<string>>(new Set());
@@ -57,6 +60,25 @@ export function FlashcardView() {
     if (mode === 'my-words' && currentWord) {
       reviewWord(currentWord.dutch, correct);
       if (!correct) setAgainKeys(prev => new Set(prev).add(currentWord.dutch.toLowerCase()));
+    }
+    if (mode === 'set-practice' && currentSetWord) {
+      // Auto-enroll set words into the SRS queue and record a legacy review
+      enrollWord(currentSetWord.dutch, currentSetWord.english);
+      reviewWord(currentSetWord.dutch, correct);
+    }
+    setFlipped(false);
+    if (currentIndex < totalCards - 1) setCurrentIndex(prev => prev + 1);
+    else setCurrentIndex(totalCards);
+  };
+
+  const handleSRSRating = (rating: SRSRating) => {
+    if (mode === 'my-words' && currentWord) {
+      reviewWordSRS(currentWord.dutch, rating);
+      if (rating === 'again') setAgainKeys(prev => new Set(prev).add(currentWord.dutch.toLowerCase()));
+    }
+    if (mode === 'set-practice' && currentSetWord) {
+      enrollWord(currentSetWord.dutch, currentSetWord.english);
+      reviewWordSRS(currentSetWord.dutch, rating);
     }
     setFlipped(false);
     if (currentIndex < totalCards - 1) setCurrentIndex(prev => prev + 1);
@@ -126,7 +148,7 @@ export function FlashcardView() {
   }
 
   const startMyWords = () => {
-    const words = getWordsForReview();
+    const words = getWordsDueForReview();
     setSessionQueue(words);
     setOriginalSession(words);
     setAgainKeys(new Set());
@@ -195,8 +217,10 @@ export function FlashcardView() {
   // ===== BROWSE MODE =====
   if (mode === 'browse') {
     const a1Sets = flashcardSets.filter(s => s.level === 'A1');
+    const a1CoreSets = a1Sets.filter(s => s.folder === 'Core');
     const a1VerbSets = a1Sets.filter(s => s.folder === 'Verbs');
     const a1NounSets = a1Sets.filter(s => s.folder === 'Nouns');
+    const a1AdjSets  = a1Sets.filter(s => s.folder === 'Adjectives');
     const groupedSets = Object.entries(categoryLabels).map(([cat, info]) => ({
       category: cat as FlashcardSetCategory,
       ...info,
@@ -207,31 +231,31 @@ export function FlashcardView() {
       <div className="animate-fade-in space-y-5">
 
         {/* My Saved Words */}
-        {(() => {
-          const activeCount = allWords.filter(w => w.status !== 'known').length;
-          const dueNow = activeCount - scheduledWords.length;
-          if (activeCount === 0) return null;
-          return (
-            <Card
-              className={`card-hover cursor-pointer p-4 flex items-center justify-between ${dueNow > 0 ? 'border-primary/30 bg-primary/5' : ''}`}
-              onClick={startMyWords}
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-2xl">📝</span>
-                <div>
-                  <p className="font-heading font-semibold text-foreground">My Saved Words</p>
-                  <p className="text-xs text-muted-foreground">
-                    {dueNow > 0
-                      ? <><span className="text-primary font-semibold">{dueNow} due now</span>{scheduledWords.length > 0 ? ` · ${scheduledWords.length} scheduled` : ''}</>
-                      : `All done! ${scheduledWords.length} word${scheduledWords.length !== 1 ? 's' : ''} scheduled for later`
-                    }
-                  </p>
-                </div>
+        {allWords.length > 0 && (
+          <Card
+            className={`card-hover cursor-pointer p-4 flex items-center justify-between ${dueCount > 0 ? 'border-primary/30 bg-primary/5' : ''}`}
+            onClick={startMyWords}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📝</span>
+              <div>
+                <p className="font-heading font-semibold text-foreground">Spaced Repetition Review</p>
+                <p className="text-xs text-muted-foreground">
+                  {dueCount > 0
+                    ? <><span className="text-primary font-semibold">{dueCount} due today</span></>
+                    : `All caught up! ${allWords.length} word${allWords.length !== 1 ? 's' : ''} in queue`
+                  }
+                </p>
               </div>
-              <ChevronRight className="h-5 w-5 text-muted-foreground" />
-            </Card>
-          );
-        })()}
+            </div>
+            {dueCount > 0 && (
+              <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground">
+                {dueCount}
+              </span>
+            )}
+            {dueCount === 0 && <ChevronRight className="h-5 w-5 text-muted-foreground" />}
+          </Card>
+        )}
 
         {/* Learned Words */}
         {learnedWords.length > 0 && (
@@ -306,13 +330,26 @@ export function FlashcardView() {
               <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
                 <span>📁</span> A1 Level
                 <span className="text-xs font-normal text-muted-foreground">
-                  {a1VerbSets.reduce((t, s) => t + s.words.length, 0)} verbs · {a1NounSets.reduce((t, s) => t + s.words.length, 0)} nouns
+                  {a1VerbSets.reduce((t, s) => t + s.words.length, 0)} verbs · {a1NounSets.reduce((t, s) => t + s.words.length, 0)} nouns · {a1AdjSets.reduce((t, s) => t + s.words.length, 0)} adjectives
                 </span>
               </h3>
               <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${a1Open ? 'rotate-180' : ''}`} />
             </button>
             {a1Open && (
               <div className="ml-3 border-l-2 border-border pl-3 space-y-3">
+                {/* Core sets — shown individually, no subfolder */}
+                {a1CoreSets.map(set => (
+                  <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between border-primary/20 bg-primary/5" onClick={() => startSet(set)}>
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg">{set.emoji}</span>
+                      <div>
+                        <p className="text-sm font-semibold text-foreground">{set.title}</p>
+                        <p className="text-xs text-muted-foreground">{set.words.length} words · Start here</p>
+                      </div>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </Card>
+                ))}
                 {/* Verbs subfolder */}
                 {a1VerbSets.length > 0 && (
                   <div>
@@ -364,6 +401,36 @@ export function FlashcardView() {
                               <div>
                                 <p className="text-sm font-medium text-foreground">{set.title}</p>
                                 <p className="text-xs text-muted-foreground">{set.words.length} nouns</p>
+                              </div>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {/* Adjectives subfolder */}
+                {a1AdjSets.length > 0 && (
+                  <div>
+                    <button
+                      onClick={() => setA1AdjOpen(v => !v)}
+                      className="w-full flex items-center justify-between py-1"
+                    >
+                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+                        🎨 Adjectives <span className="font-normal normal-case">({a1AdjSets.length} sets)</span>
+                      </span>
+                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a1AdjOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {a1AdjOpen && (
+                      <div className="space-y-2 mt-2">
+                        {a1AdjSets.map(set => (
+                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
+                            <div className="flex items-center gap-3">
+                              <span className="text-lg">{set.emoji}</span>
+                              <div>
+                                <p className="text-sm font-medium text-foreground">{set.title}</p>
+                                <p className="text-xs text-muted-foreground">{set.words.length} adjectives</p>
                               </div>
                             </div>
                             <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -470,7 +537,7 @@ export function FlashcardView() {
           <div className="rounded-2xl bg-accent p-6 mb-4"><span className="text-4xl">📚</span></div>
           <h3 className="font-heading text-xl font-semibold text-foreground">No words yet</h3>
           <p className="mt-2 max-w-sm text-muted-foreground">
-            Study a flashcard set and tap <strong>Save to My Words</strong> on cards you want to memorise.
+            Practice any flashcard set below — every card you rate will be automatically added to your spaced repetition queue.
           </p>
           <Button onClick={goBack} variant="outline" className="mt-4">Browse sets</Button>
         </div>
@@ -724,40 +791,58 @@ export function FlashcardView() {
         <div className="flex flex-col items-center gap-3 animate-fade-in">
           {mode === 'my-words' && currentWord && (
             <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <X className="h-3 w-3 text-destructive/60" />
-                <span>Again → {formatDays(previewInterval(currentWord, false))}</span>
-              </span>
+              <span>Again → tomorrow</span>
               <span className="text-muted-foreground/40">·</span>
-              <span className="flex items-center gap-1">
-                <Check className="h-3 w-3 text-success/80" />
-                <span>Got it → {formatDays(previewInterval(currentWord, true))}</span>
-              </span>
-              {currentWord.stability != null && (
-                <>
-                  <span className="text-muted-foreground/40">·</span>
-                  <span>stability {Math.round(currentWord.stability)}d</span>
-                </>
-              )}
+              <span>Good → {formatDays(Math.max(3, (currentWord.interval ?? 1) * 2))}</span>
+              <span className="text-muted-foreground/40">·</span>
+              <span>Easy → {formatDays(Math.max(7, (currentWord.interval ?? 1) * 3))}</span>
             </div>
           )}
-          <div className="flex justify-center gap-4">
-            <Button
-              variant="outline"
-              size="lg"
-              onClick={() => handleAnswer(false)}
-              className="gap-2 border-destructive/30 text-destructive hover:bg-destructive/10"
-            >
-              <X className="h-5 w-5" /> Again
-            </Button>
-            <Button
-              size="lg"
-              onClick={() => handleAnswer(true)}
-              className="gap-2 bg-success text-success-foreground hover:bg-success/90"
-            >
-              <Check className="h-5 w-5" /> Got it
-            </Button>
-          </div>
+          {mode === 'my-words' ? (
+            <div className="flex justify-center gap-3">
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => handleSRSRating('again')}
+                className="gap-1.5 border-destructive/30 text-destructive hover:bg-destructive/10 text-sm px-4"
+              >
+                <X className="h-4 w-4" /> Again
+              </Button>
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => handleSRSRating('good')}
+                className="gap-1.5 border-primary/30 text-primary hover:bg-primary/10 text-sm px-4"
+              >
+                <Check className="h-4 w-4" /> Good
+              </Button>
+              <Button
+                size="lg"
+                onClick={() => handleSRSRating('easy')}
+                className="gap-1.5 bg-success text-success-foreground hover:bg-success/90 text-sm px-4"
+              >
+                <Check className="h-4 w-4" /> Easy
+              </Button>
+            </div>
+          ) : (
+            <div className="flex justify-center gap-4">
+              <Button
+                variant="outline"
+                size="lg"
+                onClick={() => handleAnswer(false)}
+                className="gap-2 border-destructive/30 text-destructive hover:bg-destructive/10"
+              >
+                <X className="h-5 w-5" /> Again
+              </Button>
+              <Button
+                size="lg"
+                onClick={() => handleAnswer(true)}
+                className="gap-2 bg-success text-success-foreground hover:bg-success/90"
+              >
+                <Check className="h-5 w-5" /> Got it
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>
