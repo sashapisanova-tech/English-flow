@@ -130,21 +130,58 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     if (!user) return;
     (async () => {
       setSyncing(true);
-      const { data: statsData } = await supabase.from('user_stats').select('xp').eq('user_id', user.id).maybeSingle();
-      if (statsData) setXP(statsData.xp);
+      try {
+        // Fetch stats (xp + text_progress) and vocabulary in parallel
+        const [statsRes, vocabRes] = await Promise.all([
+          supabase.from('user_stats').select('xp, text_progress').eq('user_id', user.id).maybeSingle(),
+          supabase.from('vocabulary').select('*').eq('user_id', user.id),
+        ]);
 
-      const { data: vocabData } = await supabase.from('vocabulary').select('*').eq('user_id', user.id);
-      if (vocabData && vocabData.length > 0) {
-        setVocabulary(prev => {
-          const merged = { ...prev };
-          for (const row of vocabData) merged[row.dutch] = rowToWord(row);
-          return merged;
-        });
-      } else {
-        const localWords = Object.values((() => { try { const r = localStorage.getItem(VOCAB_STORAGE_KEY); return r ? JSON.parse(r) : {}; } catch { return {}; } })()) as DutchWord[];
-        if (localWords.length > 0) await supabase.from('vocabulary').upsert(localWords.map(w => wordToRow(user.id, w)), { onConflict: 'user_id,dutch' });
-        const localXP: number = (() => { try { return JSON.parse(localStorage.getItem(STATS_STORAGE_KEY) || '{}').xp ?? 0; } catch { return 0; } })();
-        await supabase.from('user_stats').upsert({ user_id: user.id, xp: localXP, updated_at: new Date().toISOString() });
+        // ── XP ──
+        if (statsRes.data?.xp != null) {
+          setXP(statsRes.data.xp);
+        }
+
+        // ── Text progress ──
+        const remoteTextProgress = statsRes.data?.text_progress as Record<string, { completed: boolean; lastRead: string }> | null;
+        if (remoteTextProgress && Object.keys(remoteTextProgress).length > 0) {
+          setTexts(sampleTexts.map(t =>
+            remoteTextProgress[t.id]
+              ? { ...t, completed: true, lastRead: new Date(remoteTextProgress[t.id].lastRead) }
+              : t
+          ));
+          // Also persist to localStorage so it's available offline
+          try { localStorage.setItem(TEXT_PROGRESS_KEY, JSON.stringify(remoteTextProgress)); } catch {}
+        } else {
+          // No remote text progress yet — push local progress to Supabase
+          const localProgress = (() => { try { return JSON.parse(localStorage.getItem(TEXT_PROGRESS_KEY) || '{}'); } catch { return {}; } })();
+          if (Object.keys(localProgress).length > 0) {
+            await supabase.from('user_stats').upsert({
+              user_id: user.id,
+              text_progress: localProgress,
+              updated_at: new Date().toISOString(),
+            });
+          }
+        }
+
+        // ── Vocabulary ──
+        const vocabData = vocabRes.data;
+        if (vocabData && vocabData.length > 0) {
+          // Supabase is source of truth — overwrite local vocab with remote
+          const remoteVocab: Record<string, DutchWord> = {};
+          for (const row of vocabData) remoteVocab[row.dutch] = rowToWord(row);
+          setVocabulary(remoteVocab);
+        } else {
+          // Nothing in Supabase yet — push local vocabulary up
+          const localWords = Object.values((() => { try { const r = localStorage.getItem(VOCAB_STORAGE_KEY); return r ? JSON.parse(r) : {}; } catch { return {}; } })()) as DutchWord[];
+          if (localWords.length > 0) {
+            await supabase.from('vocabulary').upsert(localWords.map(w => wordToRow(user.id, w)), { onConflict: 'user_id,dutch' });
+          }
+          const localXP: number = (() => { try { return JSON.parse(localStorage.getItem(STATS_STORAGE_KEY) || '{}').xp ?? 0; } catch { return 0; } })();
+          await supabase.from('user_stats').upsert({ user_id: user.id, xp: localXP, updated_at: new Date().toISOString() });
+        }
+      } catch (e) {
+        console.error('Supabase load error:', e);
       }
       setSyncing(false);
     })();
@@ -294,6 +331,15 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         const progress: Record<string, { completed: boolean; lastRead: string }> = {};
         updated.forEach(t => { if (t.completed && t.lastRead) progress[t.id] = { completed: true, lastRead: (t.lastRead as Date).toISOString() }; });
         localStorage.setItem(TEXT_PROGRESS_KEY, JSON.stringify(progress));
+        // Sync to Supabase so other devices see the update
+        const u = userRef.current;
+        if (u) {
+          supabase.from('user_stats').upsert({
+            user_id: u.id,
+            text_progress: progress,
+            updated_at: new Date().toISOString(),
+          });
+        }
       } catch {}
       return updated;
     });
