@@ -581,7 +581,6 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
   },
   'm3-5': {
     'ruikt het naar': { english: 'it smells of' },
-    'een stukje':     { english: 'a little piece' },
   },
   'm3-6': {
     'naar haar toe':            { english: 'toward her' },
