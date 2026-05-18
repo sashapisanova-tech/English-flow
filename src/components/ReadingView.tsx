@@ -12,8 +12,8 @@ import {
   PenLine, Shuffle,
 } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
-import { getKeywordsForText, getSeparableVerbsForText, getFixedExpressionsForText } from '@/data/vocabulary';
-import type { SeparableVerbEntry, FixedExpressionEntry } from '@/data/vocabulary';
+import { getKeywordsForText, getSeparableVerbsForText, getFixedExpressionsForText, getSplitExpressionsForText } from '@/data/vocabulary';
+import type { SeparableVerbEntry, FixedExpressionEntry, SplitExpressionEntry } from '@/data/vocabulary';
 import type { Level } from '@/types/dutch';
 import { playDutch, stopDutch } from '@/utils/playDutch';
 
@@ -220,6 +220,7 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
 
   const separableVerbs = useMemo(() => getSeparableVerbsForText(text.id), [text.id]);
   const fixedExpressions = useMemo(() => getFixedExpressionsForText(text.id), [text.id]);
+  const splitExpressions = useMemo(() => getSplitExpressionsForText(text.id), [text.id]);
 
   const prefixToVerb = useMemo(() => {
     const map: Record<string, SeparableVerbEntry> = {};
@@ -279,6 +280,32 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
     });
     return { activeVerbs, activePrefixes };
   }, [tokens, sentenceForIndex, separableVerbs]);
+
+  // Build per-sentence split-expression activity: both words highlighted green
+  // when they co-occur in the same sentence.
+  const splitExpressionActivity = useMemo(() => {
+    const active = new Map<string, SplitExpressionEntry>(); // key: `${sentence}::${word}`
+    if (splitExpressions.length === 0) return active;
+
+    const sentenceWords: Record<string, Set<string>> = {};
+    tokens.forEach((tok, i) => {
+      const sent = sentenceForIndex[i];
+      const clean = tok.replace(/[.,!?;:'"()]/g, '').toLowerCase();
+      if (!clean || /^\s+$/.test(tok)) return;
+      if (!sentenceWords[sent]) sentenceWords[sent] = new Set();
+      sentenceWords[sent].add(clean);
+    });
+
+    splitExpressions.forEach(entry => {
+      Object.entries(sentenceWords).forEach(([sent, wordSet]) => {
+        if (wordSet.has(entry.word1) && wordSet.has(entry.word2)) {
+          active.set(`${sent}::${entry.word1}`, entry);
+          active.set(`${sent}::${entry.word2}`, entry);
+        }
+      });
+    });
+    return active;
+  }, [tokens, sentenceForIndex, splitExpressions]);
 
   // Pre-compute which token indices belong to fixed expressions
   const { expressionStartMap, expressionSkipSet } = useMemo(() => {
@@ -467,6 +494,29 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
       const clean = wordOnly.toLowerCase();
       if (!clean) return <span key={i}>{token}</span>;
       const sent = sentenceForIndex[i];
+
+      // Split expression: both words green, shown individually
+      const splitEntry = splitExpressionActivity.get(`${sent}::${clean}`);
+      if (splitEntry) {
+        return (
+          <span key={i}>
+            {leadPunct}
+            <span
+              className="word-expression word-clickable"
+              onClick={() => setExprPopup({
+                phrase: `${splitEntry.word1} … ${splitEntry.word2}`,
+                english: splitEntry.english,
+                sentence: sent,
+                savedState: 'idle',
+              })}
+            >
+              {wordOnly}
+            </span>
+            {trailPunct}
+          </span>
+        );
+      }
+
       const sepVerb =
         (separableVerbs[clean] && separableActivity.activeVerbs.get(sent)?.has(clean) ? separableVerbs[clean] : undefined)
         ?? (prefixToVerb[clean] && separableActivity.activePrefixes.get(sent)?.has(clean) ? prefixToVerb[clean] : undefined);

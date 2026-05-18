@@ -442,8 +442,7 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
     'komt':  { infinitive: 'aankomen', english: 'to arrive', prefix: 'aan' },
   },
   'm3-2': {
-    'ademt': { infinitive: 'inademen',  english: 'to breathe in',    prefix: 'in'    },
-    'zet':   { infinitive: 'tegenzetten', english: 'to lean against', prefix: 'tegen' },
+    'ademt': { infinitive: 'inademen', english: 'to breathe in', prefix: 'in' },
   },
   'm3-4': {
     'stapt': { infinitive: 'instappen / uitstappen', english: 'to board / to get off', prefix: 'in / uit' },
@@ -600,4 +599,24 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
 
 export function getFixedExpressionsForText(textId: string): Record<string, FixedExpressionEntry> {
   return textFixedExpressions[textId] || {};
+}
+
+// ─── Split Expressions ───────────────────────────────────────────────────────
+// Two non-adjacent words in the same sentence that together form a fixed
+// expression. Both words are highlighted green when they co-occur in a sentence.
+
+export interface SplitExpressionEntry {
+  word1: string;   // first word (lowercase token form)
+  word2: string;   // second word (lowercase token form)
+  english: string; // translation shown in popup
+}
+
+export const textSplitExpressions: Record<string, SplitExpressionEntry[]> = {
+  'm3-2': [
+    { word1: 'zet', word2: 'tegen', english: 'to lean against (zetten tegen)' },
+  ],
+};
+
+export function getSplitExpressionsForText(textId: string): SplitExpressionEntry[] {
+  return textSplitExpressions[textId] || [];
 }
