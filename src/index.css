@@ -148,15 +148,18 @@
   }
 
   .word-expression {
-    background-color: hsl(142 76% 92%);
-    border-radius: 3px;
-    padding: 1px 1px;
-    cursor: pointer;
-    border-bottom: 2px solid hsl(142 72% 50%);
-    transition: background-color 0.15s;
+    @apply font-semibold cursor-pointer;
+    color: hsl(142 60% 38%);
+    transition: color 0.15s;
+  }
+  .dark .word-expression {
+    color: hsl(142 60% 55%);
   }
   .word-expression:hover {
-    background-color: hsl(142 76% 84%);
+    color: hsl(142 60% 28%);
+  }
+  .dark .word-expression:hover {
+    color: hsl(142 60% 68%);
   }
 
   .level-badge {
