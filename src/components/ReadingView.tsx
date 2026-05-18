@@ -12,7 +12,9 @@ import {
   PenLine, Shuffle,
 } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
-import { getKeywordsForText, getSeparableVerbsForText, SeparableVerbEntry, getFixedExpressionsForText, FixedExpressionEntry } from '@/data/vocabulary';
+import { getKeywordsForText, getSeparableVerbsForText, getFixedExpressionsForText } from '@/data/vocabulary';
+import type { SeparableVerbEntry, FixedExpressionEntry } from '@/data/vocabulary';
+import type { Level } from '@/types/dutch';
 import { playDutch, stopDutch } from '@/utils/playDutch';
 
 interface ReadingViewProps {
@@ -73,7 +75,6 @@ async function fetchPhraseTranslation(phrase: string): Promise<string> {
 }
 
 // ─── Level config ────────────────────────────────────────────────────────────
-import type { Level } from '@/types/dutch';
 
 interface LevelConfig {
   maxOptions: number;   // choices per word-recall question

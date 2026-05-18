@@ -266,6 +266,36 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     });
   }, [addXP, syncWord]);
 
+  const [texts, setTexts] = useState<ReadingText[]>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(TEXT_PROGRESS_KEY) || '{}') as Record<string, { completed: boolean; lastRead: string }>;
+      return sampleTexts.map(t => saved[t.id] ? { ...t, completed: true, lastRead: new Date(saved[t.id].lastRead) } : t);
+    } catch { return sampleTexts; }
+  });
+  const [dailyGoal, setDailyGoal] = useState<DailyGoal>({
+    textsRead: 0, textsGoal: 2,
+    flashcardsReviewed: 0, flashcardsGoal: 15,
+    streak: 3, lastPractice: new Date(),
+  });
+
+  const markTextCompleted = useCallback((textId: string) => {
+    setTexts(prev => {
+      const updated = prev.map(t => t.id === textId ? { ...t, completed: true, lastRead: new Date() } : t);
+      try {
+        const progress: Record<string, { completed: boolean; lastRead: string }> = {};
+        updated.forEach(t => { if (t.completed && t.lastRead) progress[t.id] = { completed: true, lastRead: (t.lastRead as Date).toISOString() }; });
+        localStorage.setItem(TEXT_PROGRESS_KEY, JSON.stringify(progress));
+      } catch {}
+      return updated;
+    });
+    setDailyGoal(prev => ({ ...prev, textsRead: prev.textsRead + 1 }));
+    addXP(20);
+  }, [addXP]);
+
+  const incrementFlashcards = useCallback(() => {
+    setDailyGoal(prev => ({ ...prev, flashcardsReviewed: prev.flashcardsReviewed + 1 }));
+  }, []);
+
   /**
    * Rate a word with Again / Good / Easy and update its dueDate accordingly.
    * - Again → due tomorrow (interval stays 1)
@@ -309,36 +339,6 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     incrementFlashcards();
     if (rating !== 'again') addXP(5);
   }, [incrementFlashcards, addXP, syncWord]);
-
-  const [texts, setTexts] = useState<ReadingText[]>(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem(TEXT_PROGRESS_KEY) || '{}') as Record<string, { completed: boolean; lastRead: string }>;
-      return sampleTexts.map(t => saved[t.id] ? { ...t, completed: true, lastRead: new Date(saved[t.id].lastRead) } : t);
-    } catch { return sampleTexts; }
-  });
-  const [dailyGoal, setDailyGoal] = useState<DailyGoal>({
-    textsRead: 0, textsGoal: 2,
-    flashcardsReviewed: 0, flashcardsGoal: 15,
-    streak: 3, lastPractice: new Date(),
-  });
-
-  const markTextCompleted = useCallback((textId: string) => {
-    setTexts(prev => {
-      const updated = prev.map(t => t.id === textId ? { ...t, completed: true, lastRead: new Date() } : t);
-      try {
-        const progress: Record<string, { completed: boolean; lastRead: string }> = {};
-        updated.forEach(t => { if (t.completed && t.lastRead) progress[t.id] = { completed: true, lastRead: (t.lastRead as Date).toISOString() }; });
-        localStorage.setItem(TEXT_PROGRESS_KEY, JSON.stringify(progress));
-      } catch {}
-      return updated;
-    });
-    setDailyGoal(prev => ({ ...prev, textsRead: prev.textsRead + 1 }));
-    addXP(20);
-  }, [addXP]);
-
-  const incrementFlashcards = useCallback(() => {
-    setDailyGoal(prev => ({ ...prev, flashcardsReviewed: prev.flashcardsReviewed + 1 }));
-  }, []);
 
   const reviewWord = useCallback((dutch: string, correct: boolean) => {
     const now = new Date();
