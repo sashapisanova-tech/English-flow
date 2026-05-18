@@ -363,15 +363,25 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         else addXP(5);
       }
 
+      // Compute dueDate from FSRS interval so the SRS queue reads it correctly
+      const dueDateObj = new Date(Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate() + result.interval,
+      ));
+      const dueDate = dueDateObj.toISOString().slice(0, 10);
+
       const updated: DutchWord = {
         ...word,
         status:         newStatus,
         reviewInterval: result.interval,
+        interval:       result.interval,
         stability:      result.stability,
         difficulty:     result.difficulty,
         fsrsState:      result.state,
         lastReview:     now.toISOString(),
         nextReview:     new Date(now.getTime() + result.interval * 86_400_000),
+        dueDate,
       };
       syncWord(updated);
       return { ...prev, [dutch.toLowerCase()]: updated };
