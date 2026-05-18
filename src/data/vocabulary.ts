@@ -442,7 +442,8 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
     'komt':  { infinitive: 'aankomen', english: 'to arrive', prefix: 'aan' },
   },
   'm3-2': {
-    'ademt': { infinitive: 'inademen', english: 'to breathe in', prefix: 'in' },
+    'ademt': { infinitive: 'inademen',  english: 'to breathe in',    prefix: 'in'    },
+    'zet':   { infinitive: 'tegenzetten', english: 'to lean against', prefix: 'tegen' },
   },
   'm3-4': {
     'stapt': { infinitive: 'instappen / uitstappen', english: 'to board / to get off', prefix: 'in / uit' },
@@ -570,9 +571,6 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
   // Module 3
   'm3-1': {
     'om zich heen':   { english: 'around / looking around' },
-  },
-  'm3-2': {
-    'tegen een boom': { english: 'against a tree' },
   },
   'm3-3': {
     'passen goed':    { english: 'fit well' },
