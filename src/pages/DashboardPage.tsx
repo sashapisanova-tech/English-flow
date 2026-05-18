@@ -216,7 +216,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Voice settings — only visible while reading a text */}
-      <VoiceSettings visible={activeTab === 'reading' && !!selectedText} />
+      <VoiceSettings visible={(activeTab === 'reading' && !!selectedText) || activeTab === 'flashcards'} />
 
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md">

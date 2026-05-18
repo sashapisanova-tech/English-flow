@@ -1,7 +1,8 @@
 import { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, X, RotateCcw, ArrowLeft, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw } from 'lucide-react';
+import { Check, X, RotateCcw, ArrowLeft, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2 } from 'lucide-react';
+import { playDutch, stopDutch } from '@/utils/playDutch';
 import { useLearning } from '@/context/LearningContext';
 import { flashcardSets } from '@/data/flashcardSets';
 import { FlashcardSet, FlashcardSetCategory, FlashcardSetWord, DutchWord } from '@/types/dutch';
@@ -29,6 +30,7 @@ export function FlashcardView() {
 
   const [flipped, setFlipped]           = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaying, setIsPlaying]       = useState(false);
   const [direction, setDirection]       = useState<Direction>('dutch-to-english');
   const [mode, setMode]                 = useState<FlashcardMode>('browse');
   const [activeSet, setActiveSet]       = useState<FlashcardSet | null>(null);
@@ -67,6 +69,7 @@ export function FlashcardView() {
       reviewWord(currentSetWord.dutch, correct);
     }
     setFlipped(false);
+    stopDutch(); setIsPlaying(false);
     if (currentIndex < totalCards - 1) setCurrentIndex(prev => prev + 1);
     else setCurrentIndex(totalCards);
   };
@@ -81,11 +84,20 @@ export function FlashcardView() {
       reviewWordSRS(currentSetWord.dutch, rating);
     }
     setFlipped(false);
+    stopDutch(); setIsPlaying(false);
     if (currentIndex < totalCards - 1) setCurrentIndex(prev => prev + 1);
     else setCurrentIndex(totalCards);
   };
 
   const resetDeck = () => { setCurrentIndex(0); setFlipped(false); };
+
+  function handleListen(dutch: string) {
+    if (isPlaying) { stopDutch(); setIsPlaying(false); return; }
+    playDutch(dutch, {
+      onStart: () => setIsPlaying(true),
+      onEnd:   () => setIsPlaying(false),
+    });
+  }
 
   const goBack = () => {
     if (mode === 'set-practice' && activeCustomSet) {
@@ -676,7 +688,7 @@ export function FlashcardView() {
         </div>
       </div>
 
-      <div className="flashcard mx-auto h-64 max-w-md cursor-pointer" onClick={() => setFlipped(!flipped)}>
+      <div className="flashcard mx-auto h-64 max-w-md cursor-pointer" onClick={() => { setFlipped(!flipped); }}>
         <div className={`flashcard-inner ${flipped ? 'flipped' : ''}`}>
           <Card className="flashcard-face bg-card border-2">
             <div className="text-center">
@@ -709,6 +721,21 @@ export function FlashcardView() {
             </div>
           </Card>
         </div>
+      </div>
+
+      {/* Listen button — always visible during card practice */}
+      <div className="flex justify-center -mt-2">
+        <button
+          onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
+          className={`flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all active:scale-95 ${
+            isPlaying
+              ? 'border-primary bg-primary/10 text-primary'
+              : 'border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-primary shadow-sm'
+          }`}
+        >
+          <Volume2 className="h-3.5 w-3.5" />
+          {isPlaying ? 'Stop' : 'Listen'}
+        </button>
       </div>
 
       {flipped && displayWord.article && (displayWord.plural || displayWord.exampleTranslation || displayWord.nounTip) && (
