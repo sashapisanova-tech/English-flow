@@ -591,7 +591,7 @@ Return ONLY valid JSON, no markdown:
       {popup && (
         <div
           ref={popupRef}
-          className="fixed z-50 animate-fade-in w-56"
+          className="fixed z-[70] animate-fade-in w-56"
           style={{ left: popup.x, top: popup.anchorY, transform: 'translateY(-100%)' }}
         >
           <div className="rounded-2xl bg-card border border-border shadow-xl overflow-hidden">
@@ -638,7 +638,7 @@ Return ONLY valid JSON, no markdown:
       {/* Expression popup */}
       {exprPopup && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center pb-6 px-4"
+          className="fixed inset-0 z-[70] flex items-end justify-center pb-6 px-4"
           onClick={() => setExprPopup(null)}
         >
           <div

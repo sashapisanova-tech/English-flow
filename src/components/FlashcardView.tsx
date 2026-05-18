@@ -282,12 +282,6 @@ export function FlashcardView() {
             <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
               ✨ My Sets
             </h3>
-            <button
-              onClick={openCreateSet}
-              className="flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
-            >
-              <Plus className="h-3.5 w-3.5" /> New Set
-            </button>
           </div>
 
           {customSets.length === 0 ? (

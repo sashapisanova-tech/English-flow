@@ -408,7 +408,8 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
     'doet':  { infinitive: 'uitdoen',  english: 'to take off',         prefix: 'uit' },
   },
   'm1-10': {
-    'gaat': { infinitive: 'uitgaan', english: '(light) goes out', prefix: 'uit' },
+    'gaat':  { infinitive: 'uitgaan',      english: '(light) goes out', prefix: 'uit'     },
+    'rijdt': { infinitive: 'voorbijrijden', english: 'to drive past',    prefix: 'voorbij' },
   },
   // Module 2
   'm2-1': {
@@ -517,7 +518,7 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
   },
   'm1-10': {
     'aan haar dag':   { english: 'about her day' },
-    'in slaap':       { english: 'asleep / to sleep' },
+    'valt in slaap':  { english: 'falls asleep' },
   },
   // Module 2
   'm2-1': {
