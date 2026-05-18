@@ -164,6 +164,7 @@ export const textKeywords: Record<string, KeywordMap> = {
     raam: 'window', winkels: 'shops',
     haltes: 'stops', plein: 'square / plaza',
     levendig: 'lively / vibrant', glimlacht: 'smiles',
+    even: 'a moment / just', verder: 'further / on',
   },
   // Text 22: Tom fietst naar het park
   'm3-2': {
@@ -191,6 +192,7 @@ export const textKeywords: Record<string, KeywordMap> = {
     groenten: 'vegetables', fruit: 'fruit', bloemen: 'flowers',
     vers: 'fresh', brood: 'bread', ruikt: 'smells',
     smaakt: 'tastes', favoriete: 'favourite', langzaam: 'slowly',
+    stukje: 'little piece',
   },
   // Text 26: Lisa komt met de trein
   'm3-6': {
@@ -204,7 +206,7 @@ export const textKeywords: Record<string, KeywordMap> = {
     route: 'route', proberen: 'to try', kanaal: 'canal',
     stil: 'still / quiet', grijs: 'grey', langzaam: 'slowly',
     lucht: 'sky / air', oranje: 'orange', energiek: 'energetic',
-    brug: 'bridge', mooier: 'more beautiful',
+    brug: 'bridge', mooier: 'more beautiful', eenden: 'ducks',
   },
   // Text 28: De weg vragen
   'm3-8': {
@@ -227,6 +229,7 @@ export const textKeywords: Record<string, KeywordMap> = {
     deur: 'door', borden: 'signs', plaatsen: 'seats',
     licht: 'light', muziek: 'music',
     kippenvel: 'goosebumps', prachtig: 'beautiful / magnificent',
+    volgen: 'to follow',
   },
 
   // ===== MODULE 4 — Work & Study =====
@@ -438,15 +441,22 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
     'stapt': { infinitive: 'instappen / uitstappen', english: 'to board / to get off', prefix: 'in / uit' },
     'komt':  { infinitive: 'aankomen', english: 'to arrive', prefix: 'aan' },
   },
+  'm3-2': {
+    'ademt': { infinitive: 'inademen', english: 'to breathe in', prefix: 'in' },
+  },
   'm3-4': {
     'stapt': { infinitive: 'instappen / uitstappen', english: 'to board / to get off', prefix: 'in / uit' },
+    'belt':  { infinitive: 'aanbellen', english: 'to ring the doorbell', prefix: 'aan' },
+  },
+  'm3-5': {
+    'biedt': { infinitive: 'aanbieden', english: 'to offer', prefix: 'aan' },
   },
   'm3-6': {
     'komt': { infinitive: 'aankomen', english: 'to arrive', prefix: 'aan' },
   },
   'm3-7': {
-    'staat': { infinitive: 'opstaan',  english: 'to get up',  prefix: 'op'  },
-    'komt':  { infinitive: 'aankomen', english: 'to arrive',  prefix: 'aan' },
+    'staat': { infinitive: 'opstaan',           english: 'to get up',         prefix: 'op'       },
+    'komt':  { infinitive: 'aankomen / opkomen', english: 'to arrive / to rise', prefix: 'aan / op' },
   },
   'm3-8': {
     'slaat': { infinitive: 'linksafslaan', english: 'to turn left', prefix: 'linksaf' },
@@ -556,6 +566,37 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
     'een foto':       { english: 'a photo' },
     'praten over':    { english: 'to talk about' },
     'alles voelt licht en goed': { english: 'everything feels light and good' },
+  },
+  // Module 3
+  'm3-1': {
+    'om zich heen':   { english: 'around / looking around' },
+  },
+  'm3-2': {
+    'tegen een boom': { english: 'against a tree' },
+  },
+  'm3-3': {
+    'passen goed':    { english: 'fit well' },
+    'langs de gracht': { english: 'along the canal' },
+  },
+  'm3-4': {
+    'andere kant van de stad': { english: 'the other side of the city' },
+    'ik ben onderweg':         { english: "I'm on my way" },
+  },
+  'm3-5': {
+    'ruikt het naar': { english: 'it smells of' },
+    'een stukje':     { english: 'a little piece' },
+  },
+  'm3-6': {
+    'naar haar toe':            { english: 'toward her' },
+    'geven elkaar een knuffel': { english: 'give each other a hug' },
+    'om zich heen':             { english: 'around / looking around' },
+  },
+  'm3-7': {
+    'op tijd': { english: 'on time' },
+  },
+  'm3-9': {
+    'genieten van':      { english: 'to enjoy' },
+    'stuur die naar mij': { english: 'send that to me' },
   },
 };
 
