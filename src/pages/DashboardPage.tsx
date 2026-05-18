@@ -3,12 +3,14 @@ import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useLearning } from '@/context/LearningContext';
 import { useAuth } from '@/context/AuthContext';
-import { BookOpen, Brain, BarChart3, Target, Zap, LogOut, Cloud } from 'lucide-react';
+import { BookOpen, Brain, BarChart3, Target, Zap, Cloud, User } from 'lucide-react';
 import { TextList } from '@/components/TextList';
 import { ReadingView } from '@/components/ReadingView';
 import { FlashcardView } from '@/components/FlashcardView';
 import { ProgressView } from '@/components/ProgressView';
 import { TasksView } from '@/components/TasksView';
+import { MeView } from '@/components/MeView';
+import { VoiceSettings } from '@/components/VoiceSettings';
 import { ReadingText, Level, Module } from '@/types/dutch';
 import heroImage from '@/assets/hero-dutch.jpg';
 import { getLevelInfo, getXPProgress } from '@/utils/levels';
@@ -21,7 +23,7 @@ export default function DashboardPage() {
   const [openLevel, setOpenLevel] = useState<Level | null>(null);
   const [openModule, setOpenModule] = useState<Module | null>(null);
   const { dailyGoal, vocabulary, xp, level, syncing, dueCount } = useLearning();
-  const { user, signOut } = useAuth();
+  const { user } = useAuth();
 
   const wordCount = Object.keys(vocabulary).length;
   const readingProgress   = dailyGoal.textsGoal > 0         ? (dailyGoal.textsRead         / dailyGoal.textsGoal)         * 100 : 0;
@@ -46,7 +48,7 @@ export default function DashboardPage() {
     { key: 'reading', icon: BookOpen, label: 'Read' },
     { key: 'flashcards', icon: Brain, label: 'Cards' },
     { key: 'tasks', icon: Target, label: 'Tasks' },
-    { key: 'progress', icon: BarChart3, label: 'Progress' },
+    { key: 'progress', icon: User, label: 'Me' },
   ];
 
   const { texts } = useLearning();
@@ -82,7 +84,7 @@ export default function DashboardPage() {
                  activeTab === 'reading' && selectedText ? selectedText.title :
                  activeTab === 'reading' ? 'Reading Library' :
                  activeTab === 'flashcards' ? 'Flashcards' :
-                 activeTab === 'tasks' ? 'Tasks 🎯' : 'Your Progress'}
+                 activeTab === 'tasks' ? 'Tasks 🎯' : 'Me'}
               </h1>
               {activeTab === 'home' && (
                 <p className="mt-1 text-sm text-muted-foreground">Ready for your daily Dutch practice?</p>
@@ -90,14 +92,6 @@ export default function DashboardPage() {
             </div>
             <div className="flex items-center gap-2 mt-1 shrink-0">
               {syncing && <Cloud className="h-4 w-4 text-primary animate-pulse" />}
-              <button
-                onClick={signOut}
-                title={`Sign out (${user?.email})`}
-                className="flex items-center gap-1 rounded-full border border-border bg-background/60 px-2.5 py-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-                <span className="hidden sm:inline">Sign out</span>
-              </button>
             </div>
           </div>
         </div>
@@ -218,8 +212,11 @@ export default function DashboardPage() {
 
         {activeTab === 'flashcards' && <FlashcardView />}
         {activeTab === 'tasks' && <TasksView />}
-        {activeTab === 'progress' && <ProgressView />}
+        {activeTab === 'progress' && <MeView />}
       </div>
+
+      {/* Voice settings — only visible while reading a text */}
+      <VoiceSettings visible={activeTab === 'reading' && !!selectedText} />
 
       {/* Bottom Navigation */}
       <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-md">

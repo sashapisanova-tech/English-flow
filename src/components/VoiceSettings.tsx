@@ -11,7 +11,7 @@ import { playDutch, stopDutch } from '@/utils/playDutch';
 
 const PREVIEW_TEXT = 'Hoi! Mijn naam is Daan. Ik help je Nederlands leren.';
 
-export function VoiceSettings() {
+export function VoiceSettings({ visible = false }: { visible?: boolean }) {
   const [open, setOpen] = useState(false);
   const [preset, setPreset] = useState<VoicePreset>(getVoicePreset);
   const [keyInput, setKeyInput] = useState('');
@@ -54,14 +54,16 @@ export function VoiceSettings() {
 
   return (
     <>
-      {/* Trigger button — sits above the Daan chat button */}
-      <button
-        onClick={() => setOpen(true)}
-        className="fixed bottom-36 right-4 z-40 flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border shadow-md hover:bg-secondary transition-all active:scale-95"
-        aria-label="Voice settings"
-      >
-        <Settings2 className="h-4.5 w-4.5 text-muted-foreground" style={{ width: 18, height: 18 }} />
-      </button>
+      {/* Trigger button — only shown when reading a text */}
+      {visible && (
+        <button
+          onClick={() => setOpen(true)}
+          className="fixed bottom-36 right-4 z-40 flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border shadow-md hover:bg-secondary transition-all active:scale-95"
+          aria-label="Voice settings"
+        >
+          <Settings2 className="h-4.5 w-4.5 text-muted-foreground" style={{ width: 18, height: 18 }} />
+        </button>
+      )}
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent side="bottom" className="h-auto max-h-[85vh] flex flex-col p-0 rounded-t-2xl overflow-y-auto">

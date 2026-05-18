@@ -9,7 +9,6 @@ import { AuthScreen } from "@/components/AuthScreen";
 import DashboardPage from "./pages/DashboardPage";
 import NotFound from "./pages/NotFound";
 import { AIChat } from "@/components/AIChat";
-import { VoiceSettings } from "@/components/VoiceSettings";
 import React from "react";
 
 class ErrorBoundary extends React.Component<
@@ -74,7 +73,6 @@ function AppContent() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
-      <VoiceSettings />
       <AIChat />
     </LearningProvider>
   );
