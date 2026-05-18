@@ -1,8 +1,10 @@
-import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode } from 'react';
 import { DutchWord, WordStatus, DailyGoal, ReadingText } from '@/types/dutch';
 import { sampleTexts } from '@/data/texts';
 import { getLevelInfo } from '@/utils/levels';
 import { fsrsReview, FSRSCard, FSRSRating } from '@/utils/fsrs';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/context/AuthContext';
 
 const VOCAB_STORAGE_KEY = 'dutch-vocabulary-v1';
 const STATS_STORAGE_KEY = 'dutch-player-stats-v1';
@@ -15,6 +17,48 @@ function todayUTC(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
+// ── Supabase row ↔ DutchWord converters ─────────────────────────────────────
+
+function wordToRow(userId: string, w: DutchWord) {
+  return {
+    user_id:           userId,
+    dutch:             w.dutch,
+    english:           w.english,
+    status:            w.status,
+    review_interval:   w.reviewInterval,
+    next_review:       w.nextReview  ? new Date(w.nextReview).toISOString() : null,
+    last_review:       w.lastReview  ?? null,
+    stability:         w.stability   ?? null,
+    difficulty:        w.difficulty  ?? null,
+    fsrs_state:        w.fsrsState   ?? null,
+    times_encountered: w.timesEncountered,
+    example:           w.example     ?? null,
+    plural:            w.plural      ?? null,
+    due_date:          w.dueDate     ?? null,
+    interval:          w.interval    ?? null,
+    updated_at:        new Date().toISOString(),
+  };
+}
+
+function rowToWord(row: Record<string, unknown>): DutchWord {
+  return {
+    dutch:            row.dutch              as string,
+    english:          row.english            as string,
+    status:           (row.status            as WordStatus) ?? 'new',
+    reviewInterval:   (row.review_interval   as number)     ?? 1,
+    timesEncountered: (row.times_encountered as number)     ?? 1,
+    nextReview:       row.next_review  ? new Date(row.next_review as string) : undefined,
+    lastReview:       row.last_review  ? (row.last_review  as string)        : undefined,
+    stability:        row.stability   != null ? (row.stability   as number)  : undefined,
+    difficulty:       row.difficulty  != null ? (row.difficulty  as number)  : undefined,
+    fsrsState:        row.fsrs_state  ? (row.fsrs_state as DutchWord['fsrsState']) : undefined,
+    example:          row.example     ? (row.example    as string)           : undefined,
+    plural:           row.plural      ? (row.plural     as string)           : undefined,
+    dueDate:          row.due_date    ? (row.due_date   as string)           : undefined,
+    interval:         row.interval   != null ? (row.interval    as number)   : undefined,
+  };
+}
+
 // ── Context interface ────────────────────────────────────────────────────────
 
 interface LearningState {
@@ -23,6 +67,7 @@ interface LearningState {
   dailyGoal: DailyGoal;
   xp: number;
   level: number;
+  syncing: boolean;
   dueCount: number;
   addXP:                (amount: number) => void;
   addWord:              (dutch: string, english: string, extras?: Partial<DutchWord>) => void;
@@ -42,6 +87,11 @@ const LearningContext = createContext<LearningState | null>(null);
 // ── Provider ─────────────────────────────────────────────────────────────────
 
 export function LearningProvider({ children }: { children: ReactNode }) {
+  const { user } = useAuth();
+  const userRef = useRef(user);
+  useEffect(() => { userRef.current = user; }, [user]);
+
+  const [syncing, setSyncing] = useState(false);
 
   // ── XP ──────────────────────────────────────────────────────────────────
 
@@ -72,6 +122,53 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     try { localStorage.setItem(VOCAB_STORAGE_KEY, JSON.stringify(vocabulary)); } catch {}
   }, [vocabulary]);
 
+  // ── Load from Supabase on login ──────────────────────────────────────────
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      setSyncing(true);
+      const { data: statsData } = await supabase.from('user_stats').select('xp').eq('user_id', user.id).maybeSingle();
+      if (statsData) setXP(statsData.xp);
+
+      const { data: vocabData } = await supabase.from('vocabulary').select('*').eq('user_id', user.id);
+      if (vocabData && vocabData.length > 0) {
+        setVocabulary(prev => {
+          const merged = { ...prev };
+          for (const row of vocabData) merged[row.dutch] = rowToWord(row);
+          return merged;
+        });
+      } else {
+        const localWords = Object.values((() => { try { const r = localStorage.getItem(VOCAB_STORAGE_KEY); return r ? JSON.parse(r) : {}; } catch { return {}; } })()) as DutchWord[];
+        if (localWords.length > 0) await supabase.from('vocabulary').upsert(localWords.map(w => wordToRow(user.id, w)), { onConflict: 'user_id,dutch' });
+        const localXP: number = (() => { try { return JSON.parse(localStorage.getItem(STATS_STORAGE_KEY) || '{}').xp ?? 0; } catch { return 0; } })();
+        await supabase.from('user_stats').upsert({ user_id: user.id, xp: localXP, updated_at: new Date().toISOString() });
+      }
+      setSyncing(false);
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
+
+  // ── Sync XP to Supabase (debounced) ─────────────────────────────────────
+
+  const xpSyncTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (!userRef.current) return;
+    if (xpSyncTimer.current) clearTimeout(xpSyncTimer.current);
+    xpSyncTimer.current = setTimeout(() => {
+      if (!userRef.current) return;
+      supabase.from('user_stats').upsert({ user_id: userRef.current.id, xp, updated_at: new Date().toISOString() });
+    }, 2000);
+  }, [xp]);
+
+  // ── Sync a single word to Supabase ──────────────────────────────────────
+
+  const syncWord = useCallback((word: DutchWord) => {
+    const u = userRef.current;
+    if (!u) return;
+    supabase.from('vocabulary').upsert(wordToRow(u.id, word), { onConflict: 'user_id,dutch' });
+  }, []);
+
   // ── Mutations ────────────────────────────────────────────────────────────
 
   const addWord = useCallback((dutch: string, english: string, extras?: Partial<DutchWord>) => {
@@ -84,6 +181,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
           dueDate: existing.dueDate ?? todayUTC(),
           interval: existing.interval ?? 1,
         };
+        syncWord(updated);
         return { ...prev, [dutch.toLowerCase()]: updated };
       }
       addXP(2);
@@ -93,9 +191,10 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         dueDate: todayUTC(), interval: 1,
         ...extras,
       };
+      syncWord(newWord);
       return { ...prev, [dutch.toLowerCase()]: newWord };
     });
-  }, [addXP]);
+  }, [addXP, syncWord]);
 
   const removeWord = useCallback((dutch: string) => {
     const key = dutch.toLowerCase();
@@ -104,14 +203,17 @@ export function LearningProvider({ children }: { children: ReactNode }) {
       const { [key]: _, ...rest } = prev;
       return rest;
     });
+    const u = userRef.current;
+    if (u) supabase.from('vocabulary').delete().match({ user_id: u.id, dutch: key });
   }, []);
 
   const updateWordStatus = useCallback((dutch: string, status: WordStatus) => {
     setVocabulary(prev => {
-      const updated = { ...prev[dutch.toLowerCase()], status };
-      return { ...prev, [dutch.toLowerCase()]: updated as DutchWord };
+      const updated = { ...prev[dutch.toLowerCase()], status } as DutchWord;
+      syncWord(updated);
+      return { ...prev, [dutch.toLowerCase()]: updated };
     });
-  }, []);
+  }, [syncWord]);
 
   const getWordsForReview = useCallback(() => {
     const now = new Date();
@@ -150,6 +252,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         const existing = prev[key];
         if (existing.dueDate) return prev; // already enrolled, nothing to do
         const updated: DutchWord = { ...existing, dueDate: todayUTC(), interval: existing.interval ?? 1 };
+        syncWord(updated);
         return { ...prev, [key]: updated };
       }
       addXP(2);
@@ -158,9 +261,10 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         status: 'new', timesEncountered: 1, reviewInterval: 1,
         dueDate: todayUTC(), interval: 1,
       };
+      syncWord(newWord);
       return { ...prev, [key]: newWord };
     });
-  }, [addXP]);
+  }, [addXP, syncWord]);
 
   /**
    * Rate a word with Again / Good / Easy and update its dueDate accordingly.
@@ -199,11 +303,12 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         dueDate,
         lastReview: now.toISOString(),
       };
+      syncWord(updated);
       return { ...prev, [key]: updated };
     });
     incrementFlashcards();
     if (rating !== 'again') addXP(5);
-  }, [incrementFlashcards, addXP]);
+  }, [incrementFlashcards, addXP, syncWord]);
 
   const [texts, setTexts] = useState<ReadingText[]>(() => {
     try {
@@ -268,10 +373,11 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         lastReview:     now.toISOString(),
         nextReview:     new Date(now.getTime() + result.interval * 86_400_000),
       };
+      syncWord(updated);
       return { ...prev, [dutch.toLowerCase()]: updated };
     });
     incrementFlashcards();
-  }, [incrementFlashcards, addXP]);
+  }, [incrementFlashcards, addXP, syncWord]);
 
   const dueCount = React.useMemo(() => {
     const today = todayUTC();
@@ -280,7 +386,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
 
   return (
     <LearningContext.Provider value={{
-      vocabulary, texts, dailyGoal, xp, level, dueCount,
+      vocabulary, texts, dailyGoal, xp, level, syncing, dueCount,
       addXP, addWord, removeWord, updateWordStatus,
       getWordsForReview, getWordsDueForReview, enrollWord, reviewWordSRS,
       markTextCompleted, incrementFlashcards, reviewWord,
