@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useLearning } from '@/context/LearningContext';
 import { useAuth } from '@/context/AuthContext';
-import { BookOpen, Brain, BarChart3, Target, Zap, Cloud, User } from 'lucide-react';
+import { BookOpen, Brain, Target, Zap, Cloud, User, Pencil, Check } from 'lucide-react';
 import { TextList } from '@/components/TextList';
 import { ReadingView } from '@/components/ReadingView';
 import { FlashcardView } from '@/components/FlashcardView';
@@ -22,7 +22,10 @@ export default function DashboardPage() {
   const [selectedText, setSelectedText] = useState<ReadingText | null>(null);
   const [openLevel, setOpenLevel] = useState<Level | null>(null);
   const [openModule, setOpenModule] = useState<Module | null>(null);
-  const { dailyGoal, vocabulary, xp, level, syncing, dueCount } = useLearning();
+  const [editingGoals, setEditingGoals] = useState(false);
+  const [goalTexts, setGoalTexts] = useState<string>('');
+  const [goalCards, setGoalCards] = useState<string>('');
+  const { dailyGoal, vocabulary, xp, level, syncing, dueCount, setGoals } = useLearning();
   const { user } = useAuth();
 
   const wordCount = Object.keys(vocabulary).length;
@@ -140,25 +143,65 @@ export default function DashboardPage() {
 
             {/* Today's Goals */}
             <Card className="p-5 space-y-4">
-              <h3 className="font-heading font-semibold text-foreground">Today's Goals</h3>
+              <div className="flex items-center justify-between">
+                <h3 className="font-heading font-semibold text-foreground">Today's Goals</h3>
+                {!editingGoals ? (
+                  <button
+                    onClick={() => { setGoalTexts(String(dailyGoal.textsGoal)); setGoalCards(String(dailyGoal.flashcardsGoal)); setEditingGoals(true); }}
+                    className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <Pencil className="h-3.5 w-3.5" /> Edit
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      const t = Math.max(1, parseInt(goalTexts) || dailyGoal.textsGoal);
+                      const c = Math.max(1, parseInt(goalCards) || dailyGoal.flashcardsGoal);
+                      setGoals(t, c);
+                      setEditingGoals(false);
+                    }}
+                    className="flex items-center gap-1 text-xs text-primary font-semibold hover:opacity-80 transition-colors"
+                  >
+                    <Check className="h-3.5 w-3.5" /> Save
+                  </button>
+                )}
+              </div>
               <div className="space-y-3">
                 <div>
                   <div className="flex justify-between text-sm mb-1.5">
                     <span className="flex items-center gap-1.5 text-muted-foreground">
                       <BookOpen className="h-3.5 w-3.5" /> Read texts
                     </span>
-                    <span className="font-medium">{dailyGoal.textsRead}/{dailyGoal.textsGoal}</span>
+                    {editingGoals ? (
+                      <input
+                        type="number" min={1} max={99}
+                        value={goalTexts}
+                        onChange={e => setGoalTexts(e.target.value)}
+                        className="w-14 rounded-md border border-border bg-background px-2 py-0.5 text-right text-sm font-medium focus:outline-none focus:border-primary"
+                      />
+                    ) : (
+                      <span className="font-medium">{dailyGoal.textsRead}/{dailyGoal.textsGoal}</span>
+                    )}
                   </div>
-                  <Progress value={readingProgress} className="h-2.5" />
+                  {!editingGoals && <Progress value={readingProgress} className="h-2.5" />}
                 </div>
                 <div>
                   <div className="flex justify-between text-sm mb-1.5">
                     <span className="flex items-center gap-1.5 text-muted-foreground">
                       <Brain className="h-3.5 w-3.5" /> Review flashcards
                     </span>
-                    <span className="font-medium">{dailyGoal.flashcardsReviewed}/{dailyGoal.flashcardsGoal}</span>
+                    {editingGoals ? (
+                      <input
+                        type="number" min={1} max={999}
+                        value={goalCards}
+                        onChange={e => setGoalCards(e.target.value)}
+                        className="w-14 rounded-md border border-border bg-background px-2 py-0.5 text-right text-sm font-medium focus:outline-none focus:border-primary"
+                      />
+                    ) : (
+                      <span className="font-medium">{dailyGoal.flashcardsReviewed}/{dailyGoal.flashcardsGoal}</span>
+                    )}
                   </div>
-                  <Progress value={flashcardProgress} className="h-2.5" />
+                  {!editingGoals && <Progress value={flashcardProgress} className="h-2.5" />}
                 </div>
               </div>
             </Card>

@@ -6,9 +6,10 @@ import { fsrsReview, FSRSCard, FSRSRating } from '@/utils/fsrs';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
-const VOCAB_STORAGE_KEY = 'dutch-vocabulary-v1';
-const STATS_STORAGE_KEY = 'dutch-player-stats-v1';
-const TEXT_PROGRESS_KEY = 'dutch-text-progress-v1';
+const VOCAB_STORAGE_KEY  = 'dutch-vocabulary-v1';
+const STATS_STORAGE_KEY  = 'dutch-player-stats-v1';
+const TEXT_PROGRESS_KEY  = 'dutch-text-progress-v1';
+const GOALS_STORAGE_KEY  = 'dutch-daily-goals-v1';
 
 // ── UTC date helpers ─────────────────────────────────────────────────────────
 
@@ -80,6 +81,7 @@ interface LearningState {
   markTextCompleted:    (textId: string) => void;
   incrementFlashcards:  () => void;
   reviewWord:           (dutch: string, correct: boolean) => void;
+  setGoals:             (textsGoal: number, flashcardsGoal: number) => void;
 }
 
 const LearningContext = createContext<LearningState | null>(null);
@@ -272,10 +274,17 @@ export function LearningProvider({ children }: { children: ReactNode }) {
       return sampleTexts.map(t => saved[t.id] ? { ...t, completed: true, lastRead: new Date(saved[t.id].lastRead) } : t);
     } catch { return sampleTexts; }
   });
-  const [dailyGoal, setDailyGoal] = useState<DailyGoal>({
-    textsRead: 0, textsGoal: 2,
-    flashcardsReviewed: 0, flashcardsGoal: 15,
-    streak: 3, lastPractice: new Date(),
+  const [dailyGoal, setDailyGoal] = useState<DailyGoal>(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(GOALS_STORAGE_KEY) || '{}');
+      return {
+        textsRead: 0, textsGoal: saved.textsGoal ?? 2,
+        flashcardsReviewed: 0, flashcardsGoal: saved.flashcardsGoal ?? 15,
+        streak: 3, lastPractice: new Date(),
+      };
+    } catch {
+      return { textsRead: 0, textsGoal: 2, flashcardsReviewed: 0, flashcardsGoal: 15, streak: 3, lastPractice: new Date() };
+    }
   });
 
   const markTextCompleted = useCallback((textId: string) => {
@@ -389,6 +398,11 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     incrementFlashcards();
   }, [incrementFlashcards, addXP, syncWord]);
 
+  const setGoals = useCallback((textsGoal: number, flashcardsGoal: number) => {
+    setDailyGoal(prev => ({ ...prev, textsGoal, flashcardsGoal }));
+    try { localStorage.setItem(GOALS_STORAGE_KEY, JSON.stringify({ textsGoal, flashcardsGoal })); } catch {}
+  }, []);
+
   const dueCount = React.useMemo(() => {
     const today = todayUTC();
     return Object.values(vocabulary).filter(w => !w.dueDate || w.dueDate <= today).length;
@@ -399,7 +413,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
       vocabulary, texts, dailyGoal, xp, level, syncing, dueCount,
       addXP, addWord, removeWord, updateWordStatus,
       getWordsForReview, getWordsDueForReview, enrollWord, reviewWordSRS,
-      markTextCompleted, incrementFlashcards, reviewWord,
+      markTextCompleted, incrementFlashcards, reviewWord, setGoals,
     }}>
       {children}
     </LearningContext.Provider>
