@@ -12,7 +12,7 @@ import {
   PenLine, Shuffle,
 } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
-import { getKeywordsForText, getSeparableVerbsForText, SeparableVerbEntry } from '@/data/vocabulary';
+import { getKeywordsForText, getSeparableVerbsForText, SeparableVerbEntry, getFixedExpressionsForText, FixedExpressionEntry } from '@/data/vocabulary';
 import { playDutch, stopDutch } from '@/utils/playDutch';
 
 interface ReadingViewProps {
@@ -172,6 +172,10 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
   const [saveState, setSaveState] = useState<'idle' | 'saved'>('idle');
   const popupRef = useRef<HTMLDivElement>(null);
 
+  const [exprPopup, setExprPopup] = useState<{
+    phrase: string; english: string; sentence: string; savedState: 'idle' | 'saved';
+  } | null>(null);
+
   // ── TTS ──
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -214,6 +218,7 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
   }, [text.id, text.words]);
 
   const separableVerbs = useMemo(() => getSeparableVerbsForText(text.id), [text.id]);
+  const fixedExpressions = useMemo(() => getFixedExpressionsForText(text.id), [text.id]);
 
   const prefixToVerb = useMemo(() => {
     const map: Record<string, SeparableVerbEntry> = {};
@@ -273,6 +278,42 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
     });
     return { activeVerbs, activePrefixes };
   }, [tokens, sentenceForIndex, separableVerbs]);
+
+  // Pre-compute which token indices belong to fixed expressions
+  const { expressionStartMap, expressionSkipSet } = useMemo(() => {
+    const exprMap = new Map<number, { phrase: string; english: string; rangeEnd: number; displayText: string }>();
+    const skipSet = new Set<number>();
+
+    // Build list of non-whitespace tokens with their index
+    const nonWsTokens: { idx: number; clean: string }[] = [];
+    tokens.forEach((tok, i) => {
+      if (/^\s+$/.test(tok)) return;
+      const clean = tok.replace(/[.,!?;:'"«»""''()\[\]]+/g, '').toLowerCase();
+      if (clean) nonWsTokens.push({ idx: i, clean });
+    });
+
+    Object.entries(fixedExpressions).forEach(([phrase, { english }]) => {
+      const phraseWords = phrase.toLowerCase().split(/\s+/).filter(Boolean);
+      for (let ni = 0; ni <= nonWsTokens.length - phraseWords.length; ni++) {
+        let match = true;
+        for (let pi = 0; pi < phraseWords.length; pi++) {
+          if (nonWsTokens[ni + pi]?.clean !== phraseWords[pi]) { match = false; break; }
+        }
+        if (match) {
+          const firstTokenIdx = nonWsTokens[ni].idx;
+          const lastTokenIdx = nonWsTokens[ni + phraseWords.length - 1].idx;
+          // Build display text from all tokens in range (including spaces)
+          const displayText = tokens.slice(firstTokenIdx, lastTokenIdx + 1).join('');
+          exprMap.set(firstTokenIdx, { phrase, english, rangeEnd: lastTokenIdx, displayText });
+          for (let i = firstTokenIdx + 1; i <= lastTokenIdx; i++) {
+            skipSet.add(i);
+          }
+        }
+      }
+    });
+
+    return { expressionStartMap: exprMap, expressionSkipSet: skipSet };
+  }, [tokens, fixedExpressions]);
 
   // ── Level config ──
   const levelConfig = useMemo(() => getLevelConfig(text.level), [text.level]);
@@ -396,12 +437,31 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
 
   const renderText = () => {
     return tokens.map((token, i) => {
+      // Skip tokens that are non-first parts of expressions
+      if (expressionSkipSet.has(i)) return null;
+
       if (/^\s+$/.test(token)) return <span key={i}>{token}</span>;
+
+      // Check if this token starts a fixed expression
+      const exprInfo = expressionStartMap.get(i);
+      if (exprInfo) {
+        const sentenceForExpr = sentenceForIndex[i];
+        return (
+          <span
+            key={i}
+            className=”word-expression word-clickable”
+            onClick={() => setExprPopup({ phrase: exprInfo.phrase, english: exprInfo.english, sentence: sentenceForExpr, savedState: ‘idle’ })}
+          >
+            {exprInfo.displayText}
+          </span>
+        );
+      }
+
       // Separate leading punct, word body, trailing punct
-      const leadMatch = token.match(/^[.,!?;:'"«»“”‘’()\[\]]+/);
-      const trailMatch = token.match(/[.,!?;:'"«»“”‘’()\[\]]+$/);
-      const leadPunct = leadMatch?.[0] ?? '';
-      const trailPunct = trailMatch?.[0] ?? '';
+      const leadMatch = token.match(/^[.,!?;:’”«»””’’()\[\]]+/);
+      const trailMatch = token.match(/[.,!?;:’”«»””’’()\[\]]+$/);
+      const leadPunct = leadMatch?.[0] ?? ‘’;
+      const trailPunct = trailMatch?.[0] ?? ‘’;
       const wordOnly = token.slice(leadPunct.length, token.length - trailPunct.length);
       const clean = wordOnly.toLowerCase();
       if (!clean) return <span key={i}>{token}</span>;
@@ -412,14 +472,14 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
       const keywordEnglish = !sepVerb ? keywords[clean] : undefined;
       const isKeyword = !!keywordEnglish;
       const vocabEntry = vocabulary[clean];
-      const status = vocabEntry?.status || 'new';
+      const status = vocabEntry?.status || ‘new’;
       return (
         <span key={i}>
           {leadPunct}
           <WordPopover
             word={clean}
             display={wordOnly}
-            translation={keywordEnglish ?? ''}
+            translation={keywordEnglish ?? ‘’}
             status={status}
             highlighted={isKeyword}
             sentence={sent}
@@ -574,6 +634,55 @@ Return ONLY valid JSON, no markdown:
         </div>
       )}
 
+      {/* Expression popup */}
+      {exprPopup && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center pb-6 px-4"
+          onClick={() => setExprPopup(null)}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl bg-card border border-border shadow-2xl overflow-hidden animate-fade-in"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="px-4 pt-4 pb-2 flex items-center gap-2">
+              <span className="rounded bg-green-100 px-1.5 py-0.5 text-xs font-semibold text-green-700">fixed expression</span>
+            </div>
+            <div className="px-4 pb-3">
+              <p className="font-heading text-lg font-bold text-foreground">{exprPopup.phrase}</p>
+              <p className="text-base text-muted-foreground mt-0.5">{exprPopup.english}</p>
+            </div>
+            {exprPopup.sentence && (
+              <div className="mx-4 mb-3 rounded-md bg-secondary p-3">
+                <p className="text-sm font-medium italic text-secondary-foreground">"{exprPopup.sentence}"</p>
+              </div>
+            )}
+            <div className="flex gap-2 px-4 pb-4">
+              <button
+                onClick={() => {
+                  addWord(exprPopup.phrase, exprPopup.english, { example: exprPopup.sentence });
+                  setExprPopup(prev => prev ? { ...prev, savedState: 'saved' } : null);
+                  setTimeout(() => setExprPopup(null), 1400);
+                }}
+                className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all active:scale-95 ${
+                  exprPopup.savedState === 'saved' ? 'bg-green-500 text-white' : 'bg-primary text-primary-foreground hover:opacity-90'
+                }`}
+              >
+                {exprPopup.savedState === 'saved' ? '✓ Saved!' : '＋ Save to flashcards'}
+              </button>
+              <button
+                onClick={() => {
+                  window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this Dutch expression for me: "${exprPopup.phrase}"` } }));
+                  setExprPopup(null);
+                }}
+                className="flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold bg-secondary text-foreground hover:bg-accent transition-all"
+              >
+                💬 Ask Daan
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Reading text */}
       <Card className="p-6 md:p-8" onMouseUp={handleSelectionEnd} onTouchEnd={handleSelectionEnd}>
         <div className="reading-text leading-[2.2]">{renderText()}</div>
@@ -582,7 +691,8 @@ Return ONLY valid JSON, no markdown:
       <p className="text-center text-xs text-muted-foreground">
         Tap a word to translate · <span className="font-semibold text-foreground">Select a phrase</span> to save it ·{' '}
         <span className="font-semibold" style={{ color: 'hsl(var(--dutch-orange))' }}>Orange</span> = vocab ·{' '}
-        <span className="font-semibold text-blue-600">Blue</span> = separable verb
+        <span className="font-semibold text-blue-600">Blue</span> = separable verb ·{' '}
+        <span className="font-semibold text-green-600">Green</span> = fixed expression
       </p>
 
       {/* ── Practice exercises ────────────────────────────────────────────── */}

@@ -147,6 +147,18 @@
     color: hsl(220 90% 55%);
   }
 
+  .word-expression {
+    background-color: hsl(142 76% 92%);
+    border-radius: 3px;
+    padding: 1px 1px;
+    cursor: pointer;
+    border-bottom: 2px solid hsl(142 72% 50%);
+    transition: background-color 0.15s;
+  }
+  .word-expression:hover {
+    background-color: hsl(142 76% 84%);
+  }
+
   .level-badge {
     @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold tracking-wider uppercase;
   }

@@ -414,13 +414,21 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
   'm2-1': {
     'stapt': { infinitive: 'uitstappen', english: 'to get off', prefix: 'uit' },
   },
+  'm2-5': {
+    'brengt': { infinitive: 'meebrengen', english: 'to bring along', prefix: 'mee' },
+  },
+  'm2-7': {
+    'kom': { infinitive: 'terugkomen', english: 'to come back', prefix: 'terug' },
+  },
   'm2-2': {
     'staat': { infinitive: 'opstaan', english: 'to get up', prefix: 'op' },
   },
   'm2-8': {
     'nodigen': { infinitive: 'uitnodigen', english: 'to invite', prefix: 'uit' },
+    'brengt':  { infinitive: 'meebrengen', english: 'to bring along', prefix: 'mee' },
   },
   'm2-9': {
+    'belt': { infinitive: 'opbellen', english: 'to call (phone)', prefix: 'op' },
     'kom':  { infinitive: 'langskomen', english: 'to come by / drop in', prefix: 'langs' },
     'komt': { infinitive: 'langskomen', english: 'to come by / drop in', prefix: 'langs' },
   },
@@ -476,4 +484,80 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
 
 export function getSeparableVerbsForText(textId: string): Record<string, SeparableVerbEntry> {
   return textSeparableVerbs[textId] || {};
+}
+
+// ─── Fixed Expressions ──────────────────────────────────────────────────────
+// Multi-word fixed expressions per text. Keys are the exact phrase as it
+// appears in the text (lowercase). Used to render green highlights.
+
+export interface FixedExpressionEntry {
+  english: string;
+}
+
+export const textFixedExpressions: Record<string, Record<string, FixedExpressionEntry>> = {
+  // Module 1
+  'm1-3': {
+    'naast elkaar':   { english: 'next to each other' },
+    'door de stad':   { english: 'through the city' },
+  },
+  'm1-4': {
+    'aan de beurt':   { english: "it's one's turn" },
+    'tot ziens':      { english: 'goodbye / see you' },
+  },
+  'm1-5': {
+    'op bezoek':      { english: 'on a visit / over' },
+  },
+  'm1-7': {
+    'langs het water': { english: 'along the water' },
+    'over het weekend': { english: 'about the weekend' },
+    'na een tijdje':  { english: 'after a while' },
+  },
+  'm1-8': {
+    'naar buiten':    { english: 'outside / out' },
+  },
+  'm1-10': {
+    'aan haar dag':   { english: 'about her day' },
+    'in slaap':       { english: 'asleep / to sleep' },
+  },
+  // Module 2
+  'm2-1': {
+    'heb je morgen tijd': { english: 'do you have time tomorrow?' },
+    'tot morgen':     { english: 'see you tomorrow' },
+  },
+  'm2-2': {
+    'ik heb je gemist': { english: 'I missed you' },
+  },
+  'm2-3': {
+    'op zijn gemak':  { english: 'at ease / comfortable' },
+  },
+  'm2-5': {
+    'over vroeger':   { english: 'about the past' },
+  },
+  'm2-6': {
+    'het eens':        { english: 'in agreement' },
+    'vragen stellen':  { english: 'to ask questions' },
+    'beter te leren kennen': { english: 'to get to know better' },
+  },
+  'm2-7': {
+    'kom erbij':      { english: 'join in / come join us' },
+  },
+  'm2-8': {
+    'samen aan tafel': { english: 'together at the table' },
+    'niemand wil':    { english: 'nobody wants to' },
+  },
+  'm2-9': {
+    'aan de hand':    { english: "what's going on / the matter" },
+    'dat snap ik':    { english: 'I understand that' },
+    'dat is lief':    { english: "that's sweet/kind" },
+    'het moeilijk':   { english: 'a hard time / difficult' },
+  },
+  'm2-10': {
+    'een foto':       { english: 'a photo' },
+    'praten over':    { english: 'to talk about' },
+    'alles voelt licht en goed': { english: 'everything feels light and good' },
+  },
+};
+
+export function getFixedExpressionsForText(textId: string): Record<string, FixedExpressionEntry> {
+  return textFixedExpressions[textId] || {};
 }

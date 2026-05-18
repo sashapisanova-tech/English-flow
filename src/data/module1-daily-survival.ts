@@ -261,7 +261,7 @@ export const module1Texts: ReadingText[] = [
     title: 'Goedenacht',
     titleTranslation: 'Good Night',
     level: 'A1', module: M, moduleTitle: MT,
-    content: 'Het is avond. Anna gaat naar bed. Zij poetst haar tanden. Zij zet haar wekker. Morgen moet zij vroeg opstaan. Zij denkt aan haar dag. Zij heeft gewerkt en gegeten. Zij heeft Tom gezien in het café. Het was een goede dag. In haar kamer is het stil. Het licht gaat uit. Anna sluit haar ogen. Zij ademt rustig in en uit. Buiten rijdt een auto voorbij. Anna valt in slaap.',
+    content: 'Het is avond. Anna gaat naar bed. Zij poetst haar tanden. Zij zet haar wekker. Morgen moet zij vroeg opstaan. Zij denkt aan haar dag. Zij heeft gewerkt en gegeten. Zij heeft Tom gezien in het café. Het was een goede dag. In haar kamer is het stil. Het licht gaat uit. Anna sluit haar ogen. Zij ademt rustig in en uit. Buiten rijdt een auto voorbij. Anna valt in slaap. Morgen is een nieuwe dag.',
     words: {
       avond: { english: 'evening' },
       bed: { english: 'bed' },
