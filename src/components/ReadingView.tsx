@@ -468,7 +468,11 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
       // Skip tokens that are non-first parts of expressions
       if (expressionSkipSet.has(i)) return null;
 
-      if (/^\s+$/.test(token)) return <span key={i}>{token}</span>;
+      if (/^\s+$/.test(token)) {
+        if (token.includes('\n\n')) return <span key={i} className="block mt-3" />;
+        if (token.includes('\n'))   return <br key={i} />;
+        return <span key={i}>{token}</span>;
+      }
 
       // Check if this token starts a fixed expression
       const exprInfo = expressionStartMap.get(i);
