@@ -669,7 +669,7 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
     'dit is heerlijk': { english: 'this is delicious' },
   },
   'm5-7': {
-    'aan zijn telefoon': { english: 'on his phone' },
+    'aan zijn telefoon zit': { english: 'is on his phone' },
   },
   'm5-8': {
     'ver weg':      { english: 'far away' },
