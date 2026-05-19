@@ -30,7 +30,10 @@ export type Module =
   | 'work-study'
   | 'everyday-conversations'
   | 'a2-independence'
-  | 'a2-social';
+  | 'a2-social'
+  | 'a2-living'
+  | 'a2-work'
+  | 'a2-adventures';
 
 export interface ReadingText {
   id: string;

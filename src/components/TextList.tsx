@@ -20,8 +20,11 @@ const moduleInfo: { key: Module; number: number; label: string; emoji: string; l
   { key: 'transport-city',        number: 3, label: 'City & Movement',       emoji: '🚋', level: 'A1' },
   { key: 'work-study',            number: 4, label: 'Work & Study',          emoji: '💼', level: 'A1' },
   { key: 'everyday-conversations',number: 5, label: 'Personal Development',  emoji: '🌱', level: 'A1' },
-  { key: 'a2-independence',       number: 1, label: 'Everyday Independence', emoji: '🗓️', level: 'A2' },
-  { key: 'a2-social',             number: 2, label: 'Social Interaction',    emoji: '🤝', level: 'A2' },
+  { key: 'a2-independence', number: 1, label: 'Everyday Independence', emoji: '🗓️', level: 'A2' },
+  { key: 'a2-social',      number: 2, label: 'Social Interaction',    emoji: '🤝', level: 'A2' },
+  { key: 'a2-living',      number: 3, label: 'Leven in Nederland',    emoji: '🏘️', level: 'A2' },
+  { key: 'a2-work',        number: 4, label: 'Werk & Studie',         emoji: '💼', level: 'A2' },
+  { key: 'a2-adventures',  number: 5, label: 'Kleine Avonturen',      emoji: '🚂', level: 'A2' },
 ];
 
 const levelMeta: Record<Level, { subtitle: string }> = {
@@ -34,7 +37,7 @@ const levelMeta: Record<Level, { subtitle: string }> = {
 
 const levels: { key: Level; label: string; description: string; available: boolean }[] = [
   { key: 'A1', label: 'A1 — Beginner',     description: '50 texts · 5 modules', available: true },
-  { key: 'A2', label: 'A2 — Elementary',   description: '20 texts · 2 modules', available: true },
+  { key: 'A2', label: 'A2 — Elementary',   description: '50 texts · 5 modules', available: true },
   { key: 'B1', label: 'B1 — Intermediate', description: 'Coming soon',          available: false },
 ];
 
