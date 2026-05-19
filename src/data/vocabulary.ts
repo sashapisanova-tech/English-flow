@@ -330,10 +330,9 @@ export const textKeywords: Record<string, KeywordMap> = {
   },
   // Text 44: Fotografie
   'm5-4': {
-    hobby: 'hobby', fotografie: 'photography', camera: 'camera',
-    eenvoudige: 'simple', moment: 'moment',
+    fotografie: 'photography', eenvoudige: 'simple',
     knielt: 'kneels', hoek: 'angle / corner',
-    bekijkt: 'looks at / views', leert: 'learns', fijne: 'nice / pleasant',
+    bekijkt: 'looks at / views', sommige: 'some',
   },
   // Text 45: Samen joggen
   'm5-5': {
@@ -659,7 +658,8 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
     'een goed gevoel':  { english: 'a good feeling' },
   },
   'm5-4': {
-    'het juiste moment': { english: 'the right moment' },
+    "maakt foto's van":   { english: 'takes photos of' },
+    'het juiste moment':  { english: 'the right moment' },
     'maar dat geeft niet': { english: "that's ok / never mind" },
   },
   'm5-5': {
@@ -701,6 +701,9 @@ export const textSplitExpressions: Record<string, SplitExpressionEntry[]> = {
   ],
   'm5-3': [
     { word1: 'geeft', word2: 'gevoel', english: 'gives a good feeling (een goed gevoel geven)' },
+  ],
+  'm5-4': [
+    { word1: 'wacht', word2: 'op', english: 'waits for (wachten op)' },
   ],
 };
 
