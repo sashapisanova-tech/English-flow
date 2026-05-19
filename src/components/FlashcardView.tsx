@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, X, RotateCcw, ArrowLeft, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2 } from 'lucide-react';
+import { Check, X, RotateCcw, ArrowLeft, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2 } from 'lucide-react';
 import { playDutch, stopDutch } from '@/utils/playDutch';
 import { useLearning } from '@/context/LearningContext';
 import { flashcardSets } from '@/data/flashcardSets';
@@ -27,6 +27,7 @@ const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: strin
 export function FlashcardView() {
   const { getWordsForReview, getWordsDueForReview, reviewWord, reviewWordSRS, enrollWord, vocabulary, dailyGoal, addWord, updateWordStatus, dueCount } = useLearning();
   const { sets: customSets, createSet, deleteSet, addWordToSet, removeWordFromSet } = useCustomSets();
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const [flipped, setFlipped]           = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -222,6 +223,7 @@ export function FlashcardView() {
         onAddWord={addWordToSet}
         onRemoveWord={removeWordFromSet}
         onStartPractice={startCustomSetPractice}
+        onDelete={(id) => { deleteSet(id); setActiveCustomSet(null); setMode('browse'); }}
       />
     );
   }
@@ -294,6 +296,12 @@ export function FlashcardView() {
             <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
               ✨ My Sets
             </h3>
+            <button
+              onClick={openCreateSet}
+              className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors font-medium"
+            >
+              <Plus className="h-3.5 w-3.5" /> New set
+            </button>
           </div>
 
           {customSets.length === 0 ? (
@@ -307,19 +315,51 @@ export function FlashcardView() {
           ) : (
             <div className="space-y-2">
               {customSets.map(cs => (
-                <Card
-                  key={cs.id}
-                  className="card-hover cursor-pointer p-3.5 flex items-center justify-between"
-                  onClick={() => openCustomEditor(cs)}
-                >
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg">{cs.emoji}</span>
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{cs.title}</p>
-                      <p className="text-xs text-muted-foreground">{cs.words.length} word{cs.words.length !== 1 ? 's' : ''}</p>
+                <Card key={cs.id} className="p-3.5">
+                  {confirmDeleteId === cs.id ? (
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm text-destructive font-medium">Delete "{cs.title}"?</p>
+                      <div className="flex gap-2 shrink-0">
+                        <button
+                          onClick={() => setConfirmDeleteId(null)}
+                          className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => { deleteSet(cs.id); setConfirmDeleteId(null); }}
+                          className="text-xs font-semibold text-white bg-destructive hover:bg-destructive/90 transition-colors px-3 py-1 rounded-md"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  ) : (
+                    <div className="flex items-center justify-between">
+                      <div
+                        className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer"
+                        onClick={() => openCustomEditor(cs)}
+                      >
+                        <span className="text-lg">{cs.emoji}</span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-foreground truncate">{cs.title}</p>
+                          <p className="text-xs text-muted-foreground">{cs.words.length} word{cs.words.length !== 1 ? 's' : ''}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(cs.id); }}
+                          className="p-1.5 text-muted-foreground hover:text-destructive transition-colors rounded-md hover:bg-destructive/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                        <ChevronRight
+                          className="h-4 w-4 text-muted-foreground cursor-pointer"
+                          onClick={() => openCustomEditor(cs)}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </Card>
               ))}
             </div>

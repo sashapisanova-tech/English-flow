@@ -53,15 +53,17 @@ interface Props {
   onAddWord: (setId: string, word: CustomWord) => void;
   onRemoveWord: (setId: string, dutch: string) => void;
   onStartPractice: (set: CustomSet) => void;
+  onDelete: (id: string) => void;
 }
 
-export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartPractice }: Props) {
+export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartPractice, onDelete }: Props) {
   const [dutch, setDutch] = useState('');
   const [english, setEnglish] = useState('');
   const [example, setExample] = useState('');
   const [generating, setGenerating] = useState(false);
   const [translating, setTranslating] = useState(false);
   const [addError, setAddError] = useState('');
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   async function handleDutchBlur() {
     const word = dutch.trim();
@@ -208,6 +210,37 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartP
           ))}
         </div>
       )}
+
+      {/* Delete set */}
+      <div className="pt-2 border-t border-border">
+        {confirmDelete ? (
+          <div className="flex items-center justify-between gap-3 rounded-lg bg-destructive/10 border border-destructive/20 px-3 py-2.5">
+            <p className="text-sm text-destructive font-medium">Delete "{set.title}"?</p>
+            <div className="flex gap-2 shrink-0">
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => { onDelete(set.id); onBack(); }}
+                className="text-xs font-semibold text-white bg-destructive hover:bg-destructive/90 transition-colors px-3 py-1 rounded-md"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ) : (
+          <button
+            onClick={() => setConfirmDelete(true)}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+            Delete this set
+          </button>
+        )}
+      </div>
     </div>
   );
 }
