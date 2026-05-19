@@ -324,9 +324,9 @@ export const textKeywords: Record<string, KeywordMap> = {
   },
   // Text 43: Een weekplanning
   'm5-3': {
-    plannen: 'to plan', lijst: 'list', afspraken: 'appointments',
-    rood: 'red', blauw: 'blue', taak: 'task',
-    vinkje: 'tick / checkmark', gevoel: 'feeling', helder: 'clear',
+    afspraken: 'appointments / plans', gebruikt: 'uses', blauw: 'blue',
+    vrije: 'free', belangrijkste: 'most important',
+    afrondt: 'finishes / completes', vinkje: 'tick / checkmark', helder: 'clear',
   },
   // Text 44: Fotografie
   'm5-4': {
@@ -655,8 +655,8 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
     'een paar minuten':               { english: 'a few minutes' },
   },
   'm5-3': {
-    'een goed gevoel': { english: 'a good feeling' },
-    'een rondje':      { english: 'a lap / a round' },
+    'loopt een rondje': { english: 'goes for a jog / takes a lap' },
+    'een goed gevoel':  { english: 'a good feeling' },
   },
   'm5-4': {
     'het juiste moment': { english: 'the right moment' },
@@ -698,6 +698,9 @@ export interface SplitExpressionEntry {
 export const textSplitExpressions: Record<string, SplitExpressionEntry[]> = {
   'm3-2': [
     { word1: 'zet', word2: 'tegen', english: 'to lean against (zetten tegen)' },
+  ],
+  'm5-3': [
+    { word1: 'geeft', word2: 'gevoel', english: 'gives a good feeling (een goed gevoel geven)' },
   ],
 };
 
