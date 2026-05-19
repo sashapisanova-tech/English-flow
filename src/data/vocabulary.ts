@@ -690,9 +690,10 @@ export function getFixedExpressionsForText(textId: string): Record<string, Fixed
 // expression. Both words are highlighted green when they co-occur in a sentence.
 
 export interface SplitExpressionEntry {
-  word1: string;   // first word (lowercase token form)
-  word2: string;   // second word (lowercase token form)
-  english: string; // translation shown in popup
+  word1: string;    // first word (lowercase token form)
+  word2: string;    // second word (lowercase token form)
+  english: string;  // translation shown in popup
+  display?: string; // optional override for the phrase shown in popup & saved to flashcards
 }
 
 export const textSplitExpressions: Record<string, SplitExpressionEntry[]> = {
@@ -700,7 +701,7 @@ export const textSplitExpressions: Record<string, SplitExpressionEntry[]> = {
     { word1: 'zet', word2: 'tegen', english: 'to lean against (zetten tegen)' },
   ],
   'm5-3': [
-    { word1: 'geeft', word2: 'gevoel', english: 'gives a good feeling (een goed gevoel geven)' },
+    { word1: 'geeft', word2: 'gevoel', display: 'geeft … een goed gevoel', english: 'to give a good feeling' },
   ],
   'm5-4': [
     { word1: 'wacht', word2: 'op', english: 'waits for (wachten op)' },

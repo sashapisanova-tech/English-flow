@@ -511,7 +511,7 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
             <span
               className="word-expression word-clickable"
               onClick={() => setExprPopup({
-                phrase: `${splitEntry.word1} … ${splitEntry.word2}`,
+                phrase: splitEntry.display ?? `${splitEntry.word1} … ${splitEntry.word2}`,
                 english: splitEntry.english,
                 sentence: sent,
                 savedState: 'idle',
