@@ -500,8 +500,7 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
     'staat': { infinitive: 'opstaan', english: 'to get up', prefix: 'op' },
   },
   'm5-2': {
-    'schrijft': { infinitive: 'opschrijven', english: 'to write down', prefix: 'op' },
-    'denkt':    { infinitive: 'nadenken',    english: 'to think / reflect', prefix: 'na' },
+    'denkt': { infinitive: 'nadenken', english: 'to think / reflect', prefix: 'na' },
   },
   'm5-3': {
     'schrijft': { infinitive: 'opschrijven', english: 'to write down', prefix: 'op' },
@@ -651,8 +650,9 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
   },
   // Module 5
   'm5-2': {
-    'aan de tafel':   { english: 'at the table' },
-    'een paar minuten': { english: 'a few minutes' },
+    'drie dingen op die goed gingen': { english: 'three things that went well' },
+    'zit aan de tafel':               { english: 'sits at the table' },
+    'een paar minuten':               { english: 'a few minutes' },
   },
   'm5-3': {
     'een goed gevoel': { english: 'a good feeling' },
