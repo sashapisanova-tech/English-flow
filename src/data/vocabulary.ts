@@ -243,7 +243,7 @@ export const textKeywords: Record<string, KeywordMap> = {
   // Text 32: In de bibliotheek
   'm4-2': {
     bibliotheek: 'library', stil: 'quiet / silent', tafel: 'table',
-    aantekeningen: 'notes', student: 'student',
+    aantekeningen: 'notes', student: 'student', rustig: 'quietly / calmly',
     moe: 'tired', buiten: 'outside', frisse: 'fresh',
     broodje: 'bread roll / sandwich', bakker: 'baker / bakery',
   },
@@ -264,7 +264,7 @@ export const textKeywords: Record<string, KeywordMap> = {
   // Text 35: Een presentatie voorbereiden
   'm4-5': {
     presentatie: 'presentation', informatie: 'information',
-    documenten: 'documents', oefent: 'practises',
+    documenten: 'documents', verzamelt: 'collects / gathers', oefent: 'practises',
     hardop: 'out loud', duidelijk: 'clear / clearly',
     helpt: 'helps', kleuren: 'colours', klaar: 'ready',
   },
@@ -272,8 +272,8 @@ export const textKeywords: Record<string, KeywordMap> = {
   'm4-6': {
     boekwinkel: 'bookshop', parttime: 'part-time',
     opent: 'opens', lichten: 'lights', planken: 'shelves',
-    klant: 'customer / client', roman: 'novel',
-    sectie: 'section', aankoop: 'purchase',
+    klant: 'customer / client', roman: 'novel', ordent: 'arranges / sorts',
+    wijst: 'points to / directs', sectie: 'section', aankoop: 'purchase',
     kassa: 'checkout', sluit: 'closes',
   },
   // Text 37: De avondcursus
@@ -281,7 +281,7 @@ export const textKeywords: Record<string, KeywordMap> = {
     avondcursus: 'evening course', klas: 'class / classroom',
     bord: 'board / blackboard', woorden: 'words',
     oefenen: 'to practise', zinnen: 'sentences',
-    gesprek: 'conversation', dagelijkse: 'daily',
+    gesprek: 'conversation', dagelijkse: 'daily', buurvrouw: 'female neighbour / classmate',
     fout: 'mistake', vriendelijk: 'friendly / kindly', trots: 'proud',
   },
   // Text 38: Een groepsproject
@@ -301,7 +301,7 @@ export const textKeywords: Record<string, KeywordMap> = {
   },
   // Text 40: Werken in het café
   'm4-10': {
-    verslag: 'report / essay', artikelen: 'articles',
+    verslag: 'report / essay', artikelen: 'articles', allebei: 'both',
     studie: 'study', idee: 'idea', sluiten: 'to close',
     bestellen: 'to order', weekend: 'weekend',
     moe: 'tired', tevreden: 'satisfied / content',
@@ -467,16 +467,33 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
   },
   // Module 4
   'm4-1': {
-    'komt': { infinitive: 'aankomen',  english: 'to arrive',      prefix: 'aan' },
+    'komt': { infinitive: 'aankomen',   english: 'to arrive',    prefix: 'aan'    },
+    'gaan': { infinitive: 'verdergaan', english: 'to continue',  prefix: 'verder' },
   },
   'm4-2': {
-    'staat': { infinitive: 'opstaan', english: 'to get up', prefix: 'op' },
+    'staat': { infinitive: 'opstaan',   english: 'to get up',    prefix: 'op'     },
+    'gaat':  { infinitive: 'teruggaan', english: 'to go back',   prefix: 'terug'  },
+  },
+  'm4-3': {
+    'legt':    { infinitive: 'uitleggen',    english: 'to explain',        prefix: 'uit'  },
+    'schrijft':{ infinitive: 'meeschrijven', english: 'to take notes along', prefix: 'mee' },
+    'loopt':   { infinitive: 'teruglopen',   english: 'to walk back',      prefix: 'terug'},
+  },
+  'm4-4': {
+    'legt': { infinitive: 'uitleggen', english: 'to explain', prefix: 'uit' },
   },
   'm4-6': {
-    'zet': { infinitive: 'aanzetten', english: 'to turn on (lights)', prefix: 'aan' },
+    'zet':    { infinitive: 'aanzetten',  english: 'to turn on',       prefix: 'aan'    },
+    'komt':   { infinitive: 'binnenkomen', english: 'to come in',       prefix: 'binnen' },
+    'rekent': { infinitive: 'afrekenen',  english: 'to pay / check out', prefix: 'af'    },
   },
   'm4-9': {
-    'werkt': { infinitive: 'bijwerken', english: 'to update / revise', prefix: 'bij' },
+    'werkt':   { infinitive: 'bijwerken',  english: 'to update / revise', prefix: 'bij' },
+    'schrijft':{ infinitive: 'opschrijven', english: 'to write down',     prefix: 'op'  },
+    'ademt':   { infinitive: 'inademen',   english: 'to breathe in',      prefix: 'in'  },
+  },
+  'm4-10': {
+    'wisselen': { infinitive: 'uitwisselen', english: 'to exchange', prefix: 'uit' },
   },
   // Module 5
   'm5-1': {
@@ -593,6 +610,29 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
   'm3-9': {
     'genieten van':      { english: 'to enjoy' },
     'stuur die naar mij': { english: 'send that to me' },
+  },
+  // Module 4
+  'm4-3': {
+    'stelt een vraag': { english: 'asks a question' },
+  },
+  'm4-5': {
+    'er klaar voor': { english: 'ready for it' },
+  },
+  'm4-7': {
+    'bijna goed':  { english: 'almost right' },
+  },
+  'm4-8': {
+    'bijna klaar': { english: 'almost done' },
+    'nog een keer': { english: 'once more' },
+  },
+  'm4-9': {
+    'een beetje nerveus': { english: 'a bit nervous' },
+    'nog beter':          { english: 'even better' },
+    'er klaar voor':      { english: 'ready for it' },
+  },
+  'm4-10': {
+    'aan het einde':    { english: 'at the end' },
+    'moe maar tevreden': { english: 'tired but satisfied' },
   },
 };
 
