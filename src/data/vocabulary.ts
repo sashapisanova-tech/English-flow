@@ -499,14 +499,29 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
   'm5-1': {
     'staat': { infinitive: 'opstaan', english: 'to get up', prefix: 'op' },
   },
+  'm5-2': {
+    'schrijft': { infinitive: 'opschrijven', english: 'to write down', prefix: 'op' },
+    'denkt':    { infinitive: 'nadenken',    english: 'to think / reflect', prefix: 'na' },
+  },
+  'm5-3': {
+    'schrijft': { infinitive: 'opschrijven', english: 'to write down', prefix: 'op' },
+  },
   'm5-5': {
     'staan': { infinitive: 'opstaan', english: 'to get up', prefix: 'op' },
   },
   'm5-6': {
-    'komt': { infinitive: 'langskomen', english: 'to come by / drop in', prefix: 'langs' },
+    'komt':    { infinitive: 'langskomen',  english: 'to come by / drop in', prefix: 'langs' },
+    'schrijft':{ infinitive: 'opschrijven', english: 'to write down',        prefix: 'op'    },
   },
   'm5-7': {
     'legt': { infinitive: 'wegleggen', english: 'to put away', prefix: 'weg' },
+  },
+  'm5-8': {
+    'schrijft': { infinitive: 'opschrijven', english: 'to write down', prefix: 'op' },
+  },
+  'm5-9': {
+    'zet':     { infinitive: 'aanzetten',     english: 'to turn on',    prefix: 'aan'  },
+    'schrijft':{ infinitive: 'terugschrijven', english: 'to write back', prefix: 'terug'},
   },
 };
 
@@ -633,6 +648,36 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
   'm4-10': {
     'aan het einde':    { english: 'at the end' },
     'moe maar tevreden': { english: 'tired but satisfied' },
+  },
+  // Module 5
+  'm5-2': {
+    'aan de tafel':   { english: 'at the table' },
+    'een paar minuten': { english: 'a few minutes' },
+  },
+  'm5-3': {
+    'een goed gevoel': { english: 'a good feeling' },
+    'een rondje':      { english: 'a lap / a round' },
+  },
+  'm5-4': {
+    'het juiste moment': { english: 'the right moment' },
+    'maar dat geeft niet': { english: "that's ok / never mind" },
+  },
+  'm5-5': {
+    'we hebben het gedaan': { english: 'we did it' },
+  },
+  'm5-6': {
+    'dit is heerlijk': { english: 'this is delicious' },
+  },
+  'm5-7': {
+    'aan zijn telefoon': { english: 'on his phone' },
+  },
+  'm5-8': {
+    'ver weg':      { english: 'far away' },
+    'stap voor stap': { english: 'step by step' },
+  },
+  'm5-10': {
+    'heb veel geleerd':       { english: 'learned a lot' },
+    'blij met hoe het gaat':  { english: 'happy with how things are going' },
   },
 };
 
