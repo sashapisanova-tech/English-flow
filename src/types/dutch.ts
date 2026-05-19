@@ -28,7 +28,9 @@ export type Module =
   | 'shopping-food'
   | 'transport-city'
   | 'work-study'
-  | 'everyday-conversations';
+  | 'everyday-conversations'
+  | 'a2-independence'
+  | 'a2-social';
 
 export interface ReadingText {
   id: string;

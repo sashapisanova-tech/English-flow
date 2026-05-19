@@ -14,27 +14,39 @@ interface TextListProps {
   setOpenModule: Dispatch<SetStateAction<Module | null>>;
 }
 
-const moduleInfo: { key: Module; number: number; label: string; emoji: string }[] = [
-  { key: 'daily-survival', number: 1, label: 'Daily Survival', emoji: '🏠' },
-  { key: 'social-life', number: 2, label: 'Social Life', emoji: '👥' },
-  { key: 'transport-city', number: 3, label: 'City & Movement', emoji: '🚋' },
-  { key: 'work-study', number: 4, label: 'Work & Study', emoji: '💼' },
-  { key: 'everyday-conversations', number: 5, label: 'Personal Development', emoji: '🌱' },
+const moduleInfo: { key: Module; number: number; label: string; emoji: string; level: Level }[] = [
+  { key: 'daily-survival',        number: 1, label: 'Daily Survival',        emoji: '🏠', level: 'A1' },
+  { key: 'social-life',           number: 2, label: 'Social Life',           emoji: '👥', level: 'A1' },
+  { key: 'transport-city',        number: 3, label: 'City & Movement',       emoji: '🚋', level: 'A1' },
+  { key: 'work-study',            number: 4, label: 'Work & Study',          emoji: '💼', level: 'A1' },
+  { key: 'everyday-conversations',number: 5, label: 'Personal Development',  emoji: '🌱', level: 'A1' },
+  { key: 'a2-independence',       number: 1, label: 'Everyday Independence', emoji: '🗓️', level: 'A2' },
+  { key: 'a2-social',             number: 2, label: 'Social Interaction',    emoji: '🤝', level: 'A2' },
 ];
 
+const levelMeta: Record<Level, { subtitle: string }> = {
+  A0: { subtitle: 'Starter' },
+  A1: { subtitle: 'Beginner' },
+  A2: { subtitle: 'Elementary' },
+  B1: { subtitle: 'Intermediate' },
+  B2: { subtitle: 'Upper-Intermediate' },
+};
+
 const levels: { key: Level; label: string; description: string; available: boolean }[] = [
-  { key: 'A1', label: 'A1 — Beginner', description: '50 texts · 5 modules', available: true },
-  { key: 'A2', label: 'A2 — Elementary', description: 'Coming soon', available: false },
-  { key: 'B1', label: 'B1 — Intermediate', description: 'Coming soon', available: false },
+  { key: 'A1', label: 'A1 — Beginner',     description: '50 texts · 5 modules', available: true },
+  { key: 'A2', label: 'A2 — Elementary',   description: '20 texts · 2 modules', available: true },
+  { key: 'B1', label: 'B1 — Intermediate', description: 'Coming soon',          available: false },
 ];
 
 export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpenModule }: TextListProps) {
   const { texts } = useLearning();
 
-  const modules = moduleInfo.map(mod => ({
-    ...mod,
-    texts: texts.filter(t => t.module === mod.key && t.level === (openLevel ?? 'A1')),
-  }));
+  const modules = moduleInfo
+    .filter(mod => mod.level === (openLevel ?? 'A1'))
+    .map(mod => ({
+      ...mod,
+      texts: texts.filter(t => t.module === mod.key),
+    }));
 
   // ===== TEXT LIST INSIDE A MODULE =====
   if (openLevel && openModule) {
@@ -107,7 +119,7 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
           </div>
           <div>
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Level</p>
-            <h2 className="font-heading text-xl font-bold text-foreground">{openLevel} — Beginner</h2>
+            <h2 className="font-heading text-xl font-bold text-foreground">{openLevel} — {levelMeta[openLevel]?.subtitle ?? openLevel}</h2>
           </div>
         </div>
 
