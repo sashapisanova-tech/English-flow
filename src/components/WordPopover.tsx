@@ -28,8 +28,11 @@ async function fetchTranslation(word: string, sentence?: string): Promise<string
   try {
     const apiKey = localStorage.getItem('dutch-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
     if (apiKey && apiKey !== 'your_api_key_here') {
-      const userMsg = sentence
-        ? `Translate the Dutch word "${word}" as it is used in this sentence: "${sentence}"\n\nReply with ONLY the English translation of that specific word, 1–4 words max.`
+      // Only use sentence as context when the word actually appears in it;
+      // a mismatch causes Claude to write explanatory text instead of a translation.
+      const contextSentence = sentence && sentence.toLowerCase().includes(word.toLowerCase()) ? sentence : undefined;
+      const userMsg = contextSentence
+        ? `Translate the Dutch word "${word}" as used in: "${contextSentence}"\n\nReply with ONLY the English translation, 1–4 words max.`
         : `Translate the Dutch word "${word}" to English. Reply with ONLY the English translation, 1–4 words max.`;
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',

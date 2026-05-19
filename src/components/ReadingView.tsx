@@ -231,13 +231,16 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
   }, [separableVerbs]);
 
   const { tokens, sentenceForIndex } = useMemo(() => {
-    const sentences = text.content.match(/[^.!?]+[.!?]?/g) ?? [text.content];
+    // Normalise newlines → spaces for sentence detection so paragraph breaks
+    // don't corrupt the position-tracking cursor logic.
+    const normalised = text.content.replace(/\n+/g, ' ');
+    const sentences = normalised.match(/[^.!?]+[.!?]?/g) ?? [normalised];
     const rawTokens = text.content.split(/(\s+)/);
     const map: string[] = [];
     let cursor = 0;
     let acc = '';
     rawTokens.forEach((tok, i) => {
-      acc += tok;
+      acc += tok.replace(/\n+/g, ' ');   // use normalised length for cursor maths
       while (cursor < sentences.length - 1 && acc.length > sentences.slice(0, cursor + 1).join('').length) {
         cursor++;
       }
