@@ -774,8 +774,8 @@ export function FlashcardView() {
           onClick={() => { setFlipped(!flipped); }}
         >
           <div className={`flashcard-inner ${flipped ? 'flipped' : ''}`}>
-            <Card className="flashcard-face bg-card border-2 relative">
-              {/* Listen button — true top-right corner of card */}
+            <Card className="flashcard-face bg-card border-2">
+              {/* Listen button — top-right corner (absolute relative to flashcard-face) */}
               <button
                 onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
                 className={`absolute top-3 right-3 z-10 p-2 rounded-full transition-all active:scale-90 ${
@@ -801,8 +801,8 @@ export function FlashcardView() {
                 <p className="mt-4 text-xs text-muted-foreground">Tap to reveal</p>
               </div>
             </Card>
-            <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20 relative">
-              {/* Listen button — true top-right corner of back face */}
+            <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20">
+              {/* Listen button — top-right corner (absolute relative to flashcard-face) */}
               <button
                 onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
                 className={`absolute top-3 right-3 z-10 p-2 rounded-full transition-all active:scale-90 ${
