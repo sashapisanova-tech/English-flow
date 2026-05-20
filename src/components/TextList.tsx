@@ -1,10 +1,11 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { useLearning } from '@/context/LearningContext';
-import { BookOpen, CheckCircle2, ChevronRight, ArrowLeft, Folder, GraduationCap, Lock } from 'lucide-react';
+import { BookOpen, CheckCircle2, ChevronRight, ArrowLeft, Folder, GraduationCap, Lock, Sparkles } from 'lucide-react';
 import { ReadingText, Module, Level } from '@/types/dutch';
+import { GenerateTextView } from '@/components/GenerateTextView';
 
 interface TextListProps {
   onSelect: (text: ReadingText) => void;
@@ -43,6 +44,7 @@ const levels: { key: Level; label: string; description: string; available: boole
 
 export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpenModule }: TextListProps) {
   const { texts } = useLearning();
+  const [showGenerator, setShowGenerator] = useState(false);
 
   const modules = moduleInfo
     .filter(mod => mod.level === (openLevel ?? 'A1'))
@@ -108,11 +110,25 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
     );
   }
 
+  // ===== AI TEXT GENERATOR =====
+  if (openLevel && showGenerator) {
+    return (
+      <GenerateTextView
+        level={openLevel}
+        onBack={() => setShowGenerator(false)}
+        onTextGenerated={(text) => {
+          setShowGenerator(false);
+          onSelect(text);
+        }}
+      />
+    );
+  }
+
   // ===== MODULE FOLDERS GRID (inside a level) =====
   if (openLevel) {
     return (
       <div className="animate-fade-in space-y-3">
-        <Button variant="ghost" size="sm" onClick={() => setOpenLevel(null)} className="-ml-2 gap-1">
+        <Button variant="ghost" size="sm" onClick={() => { setOpenLevel(null); setShowGenerator(false); }} className="-ml-2 gap-1">
           <ArrowLeft className="h-4 w-4" /> All levels
         </Button>
 
@@ -126,7 +142,7 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
           </div>
         </div>
 
-        {modules.map(mod => {
+        {modules.map((mod, idx) => {
           const total = mod.texts.length;
           const done = mod.texts.filter(t => t.completed).length;
           const progressPct = total > 0 ? (done / total) * 100 : 0;
@@ -162,6 +178,23 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
             </Card>
           );
         })}
+
+        {/* Generate your own text — below the last module */}
+        <Card
+          onClick={() => setShowGenerator(true)}
+          className="card-hover cursor-pointer p-4 active:scale-[0.98] transition-transform border-dashed border-primary/30 bg-primary/5"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+              <Sparkles className="h-6 w-6 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="font-heading font-semibold text-primary">Generate your own text</p>
+              <p className="text-xs text-muted-foreground">AI writes a custom {openLevel} text for you</p>
+            </div>
+            <ChevronRight className="h-5 w-5 text-primary/60 shrink-0" />
+          </div>
+        </Card>
       </div>
     );
   }
