@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check, X, RotateCcw, ArrowLeft, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2 } from 'lucide-react';
@@ -47,6 +47,9 @@ export function FlashcardView() {
   const [sessionQueue,    setSessionQueue]    = useState<DutchWord[]>([]);
   const [originalSession, setOriginalSession] = useState<DutchWord[]>([]);
   const [againKeys,       setAgainKeys]       = useState<Set<string>>(new Set());
+  // Swipe gesture state
+  const touchStartX = useRef<number | null>(null);
+  const [swipeDeltaX, setSwipeDeltaX] = useState(0);
 
   const allWords       = useMemo(() => Object.values(vocabulary), [vocabulary]);
   const learnedWords   = useMemo(() => allWords.filter(w => w.status === 'known'), [allWords]);
@@ -171,6 +174,45 @@ export function FlashcardView() {
   };
   const startLearned  = () => { setMode('learned'); };
 
+  const startLearningAll = () => {
+    const words = allWords.filter(w => w.status !== 'known');
+    setSessionQueue(words);
+    setOriginalSession(words);
+    setAgainKeys(new Set());
+    setMode('my-words');
+    setCurrentIndex(0);
+    setFlipped(false);
+  };
+
+  const goPrevCard = () => {
+    if (currentIndex <= 0) return;
+    stopDutch(); setIsPlaying(false);
+    setCurrentIndex(prev => prev - 1);
+    setFlipped(false);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    setSwipeDeltaX(0);
+  };
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!flipped || touchStartX.current === null) return;
+    setSwipeDeltaX(e.touches[0].clientX - touchStartX.current);
+  };
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const dx = touchStartX.current !== null
+      ? e.changedTouches[0].clientX - touchStartX.current
+      : 0;
+    touchStartX.current = null;
+    setSwipeDeltaX(0);
+    if (!flipped || Math.abs(dx) < 60) return;
+    if (dx < 0) {
+      mode === 'my-words' ? handleSRSRating('again') : handleAnswer(false);
+    } else {
+      mode === 'my-words' ? handleSRSRating('good') : handleAnswer(true);
+    }
+  };
+
   const openCustomEditor = (cs: CustomSet) => { setActiveCustomSet(cs); setMode('custom-editor'); };
   const openCreateSet    = () => setMode('create-set');
 
@@ -243,128 +285,6 @@ export function FlashcardView() {
 
     return (
       <div className="animate-fade-in space-y-5">
-
-        {/* My Saved Words */}
-        {allWords.length > 0 && (
-          <Card
-            className={`card-hover cursor-pointer p-4 flex items-center justify-between ${dueCount > 0 ? 'border-primary/30 bg-primary/5' : ''}`}
-            onClick={startMyWords}
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">📝</span>
-              <div>
-                <p className="font-heading font-semibold text-foreground">Spaced Repetition Review</p>
-                <p className="text-xs text-muted-foreground">
-                  {dueCount > 0
-                    ? <><span className="text-primary font-semibold">{dueCount} due today</span></>
-                    : `All caught up! ${allWords.length} word${allWords.length !== 1 ? 's' : ''} in queue`
-                  }
-                </p>
-              </div>
-            </div>
-            {dueCount > 0 && (
-              <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground">
-                {dueCount}
-              </span>
-            )}
-            {dueCount === 0 && <ChevronRight className="h-5 w-5 text-muted-foreground" />}
-          </Card>
-        )}
-
-        {/* Learned Words */}
-        {learnedWords.length > 0 && (
-          <Card
-            className="card-hover cursor-pointer p-4 flex items-center justify-between border-green-200 bg-green-50"
-            onClick={startLearned}
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">🎓</span>
-              <div>
-                <p className="font-heading font-semibold text-foreground">Learned Words</p>
-                <p className="text-xs text-muted-foreground">
-                  {learnedWords.length} word{learnedWords.length !== 1 ? 's' : ''} mastered
-                </p>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
-        )}
-
-        {/* My Custom Sets */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
-              ✨ My Sets
-            </h3>
-            <button
-              onClick={openCreateSet}
-              className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors font-medium"
-            >
-              <Plus className="h-3.5 w-3.5" /> New set
-            </button>
-          </div>
-
-          {customSets.length === 0 ? (
-            <Card
-              className="card-hover cursor-pointer border-dashed p-4 flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-              onClick={openCreateSet}
-            >
-              <Plus className="h-4 w-4" />
-              <span className="text-sm">Create your first custom set</span>
-            </Card>
-          ) : (
-            <div className="space-y-2">
-              {customSets.map(cs => (
-                <Card key={cs.id} className="p-3.5">
-                  {confirmDeleteId === cs.id ? (
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm text-destructive font-medium">Delete "{cs.title}"?</p>
-                      <div className="flex gap-2 shrink-0">
-                        <button
-                          onClick={() => setConfirmDeleteId(null)}
-                          className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => { deleteSet(cs.id); setConfirmDeleteId(null); }}
-                          className="text-xs font-semibold text-white bg-destructive hover:bg-destructive/90 transition-colors px-3 py-1 rounded-md"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-between">
-                      <div
-                        className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer"
-                        onClick={() => openCustomEditor(cs)}
-                      >
-                        <span className="text-lg">{cs.emoji}</span>
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium text-foreground truncate">{cs.title}</p>
-                          <p className="text-xs text-muted-foreground">{cs.words.length} word{cs.words.length !== 1 ? 's' : ''}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1 shrink-0">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(cs.id); }}
-                          className="p-1.5 text-muted-foreground hover:text-destructive transition-colors rounded-md hover:bg-destructive/10"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                        <ChevronRight
-                          className="h-4 w-4 text-muted-foreground cursor-pointer"
-                          onClick={() => openCustomEditor(cs)}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
 
         {/* A1 Level folder */}
         {a1Sets.length > 0 && (
@@ -517,6 +437,147 @@ export function FlashcardView() {
             </div>
           </div>
         ))}
+
+        {/* My Custom Sets */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
+              ✨ My Sets
+            </h3>
+            <button
+              onClick={openCreateSet}
+              className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors font-medium"
+            >
+              <Plus className="h-3.5 w-3.5" /> New set
+            </button>
+          </div>
+
+          {customSets.length === 0 ? (
+            <Card
+              className="card-hover cursor-pointer border-dashed p-4 flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              onClick={openCreateSet}
+            >
+              <Plus className="h-4 w-4" />
+              <span className="text-sm">Create your first custom set</span>
+            </Card>
+          ) : (
+            <div className="space-y-2">
+              {customSets.map(cs => (
+                <Card key={cs.id} className="p-3.5">
+                  {confirmDeleteId === cs.id ? (
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm text-destructive font-medium">Delete "{cs.title}"?</p>
+                      <div className="flex gap-2 shrink-0">
+                        <button
+                          onClick={() => setConfirmDeleteId(null)}
+                          className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={() => { deleteSet(cs.id); setConfirmDeleteId(null); }}
+                          className="text-xs font-semibold text-white bg-destructive hover:bg-destructive/90 transition-colors px-3 py-1 rounded-md"
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between">
+                      <div
+                        className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer"
+                        onClick={() => openCustomEditor(cs)}
+                      >
+                        <span className="text-lg">{cs.emoji}</span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-foreground truncate">{cs.title}</p>
+                          <p className="text-xs text-muted-foreground">{cs.words.length} word{cs.words.length !== 1 ? 's' : ''}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(cs.id); }}
+                          className="p-1.5 text-muted-foreground hover:text-destructive transition-colors rounded-md hover:bg-destructive/10"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                        <ChevronRight
+                          className="h-4 w-4 text-muted-foreground cursor-pointer"
+                          onClick={() => openCustomEditor(cs)}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Spaced Repetition Review */}
+        {allWords.length > 0 && (
+          <Card
+            className={`card-hover cursor-pointer p-4 flex items-center justify-between ${dueCount > 0 ? 'border-primary/30 bg-primary/5' : ''}`}
+            onClick={startMyWords}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📝</span>
+              <div>
+                <p className="font-heading font-semibold text-foreground">Spaced Repetition Review</p>
+                <p className="text-xs text-muted-foreground">
+                  {dueCount > 0
+                    ? <><span className="text-primary font-semibold">{dueCount} due today</span></>
+                    : `All caught up! ${allWords.length} word${allWords.length !== 1 ? 's' : ''} in queue`
+                  }
+                </p>
+              </div>
+            </div>
+            {dueCount > 0 && (
+              <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground">
+                {dueCount}
+              </span>
+            )}
+            {dueCount === 0 && <ChevronRight className="h-5 w-5 text-muted-foreground" />}
+          </Card>
+        )}
+
+        {/* Learning card */}
+        {allWords.filter(w => w.status !== 'known').length > 0 && (
+          <Card
+            className="card-hover cursor-pointer p-4 flex items-center justify-between border-amber-200/60 bg-amber-50/40"
+            onClick={startLearningAll}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📚</span>
+              <div>
+                <p className="font-heading font-semibold text-foreground">Learning</p>
+                <p className="text-xs text-muted-foreground">
+                  {allWords.filter(w => w.status !== 'known').length} saved word{allWords.filter(w => w.status !== 'known').length !== 1 ? 's' : ''}
+                </p>
+              </div>
+            </div>
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          </Card>
+        )}
+
+        {/* Learned Words */}
+        {learnedWords.length > 0 && (
+          <Card
+            className="card-hover cursor-pointer p-4 flex items-center justify-between border-green-200 bg-green-50"
+            onClick={startLearned}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">🎓</span>
+              <div>
+                <p className="font-heading font-semibold text-foreground">Learned Words</p>
+                <p className="text-xs text-muted-foreground">
+                  {learnedWords.length} word{learnedWords.length !== 1 ? 's' : ''} mastered
+                </p>
+              </div>
+            </div>
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          </Card>
+        )}
       </div>
     );
   }
@@ -703,6 +764,15 @@ export function FlashcardView() {
             {currentIndex + 1} / {totalCards}
             {mode === 'set-practice' && activeSet && ` · ${activeSet.title}`}
           </span>
+          {currentIndex > 0 && (
+            <button
+              onClick={goPrevCard}
+              className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-0.5"
+              aria-label="Previous card"
+            >
+              <ArrowLeft className="h-3 w-3" /> Prev
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           {mode === 'set-practice' && (
@@ -728,40 +798,68 @@ export function FlashcardView() {
         </div>
       </div>
 
-      <div className="flashcard mx-auto h-64 max-w-md cursor-pointer" onClick={() => { setFlipped(!flipped); }}>
-        <div className={`flashcard-inner ${flipped ? 'flipped' : ''}`}>
-          <Card className="flashcard-face bg-card border-2">
-            <div className="text-center">
-              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
-                {direction === 'dutch-to-english' ? 'Nederlands' : 'English'}
-              </p>
-              {direction === 'dutch-to-english' && displayWord.article && (
-                <span className={`inline-block mb-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                  displayWord.article === 'de' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
-                }`}>{displayWord.article}</span>
-              )}
-              <p className="font-heading text-3xl font-bold text-foreground">{front}</p>
-              {direction === 'dutch-to-english' && exampleSentence && !displayWord.article && (
-                <p className="mt-3 text-sm italic text-muted-foreground">"{exampleSentence}"</p>
-              )}
-              <p className="mt-4 text-xs text-muted-foreground">Tap to reveal</p>
-            </div>
-          </Card>
-          <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20">
-            <div className="text-center">
-              <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
-                {direction === 'dutch-to-english' ? 'English' : 'Nederlands'}
-              </p>
-              {direction === 'english-to-dutch' && displayWord.article && (
-                <span className={`inline-block mb-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                  displayWord.article === 'de' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
-                }`}>{displayWord.article}</span>
-              )}
-              <p className="font-heading text-3xl font-bold text-accent-foreground">{back}</p>
-            </div>
-          </Card>
+      <div
+        className="relative"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        {/* Swipe hint overlays — only visible while dragging after flip */}
+        {flipped && swipeDeltaX < -30 && (
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-start pl-4 rounded-2xl bg-destructive/20">
+            <span className="text-sm font-bold text-destructive opacity-80">← Again</span>
+          </div>
+        )}
+        {flipped && swipeDeltaX > 30 && (
+          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-end pr-4 rounded-2xl bg-success/20">
+            <span className="text-sm font-bold text-success opacity-80">Got it →</span>
+          </div>
+        )}
+        <div
+          className="flashcard mx-auto h-64 max-w-md cursor-pointer"
+          style={{ transform: flipped && swipeDeltaX !== 0 ? `translateX(${swipeDeltaX * 0.2}px) rotate(${swipeDeltaX * 0.015}deg)` : undefined, transition: swipeDeltaX === 0 ? 'transform 0.2s ease' : 'none' }}
+          onClick={() => { setFlipped(!flipped); }}
+        >
+          <div className={`flashcard-inner ${flipped ? 'flipped' : ''}`}>
+            <Card className="flashcard-face bg-card border-2">
+              <div className="text-center">
+                <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
+                  {direction === 'dutch-to-english' ? 'Nederlands' : 'English'}
+                </p>
+                {direction === 'dutch-to-english' && displayWord.article && (
+                  <span className={`inline-block mb-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                    displayWord.article === 'de' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
+                  }`}>{displayWord.article}</span>
+                )}
+                <p className="font-heading text-3xl font-bold text-foreground">{front}</p>
+                {direction === 'dutch-to-english' && exampleSentence && !displayWord.article && (
+                  <p className="mt-3 text-sm italic text-muted-foreground">"{exampleSentence}"</p>
+                )}
+                <p className="mt-4 text-xs text-muted-foreground">Tap to reveal</p>
+              </div>
+            </Card>
+            <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20">
+              <div className="text-center">
+                <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
+                  {direction === 'dutch-to-english' ? 'English' : 'Nederlands'}
+                </p>
+                {direction === 'english-to-dutch' && displayWord.article && (
+                  <span className={`inline-block mb-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${
+                    displayWord.article === 'de' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
+                  }`}>{displayWord.article}</span>
+                )}
+                <p className="font-heading text-3xl font-bold text-accent-foreground">{back}</p>
+              </div>
+            </Card>
+          </div>
         </div>
       </div>
+
+      {!flipped && currentIndex === 0 && (
+        <p className="text-center text-[10px] text-muted-foreground/50 -mt-3">
+          Flip card · then swipe ← Again &nbsp;/&nbsp; → Got it
+        </p>
+      )}
 
       {/* Listen button — always visible during card practice */}
       <div className="flex justify-center -mt-2">
@@ -841,8 +939,8 @@ export function FlashcardView() {
             }`}
           >
             {savedWords.has(displayWord.dutch)
-              ? <><Check className="h-3.5 w-3.5" /> Saved to My Words</>
-              : <><BookmarkPlus className="h-3.5 w-3.5" /> Save to My Words</>
+              ? <><Check className="h-3.5 w-3.5" /> Saved to Learning</>
+              : <><BookmarkPlus className="h-3.5 w-3.5" /> Save to Learning</>
             }
           </button>
         </div>

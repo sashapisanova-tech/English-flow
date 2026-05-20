@@ -46,6 +46,10 @@ export default function DashboardPage() {
     prevLevelRef.current = level;
   }, [level]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [activeTab]);
+
   const tabs: { key: Tab; icon: typeof BookOpen; label: string }[] = [
     { key: 'home', icon: Zap, label: 'Home' },
     { key: 'reading', icon: BookOpen, label: 'Read' },
