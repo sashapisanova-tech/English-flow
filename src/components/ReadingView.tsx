@@ -993,16 +993,17 @@ Return ONLY valid JSON, no markdown:
                   <div key={i} className="flex items-center gap-2">
                     <span className="text-xs font-bold text-muted-foreground w-5 shrink-0">{i + 1}.</span>
                     <input
+                      type="search"
                       value={clozeAnswers[seg.blankIndex] ?? ''}
                       onChange={e => !clozeSubmitted && setClozeAnswers(prev => ({ ...prev, [seg.blankIndex]: e.target.value }))}
                       placeholder="Dutch word…"
-                      autoComplete="new-password"
+                      autoComplete="off"
                       autoCorrect="off"
                       autoCapitalize="off"
                       spellCheck={false}
                       data-form-type="other"
                       data-lpignore="true"
-                      className={`flex-1 rounded-lg border px-3 py-1.5 text-sm outline-none transition-colors ${
+                      className={`flex-1 rounded-lg border px-3 py-1.5 text-sm outline-none transition-colors [&::-webkit-search-cancel-button]:hidden ${
                         clozeSubmitted
                           ? scores[i] ? 'border-emerald-400 bg-emerald-50 text-emerald-800' : 'border-red-400 bg-red-50 text-red-800'
                           : 'border-border bg-background focus:border-primary'
