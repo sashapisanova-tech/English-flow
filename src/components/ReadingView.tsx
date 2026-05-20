@@ -209,6 +209,26 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
   const [retellingTranscript, setRetellingTranscript] = useState('');
   const [retellingFeedback, setRetellingFeedback] = useState<RetellingFeedback | null>(null);
 
+  // ── Reset all exercise state when the text changes ──
+  useEffect(() => {
+    setActiveTab(null);
+    setQuizAnswers({});
+    setQuizSubmitted(false);
+    setRetrievalAnswers({});
+    setRetrievalSubmitted(false);
+    setClozeAnswers({});
+    setClozeSubmitted(false);
+    setBuilderIdx(0);
+    setBuilderSelected([]);
+    setBuilderChecked(false);
+    setBuilderScore(0);
+    setBuilderDone(false);
+    setRetellingPhase('idle');
+    setRetellingData(null);
+    setRetellingTranscript('');
+    setRetellingFeedback(null);
+  }, [text.id]);
+
   // ── Vocab / text processing ──
   const keywords = useMemo(() => {
     const curated = getKeywordsForText(text.id);
