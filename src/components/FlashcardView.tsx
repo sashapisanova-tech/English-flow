@@ -32,7 +32,7 @@ export function FlashcardView() {
   const [flipped, setFlipped]           = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying]       = useState(false);
-  const [direction, setDirection]       = useState<Direction>('dutch-to-english');
+  const [direction, setDirection]       = useState<Direction>('english-to-dutch');
   const [mode, setMode]                 = useState<FlashcardMode>('browse');
   const [activeSet, setActiveSet]       = useState<FlashcardSet | null>(null);
   const [activeCustomSet, setActiveCustomSet] = useState<CustomSet | null>(null);
@@ -338,12 +338,6 @@ export function FlashcardView() {
             <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
               ✨ My Sets
             </h3>
-            <button
-              onClick={openCreateSet}
-              className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors font-medium"
-            >
-              <Plus className="h-3.5 w-3.5" /> New set
-            </button>
           </div>
           {customSets.length === 0 ? (
             <Card
@@ -741,30 +735,8 @@ export function FlashcardView() {
             {currentIndex + 1} / {totalCards}
             {mode === 'set-practice' && activeSet && ` · ${activeSet.title}`}
           </span>
-          {currentIndex > 0 && (
-            <button
-              onClick={goPrevCard}
-              className="text-xs text-muted-foreground hover:text-foreground transition-colors flex items-center gap-0.5"
-              aria-label="Previous card"
-            >
-              <ArrowLeft className="h-3 w-3" /> Prev
-            </button>
-          )}
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          {mode === 'set-practice' && (
-            <button
-              onClick={toggleShuffle}
-              className={`flex items-center gap-1 rounded-full border px-2.5 py-1.5 text-xs font-semibold transition-all ${
-                isShuffled
-                  ? 'border-primary/40 bg-primary/10 text-primary'
-                  : 'border-border text-muted-foreground hover:border-primary/40 hover:text-primary'
-              }`}
-            >
-              <Shuffle className="h-3 w-3" />
-              {isShuffled ? 'On' : 'Shuffle'}
-            </button>
-          )}
           <button
             onClick={toggleDirection}
             className="flex items-center gap-1.5 rounded-full border-2 border-primary/40 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary transition-all hover:bg-primary/10"

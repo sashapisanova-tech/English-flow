@@ -19,6 +19,7 @@ type Tab = 'home' | 'reading' | 'flashcards' | 'progress' | 'tasks';
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
+  const [tabResetKeys, setTabResetKeys] = useState<Record<Tab, number>>({ home: 0, reading: 0, flashcards: 0, tasks: 0, progress: 0 });
   const [selectedText, setSelectedText] = useState<ReadingText | null>(null);
   const [openLevel, setOpenLevel] = useState<Level | null>(null);
   const [openModule, setOpenModule] = useState<Module | null>(null);
@@ -257,9 +258,9 @@ export default function DashboardPage() {
           />
         )}
 
-        {activeTab === 'flashcards' && <FlashcardView />}
-        {activeTab === 'tasks' && <TasksView />}
-        {activeTab === 'progress' && <MeView />}
+        {activeTab === 'flashcards' && <FlashcardView key={tabResetKeys.flashcards} />}
+        {activeTab === 'tasks' && <TasksView key={tabResetKeys.tasks} />}
+        {activeTab === 'progress' && <MeView key={tabResetKeys.progress} />}
       </div>
 
       {/* Voice settings — only visible while reading a text */}
@@ -271,7 +272,11 @@ export default function DashboardPage() {
           {tabs.map(({ key, icon: Icon, label }) => (
             <button
               key={key}
-              onClick={() => { setActiveTab(key); if (key !== 'reading') setSelectedText(null); }}
+              onClick={() => {
+                setTabResetKeys(prev => ({ ...prev, [key]: prev[key] + 1 }));
+                setActiveTab(key);
+                setSelectedText(null);
+              }}
               className={`flex flex-1 flex-col items-center gap-0.5 py-3 text-xs transition-colors ${
                 activeTab === key ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
               }`}
