@@ -5,20 +5,20 @@ import { BookOpen, Brain, Trophy, Zap } from 'lucide-react';
 import { getLevelInfo, getXPProgress, LEVELS, XP } from '@/utils/levels';
 
 const ACHIEVEMENTS = [
-  { id: 'first_word',   emoji: '📝', label: 'First Word',       desc: 'Save your first word',          check: (v: number, t: number) => v >= 1   },
-  { id: 'words_10',     emoji: '📖', label: 'Word Collector',   desc: '10 words saved',                check: (v: number)             => v >= 10  },
-  { id: 'words_25',     emoji: '📚', label: 'Bookworm',         desc: '25 words saved',                check: (v: number)             => v >= 25  },
-  { id: 'words_50',     emoji: '🧠', label: 'Vocabulary Nerd',  desc: '50 words saved',                check: (v: number)             => v >= 50  },
-  { id: 'text_1',       emoji: '🗞️', label: 'First Read',       desc: 'Complete your first text',      check: (_v: number, t: number) => t >= 1   },
-  { id: 'text_5',       emoji: '📰', label: 'Avid Reader',      desc: '5 texts completed',             check: (_v: number, t: number) => t >= 5   },
-  { id: 'text_10',      emoji: '🏛️', label: 'Scholar',          desc: '10 texts completed',            check: (_v: number, t: number) => t >= 10  },
-  { id: 'level_2',      emoji: '⭐', label: 'Level Up!',        desc: 'Reach Level 2',                 check: (_v: number, _t: number, xp: number) => xp >= 100  },
-  { id: 'level_3',      emoji: '🌟', label: 'Rising Star',      desc: 'Reach Level 3',                 check: (_v: number, _t: number, xp: number) => xp >= 250  },
-  { id: 'level_5',      emoji: '🚀', label: 'Language Rocket',  desc: 'Reach Level 5',                 check: (_v: number, _t: number, xp: number) => xp >= 900  },
+  { id: 'first_word',   emoji: '', label: 'First Word',       desc: 'Save your first word',          check: (v: number, t: number) => v >= 1   },
+  { id: 'words_10',     emoji: '', label: 'Word Collector',   desc: '10 words saved',                check: (v: number)             => v >= 10  },
+  { id: 'words_25',     emoji: '', label: 'Bookworm',         desc: '25 words saved',                check: (v: number)             => v >= 25  },
+  { id: 'words_50',     emoji: '', label: 'Vocabulary Nerd',  desc: '50 words saved',                check: (v: number)             => v >= 50  },
+  { id: 'text_1',       emoji: '', label: 'First Read',       desc: 'Complete your first text',      check: (_v: number, t: number) => t >= 1   },
+  { id: 'text_5',       emoji: '', label: 'Avid Reader',      desc: '5 texts completed',             check: (_v: number, t: number) => t >= 5   },
+  { id: 'text_10',      emoji: '', label: 'Scholar',          desc: '10 texts completed',            check: (_v: number, t: number) => t >= 10  },
+  { id: 'level_2',      emoji: '', label: 'Level Up!',        desc: 'Reach Level 2',                 check: (_v: number, _t: number, xp: number) => xp >= 100  },
+  { id: 'level_3',      emoji: '', label: 'Rising Star',      desc: 'Reach Level 3',                 check: (_v: number, _t: number, xp: number) => xp >= 250  },
+  { id: 'level_5',      emoji: '', label: 'Language Rocket',  desc: 'Reach Level 5',                 check: (_v: number, _t: number, xp: number) => xp >= 900  },
 ];
 
 // Circular XP progress ring (SVG)
-function XPRing({ pct, emoji, level }: { pct: number; emoji: string; level: number }) {
+function XPRing({ pct, level }: { pct: number; level: number }) {
   const r = 40;
   const circ = 2 * Math.PI * r;
   const offset = circ - (pct / 100) * circ;
@@ -36,8 +36,7 @@ function XPRing({ pct, emoji, level }: { pct: number; emoji: string; level: numb
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="text-2xl leading-none">{emoji}</span>
-        <span className="text-xs font-bold text-foreground mt-0.5">Lv {level}</span>
+        <span className="text-xs font-bold text-foreground">Lv {level}</span>
       </div>
     </div>
   );
@@ -65,7 +64,7 @@ export function ProgressView() {
       {/* Level card with ring */}
       <Card className={`border-2 p-5 ${levelInfo.color}`}>
         <div className="flex items-center gap-5">
-          <XPRing pct={xpProgress.pct} emoji={levelInfo.emoji} level={levelInfo.level} />
+          <XPRing pct={xpProgress.pct} level={levelInfo.level} />
           <div className="flex-1 min-w-0">
             <p className={`font-heading text-xl font-bold ${levelInfo.textColor}`}>{levelInfo.title}</p>
             <p className="text-sm text-muted-foreground mb-2">{xp} XP total</p>
@@ -77,7 +76,7 @@ export function ProgressView() {
                 </p>
               </>
             ) : (
-              <p className={`text-sm font-semibold ${levelInfo.textColor}`}>🎉 Max level!</p>
+              <p className={`text-sm font-semibold ${levelInfo.textColor}`}>Max level!</p>
             )}
           </div>
         </div>
@@ -168,7 +167,6 @@ export function ProgressView() {
           <div className="grid grid-cols-2 gap-2">
             {unlockedAchievements.map(a => (
               <Card key={a.id} className="p-3 flex items-center gap-2.5 bg-primary/5 border-primary/20">
-                <span className="text-2xl shrink-0">{a.emoji}</span>
                 <div className="min-w-0">
                   <p className="text-xs font-bold text-foreground leading-tight">{a.label}</p>
                   <p className="text-xs text-muted-foreground leading-tight truncate">{a.desc}</p>
@@ -182,7 +180,6 @@ export function ProgressView() {
           <div className="grid grid-cols-2 gap-2">
             {lockedAchievements.map(a => (
               <Card key={a.id} className="p-3 flex items-center gap-2.5 opacity-40">
-                <span className="text-2xl shrink-0 grayscale">🔒</span>
                 <div className="min-w-0">
                   <p className="text-xs font-bold text-foreground leading-tight">{a.label}</p>
                   <p className="text-xs text-muted-foreground leading-tight truncate">{a.desc}</p>

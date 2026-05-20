@@ -79,8 +79,8 @@ export function VoiceSettings({ visible = false }: { visible?: boolean }) {
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
               {savedKey
-                ? '✅ OpenAI TTS active — natural Dutch voices'
-                : '🔈 Browser TTS active — add an OpenAI key for natural voices'}
+                ? 'OpenAI TTS active — natural Dutch voices'
+                : 'Browser TTS active — add an OpenAI key for natural voices'}
             </p>
           </SheetHeader>
 
@@ -98,7 +98,6 @@ export function VoiceSettings({ visible = false }: { visible?: boolean }) {
                     }`}
                     onClick={() => handleSelectPreset(id)}
                   >
-                    <span className="text-2xl shrink-0">{info.emoji}</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-foreground">{info.name}</p>
                       <p className="text-xs text-muted-foreground">{info.desc}</p>

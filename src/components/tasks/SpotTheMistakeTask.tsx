@@ -139,7 +139,6 @@ export function SpotTheMistakeTask({ onBack }: { onBack: () => void }) {
 
       <Card className="bg-indigo-50 border-indigo-200 p-4">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xl">🕵️</span>
           <span className="text-xs font-semibold text-indigo-700 uppercase tracking-wide">Spot the Mistake</span>
         </div>
         <p className="text-xs text-indigo-700">Claude generates 5 Dutch sentences — some are correct, some have a grammar error. Can you tell the difference?</p>
@@ -249,7 +248,7 @@ export function SpotTheMistakeTask({ onBack }: { onBack: () => void }) {
               {selfCorrection.trim() && (
                 <Card className={`p-3 ${isCorrectFix ? 'bg-emerald-50 border-emerald-200' : 'bg-amber-50 border-amber-200'}`}>
                   <p className={`text-xs font-bold mb-1 ${isCorrectFix ? 'text-emerald-700' : 'text-amber-700'}`}>
-                    {isCorrectFix ? '✅ Perfect correction!' : '💡 Good try — here\'s the answer:'}
+                    {isCorrectFix ? 'Perfect correction!' : 'Good try — here\'s the answer:'}
                   </p>
                   <p className="text-sm"><span className="font-semibold text-emerald-700">Your fix: </span>{selfCorrection}</p>
                   {!isCorrectFix && <p className="text-sm mt-1"><span className="font-semibold text-foreground">Answer: </span>{current.correction}</p>}
@@ -309,7 +308,7 @@ export function SpotTheMistakeTask({ onBack }: { onBack: () => void }) {
           <div className="space-y-3 animate-fade-in">
             <Card className={`p-4 ${isCorrectGuess ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}>
               <p className={`text-sm font-bold mb-1 ${isCorrectGuess ? 'text-emerald-700' : 'text-red-700'}`}>
-                {isCorrectGuess ? '✅ Correct!' : '❌ Not quite'}
+                {isCorrectGuess ? 'Correct!' : 'Not quite'}
               </p>
               {current.has_error && (
                 <div className="space-y-1 text-sm">
@@ -331,7 +330,6 @@ export function SpotTheMistakeTask({ onBack }: { onBack: () => void }) {
   return (
     <div className="animate-fade-in space-y-5">
       <div className="text-center py-4 space-y-2">
-        <p className="text-5xl">{score === sentences.length ? '🕵️' : score >= 4 ? '🔍' : '💪'}</p>
         <h2 className="font-heading text-2xl font-bold">{score === sentences.length ? 'Sharp eye!' : score >= 4 ? 'Good detective!' : 'Keep practising!'}</h2>
         <p className="text-muted-foreground"><span className="text-3xl font-bold text-primary">{score}</span> / {sentences.length} correct</p>
       </div>

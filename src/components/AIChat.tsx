@@ -61,7 +61,7 @@ export function AIChat() {
     if (open && messages.length === 0) {
       setMessages([{
         role: 'assistant',
-        content: 'Hoi! 👋 I\'m Daan, your Dutch tutor. Ask me anything — grammar, vocabulary, pronunciation, or anything else about Dutch!',
+        content: 'Hoi! I\'m Daan, your Dutch tutor. Ask me anything — grammar, vocabulary, pronunciation, or anything else about Dutch!',
       }]);
     }
   }, [open]);
@@ -123,7 +123,6 @@ export function AIChat() {
           <SheetHeader className="px-4 pt-4 pb-3 border-b border-border shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className="text-xl">🇳🇱</span>
                 <div>
                   <SheetTitle className="text-base font-bold leading-tight">Daan — Dutch Tutor</SheetTitle>
                   <p className="text-xs text-muted-foreground">Ask anything about Dutch</p>

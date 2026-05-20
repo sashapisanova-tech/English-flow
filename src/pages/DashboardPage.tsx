@@ -88,11 +88,11 @@ export default function DashboardPage() {
           <div className="flex items-start justify-between gap-2">
             <div>
               <h1 className="font-heading text-2xl font-bold text-foreground">
-                {activeTab === 'home' ? 'Goedendag! 👋' :
+                {activeTab === 'home' ? 'Goedendag!' :
                  activeTab === 'reading' && selectedText ? selectedText.title :
                  activeTab === 'reading' ? 'Reading Library' :
                  activeTab === 'flashcards' ? 'Flashcards' :
-                 activeTab === 'tasks' ? 'Tasks 🎯' : 'Me'}
+                 activeTab === 'tasks' ? 'Tasks' : 'Me'}
               </h1>
               {activeTab === 'home' && (
                 <p className="mt-1 text-sm text-muted-foreground">Ready for your daily Dutch practice?</p>
@@ -112,8 +112,8 @@ export default function DashboardPage() {
             {/* Level-up toast */}
             {showLevelUp && (
               <div className="animate-fade-in fixed top-6 left-1/2 z-50 -translate-x-1/2 rounded-2xl bg-primary px-6 py-3 shadow-xl text-primary-foreground text-center">
-                <p className="text-lg font-bold">⬆️ Level Up!</p>
-                <p className="text-sm opacity-90">You reached {levelInfo.emoji} {levelInfo.title}</p>
+                <p className="text-lg font-bold">Level Up!</p>
+                <p className="text-sm opacity-90">You reached {levelInfo.title}</p>
               </div>
             )}
 
@@ -121,7 +121,6 @@ export default function DashboardPage() {
             <Card className={`border-2 p-5 ${levelInfo.color}`}>
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-3xl">{levelInfo.emoji}</span>
                   <div>
                     <p className={`font-heading text-lg font-bold leading-tight ${levelInfo.textColor}`}>
                       Level {levelInfo.level} — {levelInfo.title}
@@ -142,7 +141,7 @@ export default function DashboardPage() {
                 </div>
               )}
               {levelInfo.maxXP === Infinity && (
-                <p className={`text-xs font-semibold ${levelInfo.textColor}`}>🎉 Maximum level reached!</p>
+                <p className={`text-xs font-semibold ${levelInfo.textColor}`}>Maximum level reached!</p>
               )}
             </Card>
 

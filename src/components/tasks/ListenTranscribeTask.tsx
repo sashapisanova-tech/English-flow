@@ -137,7 +137,6 @@ export function ListenTranscribeTask({ onBack }: { onBack: () => void }) {
       </div>
       <Card className="bg-sky-50 border-sky-200 p-4">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xl">🎧</span>
           <span className="text-xs font-semibold text-sky-700 uppercase tracking-wide">Listen & Transcribe</span>
         </div>
         <p className="text-xs text-sky-700 leading-relaxed">
@@ -172,7 +171,6 @@ export function ListenTranscribeTask({ onBack }: { onBack: () => void }) {
     return (
       <div className="animate-fade-in space-y-5">
         <div className="text-center py-4 space-y-2">
-          <p className="text-5xl">{pct === 1 ? '🎧' : pct >= 0.7 ? '👂' : '💪'}</p>
           <h2 className="font-heading text-2xl font-bold">{pct === 1 ? 'Perfect hearing!' : pct >= 0.7 ? 'Great listening!' : 'Keep practising!'}</h2>
           <p className="text-muted-foreground"><span className="text-3xl font-bold text-primary">{totalScore}</span> / {maxScore} points</p>
         </div>

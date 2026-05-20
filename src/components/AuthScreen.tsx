@@ -41,14 +41,12 @@ export function AuthScreen() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4">
       <div className="mb-8 text-center">
-        <div className="text-5xl mb-3">🇳🇱</div>
         <h1 className="font-heading text-3xl font-bold text-foreground">Dutch Flow</h1>
         <p className="text-muted-foreground mt-1">Learn Dutch with spaced repetition</p>
       </div>
       <Card className="w-full max-w-sm p-6 space-y-5">
         {success ? (
           <div className="text-center space-y-3">
-            <div className="text-4xl">📬</div>
             <h2 className="font-semibold text-foreground">Check your email</h2>
             <p className="text-sm text-muted-foreground">
               We sent a confirmation link to <strong>{email}</strong>.<br />

@@ -83,7 +83,6 @@ export function WordSprintTask({ onBack }: { onBack: () => void }) {
 
       <Card className="bg-yellow-50 border-yellow-200 p-4">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xl">⚡</span>
           <span className="text-xs font-semibold text-yellow-700 uppercase tracking-wide">Word Sprint</span>
         </div>
         <p className="text-xs text-yellow-700">60 seconds · up to 10 words · English → Dutch. Type as fast as you can!</p>
@@ -93,7 +92,6 @@ export function WordSprintTask({ onBack }: { onBack: () => void }) {
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Word source</p>
         <button onClick={() => setSource('vocab')}
           className={`w-full flex items-center gap-3 rounded-xl border-2 p-3 text-left transition-all ${source === 'vocab' ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/40'}`}>
-          <span className="text-xl">📝</span>
           <div>
             <p className="text-sm font-medium">My vocabulary</p>
             <p className="text-xs text-muted-foreground">{myWords.length} words saved</p>
@@ -160,7 +158,6 @@ export function WordSprintTask({ onBack }: { onBack: () => void }) {
   return (
     <div className="animate-fade-in space-y-5">
       <div className="text-center py-4 space-y-2">
-        <p className="text-5xl">{score === queue.length ? '🏆' : score >= queue.length * 0.7 ? '⚡' : '💪'}</p>
         <h2 className="font-heading text-2xl font-bold">{score === queue.length ? 'Perfect sprint!' : score >= queue.length * 0.7 ? 'Great speed!' : 'Keep training!'}</h2>
         <p className="text-muted-foreground"><span className="text-3xl font-bold text-primary">{score}</span> / {queue.length} correct</p>
       </div>

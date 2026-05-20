@@ -183,7 +183,6 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartP
       {/* Word list */}
       {set.words.length === 0 ? (
         <Card className="p-6 text-center">
-          <p className="text-3xl mb-2">✏️</p>
           <p className="text-sm text-muted-foreground">No words yet — add your first one above.</p>
         </Card>
       ) : (

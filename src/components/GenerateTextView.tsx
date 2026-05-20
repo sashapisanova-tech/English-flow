@@ -283,7 +283,7 @@ Return ONLY a JSON object — no markdown fences, no explanation, just the raw J
         {themeMode === 'surprise' && (
           <div className="flex items-center gap-3 rounded-lg bg-secondary/50 px-4 py-3">
             <Shuffle className="h-5 w-5 text-primary shrink-0" />
-            <p className="text-sm text-muted-foreground">🎲 AI will choose a random theme</p>
+            <p className="text-sm text-muted-foreground">AI will choose a random theme</p>
           </div>
         )}
       </Card>
@@ -293,9 +293,9 @@ Return ONLY a JSON object — no markdown fences, no explanation, just the raw J
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Text type</p>
         <div className="flex flex-wrap gap-2">
           {([
-            { value: 'narrative', label: '📖 Narrative' },
-            { value: 'dialogue', label: '💬 Dialogue' },
-            { value: 'poem', label: '🎭 Poem' },
+            { value: 'narrative', label: 'Narrative' },
+            { value: 'dialogue', label: 'Dialogue' },
+            { value: 'poem', label: 'Poem' },
           ] as { value: TextType; label: string }[]).map(({ value, label }) => (
             <button
               key={value}

@@ -16,16 +16,16 @@ interface TextListProps {
 }
 
 const moduleInfo: { key: Module; number: number; label: string; emoji: string; level: Level }[] = [
-  { key: 'daily-survival',        number: 1, label: 'Daily Survival',        emoji: '🏠', level: 'A1' },
-  { key: 'social-life',           number: 2, label: 'Social Life',           emoji: '👥', level: 'A1' },
-  { key: 'transport-city',        number: 3, label: 'City & Movement',       emoji: '🚋', level: 'A1' },
-  { key: 'work-study',            number: 4, label: 'Work & Study',          emoji: '💼', level: 'A1' },
-  { key: 'everyday-conversations',number: 5, label: 'Personal Development',  emoji: '🌱', level: 'A1' },
-  { key: 'a2-independence', number: 1, label: 'Everyday Independence', emoji: '🗓️', level: 'A2' },
-  { key: 'a2-social',      number: 2, label: 'Social Interaction',    emoji: '🤝', level: 'A2' },
-  { key: 'a2-living',      number: 3, label: 'Leven in Nederland',    emoji: '🏘️', level: 'A2' },
-  { key: 'a2-work',        number: 4, label: 'Werk & Studie',         emoji: '💼', level: 'A2' },
-  { key: 'a2-adventures',  number: 5, label: 'Kleine Avonturen',      emoji: '🚂', level: 'A2' },
+  { key: 'daily-survival',        number: 1, label: 'Daily Survival',        emoji: '', level: 'A1' },
+  { key: 'social-life',           number: 2, label: 'Social Life',           emoji: '', level: 'A1' },
+  { key: 'transport-city',        number: 3, label: 'City & Movement',       emoji: '', level: 'A1' },
+  { key: 'work-study',            number: 4, label: 'Work & Study',          emoji: '', level: 'A1' },
+  { key: 'everyday-conversations',number: 5, label: 'Personal Development',  emoji: '', level: 'A1' },
+  { key: 'a2-independence', number: 1, label: 'Everyday Independence', emoji: '', level: 'A2' },
+  { key: 'a2-social',      number: 2, label: 'Social Interaction',    emoji: '', level: 'A2' },
+  { key: 'a2-living',      number: 3, label: 'Leven in Nederland',    emoji: '', level: 'A2' },
+  { key: 'a2-work',        number: 4, label: 'Werk & Studie',         emoji: '', level: 'A2' },
+  { key: 'a2-adventures',  number: 5, label: 'Kleine Avonturen',      emoji: '', level: 'A2' },
 ];
 
 const levelMeta: Record<Level, { subtitle: string }> = {
@@ -65,7 +65,6 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
         </Button>
 
         <div className="flex items-center gap-3">
-          <span className="text-3xl">{mod.emoji}</span>
           <div>
             <p className="text-xs uppercase tracking-wider text-muted-foreground">
               {openLevel} · Module {mod.number}
@@ -76,7 +75,7 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
 
         {mod.texts.length === 0 ? (
           <Card className="p-6 text-center">
-            <p className="text-sm text-muted-foreground">📚 Texts for this module are coming soon.</p>
+            <p className="text-sm text-muted-foreground">Texts for this module are coming soon.</p>
           </Card>
         ) : (
           <div className="space-y-2">
@@ -157,7 +156,6 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
               <div className="flex items-center gap-3 pt-1">
                 <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-accent">
                   <Folder className="h-6 w-6 text-accent-foreground" strokeWidth={1.75} />
-                  <span className="absolute -bottom-1 -right-1 text-base">{mod.emoji}</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">

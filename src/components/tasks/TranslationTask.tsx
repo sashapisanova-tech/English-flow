@@ -113,7 +113,6 @@ export function TranslationTask({ onBack }: { onBack: () => void }) {
     return (
       <div className="animate-fade-in space-y-5">
         <div className="text-center py-4">
-          <div className="text-6xl mb-3">{perfect ? '🌟' : score >= 7 ? '📖' : '💪'}</div>
           <h2 className="font-heading text-2xl font-bold mb-1">
             {perfect ? 'Perfect recall!' : score >= 7 ? 'Great memory!' : 'Keep at it!'}
           </h2>
@@ -161,7 +160,6 @@ export function TranslationTask({ onBack }: { onBack: () => void }) {
       {/* Instructions */}
       <Card className="bg-blue-50 border-blue-200 p-4">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xl">📖</span>
           <span className="text-xs font-semibold text-blue-700 uppercase tracking-wide">Word Retrieval</span>
         </div>
         <p className="text-xs text-blue-600">
@@ -231,7 +229,7 @@ export function TranslationTask({ onBack }: { onBack: () => void }) {
         )}
         {showHint && !checked && (
           <p className="text-xs text-muted-foreground bg-muted/50 rounded-lg px-3 py-2">
-            💡 Starts with: <span className="font-bold text-foreground">{current.dutch[0].toUpperCase()}...</span>
+            Starts with: <span className="font-bold text-foreground">{current.dutch[0].toUpperCase()}...</span>
             {current.dutch.length > 4 && ` (${current.dutch.length} letters)`}
           </p>
         )}
@@ -269,11 +267,11 @@ export function TranslationTask({ onBack }: { onBack: () => void }) {
           <div className="animate-fade-in space-y-3">
             {results[currentIdx] ? (
               <p className="text-sm text-green-700 text-center font-medium">
-                ✅ Correct! <span className="font-bold">{current.dutch}</span>
+                Correct! <span className="font-bold">{current.dutch}</span>
               </p>
             ) : (
               <p className="text-sm text-red-700 text-center">
-                ❌ The answer is <span className="font-bold">{current.dutch}</span>
+                The answer is <span className="font-bold">{current.dutch}</span>
                 {current.alternates && (
                   <span className="text-xs text-muted-foreground block">
                     Also accepted: {current.alternates.join(', ')}

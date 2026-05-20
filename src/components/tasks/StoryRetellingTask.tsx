@@ -259,16 +259,16 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
   if (phase === 'setup' || phase === 'generating') {
     const words = getWordsForGeneration();
     const levels: Level[] = ['A1', 'A2', 'B1'];
-    const themes: { value: Theme; emoji: string; label: string }[] = [
-      { value: 'any', emoji: '🎲', label: 'Any' },
-      { value: 'daily life', emoji: '🏠', label: 'Daily life' },
-      { value: 'adventure', emoji: '🗺️', label: 'Adventure' },
-      { value: 'mystery', emoji: '🔍', label: 'Mystery' },
+    const themes: { value: Theme; label: string }[] = [
+      { value: 'any', label: 'Any' },
+      { value: 'daily life', label: 'Daily life' },
+      { value: 'adventure', label: 'Adventure' },
+      { value: 'mystery', label: 'Mystery' },
     ];
-    const sourceTabs: { id: WordSource; label: string; emoji: string }[] = [
-      { id: 'my-words', label: 'My vocabulary', emoji: '📝' },
-      { id: 'set', label: 'Flashcard set', emoji: '📚' },
-      { id: 'custom', label: 'Enter words', emoji: '✏️' },
+    const sourceTabs: { id: WordSource; label: string }[] = [
+      { id: 'my-words', label: 'My vocabulary' },
+      { id: 'set', label: 'Flashcard set' },
+      { id: 'custom', label: 'Enter words' },
     ];
 
     return (
@@ -277,7 +277,6 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
 
         <Card className="bg-rose-50 border-rose-200 p-4">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-xl">🎙️</span>
             <span className="text-xs font-semibold text-rose-700 uppercase tracking-wide">Story Retelling</span>
           </div>
           <p className="text-xs text-rose-600 leading-relaxed">
@@ -305,7 +304,6 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
                     : 'border-border hover:border-primary/40'
                 }`}
               >
-                <span className="text-xl">{tab.emoji}</span>
                 <span className="text-sm font-medium text-foreground">{tab.label}</span>
               </button>
             ))}
@@ -391,7 +389,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
                   theme === t.value ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50'
                 }`}
               >
-                {t.emoji} {t.label}
+                {t.label}
               </button>
             ))}
           </div>
@@ -456,7 +454,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
         )}
 
         <Card className="p-4 bg-amber-50 border-amber-200">
-          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">📖 Read the story carefully</p>
+          <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">Read the story carefully</p>
           <p className="text-xs text-amber-600">
             Listen and read a few times. When ready, you'll retell it from memory using an outline and key words.
           </p>
@@ -492,7 +490,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
 
         {/* Key words */}
         <Card className="p-4 space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">🔑 Key words</p>
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Key words</p>
           <div className="flex flex-wrap gap-2">
             {story.key_words.map((kw, i) => (
               <div key={i} className="rounded-lg border border-border bg-secondary/40 px-2.5 py-1">
@@ -546,7 +544,6 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
 
         {/* Score */}
         <Card className="p-5 space-y-2 text-center">
-          <p className="text-4xl">{feedback.score >= 4 ? '🎉' : feedback.score >= 3 ? '😊' : '💪'}</p>
           <div className="flex justify-center"><StarRating score={feedback.score} /></div>
           <p className="text-sm text-muted-foreground">{feedback.score}/5</p>
         </Card>
@@ -585,15 +582,15 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
         {/* Feedback notes */}
         <Card className="p-4 space-y-3">
           <div>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">💬 Vocabulary</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Vocabulary</p>
             <p className="text-sm text-foreground">{feedback.vocabulary_feedback}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">📐 Grammar</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Grammar</p>
             <p className="text-sm text-foreground">{feedback.grammar_feedback}</p>
           </div>
           <div>
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">🌟 Keep going</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Keep going</p>
             <p className="text-sm text-foreground font-medium">{feedback.encouragement}</p>
           </div>
         </Card>

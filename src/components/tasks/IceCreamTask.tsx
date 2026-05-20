@@ -120,7 +120,6 @@ export function IceCreamTask({ onBack }: { onBack: () => void }) {
     return (
       <div className="animate-fade-in space-y-5">
         <div className="text-center py-6">
-          <div className="text-6xl mb-3">{perfect ? '🏆' : score >= 3 ? '🍦' : '😅'}</div>
           <h2 className="font-heading text-2xl font-bold mb-1">
             {perfect ? 'Perfect order!' : score >= 3 ? 'Well done!' : 'Keep practising!'}
           </h2>
@@ -166,7 +165,6 @@ export function IceCreamTask({ onBack }: { onBack: () => void }) {
       {/* Scene card */}
       <Card className="bg-amber-50 border-amber-200 p-4">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xl">🍦</span>
           <span className="text-xs font-semibold text-amber-700 uppercase tracking-wide">IJssalon De Zonnebloem</span>
         </div>
         <p className="text-xs text-amber-600 italic">You're at a Dutch ice cream shop in Amsterdam.</p>
@@ -174,7 +172,6 @@ export function IceCreamTask({ onBack }: { onBack: () => void }) {
 
       {/* Shopkeeper bubble */}
       <div className="flex gap-3">
-        <div className="text-2xl">👩‍🍳</div>
         <div className="bg-muted rounded-2xl rounded-tl-none px-4 py-3 flex-1">
           <p className="font-medium text-foreground">{step.shopkeeper.dutch}</p>
           <p className="text-xs text-muted-foreground mt-0.5 italic">{step.shopkeeper.english}</p>
@@ -192,7 +189,7 @@ export function IceCreamTask({ onBack }: { onBack: () => void }) {
       )}
       {showHint && !isAnswered && (
         <p className="text-xs text-muted-foreground bg-muted/50 rounded-lg px-3 py-2 italic">
-          💡 {step.hint}
+          {step.hint}
         </p>
       )}
 
@@ -232,10 +229,10 @@ export function IceCreamTask({ onBack }: { onBack: () => void }) {
       {isAnswered && (
         <div className="animate-fade-in space-y-3">
           {step.options[selected!].correct ? (
-            <p className="text-sm text-green-700 font-medium">✅ Goed zo! That's the right thing to say.</p>
+            <p className="text-sm text-green-700 font-medium">Goed zo! That's the right thing to say.</p>
           ) : (
             <p className="text-sm text-red-700 font-medium">
-              ❌ Not quite — the correct answer is highlighted above.
+              Not quite — the correct answer is highlighted above.
             </p>
           )}
           <Button className="w-full" onClick={handleNext}>

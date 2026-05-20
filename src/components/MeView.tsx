@@ -36,7 +36,7 @@ export function MeView() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="font-heading font-semibold text-foreground truncate">{user?.email}</p>
-            <p className="text-xs text-muted-foreground">Dutch learner 🇳🇱</p>
+            <p className="text-xs text-muted-foreground">Dutch learner</p>
           </div>
         </div>
       </Card>

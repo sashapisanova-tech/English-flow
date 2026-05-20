@@ -106,7 +106,6 @@ export function DailyChallengeTask({ onBack }: { onBack: () => void }) {
         <Badge variant="secondary">Daily Challenge</Badge>
       </div>
       <div className="text-center py-8 space-y-4">
-        <p className="text-6xl">✅</p>
         <h2 className="font-heading text-xl font-bold">Today's challenge done!</h2>
         <div className="flex items-center justify-center gap-2 text-orange-500">
           <Flame className="h-6 w-6 fill-orange-500" />
@@ -130,7 +129,6 @@ export function DailyChallengeTask({ onBack }: { onBack: () => void }) {
 
       <Card className="bg-orange-50 border-orange-200 p-4">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xl">🏆</span>
           <span className="text-xs font-semibold text-orange-700 uppercase tracking-wide">Daily Challenge</span>
         </div>
         <p className="text-xs text-orange-700 leading-relaxed">
@@ -195,7 +193,7 @@ export function DailyChallengeTask({ onBack }: { onBack: () => void }) {
           <Flame className="h-6 w-6 fill-orange-500" />
           <span className="font-heading text-2xl font-bold">{streak} day streak</span>
         </div>
-        {streak > 1 && <p className="text-sm text-muted-foreground">🔥 Come back tomorrow to keep it going!</p>}
+        {streak > 1 && <p className="text-sm text-muted-foreground">Come back tomorrow to keep it going!</p>}
       </div>
       <Button className="w-full" onClick={onBack}>Back to tasks</Button>
     </div>

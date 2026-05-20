@@ -260,7 +260,6 @@ export function GrammarDrillsTask({ onBack }: { onBack: () => void }) {
     return (
       <div className="animate-fade-in space-y-5">
         <div className="text-center py-4">
-          <div className="text-6xl mb-3">{perfect ? '🏆' : score >= exercises.length * 0.7 ? '🎯' : '💪'}</div>
           <h2 className="font-heading text-2xl font-bold mb-1">
             {perfect ? 'Perfect score!' : score >= exercises.length * 0.7 ? 'Well done!' : 'Keep drilling!'}
           </h2>
@@ -295,10 +294,10 @@ export function GrammarDrillsTask({ onBack }: { onBack: () => void }) {
       {/* Category selector */}
       <div className="grid grid-cols-3 gap-1.5">
         {([
-          { value: 'conjugation' as Category, label: 'Conjugation', emoji: '🔤' },
-          { value: 'wordorder' as Category, label: 'Word Order', emoji: '🔀' },
-          { value: 'separable' as Category, label: 'Separable', emoji: '✂️' },
-        ] as const).map(({ value, label, emoji }) => (
+          { value: 'conjugation' as Category, label: 'Conjugation' },
+          { value: 'wordorder' as Category, label: 'Word Order' },
+          { value: 'separable' as Category, label: 'Separable' },
+        ] as const).map(({ value, label }) => (
           <button
             key={value}
             onClick={() => selectCategory(value)}
@@ -308,7 +307,7 @@ export function GrammarDrillsTask({ onBack }: { onBack: () => void }) {
                 : 'border-border text-muted-foreground hover:border-primary/30'
             }`}
           >
-            {emoji} {label}
+            {label}
           </button>
         ))}
       </div>
@@ -372,12 +371,12 @@ export function GrammarDrillsTask({ onBack }: { onBack: () => void }) {
                   : normalize(input) === normalize((ex as SepEx).answer))
                   ? (
                     <p className="text-sm text-green-700 text-center font-medium">
-                      ✅ Correct!
+                      Correct!
                     </p>
                   ) : (
                     <Card className="bg-red-50 border-red-200 p-3 space-y-1">
                       <p className="text-sm text-red-700 text-center">
-                        ❌ The answer is <span className="font-bold">
+                        The answer is <span className="font-bold">
                           {category === 'conjugation' ? (ex as ConjEx).answer : (ex as SepEx).answer}
                         </span>
                       </p>
@@ -389,7 +388,7 @@ export function GrammarDrillsTask({ onBack }: { onBack: () => void }) {
                 }
                 <Card className="bg-muted/50 p-3">
                   <p className="text-xs text-muted-foreground text-center">
-                    💡 {category === 'conjugation' ? (ex as ConjEx).tip : (ex as SepEx).tip}
+                    {category === 'conjugation' ? (ex as ConjEx).tip : (ex as SepEx).tip}
                   </p>
                 </Card>
                 <Button className="w-full" onClick={handleNext}>
@@ -448,7 +447,7 @@ export function GrammarDrillsTask({ onBack }: { onBack: () => void }) {
           {checked && (
             <div className="animate-fade-in space-y-3">
               <Card className="bg-blue-50 border-blue-200 p-3">
-                <p className="text-xs text-blue-700">💡 {(ex as WOEx).rule}</p>
+                <p className="text-xs text-blue-700">{(ex as WOEx).rule}</p>
               </Card>
               <Button className="w-full" onClick={handleNext}>
                 {idx + 1 >= exercises.length ? 'See results' : 'Next →'}

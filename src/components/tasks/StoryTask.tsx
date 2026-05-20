@@ -135,11 +135,11 @@ export function StoryTask({ onBack }: { onBack: () => void }) {
     }
   }
 
-  const themes: { value: Theme; label: string; emoji: string }[] = [
-    { value: 'any', label: 'Any', emoji: '🎲' },
-    { value: 'daily life', label: 'Daily life', emoji: '🏠' },
-    { value: 'adventure', label: 'Adventure', emoji: '🗺️' },
-    { value: 'mystery', label: 'Mystery', emoji: '🔍' },
+  const themes: { value: Theme; label: string }[] = [
+    { value: 'any', label: 'Any' },
+    { value: 'daily life', label: 'Daily life' },
+    { value: 'adventure', label: 'Adventure' },
+    { value: 'mystery', label: 'Mystery' },
   ];
 
   const levels: Level[] = ['A1', 'A2', 'B1'];
@@ -157,7 +157,6 @@ export function StoryTask({ onBack }: { onBack: () => void }) {
       {/* Info card */}
       <Card className="bg-purple-50 border-purple-200 p-4">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xl">✨</span>
           <span className="text-xs font-semibold text-purple-700 uppercase tracking-wide">AI Story Generator</span>
         </div>
         <p className="text-xs text-purple-600">
@@ -170,7 +169,6 @@ export function StoryTask({ onBack }: { onBack: () => void }) {
 
       {savedWords.length === 0 ? (
         <Card className="p-6 text-center space-y-2">
-          <p className="text-2xl">📚</p>
           <p className="font-medium text-foreground">No saved words yet</p>
           <p className="text-sm text-muted-foreground">Save words from reading texts first, then come back here.</p>
         </Card>
@@ -212,7 +210,7 @@ export function StoryTask({ onBack }: { onBack: () => void }) {
                         : 'border-border bg-card text-muted-foreground hover:border-primary/50'
                     }`}
                   >
-                    {t.emoji} {t.label}
+                    {t.label}
                   </button>
                 ))}
               </div>
@@ -253,7 +251,7 @@ export function StoryTask({ onBack }: { onBack: () => void }) {
           >
             {loading ? (
               <>
-                <span className="animate-spin">⏳</span> Writing your story…
+                Writing your story…
               </>
             ) : (
               <>

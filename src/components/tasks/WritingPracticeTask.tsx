@@ -206,7 +206,7 @@ export function WritingPracticeTask({ onBack }: { onBack: () => void }) {
 
           <Card className="bg-green-50 border-green-200 p-4">
             <p className="text-xs text-green-700 leading-relaxed">
-              ✍️ Write <span className="font-bold">3–5 Dutch sentences</span> about your day or anything you like.
+              Write <span className="font-bold">3–5 Dutch sentences</span> about your day or anything you like.
               Claude will correct your Dutch and explain each mistake.
             </p>
           </Card>
@@ -220,7 +220,7 @@ export function WritingPracticeTask({ onBack }: { onBack: () => void }) {
           />
 
           <Button className="w-full" onClick={handleJournalSubmit} disabled={loading || !journalText.trim()}>
-            {loading ? '⏳ Checking your Dutch…' : 'Get feedback'}
+            {loading ? 'Checking your Dutch…' : 'Get feedback'}
           </Button>
 
           {error && (
@@ -254,7 +254,7 @@ export function WritingPracticeTask({ onBack }: { onBack: () => void }) {
                 </Card>
               ) : (
                 <Card className="p-4">
-                  <p className="text-sm text-green-700 font-medium">✅ No errors — great writing!</p>
+                  <p className="text-sm text-green-700 font-medium">No errors — great writing!</p>
                 </Card>
               )}
 
@@ -281,7 +281,7 @@ export function WritingPracticeTask({ onBack }: { onBack: () => void }) {
           <Progress value={dictProgress} className="h-2" />
 
           <Card className="bg-indigo-50 border-indigo-200 p-4 space-y-3">
-            <p className="text-xs text-indigo-700">🎧 Listen carefully and type exactly what you hear.</p>
+            <p className="text-xs text-indigo-700">Listen carefully and type exactly what you hear.</p>
             <Button
               variant="outline"
               className={`w-full gap-2 border-indigo-300 text-indigo-700 hover:bg-indigo-100 ${isPlaying ? 'opacity-70' : ''}`}
@@ -311,7 +311,7 @@ export function WritingPracticeTask({ onBack }: { onBack: () => void }) {
             <div className="space-y-3 animate-fade-in">
               <Card className={`p-4 space-y-2 ${dictCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
                 {dictCorrect ? (
-                  <p className="text-sm font-semibold text-green-700">✅ Perfect!</p>
+                  <p className="text-sm font-semibold text-green-700">Perfect!</p>
                 ) : (
                   <>
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">You wrote:</p>
@@ -333,9 +333,6 @@ export function WritingPracticeTask({ onBack }: { onBack: () => void }) {
       {mode === 'dictation' && dictFinished && (
         <div className="animate-fade-in space-y-5">
           <div className="text-center py-4">
-            <div className="text-6xl mb-3">
-              {dictScore === DICTATION_SENTENCES.length ? '🎧' : dictScore >= 7 ? '👂' : '💪'}
-            </div>
             <h2 className="font-heading text-2xl font-bold mb-1">
               {dictScore === DICTATION_SENTENCES.length ? 'Perfect listening!' : dictScore >= 7 ? 'Great ears!' : 'Keep practising!'}
             </h2>

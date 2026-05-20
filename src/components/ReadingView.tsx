@@ -702,7 +702,7 @@ Return ONLY valid JSON, no markdown:
               }}
               className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-semibold bg-secondary text-foreground hover:bg-accent transition-all"
             >
-              💬 Ask Daan about this
+              Ask Daan about this
             </button>
           </div>
           <div className="flex justify-center mt-0">
@@ -754,7 +754,7 @@ Return ONLY valid JSON, no markdown:
                 }}
                 className="flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold bg-secondary text-foreground hover:bg-accent transition-all"
               >
-                💬 Ask Daan
+                Ask Daan
               </button>
             </div>
           </div>
@@ -946,7 +946,7 @@ Return ONLY valid JSON, no markdown:
             {retrievalSubmitted && (
               <div className="space-y-2">
                 <p className={`text-sm font-semibold ${retrievalScore === retrievalTotal ? 'text-success' : 'text-foreground'}`}>
-                  {retrievalScore === retrievalTotal ? '🎉 Perfect score!' : `${retrievalScore} / ${retrievalTotal} correct`}
+                  {retrievalScore === retrievalTotal ? 'Perfect score!' : `${retrievalScore} / ${retrievalTotal} correct`}
                 </p>
                 <Button
                   variant="outline" size="sm" className="gap-2"
@@ -1017,7 +1017,7 @@ Return ONLY valid JSON, no markdown:
               ) : (
                 <div className="space-y-2">
                   <p className={`text-sm font-semibold ${correctCount === blanks.length ? 'text-emerald-600' : 'text-foreground'}`}>
-                    {correctCount === blanks.length ? '🎉 Perfect!' : `${correctCount} / ${blanks.length} correct`}
+                    {correctCount === blanks.length ? 'Perfect!' : `${correctCount} / ${blanks.length} correct`}
                   </p>
                   <Button variant="outline" size="sm" className="gap-2" onClick={() => { setClozeAnswers({}); setClozeSubmitted(false); }}>
                     <RotateCcw className="h-3.5 w-3.5" /> Try again
@@ -1065,7 +1065,6 @@ Return ONLY valid JSON, no markdown:
           if (builderDone) {
             return (
               <Card className="animate-fade-in p-5 space-y-4 text-center">
-                <p className="text-4xl">{builderScore === builderSentences.length ? '🎉' : '💪'}</p>
                 <p className="font-heading text-lg font-bold">
                   {builderScore === builderSentences.length ? 'Perfect word order!' : `${builderScore} / ${builderSentences.length} correct`}
                 </p>
@@ -1151,7 +1150,7 @@ Return ONLY valid JSON, no markdown:
               <div className="space-y-4">
                 {/* Outline */}
                 <div className="space-y-2">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">📋 Outline</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Outline</p>
                   <ol className="space-y-1.5">
                     {retellingData.outline.map((pt, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-foreground">
@@ -1164,7 +1163,7 @@ Return ONLY valid JSON, no markdown:
 
                 {/* Key words */}
                 <div className="space-y-2">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">🔑 Key words</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Key words</p>
                   <div className="flex flex-wrap gap-2">
                     {retellingData.key_words.map((kw, i) => (
                       <div key={i} className="rounded-lg border border-border bg-secondary/40 px-2.5 py-1">
@@ -1210,7 +1209,6 @@ Return ONLY valid JSON, no markdown:
               <div className="space-y-4 animate-fade-in">
                 {/* Score */}
                 <div className="flex items-center gap-3">
-                  <span className="text-3xl">{retellingFeedback.score >= 4 ? '🎉' : retellingFeedback.score >= 3 ? '😊' : '💪'}</span>
                   <div className="flex gap-0.5">
                     {[1,2,3,4,5].map(n => (
                       <Star key={n} className={`h-5 w-5 ${n <= retellingFeedback.score ? 'fill-amber-400 text-amber-400' : 'text-border'}`} />

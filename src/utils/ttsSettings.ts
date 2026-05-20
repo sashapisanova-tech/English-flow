@@ -11,9 +11,9 @@ export const VOICE_MAP: Record<VoicePreset, string> = {
 };
 
 export const VOICE_LABELS: Record<VoicePreset, { emoji: string; name: string; desc: string }> = {
-  feminine: { emoji: '👩', name: 'Nova',  desc: 'Warm & clear' },
-  male:     { emoji: '🧔', name: 'Onyx',  desc: 'Deep & calm' },
-  funny:    { emoji: '🎭', name: 'Fable', desc: 'Expressive & theatrical' },
+  feminine: { emoji: '', name: 'Nova',  desc: 'Warm & clear' },
+  male:     { emoji: '', name: 'Onyx',  desc: 'Deep & calm' },
+  funny:    { emoji: '', name: 'Fable', desc: 'Expressive & theatrical' },
 };
 
 export function getVoicePreset(): VoicePreset {

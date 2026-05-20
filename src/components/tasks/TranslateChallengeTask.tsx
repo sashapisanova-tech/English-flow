@@ -185,7 +185,6 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
       {/* Info card */}
       <Card className="bg-teal-50 border-teal-200 p-4">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-xl">🔄</span>
           <span className="text-xs font-semibold text-teal-700 uppercase tracking-wide">Translate to Dutch</span>
         </div>
         <p className="text-xs text-teal-700">
@@ -195,7 +194,6 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
 
       {savedWords.length === 0 ? (
         <Card className="p-6 text-center space-y-2">
-          <p className="text-2xl">📚</p>
           <p className="font-medium text-foreground">No saved words yet</p>
           <p className="text-sm text-muted-foreground">Save words from reading texts first, then come back here.</p>
         </Card>
@@ -204,7 +202,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
           {/* Step 1: generate */}
           {!generated && (
             <Button className="w-full gap-2" onClick={handleGenerate} disabled={loading}>
-              {loading ? <><span className="animate-spin">⏳</span> Generating text…</> : <><Sparkles className="h-4 w-4" /> Generate English text</>}
+              {loading ? <>Generating text…</> : <><Sparkles className="h-4 w-4" /> Generate English text</>}
             </Button>
           )}
 
@@ -228,7 +226,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
                     onClick={() => setShowVocab(v => !v)}
                     className="flex w-full items-center justify-between rounded-lg border border-border bg-card px-3 py-2.5 text-sm font-medium text-foreground hover:bg-secondary transition-colors"
                   >
-                    <span>📖 Vocabulary helper ({generated.hint_words.filter(h => !h.in_flashcards).length} new words)</span>
+                    <span>Vocabulary helper ({generated.hint_words.filter(h => !h.in_flashcards).length} new words)</span>
                     {showVocab ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
                   </button>
 
@@ -264,7 +262,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
                   <RotateCcw className="h-4 w-4 mr-1.5" /> New text
                 </Button>
                 <Button className="flex-1" onClick={handleCheck} disabled={loading || !studentText.trim()}>
-                  {loading ? '⏳ Checking…' : 'Check translation'}
+                  {loading ? 'Checking…' : 'Check translation'}
                 </Button>
               </div>
             </div>
@@ -296,7 +294,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
                 </Card>
               ) : (
                 <Card className="p-4">
-                  <p className="text-sm text-green-700 font-medium">✅ No errors — great translation!</p>
+                  <p className="text-sm text-green-700 font-medium">No errors — great translation!</p>
                 </Card>
               )}
 

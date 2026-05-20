@@ -15,7 +15,7 @@ type ActiveTask = 'story' | 'writing' | 'translate-challenge' | 'word-sprint' | 
 const tasks = [
   {
     id: 'daily-challenge' as const,
-    emoji: '🏆',
+    emoji: '',
     icon: Trophy,
     title: 'Daily Challenge',
     subtitle: 'One challenge per day · build your streak',
@@ -26,7 +26,7 @@ const tasks = [
   },
   {
     id: 'word-sprint' as const,
-    emoji: '⚡',
+    emoji: '',
     icon: Zap,
     title: 'Word Sprint',
     subtitle: '60 seconds · English → Dutch',
@@ -37,7 +37,7 @@ const tasks = [
   },
   {
     id: 'spot-mistake' as const,
-    emoji: '🕵️',
+    emoji: '',
     icon: Search,
     title: 'Spot the Mistake',
     subtitle: 'Find the grammar error',
@@ -48,7 +48,7 @@ const tasks = [
   },
   {
     id: 'listen-transcribe' as const,
-    emoji: '🎧',
+    emoji: '',
     icon: Headphones,
     title: 'Listen & Transcribe',
     subtitle: 'Hear · write · translate',
@@ -59,7 +59,7 @@ const tasks = [
   },
   {
     id: 'writing' as const,
-    emoji: '✍️',
+    emoji: '',
     icon: PenLine,
     title: 'Daily Journal',
     subtitle: 'Free writing · AI corrections',
@@ -70,7 +70,7 @@ const tasks = [
   },
   {
     id: 'story' as const,
-    emoji: '✨',
+    emoji: '',
     icon: Sparkles,
     title: 'AI Story Generator',
     subtitle: 'A story built from your words',
@@ -81,7 +81,7 @@ const tasks = [
   },
   {
     id: 'translate-challenge' as const,
-    emoji: '🔄',
+    emoji: '',
     icon: ArrowLeftRight,
     title: 'Translate to Dutch',
     subtitle: 'English → Dutch challenge',
@@ -118,7 +118,7 @@ export function TasksView() {
             className={`card-hover cursor-pointer border-2 p-4 ${task.color} transition-all active:scale-[0.98]`}
           >
             <div className="flex items-start gap-3">
-              <div className="text-3xl">{task.emoji}</div>
+              <task.icon className="h-7 w-7 shrink-0 mt-0.5 text-foreground/70" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap mb-1">
                   <span className="font-heading font-bold text-foreground">{task.title}</span>

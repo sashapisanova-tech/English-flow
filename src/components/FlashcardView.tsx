@@ -17,11 +17,11 @@ type FlashcardMode = 'browse' | 'my-words' | 'set-practice' | 'learned' | 'custo
 type Direction = 'dutch-to-english' | 'english-to-dutch';
 
 const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: string }> = {
-  verbs:      { label: 'Verbs',      emoji: '🏃' },
-  adjectives: { label: 'Adjectives', emoji: '🎨' },
-  nouns:      { label: 'Nouns',      emoji: '📦' },
-  numbers:    { label: 'Numbers',    emoji: '🔢' },
-  location:   { label: 'Location',   emoji: '📍' },
+  verbs:      { label: 'Verbs',      emoji: '' },
+  adjectives: { label: 'Adjectives', emoji: '' },
+  nouns:      { label: 'Nouns',      emoji: '' },
+  numbers:    { label: 'Numbers',    emoji: '' },
+  location:   { label: 'Location',   emoji: '' },
 };
 
 export function FlashcardView() {
@@ -293,7 +293,6 @@ export function FlashcardView() {
             onClick={startMyWords}
           >
             <div className="flex items-center gap-3">
-              <span className="text-2xl">📝</span>
               <div>
                 <p className="font-heading font-semibold text-foreground">Spaced Repetition Review</p>
                 <p className="text-xs text-muted-foreground">
@@ -320,7 +319,6 @@ export function FlashcardView() {
             onClick={startLearningAll}
           >
             <div className="flex items-center gap-3">
-              <span className="text-2xl">📚</span>
               <div>
                 <p className="font-heading font-semibold text-foreground">Learning</p>
                 <p className="text-xs text-muted-foreground">
@@ -336,7 +334,7 @@ export function FlashcardView() {
         <div>
           <div className="flex items-center justify-between mb-2">
             <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
-              ✨ My Sets
+              My Sets
             </h3>
           </div>
           {customSets.length === 0 ? (
@@ -389,7 +387,6 @@ export function FlashcardView() {
             onClick={startLearned}
           >
             <div className="flex items-center gap-3">
-              <span className="text-2xl">🎓</span>
               <div>
                 <p className="font-heading font-semibold text-foreground">Learned Words</p>
                 <p className="text-xs text-muted-foreground">{learnedWords.length} word{learnedWords.length !== 1 ? 's' : ''} mastered</p>
@@ -410,7 +407,7 @@ export function FlashcardView() {
               className="w-full flex items-center justify-between mb-2"
             >
               <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
-                <span>📁</span> A1 Level
+                A1 Level
                 <span className="text-xs font-normal text-muted-foreground">
                   {a1VerbSets.reduce((t, s) => t + s.words.length, 0)} verbs · {a1NounSets.reduce((t, s) => t + s.words.length, 0)} nouns · {a1AdjSets.reduce((t, s) => t + s.words.length, 0)} adjectives
                 </span>
@@ -440,7 +437,7 @@ export function FlashcardView() {
                       className="w-full flex items-center justify-between py-1"
                     >
                       <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        ⚡ Verbs <span className="font-normal normal-case">({a1VerbSets.length} sets)</span>
+                        Verbs <span className="font-normal normal-case">({a1VerbSets.length} sets)</span>
                       </span>
                       <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a1VerbsOpen ? 'rotate-180' : ''}`} />
                     </button>
@@ -470,7 +467,7 @@ export function FlashcardView() {
                       className="w-full flex items-center justify-between py-1"
                     >
                       <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        📦 Nouns <span className="font-normal normal-case">({a1NounSets.length} sets)</span>
+                        Nouns <span className="font-normal normal-case">({a1NounSets.length} sets)</span>
                       </span>
                       <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a1NounsOpen ? 'rotate-180' : ''}`} />
                     </button>
@@ -500,7 +497,7 @@ export function FlashcardView() {
                       className="w-full flex items-center justify-between py-1"
                     >
                       <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        🎨 Adjectives <span className="font-normal normal-case">({a1AdjSets.length} sets)</span>
+                        Adjectives <span className="font-normal normal-case">({a1AdjSets.length} sets)</span>
                       </span>
                       <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a1AdjOpen ? 'rotate-180' : ''}`} />
                     </button>
@@ -531,7 +528,7 @@ export function FlashcardView() {
         {groupedSets.map(({ category, label, emoji, sets }) => sets.length === 0 ? null : (
           <div key={category}>
             <h3 className="mb-2 font-heading font-semibold text-foreground flex items-center gap-2">
-              <span>{emoji}</span> {label}
+              {label}
             </h3>
             <div className="space-y-2">
               {sets.map(set => (
@@ -612,7 +609,7 @@ export function FlashcardView() {
           <Button variant="ghost" className="self-start mb-4" onClick={goBack}>
             <ArrowLeft className="h-4 w-4 mr-1" /> Back
           </Button>
-          <div className="rounded-2xl bg-accent p-6 mb-4"><span className="text-4xl">📚</span></div>
+          <div className="rounded-2xl bg-accent p-6 mb-4"></div>
           <h3 className="font-heading text-xl font-semibold text-foreground">No words yet</h3>
           <p className="mt-2 max-w-sm text-muted-foreground">
             Practice any flashcard set below — every card you rate will be automatically added to your spaced repetition queue.
@@ -657,7 +654,6 @@ export function FlashcardView() {
             <ArrowLeft className="h-4 w-4 mr-1" /> Back
           </Button>
           <div className="rounded-2xl bg-success/10 p-6 mb-4">
-            <span className="text-4xl">{nothingWasDue ? '📅' : '🎉'}</span>
           </div>
           <h3 className="font-heading text-xl font-semibold text-foreground">
             {nothingWasDue ? 'Nothing due today' : 'All caught up!'}
@@ -700,7 +696,7 @@ export function FlashcardView() {
         <Button variant="ghost" className="self-start mb-4" onClick={goBack}>
           <ArrowLeft className="h-4 w-4 mr-1" /> Back
         </Button>
-        <div className="rounded-2xl bg-success/10 p-6 mb-4"><span className="text-4xl">🎉</span></div>
+        <div className="rounded-2xl bg-success/10 p-6 mb-4"></div>
         <h3 className="font-heading text-xl font-semibold text-foreground">Set complete!</h3>
         <p className="mt-2 max-w-sm text-muted-foreground">
           You've finished "{activeSet?.title}".
@@ -869,7 +865,7 @@ export function FlashcardView() {
             </div>
           )}
           {displayWord.nounTip && (
-            <p className="text-xs text-muted-foreground pt-1 border-t border-border">💡 {displayWord.nounTip}</p>
+            <p className="text-xs text-muted-foreground pt-1 border-t border-border">{displayWord.nounTip}</p>
           )}
         </Card>
       )}
