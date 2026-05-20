@@ -286,6 +286,128 @@ export function FlashcardView() {
     return (
       <div className="animate-fade-in space-y-5">
 
+        {/* Spaced Repetition Review */}
+        {allWords.length > 0 && (
+          <Card
+            className={`card-hover cursor-pointer p-4 flex items-center justify-between ${dueCount > 0 ? 'border-primary/30 bg-primary/5' : ''}`}
+            onClick={startMyWords}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📝</span>
+              <div>
+                <p className="font-heading font-semibold text-foreground">Spaced Repetition Review</p>
+                <p className="text-xs text-muted-foreground">
+                  {dueCount > 0
+                    ? <><span className="text-primary font-semibold">{dueCount} due today</span></>
+                    : `All caught up! ${allWords.length} word${allWords.length !== 1 ? 's' : ''} in queue`
+                  }
+                </p>
+              </div>
+            </div>
+            {dueCount > 0 && (
+              <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground">
+                {dueCount}
+              </span>
+            )}
+            {dueCount === 0 && <ChevronRight className="h-5 w-5 text-muted-foreground" />}
+          </Card>
+        )}
+
+        {/* Learning card */}
+        {allWords.filter(w => w.status !== 'known').length > 0 && (
+          <Card
+            className="card-hover cursor-pointer p-4 flex items-center justify-between border-amber-200/60 bg-amber-50/40"
+            onClick={startLearningAll}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">📚</span>
+              <div>
+                <p className="font-heading font-semibold text-foreground">Learning</p>
+                <p className="text-xs text-muted-foreground">
+                  {allWords.filter(w => w.status !== 'known').length} saved word{allWords.filter(w => w.status !== 'known').length !== 1 ? 's' : ''}
+                </p>
+              </div>
+            </div>
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          </Card>
+        )}
+
+        {/* My Custom Sets */}
+        <div>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
+              ✨ My Sets
+            </h3>
+            <button
+              onClick={openCreateSet}
+              className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors font-medium"
+            >
+              <Plus className="h-3.5 w-3.5" /> New set
+            </button>
+          </div>
+          {customSets.length === 0 ? (
+            <Card
+              className="card-hover cursor-pointer border-dashed p-4 flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+              onClick={openCreateSet}
+            >
+              <Plus className="h-4 w-4" />
+              <span className="text-sm">Create your first custom set</span>
+            </Card>
+          ) : (
+            <div className="space-y-2">
+              {customSets.map(cs => (
+                <Card key={cs.id} className="p-3.5">
+                  {confirmDeleteId === cs.id ? (
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-sm text-destructive font-medium">Delete "{cs.title}"?</p>
+                      <div className="flex gap-2 shrink-0">
+                        <button onClick={() => setConfirmDeleteId(null)} className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1">Cancel</button>
+                        <button onClick={() => { deleteSet(cs.id); setConfirmDeleteId(null); }} className="text-xs font-semibold text-white bg-destructive hover:bg-destructive/90 transition-colors px-3 py-1 rounded-md">Delete</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={() => openCustomEditor(cs)}>
+                        <span className="text-lg">{cs.emoji}</span>
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium text-foreground truncate">{cs.title}</p>
+                          <p className="text-xs text-muted-foreground">{cs.words.length} word{cs.words.length !== 1 ? 's' : ''}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1 shrink-0">
+                        <button onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(cs.id); }} className="p-1.5 text-muted-foreground hover:text-destructive transition-colors rounded-md hover:bg-destructive/10">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                        <ChevronRight className="h-4 w-4 text-muted-foreground cursor-pointer" onClick={() => openCustomEditor(cs)} />
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Learned Words */}
+        {learnedWords.length > 0 && (
+          <Card
+            className="card-hover cursor-pointer p-4 flex items-center justify-between border-green-200 bg-green-50"
+            onClick={startLearned}
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">🎓</span>
+              <div>
+                <p className="font-heading font-semibold text-foreground">Learned Words</p>
+                <p className="text-xs text-muted-foreground">{learnedWords.length} word{learnedWords.length !== 1 ? 's' : ''} mastered</p>
+              </div>
+            </div>
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          </Card>
+        )}
+
+        {/* ── Prepared Sets ── */}
+        <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium pt-1">Prepared sets</p>
+
         {/* A1 Level folder */}
         {a1Sets.length > 0 && (
           <div>
@@ -419,11 +541,7 @@ export function FlashcardView() {
             </h3>
             <div className="space-y-2">
               {sets.map(set => (
-                <Card
-                  key={set.id}
-                  className="card-hover cursor-pointer p-3.5 flex items-center justify-between"
-                  onClick={() => startSet(set)}
-                >
+                <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
                   <div className="flex items-center gap-3">
                     <span className="text-lg">{set.emoji}</span>
                     <div>
@@ -437,147 +555,6 @@ export function FlashcardView() {
             </div>
           </div>
         ))}
-
-        {/* My Custom Sets */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
-              ✨ My Sets
-            </h3>
-            <button
-              onClick={openCreateSet}
-              className="flex items-center gap-1 text-xs text-primary hover:text-primary/80 transition-colors font-medium"
-            >
-              <Plus className="h-3.5 w-3.5" /> New set
-            </button>
-          </div>
-
-          {customSets.length === 0 ? (
-            <Card
-              className="card-hover cursor-pointer border-dashed p-4 flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-              onClick={openCreateSet}
-            >
-              <Plus className="h-4 w-4" />
-              <span className="text-sm">Create your first custom set</span>
-            </Card>
-          ) : (
-            <div className="space-y-2">
-              {customSets.map(cs => (
-                <Card key={cs.id} className="p-3.5">
-                  {confirmDeleteId === cs.id ? (
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm text-destructive font-medium">Delete "{cs.title}"?</p>
-                      <div className="flex gap-2 shrink-0">
-                        <button
-                          onClick={() => setConfirmDeleteId(null)}
-                          className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          onClick={() => { deleteSet(cs.id); setConfirmDeleteId(null); }}
-                          className="text-xs font-semibold text-white bg-destructive hover:bg-destructive/90 transition-colors px-3 py-1 rounded-md"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-between">
-                      <div
-                        className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer"
-                        onClick={() => openCustomEditor(cs)}
-                      >
-                        <span className="text-lg">{cs.emoji}</span>
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium text-foreground truncate">{cs.title}</p>
-                          <p className="text-xs text-muted-foreground">{cs.words.length} word{cs.words.length !== 1 ? 's' : ''}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1 shrink-0">
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(cs.id); }}
-                          className="p-1.5 text-muted-foreground hover:text-destructive transition-colors rounded-md hover:bg-destructive/10"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                        <ChevronRight
-                          className="h-4 w-4 text-muted-foreground cursor-pointer"
-                          onClick={() => openCustomEditor(cs)}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Spaced Repetition Review */}
-        {allWords.length > 0 && (
-          <Card
-            className={`card-hover cursor-pointer p-4 flex items-center justify-between ${dueCount > 0 ? 'border-primary/30 bg-primary/5' : ''}`}
-            onClick={startMyWords}
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">📝</span>
-              <div>
-                <p className="font-heading font-semibold text-foreground">Spaced Repetition Review</p>
-                <p className="text-xs text-muted-foreground">
-                  {dueCount > 0
-                    ? <><span className="text-primary font-semibold">{dueCount} due today</span></>
-                    : `All caught up! ${allWords.length} word${allWords.length !== 1 ? 's' : ''} in queue`
-                  }
-                </p>
-              </div>
-            </div>
-            {dueCount > 0 && (
-              <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground">
-                {dueCount}
-              </span>
-            )}
-            {dueCount === 0 && <ChevronRight className="h-5 w-5 text-muted-foreground" />}
-          </Card>
-        )}
-
-        {/* Learning card */}
-        {allWords.filter(w => w.status !== 'known').length > 0 && (
-          <Card
-            className="card-hover cursor-pointer p-4 flex items-center justify-between border-amber-200/60 bg-amber-50/40"
-            onClick={startLearningAll}
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">📚</span>
-              <div>
-                <p className="font-heading font-semibold text-foreground">Learning</p>
-                <p className="text-xs text-muted-foreground">
-                  {allWords.filter(w => w.status !== 'known').length} saved word{allWords.filter(w => w.status !== 'known').length !== 1 ? 's' : ''}
-                </p>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
-        )}
-
-        {/* Learned Words */}
-        {learnedWords.length > 0 && (
-          <Card
-            className="card-hover cursor-pointer p-4 flex items-center justify-between border-green-200 bg-green-50"
-            onClick={startLearned}
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">🎓</span>
-              <div>
-                <p className="font-heading font-semibold text-foreground">Learned Words</p>
-                <p className="text-xs text-muted-foreground">
-                  {learnedWords.length} word{learnedWords.length !== 1 ? 's' : ''} mastered
-                </p>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
-        )}
       </div>
     );
   }
@@ -804,25 +781,38 @@ export function FlashcardView() {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Swipe hint overlays — only visible while dragging after flip */}
-        {flipped && swipeDeltaX < -30 && (
-          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-start pl-4 rounded-2xl bg-destructive/20">
-            <span className="text-sm font-bold text-destructive opacity-80">← Again</span>
+        {/* Permanent soft color cues — left = red (Again), right = green (Got it) */}
+        <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl"
+          style={{ background: 'linear-gradient(to right, rgba(239,68,68,0.08) 0%, transparent 35%, transparent 65%, rgba(34,197,94,0.08) 100%)' }}
+        />
+        {/* Active swipe overlays */}
+        {swipeDeltaX < -40 && (
+          <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-start pl-5 rounded-2xl bg-destructive/15">
+            <span className="text-sm font-bold text-destructive">← Again</span>
           </div>
         )}
-        {flipped && swipeDeltaX > 30 && (
-          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-end pr-4 rounded-2xl bg-success/20">
-            <span className="text-sm font-bold text-success opacity-80">Got it →</span>
+        {swipeDeltaX > 40 && (
+          <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-end pr-5 rounded-2xl bg-success/15">
+            <span className="text-sm font-bold text-success">Got it →</span>
           </div>
         )}
         <div
           className="flashcard mx-auto h-64 max-w-md cursor-pointer"
-          style={{ transform: flipped && swipeDeltaX !== 0 ? `translateX(${swipeDeltaX * 0.2}px) rotate(${swipeDeltaX * 0.015}deg)` : undefined, transition: swipeDeltaX === 0 ? 'transform 0.2s ease' : 'none' }}
+          style={{ transform: swipeDeltaX !== 0 ? `translateX(${swipeDeltaX * 0.2}px) rotate(${swipeDeltaX * 0.015}deg)` : undefined, transition: swipeDeltaX === 0 ? 'transform 0.2s ease' : 'none' }}
           onClick={() => { setFlipped(!flipped); }}
         >
           <div className={`flashcard-inner ${flipped ? 'flipped' : ''}`}>
             <Card className="flashcard-face bg-card border-2">
-              <div className="text-center">
+              <div className="text-center relative">
+                {/* Listen icon — top-right of card face */}
+                <button
+                  onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
+                  className={`absolute -top-1 -right-1 p-1.5 rounded-full transition-all active:scale-95 ${
+                    isPlaying ? 'text-primary bg-primary/10' : 'text-muted-foreground/50 hover:text-primary'
+                  }`}
+                >
+                  <Volume2 className="h-4 w-4" />
+                </button>
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
                   {direction === 'dutch-to-english' ? 'Nederlands' : 'English'}
                 </p>
@@ -839,7 +829,16 @@ export function FlashcardView() {
               </div>
             </Card>
             <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20">
-              <div className="text-center">
+              <div className="text-center relative">
+                {/* Listen icon — top-right of back face too */}
+                <button
+                  onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
+                  className={`absolute -top-1 -right-1 p-1.5 rounded-full transition-all active:scale-95 ${
+                    isPlaying ? 'text-primary bg-primary/10' : 'text-muted-foreground/50 hover:text-primary'
+                  }`}
+                >
+                  <Volume2 className="h-4 w-4" />
+                </button>
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
                   {direction === 'dutch-to-english' ? 'English' : 'Nederlands'}
                 </p>
@@ -855,25 +854,27 @@ export function FlashcardView() {
         </div>
       </div>
 
-      {!flipped && currentIndex === 0 && (
-        <p className="text-center text-[10px] text-muted-foreground/50 -mt-3">
-          Flip card · then swipe ← Again &nbsp;/&nbsp; → Got it
-        </p>
-      )}
-
-      {/* Listen button — always visible during card practice */}
-      <div className="flex justify-center -mt-2">
+      {/* Action row: ← Prev  ·  Shuffle */}
+      <div className="flex items-center justify-center gap-8 -mt-2">
         <button
-          onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
-          className={`flex items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all active:scale-95 ${
-            isPlaying
-              ? 'border-primary bg-primary/10 text-primary'
-              : 'border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-primary shadow-sm'
-          }`}
+          onClick={goPrevCard}
+          disabled={currentIndex === 0}
+          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-25"
+          aria-label="Previous card"
         >
-          <Volume2 className="h-3.5 w-3.5" />
-          {isPlaying ? 'Stop' : 'Listen'}
+          <ArrowLeft className="h-4 w-4" />
         </button>
+        {mode === 'set-practice' && (
+          <button
+            onClick={toggleShuffle}
+            className={`flex items-center gap-1 rounded-full border p-1.5 transition-all ${
+              isShuffled ? 'border-primary/40 bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/40 hover:text-primary'
+            }`}
+            aria-label="Shuffle"
+          >
+            <Shuffle className="h-4 w-4" />
+          </button>
+        )}
       </div>
 
       {flipped && displayWord.article && (displayWord.plural || displayWord.exampleTranslation || displayWord.nounTip) && (
@@ -983,25 +984,7 @@ export function FlashcardView() {
                 <Check className="h-4 w-4" /> Easy
               </Button>
             </div>
-          ) : (
-            <div className="flex justify-center gap-4">
-              <Button
-                variant="outline"
-                size="lg"
-                onClick={() => handleAnswer(false)}
-                className="gap-2 border-destructive/30 text-destructive hover:bg-destructive/10"
-              >
-                <X className="h-5 w-5" /> Again
-              </Button>
-              <Button
-                size="lg"
-                onClick={() => handleAnswer(true)}
-                className="gap-2 bg-success text-success-foreground hover:bg-success/90"
-              >
-                <Check className="h-5 w-5" /> Got it
-              </Button>
-            </div>
-          )}
+          ) : null}
         </div>
       )}
     </div>
