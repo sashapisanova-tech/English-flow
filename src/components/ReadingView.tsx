@@ -996,10 +996,12 @@ Return ONLY valid JSON, no markdown:
                       value={clozeAnswers[seg.blankIndex] ?? ''}
                       onChange={e => !clozeSubmitted && setClozeAnswers(prev => ({ ...prev, [seg.blankIndex]: e.target.value }))}
                       placeholder="Dutch word…"
-                      autoComplete="off"
+                      autoComplete="new-password"
                       autoCorrect="off"
                       autoCapitalize="off"
                       spellCheck={false}
+                      data-form-type="other"
+                      data-lpignore="true"
                       className={`flex-1 rounded-lg border px-3 py-1.5 text-sm outline-none transition-colors ${
                         clozeSubmitted
                           ? scores[i] ? 'border-emerald-400 bg-emerald-50 text-emerald-800' : 'border-red-400 bg-red-50 text-red-800'
