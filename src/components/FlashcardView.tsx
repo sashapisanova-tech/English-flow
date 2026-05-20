@@ -899,6 +899,23 @@ export function FlashcardView() {
               )}
             </div>
           )}
+          {(displayWord.pastTense || displayWord.pastParticiple) && (
+            <div className="pt-2 mt-1 border-t border-border/60 space-y-1">
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Past tense</p>
+              {displayWord.pastTense && (
+                <div className="flex gap-2 text-xs">
+                  <span className="text-muted-foreground w-16 shrink-0">imperfect</span>
+                  <span className="font-medium text-foreground">{displayWord.pastTense}</span>
+                </div>
+              )}
+              {displayWord.pastParticiple && (
+                <div className="flex gap-2 text-xs">
+                  <span className="text-muted-foreground w-16 shrink-0">participle</span>
+                  <span className="font-medium text-foreground">{displayWord.pastParticiple}</span>
+                </div>
+              )}
+            </div>
+          )}
         </Card>
       )}
 

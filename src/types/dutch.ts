@@ -87,6 +87,8 @@ export interface FlashcardSetWord {
   verbType?: 'reg' | 'irr' | 'sep' | 'mod';
   verbNote?: string;
   conjugation?: VerbConjugation;
+  pastTense?: string;       // e.g. "werkte / werkten"
+  pastParticiple?: string;  // e.g. "gewerkt"
   inflected?: string;
   neverInflects?: boolean;
 }
