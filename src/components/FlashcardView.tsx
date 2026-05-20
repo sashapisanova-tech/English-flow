@@ -196,7 +196,7 @@ export function FlashcardView() {
     setSwipeDeltaX(0);
   };
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!flipped || touchStartX.current === null) return;
+    if (touchStartX.current === null) return;
     setSwipeDeltaX(e.touches[0].clientX - touchStartX.current);
   };
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -205,7 +205,7 @@ export function FlashcardView() {
       : 0;
     touchStartX.current = null;
     setSwipeDeltaX(0);
-    if (!flipped || Math.abs(dx) < 60) return;
+    if (Math.abs(dx) < 60) return;
     if (dx < 0) {
       mode === 'my-words' ? handleSRSRating('again') : handleAnswer(false);
     } else {
@@ -774,17 +774,18 @@ export function FlashcardView() {
           onClick={() => { setFlipped(!flipped); }}
         >
           <div className={`flashcard-inner ${flipped ? 'flipped' : ''}`}>
-            <Card className="flashcard-face bg-card border-2">
-              <div className="text-center relative">
-                {/* Listen icon — top-right of card face */}
-                <button
-                  onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
-                  className={`absolute -top-1 -right-1 p-1.5 rounded-full transition-all active:scale-95 ${
-                    isPlaying ? 'text-primary bg-primary/10' : 'text-muted-foreground/50 hover:text-primary'
-                  }`}
-                >
-                  <Volume2 className="h-4 w-4" />
-                </button>
+            <Card className="flashcard-face bg-card border-2 relative">
+              {/* Listen button — true top-right corner of card */}
+              <button
+                onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
+                className={`absolute top-3 right-3 z-10 p-2 rounded-full transition-all active:scale-90 ${
+                  isPlaying ? 'text-primary bg-primary/15' : 'text-muted-foreground/60 hover:text-primary hover:bg-primary/10'
+                }`}
+                aria-label="Listen"
+              >
+                <Volume2 className="h-5 w-5" />
+              </button>
+              <div className="text-center">
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
                   {direction === 'dutch-to-english' ? 'Nederlands' : 'English'}
                 </p>
@@ -800,17 +801,18 @@ export function FlashcardView() {
                 <p className="mt-4 text-xs text-muted-foreground">Tap to reveal</p>
               </div>
             </Card>
-            <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20">
-              <div className="text-center relative">
-                {/* Listen icon — top-right of back face too */}
-                <button
-                  onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
-                  className={`absolute -top-1 -right-1 p-1.5 rounded-full transition-all active:scale-95 ${
-                    isPlaying ? 'text-primary bg-primary/10' : 'text-muted-foreground/50 hover:text-primary'
-                  }`}
-                >
-                  <Volume2 className="h-4 w-4" />
-                </button>
+            <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20 relative">
+              {/* Listen button — true top-right corner of back face */}
+              <button
+                onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
+                className={`absolute top-3 right-3 z-10 p-2 rounded-full transition-all active:scale-90 ${
+                  isPlaying ? 'text-primary bg-primary/15' : 'text-muted-foreground/60 hover:text-primary hover:bg-primary/10'
+                }`}
+                aria-label="Listen"
+              >
+                <Volume2 className="h-5 w-5" />
+              </button>
+              <div className="text-center">
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
                   {direction === 'dutch-to-english' ? 'English' : 'Nederlands'}
                 </p>
