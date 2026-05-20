@@ -972,50 +972,38 @@ Return ONLY valid JSON, no markdown:
                 <p className="text-xs text-muted-foreground mt-0.5">Vocabulary words are hidden. Type them from memory.</p>
               </div>
 
-              {/* Text with numbered placeholders */}
-              <div className="rounded-xl bg-secondary/30 p-4 text-sm leading-[2.4]">
-                {clozeSegments.map((seg, i) =>
-                  seg.type === 'text'
-                    ? <span key={i}>{seg.content}</span>
-                    : <span key={i} className={`inline-flex items-center justify-center mx-0.5 px-1.5 rounded font-semibold text-xs border-b-2 ${
-                        clozeSubmitted
-                          ? scores[seg.blankIndex] ? 'bg-emerald-100 border-emerald-500 text-emerald-700' : 'bg-red-100 border-red-400 text-red-700'
-                          : 'bg-primary/10 border-primary text-primary'
-                      }`}>
-                        {seg.english}
-                      </span>
-                )}
-              </div>
-
-              {/* Input fields */}
-              <div className="space-y-2">
-                {blanks.map((seg, i) => (
-                  <div key={i} className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-muted-foreground w-5 shrink-0">{i + 1}.</span>
-                    <textarea
-                      rows={1}
-                      value={clozeAnswers[seg.blankIndex] ?? ''}
-                      onChange={e => !clozeSubmitted && setClozeAnswers(prev => ({
-                        ...prev,
-                        [seg.blankIndex]: e.target.value.replace(/\n/g, ''),
-                      }))}
-                      placeholder="Dutch word…"
-                      autoComplete="off"
-                      autoCorrect="off"
-                      autoCapitalize="off"
-                      spellCheck={false}
-                      className={`flex-1 resize-none overflow-hidden rounded-lg border px-3 py-1.5 text-sm outline-none transition-colors ${
-                        clozeSubmitted
-                          ? scores[i] ? 'border-emerald-400 bg-emerald-50 text-emerald-800' : 'border-red-400 bg-red-50 text-red-800'
-                          : 'border-border bg-background focus:border-primary'
-                      }`}
-                    />
-                    {clozeSubmitted && !scores[i] && (
-                      <span className="text-xs font-semibold text-emerald-700 shrink-0">{seg.content}</span>
-                    )}
-                    {clozeSubmitted && scores[i] && <CheckCircle className="h-4 w-4 text-emerald-500 shrink-0" />}
-                  </div>
-                ))}
+              {/* Inline text with embedded gap inputs */}
+              <div className="rounded-xl bg-secondary/30 p-4 text-sm leading-[3]">
+                {clozeSegments.map((seg, i) => {
+                  if (seg.type === 'text') return <span key={i}>{seg.content}</span>;
+                  const answer = clozeAnswers[seg.blankIndex] ?? '';
+                  const isCorrect = clozeSubmitted && scores[seg.blankIndex];
+                  const isWrong   = clozeSubmitted && !scores[seg.blankIndex];
+                  return (
+                    <span key={i} className="inline-flex flex-col items-center mx-1 align-bottom">
+                      <input
+                        type="text"
+                        value={answer}
+                        onChange={e => !clozeSubmitted && setClozeAnswers(prev => ({ ...prev, [seg.blankIndex]: e.target.value }))}
+                        placeholder={seg.english}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck={false}
+                        disabled={clozeSubmitted}
+                        style={{ width: `${Math.max(5, seg.content.length) * 0.72 + 1.5}em` }}
+                        className={`rounded border-b-2 bg-transparent px-1 py-0 text-sm text-center outline-none transition-colors placeholder:text-[10px] placeholder:text-muted-foreground/60 ${
+                          isCorrect ? 'border-emerald-500 text-emerald-700' :
+                          isWrong   ? 'border-red-400 text-red-700' :
+                          'border-primary/60 focus:border-primary'
+                        }`}
+                      />
+                      {isWrong && (
+                        <span className="text-[10px] font-semibold text-emerald-600 leading-none">{seg.content}</span>
+                      )}
+                    </span>
+                  );
+                })}
               </div>
 
               {!clozeSubmitted ? (
