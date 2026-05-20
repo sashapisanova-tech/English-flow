@@ -146,7 +146,7 @@ Return ONLY a JSON object — no markdown fences, no explanation, just the raw J
           'anthropic-dangerous-direct-browser-access': 'true',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-5-20251001',
+          model: 'claude-sonnet-4-5',
           max_tokens: 2000,
           system:
             'You are an expert Dutch language teacher and native Dutch writer. You create pedagogically sound, grammatically perfect reading texts for language learners. You always verify Dutch grammar and word choice before returning. You respond with valid JSON only — no markdown fences, no explanation, just the raw JSON object.',
