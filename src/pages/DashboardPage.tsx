@@ -21,8 +21,11 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [tabResetKeys, setTabResetKeys] = useState<Record<Tab, number>>({ home: 0, reading: 0, flashcards: 0, tasks: 0, progress: 0 });
   const [selectedText, setSelectedText] = useState<ReadingText | null>(null);
+  // Separate navigation state for Home "Continue Reading" vs Reading tab
   const [openLevel, setOpenLevel] = useState<Level | null>('A1');
   const [openModule, setOpenModule] = useState<Module | null>(null);
+  const [readingLevel, setReadingLevel] = useState<Level | null>('A1');
+  const [readingModule, setReadingModule] = useState<Module | null>(null);
   const [editingGoals, setEditingGoals] = useState(false);
   const [goalTexts, setGoalTexts] = useState<string>('');
   const [goalCards, setGoalCards] = useState<string>('');
@@ -250,10 +253,10 @@ export default function DashboardPage() {
         {activeTab === 'reading' && !selectedText && (
           <TextList
             onSelect={handleSelectText}
-            openLevel={openLevel}
-            setOpenLevel={setOpenLevel}
-            openModule={openModule}
-            setOpenModule={setOpenModule}
+            openLevel={readingLevel}
+            setOpenLevel={setReadingLevel}
+            openModule={readingModule}
+            setOpenModule={setReadingModule}
           />
         )}
 
@@ -275,7 +278,6 @@ export default function DashboardPage() {
                 setTabResetKeys(prev => ({ ...prev, [key]: prev[key] + 1 }));
                 setActiveTab(key);
                 setSelectedText(null);
-                if (key === 'reading') setOpenLevel(prev => prev ?? 'A1');
               }}
               className={`flex flex-1 flex-col items-center gap-0.5 py-3 text-xs transition-colors ${
                 activeTab === key ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
