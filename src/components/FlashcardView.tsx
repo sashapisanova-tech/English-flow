@@ -764,6 +764,16 @@ export function FlashcardView() {
             <span className="text-sm font-bold text-success">Got it →</span>
           </div>
         )}
+        {/* Single listen button — always top-right, never duplicated */}
+        <button
+          onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
+          className={`absolute top-3 right-3 z-30 p-2 rounded-full transition-all active:scale-90 ${
+            isPlaying ? 'text-primary bg-primary/15' : 'text-muted-foreground/60 hover:text-primary hover:bg-primary/10'
+          }`}
+          aria-label="Listen"
+        >
+          <Volume2 className="h-5 w-5" />
+        </button>
         <div
           className="flashcard mx-auto h-64 max-w-md cursor-pointer"
           style={{ transform: swipeDeltaX !== 0 ? `translateX(${swipeDeltaX * 0.2}px) rotate(${swipeDeltaX * 0.015}deg)` : undefined, transition: swipeDeltaX === 0 ? 'transform 0.2s ease' : 'none' }}
@@ -771,16 +781,6 @@ export function FlashcardView() {
         >
           <div className={`flashcard-inner ${flipped ? 'flipped' : ''}`}>
             <Card className="flashcard-face bg-card border-2">
-              {/* Listen button — top-right corner (absolute relative to flashcard-face) */}
-              <button
-                onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
-                className={`absolute top-3 right-3 z-10 p-2 rounded-full transition-all active:scale-90 ${
-                  isPlaying ? 'text-primary bg-primary/15' : 'text-muted-foreground/60 hover:text-primary hover:bg-primary/10'
-                }`}
-                aria-label="Listen"
-              >
-                <Volume2 className="h-5 w-5" />
-              </button>
               <div className="text-center">
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
                   {direction === 'dutch-to-english' ? 'Nederlands' : 'English'}
@@ -798,16 +798,6 @@ export function FlashcardView() {
               </div>
             </Card>
             <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20">
-              {/* Listen button — top-right corner (absolute relative to flashcard-face) */}
-              <button
-                onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
-                className={`absolute top-3 right-3 z-10 p-2 rounded-full transition-all active:scale-90 ${
-                  isPlaying ? 'text-primary bg-primary/15' : 'text-muted-foreground/60 hover:text-primary hover:bg-primary/10'
-                }`}
-                aria-label="Listen"
-              >
-                <Volume2 className="h-5 w-5" />
-              </button>
               <div className="text-center">
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
                   {direction === 'dutch-to-english' ? 'English' : 'Nederlands'}
@@ -936,15 +926,19 @@ export function FlashcardView() {
 
       {flipped && (
         <div className="flex flex-col items-center gap-3 animate-fade-in">
-          {mode === 'my-words' && currentWord && (
-            <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
-              <span>Again → tomorrow</span>
-              <span className="text-muted-foreground/40">·</span>
-              <span>Good → {formatDays(Math.max(3, (currentWord.interval ?? 1) * 2))}</span>
-              <span className="text-muted-foreground/40">·</span>
-              <span>Easy → {formatDays(Math.max(7, (currentWord.interval ?? 1) * 3))}</span>
-            </div>
-          )}
+          {mode === 'my-words' && currentWord && (() => {
+            const goodDays  = previewInterval(currentWord, true);
+            const easyDays  = Math.max(goodDays + 1, Math.round(goodDays * 1.5));
+            return (
+              <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+                <span>Again → tomorrow</span>
+                <span className="text-muted-foreground/40">·</span>
+                <span>Good → {formatDays(goodDays)}</span>
+                <span className="text-muted-foreground/40">·</span>
+                <span>Easy → {formatDays(easyDays)}</span>
+              </div>
+            );
+          })()}
           {mode === 'my-words' ? (
             <div className="flex justify-center gap-3">
               <Button
