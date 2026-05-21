@@ -980,26 +980,25 @@ Return ONLY valid JSON, no markdown:
                   const isCorrect = clozeSubmitted && scores[seg.blankIndex];
                   const isWrong   = clozeSubmitted && !scores[seg.blankIndex];
                   return (
-                    <span key={i} className="inline-flex flex-col items-center mx-1 align-bottom">
+                    <span key={i} className="inline-flex flex-col items-center mx-0.5 align-bottom">
                       <input
                         type="text"
                         value={answer}
                         onChange={e => !clozeSubmitted && setClozeAnswers(prev => ({ ...prev, [seg.blankIndex]: e.target.value }))}
-                        placeholder={seg.english}
+                        placeholder="..."
                         autoComplete="off"
                         autoCorrect="off"
                         autoCapitalize="off"
                         spellCheck={false}
                         disabled={clozeSubmitted}
-                        style={{ width: `${Math.max(5, seg.content.length) * 0.72 + 1.5}em` }}
-                        className={`rounded border-b-2 bg-transparent px-1 py-0 text-sm text-center outline-none transition-colors placeholder:text-[10px] placeholder:text-muted-foreground/60 ${
+                        className={`w-20 rounded border-b-2 bg-transparent px-1 py-0 text-sm text-center outline-none transition-colors placeholder:text-muted-foreground/40 ${
                           isCorrect ? 'border-emerald-500 text-emerald-700' :
                           isWrong   ? 'border-red-400 text-red-700' :
                           'border-primary/60 focus:border-primary'
                         }`}
                       />
                       {isWrong && (
-                        <span className="text-[10px] font-semibold text-emerald-600 leading-none">{seg.content}</span>
+                        <span className="text-[10px] font-semibold text-emerald-600 leading-none mt-0.5">{seg.content}</span>
                       )}
                     </span>
                   );
