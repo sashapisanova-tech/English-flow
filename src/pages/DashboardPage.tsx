@@ -275,6 +275,7 @@ export default function DashboardPage() {
                 setTabResetKeys(prev => ({ ...prev, [key]: prev[key] + 1 }));
                 setActiveTab(key);
                 setSelectedText(null);
+                if (key === 'reading') setOpenLevel(prev => prev ?? 'A1');
               }}
               className={`flex flex-1 flex-col items-center gap-0.5 py-3 text-xs transition-colors ${
                 activeTab === key ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
