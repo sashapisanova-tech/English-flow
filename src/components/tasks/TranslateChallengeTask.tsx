@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, CheckCircle2, XCircle, RotateCcw, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
+import { TaskFilters, Level, Theme } from './TaskFilters';
 
 const API_KEY_STORAGE = 'dutch-app-anthropic-key';
 
@@ -11,13 +12,15 @@ function getSavedKey(): string {
   return localStorage.getItem(API_KEY_STORAGE) || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
 }
 
-const GENERATE_SYSTEM = `You are a Dutch language teacher creating translation exercises for A1–A2 learners.
+function makeGenerateSystem(level: Level, theme: Theme) {
+  return `You are a Dutch language teacher creating translation exercises for ${level} learners.
+The theme/context for this exercise is: ${theme}.
 Given a list of Dutch vocabulary words the student has saved, write a short English paragraph (4–6 sentences) whose meaning naturally uses those words' English equivalents.
 The student will translate this paragraph back into Dutch — so write English that can be cleanly translated using those Dutch words.
 
 Rules:
-- Simple, clear English. Short sentences (6–10 words each).
-- Coherent narrative with a beginning and small resolution.
+- Simple, clear English appropriate for ${level} level. Short sentences (6–10 words each).
+- Coherent narrative related to the theme "${theme}" with a beginning and small resolution.
 - Do NOT include Dutch words in the English text.
 
 Return ONLY this JSON, nothing else:
@@ -28,6 +31,7 @@ Return ONLY this JSON, nothing else:
   ]
 }
 hint_words: up to 6 Dutch words from the input list. For each, provide the Dutch word, its contextual English meaning in this specific text (not a generic dictionary definition), and set in_flashcards to false (the app will set this).`;
+}
 
 const CHECK_SYSTEM = `You are a Dutch language tutor checking a student's English-to-Dutch translation.
 You will receive the English original, the student's Dutch attempt, and the target vocabulary they should use.
@@ -66,7 +70,7 @@ interface CheckResponse {
   words_used: string[];
 }
 
-async function generateText(words: string[]): Promise<GenerateResponse> {
+async function generateText(words: string[], level: Level, theme: Theme): Promise<GenerateResponse> {
   const key = getSavedKey();
   if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -80,7 +84,7 @@ async function generateText(words: string[]): Promise<GenerateResponse> {
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 512,
-      system: GENERATE_SYSTEM,
+      system: makeGenerateSystem(level, theme),
       messages: [{ role: 'user', content: `words: ${JSON.stringify(words)}` }],
     }),
   });
@@ -119,6 +123,8 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
   const { vocabulary } = useLearning();
   const savedWords = useMemo(() => Object.keys(vocabulary), [vocabulary]);
 
+  const [level, setLevel] = useState<Level>('A2');
+  const [theme, setTheme] = useState<Theme>('Dagelijks leven');
   const [generated, setGenerated] = useState<GenerateResponse | null>(null);
   const [studentText, setStudentText] = useState('');
   const [feedback, setFeedback] = useState<CheckResponse | null>(null);
@@ -133,7 +139,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
     setFeedback(null);
     setStudentText('');
     try {
-      const result = await generateText(savedWords);
+      const result = await generateText(savedWords, level, theme);
       // Mark which hint words the student already has in flashcards
       result.hint_words = result.hint_words.map(h => ({
         ...h,
@@ -191,6 +197,10 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
           Claude writes a short English text using your saved words. Read it, then write your Dutch translation. Get instant AI feedback.
         </p>
       </Card>
+
+      {!generated && !loading && (
+        <TaskFilters level={level} theme={theme} onLevelChange={setLevel} onThemeChange={setTheme} />
+      )}
 
       {savedWords.length === 0 ? (
         <Card className="p-6 text-center space-y-2">
