@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { TranslateChallengeTask } from './tasks/TranslateChallengeTask';
 import { MicroJournalTask } from './tasks/MicroJournalTask';
 import { SentenceBuilderTask } from './tasks/SentenceBuilderTask';
 import { ContinueDialogueTask } from './tasks/ContinueDialogueTask';
-import { ChevronRight, ArrowLeftRight, PenLine, Layers, MessageCircle } from 'lucide-react';
+import { ArrowLeftRight, PenLine, Layers, MessageCircle, ChevronRight } from 'lucide-react';
 
 type ActiveTask = 'translate' | 'journal' | 'builder' | 'dialogue' | null;
 
@@ -14,41 +12,29 @@ const tasks = [
     id: 'translate' as const,
     icon: ArrowLeftRight,
     title: 'Translate to Dutch',
-    subtitle: 'English → Dutch challenge',
-    description: 'Claude writes a short English text using your saved words. Read it and write your Dutch translation — then get instant AI corrections.',
     tag: 'Translation',
-    color: 'bg-teal-50 border-teal-200',
-    tagColor: 'bg-teal-100 text-teal-700',
+    description: 'Read an English text and write your Dutch translation. Get instant AI corrections.',
   },
   {
     id: 'journal' as const,
     icon: PenLine,
     title: 'Micro Journal',
-    subtitle: 'Daily writing · AI corrections',
-    description: 'Choose a writing prompt, write 2–4 Dutch sentences, and get gentle feedback from an AI tutor focused on your most important errors.',
     tag: 'Writing',
-    color: 'bg-green-50 border-green-200',
-    tagColor: 'bg-green-100 text-green-700',
+    description: 'Pick a prompt, write 2–4 Dutch sentences, get gentle feedback on your key mistakes.',
   },
   {
     id: 'builder' as const,
     icon: Layers,
     title: 'Sentence Builder',
-    subtitle: 'Arrange word tiles',
-    description: 'Tap word tiles to arrange them into the correct Dutch sentence. 5 rounds per session, scored and level-appropriate.',
     tag: 'Grammar',
-    color: 'bg-blue-50 border-blue-200',
-    tagColor: 'bg-blue-100 text-blue-700',
+    description: 'Tap word tiles to form the correct Dutch sentence. Five rounds, level-matched.',
   },
   {
     id: 'dialogue' as const,
     icon: MessageCircle,
     title: 'Chat with AI',
-    subtitle: 'Back-and-forth conversation',
-    description: 'Have a short Dutch conversation with an AI partner tailored to your level and chosen theme. Receive grammar feedback at the end.',
-    tag: 'Speaking',
-    color: 'bg-purple-50 border-purple-200',
-    tagColor: 'bg-purple-100 text-purple-700',
+    tag: 'Conversation',
+    description: 'Hold a short Dutch conversation with an AI partner. Grammar notes at the end.',
   },
 ];
 
@@ -56,37 +42,45 @@ export function TasksView() {
   const [activeTask, setActiveTask] = useState<ActiveTask>(null);
 
   if (activeTask === 'translate') return <TranslateChallengeTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'journal') return <MicroJournalTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'builder') return <SentenceBuilderTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'dialogue') return <ContinueDialogueTask onBack={() => setActiveTask(null)} />;
+  if (activeTask === 'journal')   return <MicroJournalTask onBack={() => setActiveTask(null)} />;
+  if (activeTask === 'builder')   return <SentenceBuilderTask onBack={() => setActiveTask(null)} />;
+  if (activeTask === 'dialogue')  return <ContinueDialogueTask onBack={() => setActiveTask(null)} />;
 
   return (
-    <div className="animate-fade-in space-y-5">
+    <div className="animate-fade-in space-y-6">
       <div>
-        <h2 className="font-heading text-lg font-bold text-foreground">Tasks</h2>
-        <p className="text-sm text-muted-foreground mt-0.5">Practice exercises to put your Dutch to the test.</p>
+        <p className="text-sm text-muted-foreground mt-0.5">Choose an exercise and practise your Dutch.</p>
       </div>
 
-      <div className="space-y-3">
-        {tasks.map(task => (
-          <Card
+      <div className="space-y-2">
+        {tasks.map((task, idx) => (
+          <button
             key={task.id}
             onClick={() => setActiveTask(task.id)}
-            className={`card-hover cursor-pointer border-2 p-4 ${task.color} transition-all active:scale-[0.98]`}
+            className="w-full text-left group flex items-center gap-4 rounded-2xl border border-border bg-card px-4 py-4 transition-all hover:border-foreground/25 hover:shadow-sm active:scale-[0.99]"
           >
-            <div className="flex items-start gap-3">
-              <task.icon className="h-7 w-7 shrink-0 mt-0.5 text-foreground/70" />
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap mb-1">
-                  <span className="font-heading font-bold text-foreground">{task.title}</span>
-                  <Badge className={`text-xs px-2 py-0 ${task.tagColor} border-0`}>{task.tag}</Badge>
-                </div>
-                <p className="text-xs text-muted-foreground italic mb-2">{task.subtitle}</p>
-                <p className="text-sm text-foreground/80 leading-snug">{task.description}</p>
+            {/* Number */}
+            <span className="shrink-0 font-heading text-xs font-semibold text-muted-foreground/50 w-5 text-right tabular-nums">
+              {String(idx + 1).padStart(2, '0')}
+            </span>
+
+            {/* Icon */}
+            <span className="shrink-0 flex h-9 w-9 items-center justify-center rounded-xl bg-muted">
+              <task.icon className="h-4 w-4 text-foreground/70" />
+            </span>
+
+            {/* Text */}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="font-heading font-semibold text-sm text-foreground">{task.title}</span>
+                <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wider">{task.tag}</span>
               </div>
-              <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+              <p className="text-xs text-muted-foreground leading-snug">{task.description}</p>
             </div>
-          </Card>
+
+            {/* Arrow */}
+            <ChevronRight className="shrink-0 h-4 w-4 text-muted-foreground/40 group-hover:text-muted-foreground transition-colors" />
+          </button>
         ))}
       </div>
     </div>

@@ -177,12 +177,12 @@
   }
 
   .card-hover {
-    @apply transition-all duration-300;
+    @apply transition-all duration-200;
   }
 
   .card-hover:hover {
-    @apply shadow-lg -translate-y-1;
-    box-shadow: 0 10px 30px -10px hsl(var(--primary) / 0.2);
+    @apply shadow-sm;
+    border-color: hsl(var(--foreground) / 0.18);
   }
 
   .flashcard {
