@@ -985,13 +985,13 @@ Return ONLY valid JSON, no markdown:
                         type="text"
                         value={answer}
                         onChange={e => !clozeSubmitted && setClozeAnswers(prev => ({ ...prev, [seg.blankIndex]: e.target.value }))}
-                        placeholder="..."
-                        autoComplete="off"
+                        placeholder={seg.english}
+                        autoComplete="new-password"
                         autoCorrect="off"
                         autoCapitalize="off"
                         spellCheck={false}
                         disabled={clozeSubmitted}
-                        className={`w-20 rounded border-b-2 bg-transparent px-1 py-0 text-sm text-center outline-none transition-colors placeholder:text-muted-foreground/40 ${
+                        className={`w-20 rounded border-b-2 bg-transparent px-1 py-0 text-sm text-center outline-none transition-colors placeholder:text-[10px] placeholder:text-muted-foreground/60 ${
                           isCorrect ? 'border-emerald-500 text-emerald-700' :
                           isWrong   ? 'border-red-400 text-red-700' :
                           'border-primary/60 focus:border-primary'
