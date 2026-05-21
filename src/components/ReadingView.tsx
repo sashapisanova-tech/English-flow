@@ -766,12 +766,6 @@ Return ONLY valid JSON, no markdown:
         <div className="reading-text leading-[2.2]">{renderText()}</div>
       </Card>
 
-      <p className="text-center text-xs text-muted-foreground">
-        Tap a word to translate · <span className="font-semibold text-foreground">Select a phrase</span> to save it ·{' '}
-        <span className="font-semibold" style={{ color: 'hsl(var(--dutch-orange))' }}>Orange</span> = vocab ·{' '}
-        <span className="font-semibold text-blue-600">Blue</span> = separable verb ·{' '}
-        <span className="font-semibold text-green-600">Green</span> = fixed expression
-      </p>
 
       {/* ── Practice exercises ────────────────────────────────────────────── */}
       <div className="space-y-3">
