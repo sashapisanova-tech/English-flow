@@ -24,7 +24,7 @@ export default function DashboardPage() {
   // Separate navigation state for Home "Continue Reading" vs Reading tab
   const [openLevel, setOpenLevel] = useState<Level | null>('A1');
   const [openModule, setOpenModule] = useState<Module | null>(null);
-  const [readingLevel, setReadingLevel] = useState<Level | null>('A1');
+  const [readingLevel, setReadingLevel] = useState<Level | null>(null);
   const [readingModule, setReadingModule] = useState<Module | null>(null);
   const [editingGoals, setEditingGoals] = useState(false);
   const [goalTexts, setGoalTexts] = useState<string>('');
@@ -278,6 +278,7 @@ export default function DashboardPage() {
                 setTabResetKeys(prev => ({ ...prev, [key]: prev[key] + 1 }));
                 setActiveTab(key);
                 setSelectedText(null);
+                if (key === 'reading') { setReadingLevel(null); setReadingModule(null); }
               }}
               className={`flex flex-1 flex-col items-center gap-0.5 py-3 text-xs transition-colors ${
                 activeTab === key ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
