@@ -14,6 +14,7 @@ import { VoiceSettings } from '@/components/VoiceSettings';
 import { ReadingText, Level, Module } from '@/types/dutch';
 import heroImage from '@/assets/hero-dutch.jpg';
 import { getLevelInfo, getXPProgress } from '@/utils/levels';
+import { ReadingOnboarding, useReadingOnboarding } from '@/components/ReadingOnboarding';
 
 type Tab = 'home' | 'reading' | 'flashcards' | 'progress' | 'tasks';
 
@@ -63,6 +64,7 @@ export default function DashboardPage() {
   ];
 
   const { texts } = useLearning();
+  const { show: showReadingOnboarding, dismiss: dismissReadingOnboarding } = useReadingOnboarding();
 
   const handleSelectText = (text: ReadingText) => {
     setSelectedText(text);
@@ -264,6 +266,11 @@ export default function DashboardPage() {
         {activeTab === 'tasks' && <TasksView key={tabResetKeys.tasks} />}
         {activeTab === 'progress' && <MeView key={tabResetKeys.progress} />}
       </div>
+
+      {/* Reading onboarding — shown once on first visit to the Read tab */}
+      {activeTab === 'reading' && showReadingOnboarding && (
+        <ReadingOnboarding onDone={dismissReadingOnboarding} />
+      )}
 
       {/* Voice settings — only visible while reading a text */}
       <VoiceSettings visible={(activeTab === 'reading' && !!selectedText) || activeTab === 'flashcards'} />
