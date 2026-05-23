@@ -5,9 +5,10 @@ import { SentenceBuilderTask } from './tasks/SentenceBuilderTask';
 import { ContinueDialogueTask } from './tasks/ContinueDialogueTask';
 import { GuidedJournalTask } from './tasks/GuidedJournalTask';
 import { GapFillTask } from './tasks/GapFillTask';
-import { ArrowLeftRight, PenLine, Layers, MessageCircle, BookMarked, PuzzleIcon, ChevronRight } from 'lucide-react';
+import { ErrorCorrectionTask } from './tasks/ErrorCorrectionTask';
+import { ArrowLeftRight, PenLine, Layers, MessageCircle, BookMarked, PuzzleIcon, Pencil, ChevronRight } from 'lucide-react';
 
-type ActiveTask = 'translate' | 'journal' | 'builder' | 'dialogue' | 'guided-journal' | 'gap-fill' | null;
+type ActiveTask = 'translate' | 'journal' | 'builder' | 'dialogue' | 'guided-journal' | 'gap-fill' | 'error-correction' | null;
 
 const tasks = [
   {
@@ -52,6 +53,13 @@ const tasks = [
     tag: 'Grammar',
     description: 'Fill in missing verbs, articles and prepositions from sentences you have already read. Grammar-targeted, level-aware.',
   },
+  {
+    id: 'error-correction' as const,
+    icon: Pencil,
+    title: 'Error Correction',
+    tag: 'Grammar',
+    description: 'A Dutch sentence with one deliberate grammar mistake. Find it, rewrite it correctly, and understand why — exercises adapt to your past errors.',
+  },
 ];
 
 export function TasksView() {
@@ -62,7 +70,8 @@ export function TasksView() {
   if (activeTask === 'builder')   return <SentenceBuilderTask onBack={() => setActiveTask(null)} />;
   if (activeTask === 'dialogue')       return <ContinueDialogueTask onBack={() => setActiveTask(null)} />;
   if (activeTask === 'guided-journal') return <GuidedJournalTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'gap-fill')       return <GapFillTask       onBack={() => setActiveTask(null)} />;
+  if (activeTask === 'gap-fill')         return <GapFillTask         onBack={() => setActiveTask(null)} />;
+  if (activeTask === 'error-correction') return <ErrorCorrectionTask onBack={() => setActiveTask(null)} />;
 
   return (
     <div className="animate-fade-in space-y-6">

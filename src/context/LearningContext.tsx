@@ -62,6 +62,12 @@ function rowToWord(row: Record<string, unknown>): DutchWord {
 
 // ── Context interface ────────────────────────────────────────────────────────
 
+export interface PastError {
+  type: string;
+  example: string;
+  date: string;
+}
+
 interface LearningState {
   vocabulary: Record<string, DutchWord>;
   texts: ReadingText[];
@@ -70,6 +76,7 @@ interface LearningState {
   level: number;
   syncing: boolean;
   dueCount: number;
+  pastErrors: PastError[];
   addXP:                (amount: number) => void;
   addWord:              (dutch: string, english: string, extras?: Partial<DutchWord>) => void;
   removeWord:           (dutch: string) => void;
@@ -82,6 +89,7 @@ interface LearningState {
   incrementFlashcards:  () => void;
   reviewWord:           (dutch: string, correct: boolean) => void;
   setGoals:             (textsGoal: number, flashcardsGoal: number) => void;
+  addPastError:         (error: PastError) => void;
 }
 
 const LearningContext = createContext<LearningState | null>(null);
@@ -464,9 +472,22 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     return Object.values(vocabulary).filter(w => !w.dueDate || w.dueDate <= today).length;
   }, [vocabulary]);
 
+  const [pastErrors, setPastErrors] = useState<PastError[]>(() => {
+    try { return JSON.parse(localStorage.getItem('dutch-past-errors-v1') || '[]'); } catch { return []; }
+  });
+
+  const addPastError = useCallback((error: PastError) => {
+    setPastErrors(prev => {
+      const updated = [...prev, error].slice(-50); // keep last 50
+      try { localStorage.setItem('dutch-past-errors-v1', JSON.stringify(updated)); } catch {}
+      return updated;
+    });
+  }, []);
+
   return (
     <LearningContext.Provider value={{
       vocabulary, texts, dailyGoal, xp, level, syncing, dueCount,
+      pastErrors, addPastError,
       addXP, addWord, removeWord, updateWordStatus,
       getWordsForReview, getWordsDueForReview, enrollWord, reviewWordSRS,
       markTextCompleted, incrementFlashcards, reviewWord, setGoals,
