@@ -218,6 +218,70 @@ function StepChat() {
   );
 }
 
+function StepColors() {
+  const [revealed, setRevealed] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setRevealed(true), 500);
+    return () => clearTimeout(t);
+  }, []);
+
+  const items = [
+    {
+      color: 'bg-orange-100 text-orange-700 border-orange-200',
+      dot: 'bg-orange-400',
+      label: 'Vocabulary word',
+      desc: 'A word from your saved flashcard list — already familiar territory.',
+      word: 'winkel',
+    },
+    {
+      color: 'bg-blue-100 text-blue-700 border-blue-200',
+      dot: 'bg-blue-400',
+      label: 'Separable verb',
+      desc: 'A verb whose prefix splits off in a sentence — easy to miss.',
+      word: 'opbellen',
+    },
+    {
+      color: 'bg-green-100 text-green-700 border-green-200',
+      dot: 'bg-green-400',
+      label: 'Fixed expression',
+      desc: 'A set phrase — the meaning can\'t be guessed word by word.',
+      word: 'het gaat wel',
+    },
+  ];
+
+  return (
+    <div className="w-full space-y-2">
+      {/* Example sentence */}
+      <div className="rounded-xl border border-border bg-card p-3 text-sm leading-[2.2]">
+        <span>Hij moet de </span>
+        <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-500 ${revealed ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-transparent text-foreground border-transparent'}`}>winkel</span>
+        <span> </span>
+        <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-700 ${revealed ? 'bg-blue-100 text-blue-700 border-blue-200' : 'bg-transparent text-foreground border-transparent'}`}>opbellen</span>
+        <span> — </span>
+        <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-1000 ${revealed ? 'bg-green-100 text-green-700 border-green-200' : 'bg-transparent text-foreground border-transparent'}`}>het gaat wel</span>
+        <span>.</span>
+      </div>
+
+      {/* Legend */}
+      <div className="space-y-2">
+        {items.map(({ color, dot, label, desc, word }, i) => (
+          <div
+            key={label}
+            className={`flex items-start gap-3 rounded-xl border border-border bg-card px-3 py-2.5 transition-all duration-500 ${revealed ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-2'}`}
+            style={{ transitionDelay: `${i * 150 + 400}ms` }}
+          >
+            <span className={`rounded border px-2 py-0.5 text-xs font-semibold shrink-0 mt-0.5 ${color}`}>{word}</span>
+            <div>
+              <p className="text-xs font-semibold text-foreground">{label}</p>
+              <p className="text-xs text-muted-foreground leading-snug">{desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function StepExercises() {
   const [active, setActive] = useState(0);
   useEffect(() => {
@@ -272,13 +336,13 @@ const STEPS = [
   },
   {
     title: 'Select a phrase',
-    body: 'Press and drag to highlight multiple words. A popup lets you save the whole phrase to flashcards — or ask the AI to explain it.',
+    body: 'Press and drag to highlight multiple words. A popup lets you save the whole phrase to your flashcards with one tap.',
     Visual: StepHighlight,
   },
   {
-    title: 'Ask the AI anything',
-    body: 'Tap the chat button to open a conversation about the text. Ask about grammar, vocabulary, cultural context — anything you\'re unsure about.',
-    Visual: StepChat,
+    title: 'Colour coding',
+    body: 'Words are highlighted automatically as you read. Watch the colours appear — they tell you what kind of word you\'re looking at before you even tap.',
+    Visual: StepColors,
   },
   {
     title: 'Practice exercises',
