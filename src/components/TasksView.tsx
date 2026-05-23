@@ -3,9 +3,10 @@ import { TranslateChallengeTask } from './tasks/TranslateChallengeTask';
 import { MicroJournalTask } from './tasks/MicroJournalTask';
 import { SentenceBuilderTask } from './tasks/SentenceBuilderTask';
 import { ContinueDialogueTask } from './tasks/ContinueDialogueTask';
-import { ArrowLeftRight, PenLine, Layers, MessageCircle, ChevronRight } from 'lucide-react';
+import { GuidedJournalTask } from './tasks/GuidedJournalTask';
+import { ArrowLeftRight, PenLine, Layers, MessageCircle, BookMarked, ChevronRight } from 'lucide-react';
 
-type ActiveTask = 'translate' | 'journal' | 'builder' | 'dialogue' | null;
+type ActiveTask = 'translate' | 'journal' | 'builder' | 'dialogue' | 'guided-journal' | null;
 
 const tasks = [
   {
@@ -36,6 +37,13 @@ const tasks = [
     tag: 'Conversation',
     description: 'Hold a short Dutch conversation with an AI partner. Grammar notes at the end.',
   },
+  {
+    id: 'guided-journal' as const,
+    icon: BookMarked,
+    title: 'Guided Journal',
+    tag: 'Personal',
+    description: 'A journaling prompt built from texts you have read — reuses your vocabulary, adapts to your level.',
+  },
 ];
 
 export function TasksView() {
@@ -44,7 +52,8 @@ export function TasksView() {
   if (activeTask === 'translate') return <TranslateChallengeTask onBack={() => setActiveTask(null)} />;
   if (activeTask === 'journal')   return <MicroJournalTask onBack={() => setActiveTask(null)} />;
   if (activeTask === 'builder')   return <SentenceBuilderTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'dialogue')  return <ContinueDialogueTask onBack={() => setActiveTask(null)} />;
+  if (activeTask === 'dialogue')       return <ContinueDialogueTask onBack={() => setActiveTask(null)} />;
+  if (activeTask === 'guided-journal') return <GuidedJournalTask   onBack={() => setActiveTask(null)} />;
 
   return (
     <div className="animate-fade-in space-y-6">
