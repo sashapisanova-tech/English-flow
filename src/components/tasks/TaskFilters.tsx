@@ -20,9 +20,10 @@ interface TaskFiltersProps {
   theme: Theme;
   onLevelChange: (l: Level) => void;
   onThemeChange: (t: Theme) => void;
+  hideTheme?: boolean;
 }
 
-export function TaskFilters({ level, theme, onLevelChange, onThemeChange }: TaskFiltersProps) {
+export function TaskFilters({ level, theme, onLevelChange, onThemeChange, hideTheme = false }: TaskFiltersProps) {
   const isCustom = !SUGGESTED_THEMES.includes(theme);
   const [customMode, setCustomMode] = useState(isCustom);
   const [draft, setDraft] = useState(isCustom ? theme : '');
@@ -65,7 +66,7 @@ export function TaskFilters({ level, theme, onLevelChange, onThemeChange }: Task
       </div>
 
       {/* Theme */}
-      <div className="space-y-1.5">
+      {!hideTheme && <div className="space-y-1.5">
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Theme</p>
         <div className="flex flex-wrap gap-2">
           {SUGGESTED_THEMES.map(t => (
@@ -115,7 +116,7 @@ export function TaskFilters({ level, theme, onLevelChange, onThemeChange }: Task
             </button>
           </div>
         )}
-      </div>
+      </div>}
     </div>
   );
 }

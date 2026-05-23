@@ -4,9 +4,10 @@ import { MicroJournalTask } from './tasks/MicroJournalTask';
 import { SentenceBuilderTask } from './tasks/SentenceBuilderTask';
 import { ContinueDialogueTask } from './tasks/ContinueDialogueTask';
 import { GuidedJournalTask } from './tasks/GuidedJournalTask';
-import { ArrowLeftRight, PenLine, Layers, MessageCircle, BookMarked, ChevronRight } from 'lucide-react';
+import { GapFillTask } from './tasks/GapFillTask';
+import { ArrowLeftRight, PenLine, Layers, MessageCircle, BookMarked, PuzzleIcon, ChevronRight } from 'lucide-react';
 
-type ActiveTask = 'translate' | 'journal' | 'builder' | 'dialogue' | 'guided-journal' | null;
+type ActiveTask = 'translate' | 'journal' | 'builder' | 'dialogue' | 'guided-journal' | 'gap-fill' | null;
 
 const tasks = [
   {
@@ -44,6 +45,13 @@ const tasks = [
     tag: 'Personal',
     description: 'A journaling prompt built from texts you have read — reuses your vocabulary, adapts to your level.',
   },
+  {
+    id: 'gap-fill' as const,
+    icon: PuzzleIcon,
+    title: 'Gap Fill',
+    tag: 'Grammar',
+    description: 'Fill in missing verbs, articles and prepositions from sentences you have already read. Grammar-targeted, level-aware.',
+  },
 ];
 
 export function TasksView() {
@@ -53,7 +61,8 @@ export function TasksView() {
   if (activeTask === 'journal')   return <MicroJournalTask onBack={() => setActiveTask(null)} />;
   if (activeTask === 'builder')   return <SentenceBuilderTask onBack={() => setActiveTask(null)} />;
   if (activeTask === 'dialogue')       return <ContinueDialogueTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'guided-journal') return <GuidedJournalTask   onBack={() => setActiveTask(null)} />;
+  if (activeTask === 'guided-journal') return <GuidedJournalTask onBack={() => setActiveTask(null)} />;
+  if (activeTask === 'gap-fill')       return <GapFillTask       onBack={() => setActiveTask(null)} />;
 
   return (
     <div className="animate-fade-in space-y-6">
