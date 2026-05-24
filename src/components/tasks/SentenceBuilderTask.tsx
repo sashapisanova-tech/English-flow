@@ -1,36 +1,41 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, RotateCcw, Sparkles } from 'lucide-react';
-import { TaskFilters, Level, Theme } from './TaskFilters';
+import { ArrowLeft, CheckCircle2, XCircle, RotateCcw } from 'lucide-react';
+import { useLearning } from '@/context/LearningContext';
+import { TaskFilters, Level } from './TaskFilters';
 
 const API_KEY_STORAGE = 'dutch-app-anthropic-key';
 
 function getSavedKey(): string {
-  return localStorage.getItem(API_KEY_STORAGE) || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
+  return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
 }
 
-interface Sentence {
-  dutch: string;
-  english: string;
+interface CompatibilityResult {
+  approved: boolean;
+  words: string[];
+  hint: string;
 }
 
-interface GenerateResponse {
-  sentences: Sentence[];
+interface FeedbackResult {
+  allWordsUsed: boolean;
+  grammaticallyValid: boolean;
+  feedback: string;
+  correctedVersion: string;
 }
 
-async function generateSentences(level: Level, theme: Theme): Promise<GenerateResponse> {
+async function checkCompatibility(
+  level: Level,
+  candidateWords: string[],
+  allWords: string[],
+): Promise<CompatibilityResult> {
   const key = getSavedKey();
   if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
-  const system = `You are a Dutch language teacher creating sentence-building exercises.
-Generate 5 Dutch sentences for level ${level} about the theme "${theme}".
-Each sentence should be 4-7 words. Return ONLY this JSON:
-{
-  "sentences": [
-    {"dutch": "Ik ga morgen naar de winkel.", "english": "I am going to the store tomorrow."},
-    ...
-  ]
-}`;
+
+  const system = `You are a Dutch vocabulary exercise assistant. Given 3 Dutch words, confirm they can plausibly appear together in one natural Dutch sentence. If not, suggest replacing the least compatible word with a semantically compatible alternative from the given vocabulary list. Return JSON only: { "approved": true/false, "words": ["word1","word2","word3"], "hint": "" }`;
+
+  const userMsg = `Level: ${level}\nCandidate words: ${candidateWords.join(', ')}\nFull vocabulary list (for replacement if needed): ${allWords.slice(0, 30).join(', ')}`;
+
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -41,255 +46,309 @@ Each sentence should be 4-7 words. Return ONLY this JSON:
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 512,
+      max_tokens: 300,
       system,
-      messages: [{ role: 'user', content: `Generate sentences for level ${level}, theme: ${theme}` }],
+      messages: [{ role: 'user', content: userMsg }],
     }),
   });
+
   if (!res.ok) throw new Error(`API error ${res.status}`);
   const data = await res.json() as { content: { text: string }[] };
   const raw = data.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
-  return JSON.parse(raw) as GenerateResponse;
+  const result = JSON.parse(raw) as CompatibilityResult;
+  // A1: hint is populated by API; A2: clear hint
+  if (level !== 'A1') result.hint = '';
+  return result;
 }
 
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+async function evaluateSentence(
+  level: Level,
+  words: string[],
+  userSentence: string,
+): Promise<FeedbackResult> {
+  const key = getSavedKey();
+  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
+
+  const system = `Evaluate whether the learner used all 3 target words correctly in a grammatically valid Dutch sentence. Do not penalize creativity. Return JSON only: { "allWordsUsed": true/false, "grammaticallyValid": true/false, "feedback": "...", "correctedVersion": "" }`;
+
+  const userMsg = `Level: ${level}\nTarget words: ${words.join(', ')}\nLearner's sentence: ${userSentence}`;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': key,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 400,
+      system,
+      messages: [{ role: 'user', content: userMsg }],
+    }),
+  });
+
+  if (!res.ok) throw new Error(`API error ${res.status}`);
+  const data = await res.json() as { content: { text: string }[] };
+  const raw = data.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  return JSON.parse(raw) as FeedbackResult;
 }
 
-type Screen = 'filter' | 'practice' | 'done';
-
-interface WordTile {
-  word: string;
-  id: number; // unique key even if word repeats
-}
+type Screen = 'config' | 'loading' | 'exercise' | 'feedback';
 
 export function SentenceBuilderTask({ onBack }: { onBack: () => void }) {
-  const [screen, setScreen] = useState<Screen>('filter');
-  const [level, setLevel] = useState<Level>('A2');
-  const [theme, setTheme] = useState<Theme>('Dagelijks leven');
-  const [sentences, setSentences] = useState<Sentence[]>([]);
+  const { vocabulary, addPastError } = useLearning();
+
+  const allVocabWords = useMemo(() =>
+    Object.values(vocabulary).sort((a, b) => (a.stability ?? 0) - (b.stability ?? 0)),
+    [vocabulary]
+  );
+
+  const [level, setLevel] = useState<Level>('A1');
+  const [screen, setScreen] = useState<Screen>('config');
+  const [words, setWords] = useState<string[]>([]);
+  const [hint, setHint] = useState('');
+  const [userSentence, setUserSentence] = useState('');
+  const [feedbackResult, setFeedbackResult] = useState<FeedbackResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Practice state
-  const [roundIndex, setRoundIndex] = useState(0);
-  const [pool, setPool] = useState<WordTile[]>([]);
-  const [placed, setPlaced] = useState<WordTile[]>([]);
-  const [checked, setChecked] = useState(false);
-  const [correct, setCorrect] = useState(false);
-  const [score, setScore] = useState(0);
+  const hasFewWords = allVocabWords.length < 3;
 
-  async function handleGenerate() {
+  function pickCandidateWords() {
+    const len = allVocabWords.length;
+    const weak   = allVocabWords[0];
+    const medium = allVocabWords[Math.floor(len / 3)];
+    const strong = allVocabWords[Math.floor(len * 2 / 3)];
+    return [weak.dutch, medium.dutch, strong.dutch];
+  }
+
+  async function startExercise() {
+    if (hasFewWords) return;
     setLoading(true);
     setError(null);
+    setScreen('loading');
+    setFeedbackResult(null);
+    setUserSentence('');
+
     try {
-      const result = await generateSentences(level, theme);
-      setSentences(result.sentences);
-      startRound(result.sentences, 0);
-      setScore(0);
-      setScreen('practice');
+      const candidates = pickCandidateWords();
+      const allWordsList = allVocabWords.map(w => w.dutch);
+      const result = await checkCompatibility(level, candidates, allWordsList);
+      setWords(result.words);
+      setHint(result.hint);
+      setScreen('exercise');
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Unknown error';
-      setError(msg === 'NO_KEY' ? 'API key missing — add it in settings first.' : msg);
+      setError(msg === 'NO_KEY' ? 'Add your Anthropic API key in the Me tab → Settings.' : msg);
+      setScreen('config');
     } finally {
       setLoading(false);
     }
   }
 
-  function startRound(sentenceList: Sentence[], idx: number) {
-    const s = sentenceList[idx];
-    const words = s.dutch.replace(/[.,!?]/g, '').split(' ');
-    const tiles: WordTile[] = shuffle(words).map((w, i) => ({ word: w, id: i }));
-    setPool(tiles);
-    setPlaced([]);
-    setChecked(false);
-    setCorrect(false);
-    setRoundIndex(idx);
-  }
-
-  function handleTileFromPool(tile: WordTile) {
-    setPool(prev => prev.filter(t => t.id !== tile.id));
-    setPlaced(prev => [...prev, tile]);
-  }
-
-  function handleTileFromPlaced(tile: WordTile) {
-    setPlaced(prev => prev.filter(t => t.id !== tile.id));
-    setPool(prev => [...prev, tile]);
-  }
-
-  function handleCheck() {
-    const current = sentences[roundIndex];
-    const answer = placed.map(t => t.word).join(' ');
-    const target = current.dutch.replace(/[.,!?]/g, '');
-    const isCorrect = answer.toLowerCase() === target.toLowerCase();
-    setChecked(true);
-    setCorrect(isCorrect);
-    if (isCorrect) setScore(s => s + 1);
-  }
-
-  function handleNext() {
-    const nextIdx = roundIndex + 1;
-    if (nextIdx >= sentences.length) {
-      setScreen('done');
-    } else {
-      startRound(sentences, nextIdx);
+  async function handleCheck() {
+    if (!userSentence.trim()) return;
+    setLoading(true);
+    setError(null);
+    try {
+      const result = await evaluateSentence(level, words, userSentence.trim());
+      setFeedbackResult(result);
+      if (!result.allWordsUsed || !result.grammaticallyValid) {
+        addPastError({
+          type: 'sentence construction',
+          example: userSentence.trim(),
+          date: new Date().toISOString(),
+        });
+      }
+      setScreen('feedback');
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : 'Unknown error';
+      setError(msg === 'NO_KEY' ? 'Add your Anthropic API key in the Me tab → Settings.' : msg);
+    } finally {
+      setLoading(false);
     }
   }
 
-  function handleReset() {
-    setScreen('filter');
-    setSentences([]);
-    setScore(0);
-    setError(null);
-  }
+  // ── Config screen ────────────────────────────────────────────────────────────
 
-  const currentSentence = sentences[roundIndex];
-
-  return (
-    <div className="animate-fade-in space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={screen === 'filter' ? onBack : handleReset}
-          className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-4 w-4" /> {screen === 'filter' ? 'Tasks' : 'Tasks'}
+  if (screen === 'config') {
+    return (
+      <div className="animate-fade-in space-y-4 pb-6">
+        <button onClick={onBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="h-4 w-4" /> Tasks
         </button>
-        {screen === 'practice' && (
-          <span className="text-sm text-muted-foreground">{roundIndex + 1} / {sentences.length}</span>
+
+        <div>
+          <h2 className="font-heading text-xl font-bold text-foreground">Sentence Builder</h2>
+          <p className="text-sm text-muted-foreground mt-0.5">
+            Write one natural Dutch sentence using three words from your vocabulary.
+          </p>
+        </div>
+
+        {hasFewWords ? (
+          <Card className="p-6 text-center space-y-2">
+            <p className="font-medium text-foreground">Not enough vocabulary</p>
+            <p className="text-sm text-muted-foreground">Save at least 3 vocabulary words first.</p>
+          </Card>
+        ) : (
+          <>
+            <Card className="p-4">
+              <TaskFilters
+                level={level}
+                theme="Dagelijks leven"
+                onLevelChange={setLevel}
+                onThemeChange={() => {}}
+                hideTheme
+              />
+            </Card>
+
+            {error && (
+              <Card className="border-red-200 bg-red-50 p-4">
+                <p className="text-sm text-red-700">{error}</p>
+              </Card>
+            )}
+
+            <Button
+              className="w-full gap-2 py-5 text-base font-semibold"
+              onClick={startExercise}
+              disabled={loading}
+            >
+              Start
+            </Button>
+          </>
         )}
       </div>
+    );
+  }
 
-      {/* Info card */}
-      <Card className="bg-blue-50 border-blue-200 p-4">
-        <p className="text-xs font-semibold text-blue-700 uppercase tracking-wide mb-1">Sentence Builder</p>
-        <p className="text-xs text-blue-700">
-          Tap word tiles to arrange them into the correct Dutch sentence.
-        </p>
-      </Card>
+  // ── Loading screen ───────────────────────────────────────────────────────────
 
-      {/* Filter screen */}
-      {screen === 'filter' && (
-        <div className="space-y-4">
-          <TaskFilters level={level} theme={theme} onLevelChange={setLevel} onThemeChange={setTheme} />
+  if (screen === 'loading') {
+    return (
+      <div className="animate-fade-in space-y-4 pb-6">
+        <button onClick={onBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="h-4 w-4" /> Tasks
+        </button>
+        <Card className="p-6 text-center">
+          <p className="text-sm text-muted-foreground animate-pulse">Picking your words…</p>
+        </Card>
+      </div>
+    );
+  }
 
-          {error && (
-            <Card className="border-red-200 bg-red-50 p-4">
-              <p className="text-sm text-red-700">{error}</p>
-            </Card>
-          )}
+  // ── Exercise screen ──────────────────────────────────────────────────────────
 
-          <Button className="w-full gap-2" onClick={handleGenerate} disabled={loading}>
-            {loading ? 'Generating...' : <><Sparkles className="h-4 w-4" /> Generate sentences</>}
-          </Button>
-        </div>
-      )}
+  if (screen === 'exercise') {
+    return (
+      <div className="animate-fade-in space-y-4 pb-6">
+        <button onClick={() => setScreen('config')} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="h-4 w-4" /> Tasks
+        </button>
 
-      {/* Practice screen */}
-      {screen === 'practice' && currentSentence && (
-        <div className="space-y-4 animate-fade-in">
-          {/* English hint */}
-          <Card className="p-4 bg-amber-50 border-amber-200">
-            <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">Translate to Dutch</p>
-            <p className="text-sm font-medium text-foreground">{currentSentence.english}</p>
-          </Card>
+        <h2 className="font-heading text-xl font-bold text-foreground">Sentence Builder</h2>
 
-          {/* Placed words area */}
-          <div className="min-h-[56px] rounded-xl border-2 border-dashed border-border bg-card p-3 flex flex-wrap gap-2 items-center">
-            {placed.length === 0 && (
-              <span className="text-xs text-muted-foreground">Tap words below to place them here…</span>
-            )}
-            {placed.map(tile => (
-              <button
-                key={tile.id}
-                onClick={() => !checked && handleTileFromPlaced(tile)}
-                disabled={checked}
-                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                  checked
-                    ? correct
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-red-100 text-red-800'
-                    : 'bg-primary text-primary-foreground hover:bg-primary/90'
-                }`}
-              >
-                {tile.word}
-              </button>
-            ))}
-          </div>
-
-          {/* Word pool */}
+        {/* Word chips */}
+        <div className="space-y-3">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Use all three words in one sentence</p>
           <div className="flex flex-wrap gap-2">
-            {pool.map(tile => (
-              <button
-                key={tile.id}
-                onClick={() => !checked && handleTileFromPool(tile)}
-                disabled={checked}
-                className="rounded-lg border border-border bg-card px-3 py-1.5 text-sm font-medium text-foreground hover:border-primary/40 transition-colors disabled:opacity-50"
+            {words.map(w => (
+              <span
+                key={w}
+                className="rounded-full border border-primary/40 bg-primary/5 px-3 py-1.5 text-sm font-semibold text-primary"
               >
-                {tile.word}
-              </button>
+                {w}
+              </span>
             ))}
           </div>
-
-          {/* Result message */}
-          {checked && (
-            <Card className={`p-3 ${correct ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`}>
-              {correct ? (
-                <p className="text-sm font-medium text-green-700">Correct!</p>
-              ) : (
-                <div className="space-y-1">
-                  <p className="text-sm font-medium text-red-700">Not quite. The correct sentence:</p>
-                  <p className="text-sm text-foreground font-semibold">{currentSentence.dutch}</p>
-                </div>
-              )}
-            </Card>
-          )}
-
-          {/* Action buttons */}
-          {!checked ? (
-            <Button
-              className="w-full"
-              onClick={handleCheck}
-              disabled={placed.length === 0}
-            >
-              Check
-            </Button>
-          ) : (
-            <Button className="w-full" onClick={handleNext}>
-              {roundIndex + 1 >= sentences.length ? 'See results' : 'Next'}
-            </Button>
+          {hint && (
+            <p className="text-xs text-muted-foreground">{hint}</p>
           )}
         </div>
-      )}
 
-      {/* Done screen */}
-      {screen === 'done' && (
-        <div className="space-y-4 animate-fade-in">
-          <Card className="p-6 text-center space-y-2">
-            <p className="text-3xl font-bold text-foreground">{score} / {sentences.length}</p>
-            <p className="text-sm text-muted-foreground">
-              {score === sentences.length
-                ? 'Perfect score!'
-                : score >= Math.ceil(sentences.length / 2)
-                ? 'Good work!'
-                : 'Keep practising!'}
-            </p>
+        <textarea
+          value={userSentence}
+          onChange={e => setUserSentence(e.target.value)}
+          placeholder="Schrijf je zin hier…"
+          autoComplete="new-password"
+          autoCorrect="off"
+          autoCapitalize="none"
+          spellCheck={false}
+          rows={3}
+          className="w-full rounded-xl border border-border bg-card p-4 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+        />
+
+        {error && (
+          <Card className="border-red-200 bg-red-50 p-4">
+            <p className="text-sm text-red-700">{error}</p>
           </Card>
+        )}
 
-          <Button className="w-full gap-2" onClick={handleGenerate} disabled={loading}>
-            {loading ? 'Generating...' : <><RotateCcw className="h-4 w-4" /> Try again</>}
+        <Button
+          className="w-full"
+          onClick={handleCheck}
+          disabled={loading || !userSentence.trim()}
+        >
+          {loading ? <span className="animate-pulse">Checking…</span> : 'Check'}
+        </Button>
+      </div>
+    );
+  }
+
+  // ── Feedback screen ──────────────────────────────────────────────────────────
+
+  if (screen === 'feedback' && feedbackResult) {
+    const success = feedbackResult.allWordsUsed && feedbackResult.grammaticallyValid;
+    return (
+      <div className="animate-fade-in space-y-4 pb-6">
+        <button onClick={() => setScreen('config')} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="h-4 w-4" /> Tasks
+        </button>
+
+        <h2 className="font-heading text-xl font-bold text-foreground">Sentence Builder</h2>
+
+        {success ? (
+          <Card className="p-4 border-emerald-200 bg-emerald-50 space-y-2">
+            <div className="flex items-center gap-2">
+              <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
+              <p className="text-sm font-semibold text-emerald-800">Well done!</p>
+            </div>
+            <p className="text-sm text-emerald-800 leading-relaxed">{feedbackResult.feedback}</p>
+          </Card>
+        ) : (
+          <Card className="p-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <XCircle className="h-5 w-5 text-red-400 shrink-0" />
+              <p className="text-sm font-semibold text-foreground">Not quite</p>
+            </div>
+            <p className="text-sm text-foreground leading-relaxed">{feedbackResult.feedback}</p>
+            {feedbackResult.correctedVersion && (
+              <div className="space-y-1 border-t border-border pt-3">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Suggested version</p>
+                <p className="text-sm font-medium text-foreground">{feedbackResult.correctedVersion}</p>
+              </div>
+            )}
+          </Card>
+        )}
+
+        {error && (
+          <Card className="border-red-200 bg-red-50 p-4">
+            <p className="text-sm text-red-700">{error}</p>
+          </Card>
+        )}
+
+        <div className="flex gap-2">
+          <Button variant="outline" className="gap-1.5" onClick={() => setScreen('config')}>
+            <RotateCcw className="h-4 w-4" /> Settings
           </Button>
-
-          <Button variant="outline" className="w-full" onClick={handleReset}>
-            Change filters
+          <Button className="flex-1" onClick={startExercise} disabled={loading}>
+            {loading ? <span className="animate-pulse">Loading…</span> : 'New words'}
           </Button>
         </div>
-      )}
-    </div>
-  );
+      </div>
+    );
+  }
+
+  return null;
 }
