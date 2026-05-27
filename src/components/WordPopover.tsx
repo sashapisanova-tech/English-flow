@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Bookmark, BookmarkPlus, Volume2, Loader2 } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { playDutch } from '@/utils/playDutch';
+import { toast } from '@/components/ui/sonner';
 import type { SeparableVerbEntry } from '@/data/vocabulary';
 
 interface WordPopoverProps {
@@ -106,11 +107,18 @@ export function WordPopover({
 
   const toggleSave = () => {
     if (separableVerb) {
-      const inf = separableVerb.infinitive.split(' ')[0]; // first infinitive if combined
+      const inf = separableVerb.infinitive.split(' ')[0];
       if (isSaved) {
         removeWord(inf);
       } else {
         addWord(inf, separableVerb.english, { example: effectiveExample });
+        toast(`"${inf}" saved to learning`, {
+          duration: 4000,
+          action: {
+            label: 'Undo',
+            onClick: () => removeWord(inf),
+          },
+        });
       }
       return;
     }
@@ -119,6 +127,13 @@ export function WordPopover({
     } else {
       addWord(word, liveTranslation || translation || word, {
         plural, example: effectiveExample, exampleTranslation,
+      });
+      toast(`"${word}" saved to learning`, {
+        duration: 4000,
+        action: {
+          label: 'Undo',
+          onClick: () => removeWord(word),
+        },
       });
     }
   };
