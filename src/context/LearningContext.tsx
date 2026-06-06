@@ -275,6 +275,23 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     });
   }, [syncWord]);
 
+  // ── Daily new-cards counter ────────────────────────────────────────────────
+  const [newCardsToday, setNewCardsToday] = useState<number>(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem(NEW_CARDS_TODAY_KEY) || 'null') as { date: string; count: number } | null;
+      if (stored && stored.date === todayUTC()) return stored.count;
+    } catch {}
+    return 0;
+  });
+
+  const incrementNewCards = useCallback(() => {
+    setNewCardsToday(prev => {
+      const next = prev + 1;
+      try { localStorage.setItem(NEW_CARDS_TODAY_KEY, JSON.stringify({ date: todayUTC(), count: next })); } catch {}
+      return next;
+    });
+  }, []);
+
   const getWordsForReview = useCallback(() => {
     const now = new Date();
     return Object.values(vocabulary)
@@ -379,23 +396,6 @@ export function LearningProvider({ children }: { children: ReactNode }) {
 
   const incrementFlashcards = useCallback(() => {
     setDailyGoal(prev => ({ ...prev, flashcardsReviewed: prev.flashcardsReviewed + 1 }));
-  }, []);
-
-  // ── Daily new-cards counter ────────────────────────────────────────────────
-  const [newCardsToday, setNewCardsToday] = useState<number>(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem(NEW_CARDS_TODAY_KEY) || 'null') as { date: string; count: number } | null;
-      if (stored && stored.date === todayUTC()) return stored.count;
-    } catch {}
-    return 0;
-  });
-
-  const incrementNewCards = useCallback(() => {
-    setNewCardsToday(prev => {
-      const next = prev + 1;
-      try { localStorage.setItem(NEW_CARDS_TODAY_KEY, JSON.stringify({ date: todayUTC(), count: next })); } catch {}
-      return next;
-    });
   }, []);
 
   /**
