@@ -6,10 +6,13 @@ import { fsrsReview, FSRSCard, FSRSRating } from '@/utils/fsrs';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
-const VOCAB_STORAGE_KEY  = 'dutch-vocabulary-v1';
-const STATS_STORAGE_KEY  = 'dutch-player-stats-v1';
-const TEXT_PROGRESS_KEY  = 'dutch-text-progress-v1';
-const GOALS_STORAGE_KEY  = 'dutch-daily-goals-v1';
+const VOCAB_STORAGE_KEY     = 'dutch-vocabulary-v1';
+const STATS_STORAGE_KEY     = 'dutch-player-stats-v1';
+const TEXT_PROGRESS_KEY     = 'dutch-text-progress-v1';
+const GOALS_STORAGE_KEY     = 'dutch-daily-goals-v1';
+const NEW_CARDS_TODAY_KEY   = 'dutch-new-cards-today-v1';
+
+export const NEW_CARDS_DAILY_LIMIT = 20;
 
 // ── UTC date helpers ─────────────────────────────────────────────────────────
 
@@ -76,6 +79,7 @@ interface LearningState {
   level: number;
   syncing: boolean;
   dueCount: number;
+  newCardsToday: number;
   pastErrors: PastError[];
   addXP:                (amount: number) => void;
   addWord:              (dutch: string, english: string, extras?: Partial<DutchWord>) => void;
@@ -84,7 +88,7 @@ interface LearningState {
   getWordsForReview:    () => DutchWord[];
   getWordsDueForReview: () => DutchWord[];
   enrollWord:           (dutch: string, english: string) => void;
-  reviewWordSRS:        (dutch: string, rating: 'again' | 'good' | 'easy') => void;
+  reviewWordSRS:        (dutch: string, rating: 'again' | 'hard' | 'good' | 'easy') => void;
   markTextCompleted:    (textId: string) => void;
   incrementFlashcards:  () => void;
   reviewWord:           (dutch: string, correct: boolean) => void;
@@ -283,18 +287,26 @@ export function LearningProvider({ children }: { children: ReactNode }) {
       });
   }, [vocabulary]);
 
-  /** Returns all words whose dueDate <= today UTC (including overdue / no dueDate). */
+  /** Returns due reviews + new cards (up to daily limit), sorted: relearning → overdue → new. */
   const getWordsDueForReview = useCallback((): DutchWord[] => {
     const today = todayUTC();
-    return Object.values(vocabulary)
-      .filter(w => !w.dueDate || w.dueDate <= today)
+    const newAllowed = Math.max(0, NEW_CARDS_DAILY_LIMIT - newCardsToday);
+
+    const dueReviews = Object.values(vocabulary)
+      .filter(w => w.stability != null && w.dueDate && w.dueDate <= today && w.status !== 'known')
       .sort((a, b) => {
-        if (!a.dueDate && b.dueDate) return -1;
-        if (a.dueDate && !b.dueDate) return 1;
-        if (!a.dueDate || !b.dueDate) return 0;
-        return a.dueDate.localeCompare(b.dueDate);
+        const aRelearn = a.fsrsState === 'relearning' ? 0 : 1;
+        const bRelearn = b.fsrsState === 'relearning' ? 0 : 1;
+        if (aRelearn !== bRelearn) return aRelearn - bRelearn;
+        return (a.dueDate ?? '').localeCompare(b.dueDate ?? '');
       });
-  }, [vocabulary]);
+
+    const newCards = Object.values(vocabulary)
+      .filter(w => !w.stability && w.status !== 'known')
+      .slice(0, newAllowed);
+
+    return [...dueReviews, ...newCards];
+  }, [vocabulary, newCardsToday]);
 
   /**
    * Adds a word to the vocabulary with dueDate = today if not already tracked.
@@ -369,49 +381,82 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     setDailyGoal(prev => ({ ...prev, flashcardsReviewed: prev.flashcardsReviewed + 1 }));
   }, []);
 
+  // ── Daily new-cards counter ────────────────────────────────────────────────
+  const [newCardsToday, setNewCardsToday] = useState<number>(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem(NEW_CARDS_TODAY_KEY) || 'null') as { date: string; count: number } | null;
+      if (stored && stored.date === todayUTC()) return stored.count;
+    } catch {}
+    return 0;
+  });
+
+  const incrementNewCards = useCallback(() => {
+    setNewCardsToday(prev => {
+      const next = prev + 1;
+      try { localStorage.setItem(NEW_CARDS_TODAY_KEY, JSON.stringify({ date: todayUTC(), count: next })); } catch {}
+      return next;
+    });
+  }, []);
+
   /**
-   * Rate a word with Again / Good / Easy and update its dueDate accordingly.
-   * - Again → due tomorrow (interval stays 1)
-   * - Good  → interval = max(3, lastInterval * 2), due in interval days
-   * - Easy  → interval = max(7, lastInterval * 3), due in interval days
+   * Rate a word with Again / Hard / Good / Easy using full FSRS-4.5.
+   * Replaces the old simple-multiplier approach.
    */
-  const reviewWordSRS = useCallback((dutch: string, rating: 'again' | 'good' | 'easy') => {
+  const reviewWordSRS = useCallback((dutch: string, rating: 'again' | 'hard' | 'good' | 'easy') => {
     const key = dutch.toLowerCase();
+    const now = new Date();
     setVocabulary(prev => {
       const word = prev[key];
       if (!word) return prev;
 
-      const lastInterval = word.interval ?? 1;
-      let newInterval: number;
-      if (rating === 'again') {
-        newInterval = 1;
-      } else if (rating === 'good') {
-        newInterval = Math.max(3, lastInterval * 2);
-      } else {
-        newInterval = Math.max(7, lastInterval * 3);
-      }
+      const card: FSRSCard | null = word.stability != null ? {
+        stability:  word.stability,
+        difficulty: word.difficulty ?? 5,
+        state:      word.fsrsState  ?? 'learning',
+        lastReview: word.lastReview ? new Date(word.lastReview) : now,
+      } : null;
 
-      // Compute new due date in UTC
-      const now = new Date();
+      const fsrsRating: FSRSRating = rating === 'again' ? 1 : rating === 'hard' ? 2 : rating === 'good' ? 3 : 4;
+
+      // Track new cards before the word has any stability (first real review)
+      const isNewCard = !word.stability;
+
+      const result = fsrsReview(card, fsrsRating, now);
+      const newStatus: WordStatus =
+        result.state === 'review' && result.stability >= 21 ? 'known' : 'learning';
+
       const dueDateObj = new Date(Date.UTC(
         now.getUTCFullYear(),
         now.getUTCMonth(),
-        now.getUTCDate() + newInterval,
+        now.getUTCDate() + result.interval,
       ));
-      const dueDate = dueDateObj.toISOString().slice(0, 10);
+      const dueDate = result.state === 'relearning'
+        ? todayUTC()
+        : dueDateObj.toISOString().slice(0, 10);
 
       const updated: DutchWord = {
         ...word,
-        interval:   newInterval,
+        status:     newStatus,
+        stability:  result.stability,
+        difficulty: result.difficulty,
+        fsrsState:  result.state,
+        interval:   result.interval,
         dueDate,
         lastReview: now.toISOString(),
       };
       syncWord(updated);
+
+      if (isNewCard) {
+        // Side-effect: increment new cards counter (deferred to avoid setState-in-setState)
+        setTimeout(() => incrementNewCards(), 0);
+      }
+
       return { ...prev, [key]: updated };
     });
     incrementFlashcards();
-    if (rating !== 'again') addXP(5);
-  }, [incrementFlashcards, addXP, syncWord]);
+    if (rating === 'easy') addXP(10);
+    else if (rating !== 'again') addXP(5);
+  }, [incrementFlashcards, addXP, syncWord, incrementNewCards]);
 
   const reviewWord = useCallback((dutch: string, correct: boolean) => {
     const now = new Date();
@@ -469,8 +514,13 @@ export function LearningProvider({ children }: { children: ReactNode }) {
 
   const dueCount = React.useMemo(() => {
     const today = todayUTC();
-    return Object.values(vocabulary).filter(w => !w.dueDate || w.dueDate <= today).length;
-  }, [vocabulary]);
+    const reviews = Object.values(vocabulary).filter(
+      w => w.stability != null && w.dueDate && w.dueDate <= today && w.status !== 'known'
+    ).length;
+    const newWords = Object.values(vocabulary).filter(w => !w.stability && w.status !== 'known').length;
+    const newAllowed = Math.max(0, NEW_CARDS_DAILY_LIMIT - newCardsToday);
+    return reviews + Math.min(newWords, newAllowed);
+  }, [vocabulary, newCardsToday]);
 
   const [pastErrors, setPastErrors] = useState<PastError[]>(() => {
     try { return JSON.parse(localStorage.getItem('dutch-past-errors-v1') || '[]'); } catch { return []; }
@@ -486,7 +536,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
 
   return (
     <LearningContext.Provider value={{
-      vocabulary, texts, dailyGoal, xp, level, syncing, dueCount,
+      vocabulary, texts, dailyGoal, xp, level, syncing, dueCount, newCardsToday,
       pastErrors, addPastError,
       addXP, addWord, removeWord, updateWordStatus,
       getWordsForReview, getWordsDueForReview, enrollWord, reviewWordSRS,

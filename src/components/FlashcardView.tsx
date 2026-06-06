@@ -9,9 +9,10 @@ import { FlashcardSet, FlashcardSetCategory, FlashcardSetWord, DutchWord } from 
 import { useCustomSets } from '@/hooks/useCustomSets';
 import type { CustomSet } from '@/hooks/useCustomSets';
 import { CustomSetEditor, CreateSetModal } from '@/components/CustomSetEditor';
-import { fsrsPreviewInterval, FSRSCard } from '@/utils/fsrs';
+import { fsrsPreviewInterval, FSRSCard, FSRSRating } from '@/utils/fsrs';
+import { NEW_CARDS_DAILY_LIMIT } from '@/context/LearningContext';
 
-type SRSRating = 'again' | 'good' | 'easy';
+type SRSRating = 'again' | 'hard' | 'good' | 'easy';
 
 type FlashcardMode = 'browse' | 'my-words' | 'set-practice' | 'learned' | 'custom-editor' | 'create-set';
 type Direction = 'dutch-to-english' | 'english-to-dutch';
@@ -25,7 +26,7 @@ const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: strin
 };
 
 export function FlashcardView() {
-  const { getWordsForReview, getWordsDueForReview, reviewWord, reviewWordSRS, enrollWord, vocabulary, dailyGoal, addWord, updateWordStatus, dueCount } = useLearning();
+  const { getWordsForReview, getWordsDueForReview, reviewWordSRS, enrollWord, vocabulary, dailyGoal, addWord, updateWordStatus, dueCount, newCardsToday } = useLearning();
   const { sets: customSets, createSet, deleteSet, addWordToSet, removeWordFromSet } = useCustomSets();
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
@@ -63,14 +64,14 @@ export function FlashcardView() {
   const totalCards     = mode === 'my-words' ? sessionQueue.length : practiceQueue.length;
 
   const handleAnswer = (correct: boolean) => {
+    const rating: SRSRating = correct ? 'good' : 'again';
     if (mode === 'my-words' && currentWord) {
-      reviewWord(currentWord.dutch, correct);
+      reviewWordSRS(currentWord.dutch, rating);
       if (!correct) setAgainKeys(prev => new Set(prev).add(currentWord.dutch.toLowerCase()));
     }
     if (mode === 'set-practice' && currentSetWord) {
-      // Auto-enroll set words into the SRS queue and record a legacy review
       enrollWord(currentSetWord.dutch, currentSetWord.english);
-      reviewWord(currentSetWord.dutch, correct);
+      reviewWordSRS(currentSetWord.dutch, rating);
     }
     setFlipped(false);
     stopDutch(); setIsPlaying(false);
@@ -220,8 +221,8 @@ export function FlashcardView() {
     setDirection(d => d === 'dutch-to-english' ? 'english-to-dutch' : 'dutch-to-english');
   }
 
-  // Preview next interval using FSRS (mirrors reviewWord in LearningContext)
-  function previewInterval(word: DutchWord | null, correct: boolean): number {
+  // Preview next interval using FSRS for a given rating
+  function previewInterval(word: DutchWord | null, rating: FSRSRating): number {
     if (!word) return 1;
     const card: FSRSCard | null = word.stability != null ? {
       stability:  word.stability,
@@ -229,7 +230,7 @@ export function FlashcardView() {
       state:      word.fsrsState  ?? 'learning',
       lastReview: word.lastReview ? new Date(word.lastReview) : new Date(),
     } : null;
-    return fsrsPreviewInterval(card, correct ? 3 : 1);
+    return fsrsPreviewInterval(card, rating);
   }
 
   function formatDays(days: number): string {
@@ -287,30 +288,47 @@ export function FlashcardView() {
       <div className="animate-fade-in space-y-5">
 
         {/* Spaced Repetition Review */}
-        {allWords.length > 0 && (
-          <Card
-            className={`card-hover cursor-pointer p-4 flex items-center justify-between ${dueCount > 0 ? 'border-primary/30 bg-primary/5' : ''}`}
-            onClick={startMyWords}
-          >
-            <div className="flex items-center gap-3">
-              <div>
-                <p className="font-heading font-semibold text-foreground">Spaced Repetition Review</p>
-                <p className="text-xs text-muted-foreground">
-                  {dueCount > 0
-                    ? <><span className="text-primary font-semibold">{dueCount} due today</span></>
-                    : `All caught up! ${allWords.length} word${allWords.length !== 1 ? 's' : ''} in queue`
-                  }
-                </p>
+        {allWords.length > 0 && (() => {
+          const today = new Date().toISOString().slice(0, 10);
+          const newWords   = allWords.filter(w => !w.stability && w.status !== 'known');
+          const newAllowed = Math.max(0, NEW_CARDS_DAILY_LIMIT - newCardsToday);
+          const reviewDue  = allWords.filter(w => w.stability && w.dueDate && w.dueDate <= today && w.status !== 'known');
+          return (
+            <Card
+              className={`card-hover cursor-pointer p-4 ${dueCount > 0 ? 'border-primary/30 bg-primary/5' : ''}`}
+              onClick={startMyWords}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <p className="font-heading font-semibold text-foreground">Daily Review</p>
+                {dueCount > 0 && (
+                  <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground">
+                    {dueCount}
+                  </span>
+                )}
+                {dueCount === 0 && <ChevronRight className="h-5 w-5 text-muted-foreground" />}
               </div>
-            </div>
-            {dueCount > 0 && (
-              <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground">
-                {dueCount}
-              </span>
-            )}
-            {dueCount === 0 && <ChevronRight className="h-5 w-5 text-muted-foreground" />}
-          </Card>
-        )}
+              <div className="flex gap-4 text-xs">
+                <div className="text-center">
+                  <p className="font-bold text-base text-foreground">{reviewDue.length}</p>
+                  <p className="text-muted-foreground">due</p>
+                </div>
+                <div className="w-px bg-border" />
+                <div className="text-center">
+                  <p className="font-bold text-base text-foreground">{Math.min(newWords.length, newAllowed)}</p>
+                  <p className="text-muted-foreground">new</p>
+                </div>
+                <div className="w-px bg-border" />
+                <div className="text-center">
+                  <p className="font-bold text-base text-foreground">{allWords.length}</p>
+                  <p className="text-muted-foreground">total</p>
+                </div>
+              </div>
+              {dueCount === 0 && (
+                <p className="mt-2 text-xs text-muted-foreground">All caught up — come back tomorrow.</p>
+              )}
+            </Card>
+          );
+        })()}
 
         {/* Learning card */}
         {allWords.filter(w => w.status !== 'known').length > 0 && (
@@ -927,42 +945,54 @@ export function FlashcardView() {
       {flipped && (
         <div className="flex flex-col items-center gap-3 animate-fade-in">
           {mode === 'my-words' && currentWord && (() => {
-            const goodDays  = previewInterval(currentWord, true);
-            const easyDays  = Math.max(goodDays + 1, Math.round(goodDays * 1.5));
+            const againDays = previewInterval(currentWord, 1);
+            const hardDays  = previewInterval(currentWord, 2);
+            const goodDays  = previewInterval(currentWord, 3);
+            const easyDays  = previewInterval(currentWord, 4);
             return (
-              <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
-                <span>Again → tomorrow</span>
-                <span className="text-muted-foreground/40">·</span>
+              <div className="flex items-center justify-center gap-3 text-[11px] text-muted-foreground flex-wrap">
+                <span>Again → {formatDays(againDays)}</span>
+                <span className="text-muted-foreground/30">·</span>
+                <span>Hard → {formatDays(hardDays)}</span>
+                <span className="text-muted-foreground/30">·</span>
                 <span>Good → {formatDays(goodDays)}</span>
-                <span className="text-muted-foreground/40">·</span>
+                <span className="text-muted-foreground/30">·</span>
                 <span>Easy → {formatDays(easyDays)}</span>
               </div>
             );
           })()}
           {mode === 'my-words' ? (
-            <div className="flex justify-center gap-3">
+            <div className="flex justify-center gap-2">
               <Button
                 variant="outline"
-                size="lg"
+                size="sm"
                 onClick={() => handleSRSRating('again')}
-                className="gap-1.5 border-destructive/30 text-destructive hover:bg-destructive/10 text-sm px-4"
+                className="gap-1 border-destructive/30 text-destructive hover:bg-destructive/10 text-xs px-3 flex-1"
               >
-                <X className="h-4 w-4" /> Again
+                Again
               </Button>
               <Button
                 variant="outline"
-                size="lg"
-                onClick={() => handleSRSRating('good')}
-                className="gap-1.5 border-primary/30 text-primary hover:bg-primary/10 text-sm px-4"
+                size="sm"
+                onClick={() => handleSRSRating('hard')}
+                className="gap-1 border-orange-300 text-orange-600 hover:bg-orange-50 text-xs px-3 flex-1"
               >
-                <Check className="h-4 w-4" /> Good
+                Hard
               </Button>
               <Button
-                size="lg"
-                onClick={() => handleSRSRating('easy')}
-                className="gap-1.5 bg-success text-success-foreground hover:bg-success/90 text-sm px-4"
+                variant="outline"
+                size="sm"
+                onClick={() => handleSRSRating('good')}
+                className="gap-1 border-primary/30 text-primary hover:bg-primary/10 text-xs px-3 flex-1"
               >
-                <Check className="h-4 w-4" /> Easy
+                Good
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => handleSRSRating('easy')}
+                className="gap-1 bg-success text-success-foreground hover:bg-success/90 text-xs px-3 flex-1"
+              >
+                Easy
               </Button>
             </div>
           ) : null}
