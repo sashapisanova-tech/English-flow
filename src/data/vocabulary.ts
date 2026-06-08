@@ -420,6 +420,9 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
   'm2-5': {
     'brengt': { infinitive: 'meebrengen', english: 'to bring along', prefix: 'mee' },
   },
+  'm2-6': {
+    'spreekt': { infinitive: 'afspreken', english: 'to arrange / meet up', prefix: 'af' },
+  },
   'm2-7': {
     'kom': { infinitive: 'terugkomen', english: 'to come back', prefix: 'terug' },
   },
@@ -569,7 +572,7 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
     'ik heb je gemist': { english: 'I missed you' },
   },
   'm2-3': {
-    'op zijn gemak':  { english: 'at ease / comfortable' },
+    'voelt zich op zijn gemak': { english: 'feels at ease / comfortable' },
   },
   'm2-5': {
     'over vroeger':   { english: 'about the past' },

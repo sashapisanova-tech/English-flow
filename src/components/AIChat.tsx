@@ -118,33 +118,22 @@ export function AIChat() {
         <MessageCircle className="h-6 w-6 text-primary-foreground" />
       </button>
 
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="bottom" className="flex flex-col p-0 rounded-t-2xl" style={{ height: 'min(80vh, calc(100dvh - env(safe-area-inset-top) - 2rem))' }}>
-          <SheetHeader className="px-4 pt-4 pb-3 border-b border-border shrink-0">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div>
-                  <SheetTitle className="text-base font-bold leading-tight">Daan — Dutch Tutor</SheetTitle>
-                  <p className="text-xs text-muted-foreground">Ask anything about Dutch</p>
-                </div>
-              </div>
-              <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
-                <X className="h-5 w-5" />
-              </button>
+      {/* Desktop: fixed right sidebar */}
+      {open && (
+        <div className="hidden md:flex fixed right-0 top-0 h-full w-96 z-50 flex-col bg-background border-l border-border shadow-xl">
+          <div className="px-4 pt-4 pb-3 border-b border-border shrink-0 flex items-center justify-between">
+            <div>
+              <p className="text-base font-bold leading-tight">Daan — Dutch Tutor</p>
+              <p className="text-xs text-muted-foreground">Ask anything about Dutch</p>
             </div>
-          </SheetHeader>
-
-          {/* Messages */}
+            <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
+              <X className="h-5 w-5" />
+            </button>
+          </div>
           <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div
-                  className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${
-                    msg.role === 'user'
-                      ? 'bg-primary text-primary-foreground rounded-br-sm'
-                      : 'bg-secondary text-secondary-foreground rounded-bl-sm'
-                  }`}
-                >
+                <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${msg.role === 'user' ? 'bg-primary text-primary-foreground rounded-br-sm' : 'bg-secondary text-secondary-foreground rounded-bl-sm'}`}>
                   {msg.content}
                 </div>
               </div>
@@ -160,31 +149,67 @@ export function AIChat() {
                 </div>
               </div>
             )}
-            {error && (
-              <p className="text-xs text-red-600 text-center">{error}</p>
-            )}
+            {error && <p className="text-xs text-red-600 text-center">{error}</p>}
             <div ref={bottomRef} />
           </div>
+          <div className="px-4 py-3 border-t border-border shrink-0">
+            <div className="flex gap-2 items-end">
+              <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
+                placeholder="Ask about Dutch grammar or vocabulary…" rows={1}
+                className="flex-1 resize-none rounded-xl border border-border bg-card px-3 py-2.5 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 max-h-32"
+                style={{ fieldSizing: 'content' } as React.CSSProperties} />
+              <Button size="sm" onClick={handleSend} disabled={!input.trim() || loading} className="h-10 w-10 shrink-0 p-0 rounded-xl">
+                <Send className="h-4 w-4" />
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground mt-1.5 text-center">Enter to send · Shift+Enter for new line</p>
+          </div>
+        </div>
+      )}
 
-          {/* Input */}
+      {/* Mobile: bottom sheet */}
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="bottom" className="md:hidden flex flex-col p-0 rounded-t-2xl" style={{ height: 'min(80vh, calc(100dvh - env(safe-area-inset-top) - 2rem))' }}>
+          <SheetHeader className="px-4 pt-4 pb-3 border-b border-border shrink-0">
+            <div className="flex items-center justify-between">
+              <div>
+                <SheetTitle className="text-base font-bold leading-tight">Daan — Dutch Tutor</SheetTitle>
+                <p className="text-xs text-muted-foreground">Ask anything about Dutch</p>
+              </div>
+              <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          </SheetHeader>
+          <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+            {messages.map((msg, i) => (
+              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-wrap ${msg.role === 'user' ? 'bg-primary text-primary-foreground rounded-br-sm' : 'bg-secondary text-secondary-foreground rounded-bl-sm'}`}>
+                  {msg.content}
+                </div>
+              </div>
+            ))}
+            {loading && (
+              <div className="flex justify-start">
+                <div className="bg-secondary rounded-2xl rounded-bl-sm px-3.5 py-2.5">
+                  <span className="flex gap-1 items-center h-5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground animate-bounce [animation-delay:0ms]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground animate-bounce [animation-delay:150ms]" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground animate-bounce [animation-delay:300ms]" />
+                  </span>
+                </div>
+              </div>
+            )}
+            {error && <p className="text-xs text-red-600 text-center">{error}</p>}
+            <div ref={bottomRef} />
+          </div>
           <div className="px-4 pt-2 border-t border-border shrink-0" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}>
             <div className="flex gap-2 items-end">
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask about Dutch grammar or vocabulary…"
-                rows={1}
+              <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
+                placeholder="Ask about Dutch grammar or vocabulary…" rows={1}
                 className="flex-1 resize-none rounded-xl border border-border bg-card px-3 py-2.5 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 max-h-32"
-                style={{ fieldSizing: 'content' } as React.CSSProperties}
-              />
-              <Button
-                size="sm"
-                onClick={handleSend}
-                disabled={!input.trim() || loading}
-                className="h-10 w-10 shrink-0 p-0 rounded-xl"
-              >
+                style={{ fieldSizing: 'content' } as React.CSSProperties} />
+              <Button size="sm" onClick={handleSend} disabled={!input.trim() || loading} className="h-10 w-10 shrink-0 p-0 rounded-xl">
                 <Send className="h-4 w-4" />
               </Button>
             </div>

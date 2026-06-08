@@ -99,11 +99,12 @@ export function WordPopover({
   useEffect(() => {
     if (!open) return;
     if (separableVerb) return; // no external translation needed
-    if (translation) { setLiveTranslation(translation); return; }
-    setLoading(true);
+    // Always fetch word info — even when translation is known, we need the article
+    setLoading(!translation); // only show spinner when we don't have a translation yet
+    if (translation) setLiveTranslation(translation);
     fetchWordInfo(word, sentence)
       .then(info => {
-        setLiveTranslation(info.translation || '—');
+        if (!translation) setLiveTranslation(info.translation || '—');
         if (info.article) setLiveArticle(info.article);
       })
       .finally(() => setLoading(false));
