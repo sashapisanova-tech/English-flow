@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { MessageCircle, Send, X } from 'lucide-react';
@@ -56,6 +56,16 @@ export function AIChat() {
   const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const [isDesktop, setIsDesktop] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(min-width: 768px)').matches
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   useEffect(() => {
     if (open && messages.length === 0) {
@@ -118,9 +128,9 @@ export function AIChat() {
         <MessageCircle className="h-6 w-6 text-primary-foreground" />
       </button>
 
-      {/* Desktop: fixed right sidebar */}
-      {open && (
-        <div className="hidden md:flex fixed right-0 top-0 h-full w-96 z-50 flex-col bg-background border-l border-border shadow-xl">
+      {/* Desktop: fixed right sidebar — only rendered on desktop to avoid Sheet backdrop conflict */}
+      {open && isDesktop && (
+        <div className="flex fixed right-4 top-4 bottom-4 w-96 z-50 flex-col bg-background border border-border shadow-2xl rounded-2xl overflow-hidden">
           <div className="px-4 pt-4 pb-3 border-b border-border shrink-0 flex items-center justify-between">
             <div>
               <p className="text-base font-bold leading-tight">Daan — Dutch Tutor</p>
@@ -167,8 +177,8 @@ export function AIChat() {
         </div>
       )}
 
-      {/* Mobile: bottom sheet */}
-      <Sheet open={open} onOpenChange={setOpen}>
+      {/* Mobile: bottom sheet — only rendered on mobile to avoid backdrop on desktop */}
+      <Sheet open={open && !isDesktop} onOpenChange={setOpen}>
         <SheetContent side="bottom" className="md:hidden flex flex-col p-0 rounded-t-2xl" style={{ height: 'min(80vh, calc(100dvh - env(safe-area-inset-top) - 2rem))' }}>
           <SheetHeader className="px-4 pt-4 pb-3 border-b border-border shrink-0">
             <div className="flex items-center justify-between">
