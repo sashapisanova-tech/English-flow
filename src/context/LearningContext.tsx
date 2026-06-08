@@ -11,23 +11,6 @@ const STATS_STORAGE_KEY     = 'dutch-player-stats-v1';
 const TEXT_PROGRESS_KEY     = 'dutch-text-progress-v1';
 const GOALS_STORAGE_KEY     = 'dutch-daily-goals-v1';
 const NEW_CARDS_TODAY_KEY   = 'dutch-new-cards-today-v1';
-const DELETED_WORDS_KEY     = 'dutch-deleted-words-v1';
-
-function getDeletedWords(): Set<string> {
-  try { return new Set(JSON.parse(localStorage.getItem(DELETED_WORDS_KEY) || '[]')); } catch { return new Set(); }
-}
-function addDeletedWord(key: string) {
-  try {
-    const s = getDeletedWords(); s.add(key);
-    localStorage.setItem(DELETED_WORDS_KEY, JSON.stringify([...s]));
-  } catch {}
-}
-function clearDeletedWord(key: string) {
-  try {
-    const s = getDeletedWords(); s.delete(key);
-    localStorage.setItem(DELETED_WORDS_KEY, JSON.stringify([...s]));
-  } catch {}
-}
 
 export const NEW_CARDS_DAILY_LIMIT = 20;
 
@@ -198,20 +181,10 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         // ── Vocabulary ──
         const vocabData = vocabRes.data;
         if (vocabData && vocabData.length > 0) {
-          // Filter out any words the user deleted locally — they may not have
-          // synced to Supabase yet (fire-and-forget delete race on reload)
-          const deleted = getDeletedWords();
+          // Supabase is source of truth — load all rows including ignored ones
           const remoteVocab: Record<string, DutchWord> = {};
-          for (const row of vocabData) {
-            if (!deleted.has(row.dutch as string)) remoteVocab[row.dutch] = rowToWord(row);
-          }
+          for (const row of vocabData) remoteVocab[row.dutch] = rowToWord(row);
           setVocabulary(remoteVocab);
-          // Retry any pending deletes — blocklist entries stay until user manually re-adds
-          if (deleted.size > 0) {
-            for (const key of deleted) {
-              supabase.from('vocabulary').delete().match({ user_id: user.id, dutch: key });
-            }
-          }
         } else {
           // Nothing in Supabase yet — push local vocabulary up
           const localWords = Object.values((() => { try { const r = localStorage.getItem(VOCAB_STORAGE_KEY); return r ? JSON.parse(r) : {}; } catch { return {}; } })()) as DutchWord[];
@@ -260,13 +233,13 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   // ── Mutations ────────────────────────────────────────────────────────────
 
   const addWord = useCallback((dutch: string, english: string, extras?: Partial<DutchWord>) => {
-    // If the user re-saves a previously deleted word, remove it from the blocklist
-    clearDeletedWord(dutch.toLowerCase());
     setVocabulary(prev => {
       const existing = prev[dutch.toLowerCase()];
       if (existing) {
         const updated: DutchWord = {
           ...existing,
+          // If previously archived, restore to active learning
+          status: existing.status === 'ignored' ? 'new' : existing.status,
           timesEncountered: existing.timesEncountered + 1,
           dueDate: existing.dueDate ?? todayUTC(),
           interval: existing.interval ?? 1,
