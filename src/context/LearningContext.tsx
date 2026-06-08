@@ -206,11 +206,10 @@ export function LearningProvider({ children }: { children: ReactNode }) {
             if (!deleted.has(row.dutch as string)) remoteVocab[row.dutch] = rowToWord(row);
           }
           setVocabulary(remoteVocab);
-          // Push any pending deletes to Supabase now that we're online
+          // Retry any pending deletes — blocklist entries stay until user manually re-adds
           if (deleted.size > 0) {
             for (const key of deleted) {
-              supabase.from('vocabulary').delete().match({ user_id: user.id, dutch: key })
-                .then(({ error }) => { if (!error) clearDeletedWord(key); });
+              supabase.from('vocabulary').delete().match({ user_id: user.id, dutch: key });
             }
           }
         } else {
@@ -289,20 +288,18 @@ export function LearningProvider({ children }: { children: ReactNode }) {
 
   const removeWord = useCallback((dutch: string) => {
     const key = dutch.toLowerCase();
-    // Persist deletion locally first — survives reload even if Supabase delete hasn't completed
+    // Write to blocklist FIRST — this is permanent until the user manually re-adds the word
     addDeletedWord(key);
     setVocabulary(prev => {
       if (!prev[key]) return prev;
       const { [key]: _, ...rest } = prev;
       return rest;
     });
+    // Fire-and-forget delete — if it fails, the blocklist still keeps the word out on reload
     const u = userRef.current;
     if (u) {
       supabase.from('vocabulary').delete().match({ user_id: u.id, dutch: key })
-        .then(({ error }) => {
-          if (error) console.error('[sync] vocab delete error:', error);
-          else clearDeletedWord(key); // remove from blocklist once confirmed deleted
-        });
+        .then(({ error }) => { if (error) console.error('[sync] vocab delete error:', error); });
     }
   }, []);
 
