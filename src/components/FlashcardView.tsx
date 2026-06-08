@@ -27,7 +27,7 @@ const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: strin
 
 export function FlashcardView() {
   const { getWordsForReview, getWordsDueForReview, reviewWordSRS, enrollWord, vocabulary, dailyGoal, addWord, removeWord, updateWord, updateWordStatus, dueCount, newCardsToday } = useLearning();
-  const { sets: customSets, createSet, deleteSet, addWordToSet, removeWordFromSet } = useCustomSets();
+  const { sets: customSets, createSet, deleteSet, addWordToSet, removeWordFromSet, updateWordInSet } = useCustomSets();
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const [flipped, setFlipped]           = useState(false);
@@ -277,6 +277,7 @@ export function FlashcardView() {
         onBack={() => { setActiveCustomSet(null); setMode('browse'); }}
         onAddWord={addWordToSet}
         onRemoveWord={removeWordFromSet}
+        onUpdateWord={updateWordInSet}
         onStartPractice={startCustomSetPractice}
         onDelete={(id) => { deleteSet(id); setActiveCustomSet(null); setMode('browse'); }}
       />
@@ -1181,7 +1182,7 @@ export function FlashcardView() {
               </div>
             );
           })()}
-          {mode === 'my-words' ? (
+          {(mode === 'my-words' || mode === 'set-practice') ? (
             <div className="flex justify-center gap-2">
               <Button
                 variant="outline"

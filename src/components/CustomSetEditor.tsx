@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, Plus, Trash2, Sparkles, Loader2, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Plus, Trash2, Sparkles, Loader2, ChevronRight, Pencil } from 'lucide-react';
 import type { CustomSet, CustomWord } from '@/hooks/useCustomSets';
 
 const API_KEY_STORAGE = 'dutch-app-anthropic-key';
@@ -11,6 +11,45 @@ function getSavedKey() {
 }
 
 const EMOJI_OPTIONS = ['📝','🌍','🍎','🏠','🚀','💼','🎵','🐾','🌿','⚡','🏖️','🎯','🔤','💬','🧳'];
+
+interface WordInfo { translation: string; article?: 'de' | 'het' }
+
+async function fetchWordInfo(dutch: string): Promise<WordInfo> {
+  const key = getSavedKey();
+  if (!key || key === 'your_api_key_here') {
+    // fallback: MyMemory translation only
+    try {
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(dutch)}&langpair=nl|en`);
+      const data = await res.json();
+      return { translation: (data?.responseData?.translatedText as string) || '' };
+    } catch { return { translation: '' }; }
+  }
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 40,
+        system: 'You are a Dutch dictionary. Reply with JSON only, no markdown: {"translation":"<1-4 word English translation>","article":"de" or "het" or null}. Use null for article if the word is not a noun.',
+        messages: [{ role: 'user', content: `Dutch word: "${dutch}"` }],
+      }),
+    });
+    if (!res.ok) return { translation: '' };
+    const data = await res.json() as { content: { text: string }[] };
+    const raw = data.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+    const parsed = JSON.parse(raw) as { translation: string; article?: string | null };
+    return {
+      translation: parsed.translation || '',
+      article: parsed.article === 'de' ? 'de' : parsed.article === 'het' ? 'het' : undefined,
+    };
+  } catch { return { translation: '' }; }
+}
 
 async function generateExample(dutch: string): Promise<string> {
   const key = getSavedKey();
@@ -27,7 +66,7 @@ async function generateExample(dutch: string): Promise<string> {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 80,
-        system: 'You are a Dutch language teacher. Generate ONE short, natural Dutch A1–A2 sentence using the given word. Return ONLY the Dutch sentence — no translation, no explanation, no punctuation beyond the sentence itself.',
+        system: 'You are a Dutch language teacher. Generate ONE short, natural Dutch A1–A2 sentence using the given word. Return ONLY the Dutch sentence — no translation, no explanation.',
         messages: [{ role: 'user', content: `Word: ${dutch}` }],
       }),
     });
@@ -37,45 +76,41 @@ async function generateExample(dutch: string): Promise<string> {
   } catch { return ''; }
 }
 
-async function autoTranslate(dutch: string): Promise<string> {
-  try {
-    const res = await fetch(
-      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(dutch)}&langpair=nl|en`
-    );
-    const data = await res.json();
-    return (data?.responseData?.translatedText as string) || '';
-  } catch { return ''; }
-}
-
 interface Props {
   set: CustomSet;
   onBack: () => void;
   onAddWord: (setId: string, word: CustomWord) => void;
   onRemoveWord: (setId: string, dutch: string) => void;
+  onUpdateWord: (setId: string, oldDutch: string, updated: CustomWord) => void;
   onStartPractice: (set: CustomSet) => void;
   onDelete: (id: string) => void;
 }
 
-export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartPractice, onDelete }: Props) {
+export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdateWord, onStartPractice, onDelete }: Props) {
   const [dutch, setDutch] = useState('');
   const [english, setEnglish] = useState('');
   const [example, setExample] = useState('');
+  const [article, setArticle] = useState<'de' | 'het' | undefined>(undefined);
   const [generating, setGenerating] = useState(false);
-  const [translating, setTranslating] = useState(false);
+  const [fetching, setFetching] = useState(false);
   const [addError, setAddError] = useState('');
   const [confirmDelete, setConfirmDelete] = useState(false);
+  // Edit state
+  const [editingDutch, setEditingDutch] = useState<string | null>(null);
+  const [editDutch, setEditDutch] = useState('');
+  const [editEnglish, setEditEnglish] = useState('');
+  const [editExample, setEditExample] = useState('');
+  const [editArticle, setEditArticle] = useState<'de' | 'het' | undefined>(undefined);
+  const [confirmDeleteWord, setConfirmDeleteWord] = useState<string | null>(null);
 
   async function handleDutchBlur() {
     const word = dutch.trim();
     if (!word) return;
-    // Auto-translate if english is empty
-    if (!english.trim()) {
-      setTranslating(true);
-      const t = await autoTranslate(word);
-      if (t) setEnglish(t);
-      setTranslating(false);
-    }
-    // AI example
+    setFetching(true);
+    const info = await fetchWordInfo(word);
+    if (info.translation && !english.trim()) setEnglish(info.translation);
+    if (info.article) setArticle(info.article);
+    setFetching(false);
     if (!example.trim()) {
       setGenerating(true);
       const ex = await generateExample(word);
@@ -91,12 +126,32 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartP
     if (set.words.some(w => w.dutch.toLowerCase() === d.toLowerCase())) {
       setAddError('Word already in this set.'); return;
     }
-    onAddWord(set.id, { dutch: d, english: e, example: example.trim() || undefined });
-    setDutch(''); setEnglish(''); setExample(''); setAddError('');
+    onAddWord(set.id, { dutch: d, english: e, example: example.trim() || undefined, article });
+    setDutch(''); setEnglish(''); setExample(''); setArticle(undefined); setAddError('');
+  }
+
+  function startEdit(word: CustomWord) {
+    setEditingDutch(word.dutch);
+    setEditDutch(word.dutch);
+    setEditEnglish(word.english);
+    setEditExample(word.example || '');
+    setEditArticle(word.article);
+    setConfirmDeleteWord(null);
+  }
+
+  function saveEdit() {
+    if (!editingDutch || !editDutch.trim() || !editEnglish.trim()) return;
+    onUpdateWord(set.id, editingDutch, {
+      dutch: editDutch.trim(),
+      english: editEnglish.trim(),
+      example: editExample.trim() || undefined,
+      article: editArticle,
+    });
+    setEditingDutch(null);
   }
 
   return (
-    <div className="animate-fade-in space-y-4">
+    <div className="animate-fade-in space-y-4 pb-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <button onClick={onBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -124,17 +179,25 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartP
         <div className="space-y-2">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">Dutch word</label>
-            <Input
-              value={dutch}
-              onChange={e => setDutch(e.target.value)}
-              onBlur={handleDutchBlur}
-              placeholder="e.g. fiets"
-              className="text-sm"
-            />
+            <div className="flex gap-2">
+              {/* Article badge */}
+              {article && (
+                <span className={`shrink-0 self-center px-2.5 py-1.5 rounded-lg text-xs font-bold border ${
+                  article === 'de' ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-pink-50 border-pink-200 text-pink-700'
+                }`}>{article}</span>
+              )}
+              <Input
+                value={dutch}
+                onChange={e => { setDutch(e.target.value); setArticle(undefined); }}
+                onBlur={handleDutchBlur}
+                placeholder="e.g. fiets"
+                className="text-sm"
+              />
+            </div>
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1 block">
-              English {translating && <Loader2 className="h-3 w-3 animate-spin" />}
+              English {fetching && <Loader2 className="h-3 w-3 animate-spin" />}
             </label>
             <Input
               value={english}
@@ -149,15 +212,13 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartP
               Example sentence
               {generating && <Loader2 className="h-3 w-3 animate-spin" />}
               {!generating && !example && dutch.trim() && (
-                <button
-                  className="text-xs text-primary underline underline-offset-2"
+                <button className="text-xs text-primary underline underline-offset-2"
                   onClick={async () => {
                     setGenerating(true);
                     const ex = await generateExample(dutch.trim());
                     if (ex) setExample(ex);
                     setGenerating(false);
-                  }}
-                >Generate</button>
+                  }}>Generate</button>
               )}
             </label>
             <Input
@@ -174,7 +235,7 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartP
         <Button
           className="w-full gap-1.5"
           onClick={handleAdd}
-          disabled={!dutch.trim() || !english.trim() || generating || translating}
+          disabled={!dutch.trim() || !english.trim() || generating || fetching}
         >
           <Plus className="h-4 w-4" /> Add word
         </Button>
@@ -188,23 +249,78 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartP
       ) : (
         <div className="space-y-2">
           {set.words.map(word => (
-            <Card key={word.dutch} className="p-3 flex items-start gap-3">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-semibold text-sm text-foreground">{word.dutch}</span>
-                  <span className="text-muted-foreground text-xs">·</span>
-                  <span className="text-sm text-muted-foreground">{word.english}</span>
+            <Card key={word.dutch} className="p-3">
+              {editingDutch === word.dutch ? (
+                // ── Edit mode ──
+                <div className="space-y-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <label className="text-[10px] text-muted-foreground mb-0.5 block">Dutch</label>
+                      <div className="flex gap-1.5">
+                        {editArticle && (
+                          <span className={`shrink-0 self-center px-1.5 py-1 rounded text-[10px] font-bold ${
+                            editArticle === 'de' ? 'bg-blue-50 text-blue-700' : 'bg-pink-50 text-pink-700'
+                          }`}>{editArticle}</span>
+                        )}
+                        <input value={editDutch} onChange={e => setEditDutch(e.target.value)}
+                          className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="text-[10px] text-muted-foreground mb-0.5 block">English</label>
+                      <input value={editEnglish} onChange={e => setEditEnglish(e.target.value)}
+                        className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-muted-foreground mb-0.5 block">Example</label>
+                    <input value={editExample} onChange={e => setEditExample(e.target.value)}
+                      className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
+                  </div>
+                  <div className="flex gap-2">
+                    <Button size="sm" className="flex-1 h-7 text-xs" onClick={saveEdit}
+                      disabled={!editDutch.trim() || !editEnglish.trim()}>Save</Button>
+                    <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => setEditingDutch(null)}>Cancel</Button>
+                  </div>
                 </div>
-                {word.example && (
-                  <p className="text-xs text-muted-foreground italic mt-0.5 leading-relaxed">"{word.example}"</p>
-                )}
-              </div>
-              <button
-                onClick={() => onRemoveWord(set.id, word.dutch)}
-                className="shrink-0 text-muted-foreground hover:text-destructive transition-colors mt-0.5"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+              ) : confirmDeleteWord === word.dutch ? (
+                // ── Delete confirm ──
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-sm text-muted-foreground truncate">Remove "{word.dutch}"?</p>
+                  <div className="flex gap-2 shrink-0">
+                    <button onClick={() => setConfirmDeleteWord(null)} className="text-xs text-muted-foreground hover:text-foreground px-2 py-1">Cancel</button>
+                    <button onClick={() => { onRemoveWord(set.id, word.dutch); setConfirmDeleteWord(null); }}
+                      className="text-xs font-semibold text-white bg-destructive px-3 py-1 rounded-md">Remove</button>
+                  </div>
+                </div>
+              ) : (
+                // ── Normal row ──
+                <div className="flex items-start gap-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      {word.article && (
+                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                          word.article === 'de' ? 'bg-blue-50 text-blue-700' : 'bg-pink-50 text-pink-700'
+                        }`}>{word.article}</span>
+                      )}
+                      <span className="font-semibold text-sm text-foreground">{word.dutch}</span>
+                      <span className="text-muted-foreground text-xs">·</span>
+                      <span className="text-sm text-muted-foreground">{word.english}</span>
+                    </div>
+                    {word.example && (
+                      <p className="text-xs text-muted-foreground italic mt-0.5 leading-relaxed">"{word.example}"</p>
+                    )}
+                  </div>
+                  <div className="flex gap-1 shrink-0">
+                    <button onClick={() => startEdit(word)} className="text-muted-foreground hover:text-foreground transition-colors p-1 rounded hover:bg-muted">
+                      <Pencil className="h-3.5 w-3.5" />
+                    </button>
+                    <button onClick={() => { setConfirmDeleteWord(word.dutch); setEditingDutch(null); }} className="text-muted-foreground hover:text-destructive transition-colors p-1 rounded hover:bg-destructive/10">
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              )}
             </Card>
           ))}
         </div>
@@ -216,27 +332,13 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onStartP
           <div className="flex items-center justify-between gap-3 rounded-lg bg-destructive/10 border border-destructive/20 px-3 py-2.5">
             <p className="text-sm text-destructive font-medium">Delete "{set.title}"?</p>
             <div className="flex gap-2 shrink-0">
-              <button
-                onClick={() => setConfirmDelete(false)}
-                className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => { onDelete(set.id); onBack(); }}
-                className="text-xs font-semibold text-white bg-destructive hover:bg-destructive/90 transition-colors px-3 py-1 rounded-md"
-              >
-                Delete
-              </button>
+              <button onClick={() => setConfirmDelete(false)} className="text-xs text-muted-foreground hover:text-foreground px-2 py-1">Cancel</button>
+              <button onClick={() => { onDelete(set.id); onBack(); }} className="text-xs font-semibold text-white bg-destructive px-3 py-1 rounded-md">Delete</button>
             </div>
           </div>
         ) : (
-          <button
-            onClick={() => setConfirmDelete(true)}
-            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors"
-          >
-            <Trash2 className="h-3.5 w-3.5" />
-            Delete this set
+          <button onClick={() => setConfirmDelete(true)} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-destructive transition-colors">
+            <Trash2 className="h-3.5 w-3.5" /> Delete this set
           </button>
         )}
       </div>
@@ -265,39 +367,23 @@ export function CreateSetModal({ onCancel, onCreate }: CreateSetProps) {
 
       <Card className="p-4 space-y-4">
         <div>
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide block mb-1.5">
-            Set name
-          </label>
-          <Input
-            value={title}
-            onChange={e => setTitle(e.target.value)}
-            placeholder="e.g. Food & Drinks"
-            autoFocus
-          />
+          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide block mb-1.5">Set name</label>
+          <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Food & Drinks" autoFocus />
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide block mb-2">
-            Icon
-          </label>
+          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide block mb-2">Icon</label>
           <div className="flex flex-wrap gap-2">
             {EMOJI_OPTIONS.map(e => (
-              <button
-                key={e}
-                onClick={() => setEmoji(e)}
-                className={`text-xl rounded-lg p-1.5 transition-all ${emoji === e ? 'bg-primary/15 ring-2 ring-primary' : 'hover:bg-secondary'}`}
-              >
+              <button key={e} onClick={() => setEmoji(e)}
+                className={`text-xl rounded-lg p-1.5 transition-all ${emoji === e ? 'bg-primary/15 ring-2 ring-primary' : 'hover:bg-secondary'}`}>
                 {e}
               </button>
             ))}
           </div>
         </div>
 
-        <Button
-          className="w-full"
-          disabled={!title.trim()}
-          onClick={() => onCreate(title.trim(), emoji)}
-        >
+        <Button className="w-full" disabled={!title.trim()} onClick={() => onCreate(title.trim(), emoji)}>
           Create Set
         </Button>
       </Card>

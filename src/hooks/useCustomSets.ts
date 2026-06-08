@@ -4,6 +4,7 @@ export interface CustomWord {
   dutch: string;
   english: string;
   example?: string;
+  article?: 'de' | 'het';
 }
 
 export interface CustomSet {
@@ -55,6 +56,18 @@ export function useCustomSets() {
     });
   }, []);
 
+  const updateWordInSet = useCallback((setId: string, oldDutch: string, updated: CustomWord) => {
+    setSets(prev => {
+      const next = prev.map(s =>
+        s.id === setId
+          ? { ...s, words: s.words.map(w => w.dutch === oldDutch ? updated : w) }
+          : s
+      );
+      save(next);
+      return next;
+    });
+  }, []);
+
   const updateSet = useCallback((setId: string, patch: Partial<Pick<CustomSet, 'title' | 'emoji'>>) => {
     setSets(prev => {
       const next = prev.map(s => s.id === setId ? { ...s, ...patch } : s);
@@ -63,5 +76,5 @@ export function useCustomSets() {
     });
   }, []);
 
-  return { sets, createSet, deleteSet, addWordToSet, removeWordFromSet, updateSet };
+  return { sets, createSet, deleteSet, addWordToSet, removeWordFromSet, updateWordInSet, updateSet };
 }
