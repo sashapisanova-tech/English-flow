@@ -275,13 +275,18 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     setVocabulary(prev => {
       const existing = prev[oldKey];
       if (!existing) return prev;
-      // Delete old entry from Supabase
-      if (u) supabase.from('vocabulary').delete().match({ user_id: u.id, dutch: oldKey });
-      // Build updated word preserving all SRS data
-      const { [oldKey]: _, ...rest } = prev;
       const updated: DutchWord = { ...existing, dutch: newKey, english: newEnglish };
-      syncWord(updated);
-      return { ...rest, [newKey]: updated };
+      if (oldKey === newKey) {
+        // Only the English changed — just upsert in place, no delete needed
+        syncWord(updated);
+        return { ...prev, [newKey]: updated };
+      } else {
+        // Dutch word changed — delete old key, insert new one
+        if (u) supabase.from('vocabulary').delete().match({ user_id: u.id, dutch: oldKey });
+        syncWord(updated);
+        const { [oldKey]: _, ...rest } = prev;
+        return { ...rest, [newKey]: updated };
+      }
     });
   }, [syncWord]);
 
