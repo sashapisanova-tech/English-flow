@@ -111,15 +111,15 @@ export function AIChat() {
       {/* Floating button */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-20 right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-primary shadow-lg hover:bg-primary/90 transition-all active:scale-95"
+        className="fixed right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-primary shadow-lg hover:bg-primary/90 transition-all active:scale-95"
+        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 5rem)', width: 52, height: 52 }}
         aria-label="Open Dutch tutor chat"
-        style={{ width: 52, height: 52 }}
       >
         <MessageCircle className="h-6 w-6 text-primary-foreground" />
       </button>
 
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="bottom" className="h-[80vh] flex flex-col p-0 rounded-t-2xl">
+        <SheetContent side="bottom" className="flex flex-col p-0 rounded-t-2xl" style={{ height: 'min(80vh, calc(100dvh - env(safe-area-inset-top) - 2rem))' }}>
           <SheetHeader className="px-4 pt-4 pb-3 border-b border-border shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -167,7 +167,7 @@ export function AIChat() {
           </div>
 
           {/* Input */}
-          <div className="px-4 pb-4 pt-2 border-t border-border shrink-0">
+          <div className="px-4 pt-2 border-t border-border shrink-0" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}>
             <div className="flex gap-2 items-end">
               <textarea
                 ref={inputRef}

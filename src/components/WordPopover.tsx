@@ -20,21 +20,19 @@ interface WordPopoverProps {
   separableVerb?: SeparableVerbEntry;
 }
 
-const translationCache: Record<string, string> = {};
+interface WordInfo { translation: string; article?: 'de' | 'het' }
+const wordInfoCache: Record<string, WordInfo> = {};
 
-async function fetchTranslation(word: string, sentence?: string): Promise<string> {
-  // Include sentence in cache key so context-specific translations are stored separately
+async function fetchWordInfo(word: string, sentence?: string): Promise<WordInfo> {
   const key = sentence ? `${word.toLowerCase()}||${sentence}` : word.toLowerCase();
-  if (translationCache[key]) return translationCache[key];
+  if (wordInfoCache[key]) return wordInfoCache[key];
   try {
     const apiKey = localStorage.getItem('dutch-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
     if (apiKey && apiKey !== 'your_api_key_here') {
-      // Only use sentence as context when the word actually appears in it;
-      // a mismatch causes Claude to write explanatory text instead of a translation.
       const contextSentence = sentence && sentence.toLowerCase().includes(word.toLowerCase()) ? sentence : undefined;
       const userMsg = contextSentence
-        ? `Translate the Dutch word "${word}" as used in: "${contextSentence}"\n\nReply with ONLY the English translation, 1–4 words max.`
-        : `Translate the Dutch word "${word}" to English. Reply with ONLY the English translation, 1–4 words max.`;
+        ? `Dutch word: "${word}" in context: "${contextSentence}"`
+        : `Dutch word: "${word}"`;
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -45,28 +43,36 @@ async function fetchTranslation(word: string, sentence?: string): Promise<string
         },
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
-          max_tokens: 20,
-          system: 'You are a Dutch-to-English translator. Give concise, context-aware translations of individual words. Never add explanations — only the translation itself.',
+          max_tokens: 40,
+          system: 'You are a Dutch dictionary. Reply with JSON only, no markdown: {"translation":"<1-4 word English translation>","article":"de" or "het" or null}. Use null for article if the word is not a noun.',
           messages: [{ role: 'user', content: userMsg }],
         }),
       });
       if (res.ok) {
         const data = await res.json() as { content: { text: string }[] };
-        const t = data.content[0].text.trim();
-        translationCache[key] = t;
-        return t;
+        const raw = data.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+        try {
+          const parsed = JSON.parse(raw) as { translation: string; article?: string | null };
+          const info: WordInfo = {
+            translation: parsed.translation || '',
+            article: parsed.article === 'de' ? 'de' : parsed.article === 'het' ? 'het' : undefined,
+          };
+          wordInfoCache[key] = info;
+          return info;
+        } catch {
+          wordInfoCache[key] = { translation: raw };
+          return wordInfoCache[key];
+        }
       }
     }
-    // Fallback: MyMemory (no API key set)
-    const res = await fetch(
-      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=nl|en`
-    );
+    // Fallback: MyMemory
+    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=nl|en`);
     const data = await res.json();
     const t = (data?.responseData?.translatedText as string) || '';
-    translationCache[key] = t;
-    return t;
+    wordInfoCache[key] = { translation: t };
+    return wordInfoCache[key];
   } catch {
-    return '';
+    return { translation: '' };
   }
 }
 
@@ -77,6 +83,7 @@ export function WordPopover({
   const [open, setOpen] = useState(false);
   const { addWord, removeWord, vocabulary } = useLearning();
   const [liveTranslation, setLiveTranslation] = useState(translation);
+  const [liveArticle, setLiveArticle] = useState<'de' | 'het' | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
   // For separable verbs, check saved state by infinitive
@@ -94,8 +101,11 @@ export function WordPopover({
     if (separableVerb) return; // no external translation needed
     if (translation) { setLiveTranslation(translation); return; }
     setLoading(true);
-    fetchTranslation(word, sentence)
-      .then(t => setLiveTranslation(t || '—'))
+    fetchWordInfo(word, sentence)
+      .then(info => {
+        setLiveTranslation(info.translation || '—');
+        if (info.article) setLiveArticle(info.article);
+      })
       .finally(() => setLoading(false));
   }, [open, word, translation, sentence, separableVerb]);
 
@@ -127,6 +137,7 @@ export function WordPopover({
     } else {
       addWord(word, liveTranslation || translation || word, {
         plural, example: effectiveExample, exampleTranslation,
+        ...(liveArticle ? { article: liveArticle } : {}),
       });
       toast(`"${word}" saved to learning`, {
         duration: 4000,

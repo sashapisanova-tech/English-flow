@@ -51,6 +51,8 @@ export function FlashcardView() {
   // Swipe gesture state
   const touchStartX = useRef<number | null>(null);
   const [swipeDeltaX, setSwipeDeltaX] = useState(0);
+  // Disable flip animation for one frame when advancing cards
+  const [noFlipAnim, setNoFlipAnim] = useState(false);
   // Word-list state
   const [wordListSearch, setWordListSearch] = useState('');
   const [editingWord, setEditingWord]       = useState<string | null>(null); // dutch key being edited
@@ -69,6 +71,15 @@ export function FlashcardView() {
   const currentSetWord = mode === 'set-practice' && practiceQueue.length > 0 ? practiceQueue[currentIndex] : null;
   const totalCards     = mode === 'my-words' ? sessionQueue.length : practiceQueue.length;
 
+  // Snap card to front without flip animation, then re-enable for next card
+  const advanceCard = (nextIndex: number) => {
+    setNoFlipAnim(true);
+    setFlipped(false);
+    stopDutch(); setIsPlaying(false);
+    setCurrentIndex(nextIndex);
+    requestAnimationFrame(() => requestAnimationFrame(() => setNoFlipAnim(false)));
+  };
+
   const handleAnswer = (correct: boolean) => {
     const rating: SRSRating = correct ? 'good' : 'again';
     if (mode === 'my-words' && currentWord) {
@@ -79,10 +90,7 @@ export function FlashcardView() {
       enrollWord(currentSetWord.dutch, currentSetWord.english);
       reviewWordSRS(currentSetWord.dutch, rating);
     }
-    setFlipped(false);
-    stopDutch(); setIsPlaying(false);
-    if (currentIndex < totalCards - 1) setCurrentIndex(prev => prev + 1);
-    else setCurrentIndex(totalCards);
+    advanceCard(currentIndex < totalCards - 1 ? currentIndex + 1 : totalCards);
   };
 
   const handleSRSRating = (rating: SRSRating) => {
@@ -94,10 +102,7 @@ export function FlashcardView() {
       enrollWord(currentSetWord.dutch, currentSetWord.english);
       reviewWordSRS(currentSetWord.dutch, rating);
     }
-    setFlipped(false);
-    stopDutch(); setIsPlaying(false);
-    if (currentIndex < totalCards - 1) setCurrentIndex(prev => prev + 1);
-    else setCurrentIndex(totalCards);
+    advanceCard(currentIndex < totalCards - 1 ? currentIndex + 1 : totalCards);
   };
 
   const resetDeck = () => { setCurrentIndex(0); setFlipped(false); };
@@ -952,7 +957,7 @@ export function FlashcardView() {
           style={{ transform: swipeDeltaX !== 0 ? `translateX(${swipeDeltaX * 0.2}px) rotate(${swipeDeltaX * 0.015}deg)` : undefined, transition: swipeDeltaX === 0 ? 'transform 0.2s ease' : 'none' }}
           onClick={() => { setFlipped(!flipped); }}
         >
-          <div className={`flashcard-inner ${flipped ? 'flipped' : ''}`}>
+          <div className={`flashcard-inner ${flipped ? 'flipped' : ''} ${noFlipAnim ? '!transition-none' : ''}`}>
             <Card className="flashcard-face bg-card border-2">
               <div className="text-center">
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
