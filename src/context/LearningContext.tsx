@@ -84,6 +84,7 @@ interface LearningState {
   addXP:                (amount: number) => void;
   addWord:              (dutch: string, english: string, extras?: Partial<DutchWord>) => void;
   removeWord:           (dutch: string) => void;
+  updateWord:           (oldDutch: string, newDutch: string, newEnglish: string) => void;
   updateWordStatus:     (dutch: string, status: WordStatus) => void;
   getWordsForReview:    () => DutchWord[];
   getWordsDueForReview: () => DutchWord[];
@@ -266,6 +267,23 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     const u = userRef.current;
     if (u) supabase.from('vocabulary').delete().match({ user_id: u.id, dutch: key });
   }, []);
+
+  const updateWord = useCallback((oldDutch: string, newDutch: string, newEnglish: string) => {
+    const oldKey = oldDutch.toLowerCase();
+    const newKey = newDutch.toLowerCase();
+    const u = userRef.current;
+    setVocabulary(prev => {
+      const existing = prev[oldKey];
+      if (!existing) return prev;
+      // Delete old entry from Supabase
+      if (u) supabase.from('vocabulary').delete().match({ user_id: u.id, dutch: oldKey });
+      // Build updated word preserving all SRS data
+      const { [oldKey]: _, ...rest } = prev;
+      const updated: DutchWord = { ...existing, dutch: newKey, english: newEnglish };
+      syncWord(updated);
+      return { ...rest, [newKey]: updated };
+    });
+  }, [syncWord]);
 
   const updateWordStatus = useCallback((dutch: string, status: WordStatus) => {
     setVocabulary(prev => {
@@ -538,7 +556,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     <LearningContext.Provider value={{
       vocabulary, texts, dailyGoal, xp, level, syncing, dueCount, newCardsToday,
       pastErrors, addPastError,
-      addXP, addWord, removeWord, updateWordStatus,
+      addXP, addWord, removeWord, updateWord, updateWordStatus,
       getWordsForReview, getWordsDueForReview, enrollWord, reviewWordSRS,
       markTextCompleted, incrementFlashcards, reviewWord, setGoals,
     }}>

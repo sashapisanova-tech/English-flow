@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, X, RotateCcw, ArrowLeft, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2 } from 'lucide-react';
+import { Check, X, RotateCcw, ArrowLeft, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2, Pencil, Search } from 'lucide-react';
 import { playDutch, stopDutch } from '@/utils/playDutch';
 import { useLearning } from '@/context/LearningContext';
 import { flashcardSets } from '@/data/flashcardSets';
@@ -14,7 +14,7 @@ import { NEW_CARDS_DAILY_LIMIT } from '@/context/LearningContext';
 
 type SRSRating = 'again' | 'hard' | 'good' | 'easy';
 
-type FlashcardMode = 'browse' | 'my-words' | 'set-practice' | 'learned' | 'custom-editor' | 'create-set';
+type FlashcardMode = 'browse' | 'my-words' | 'set-practice' | 'learned' | 'word-list' | 'custom-editor' | 'create-set';
 type Direction = 'dutch-to-english' | 'english-to-dutch';
 
 const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: string }> = {
@@ -26,7 +26,7 @@ const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: strin
 };
 
 export function FlashcardView() {
-  const { getWordsForReview, getWordsDueForReview, reviewWordSRS, enrollWord, vocabulary, dailyGoal, addWord, updateWordStatus, dueCount, newCardsToday } = useLearning();
+  const { getWordsForReview, getWordsDueForReview, reviewWordSRS, enrollWord, vocabulary, dailyGoal, addWord, removeWord, updateWord, updateWordStatus, dueCount, newCardsToday } = useLearning();
   const { sets: customSets, createSet, deleteSet, addWordToSet, removeWordFromSet } = useCustomSets();
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
@@ -51,6 +51,12 @@ export function FlashcardView() {
   // Swipe gesture state
   const touchStartX = useRef<number | null>(null);
   const [swipeDeltaX, setSwipeDeltaX] = useState(0);
+  // Word-list state
+  const [wordListSearch, setWordListSearch] = useState('');
+  const [editingWord, setEditingWord]       = useState<string | null>(null); // dutch key being edited
+  const [editDutch, setEditDutch]           = useState('');
+  const [editEnglish, setEditEnglish]       = useState('');
+  const [confirmDeleteWord, setConfirmDeleteWord] = useState<string | null>(null);
 
   const allWords       = useMemo(() => Object.values(vocabulary), [vocabulary]);
   const learnedWords   = useMemo(() => allWords.filter(w => w.status === 'known'), [allWords]);
@@ -334,13 +340,13 @@ export function FlashcardView() {
         {allWords.filter(w => w.status !== 'known').length > 0 && (
           <Card
             className="card-hover cursor-pointer p-4 flex items-center justify-between border-amber-200/60 bg-amber-50/40"
-            onClick={startLearningAll}
+            onClick={() => { setWordListSearch(''); setEditingWord(null); setConfirmDeleteWord(null); setMode('word-list'); }}
           >
             <div className="flex items-center gap-3">
               <div>
-                <p className="font-heading font-semibold text-foreground">Learning</p>
+                <p className="font-heading font-semibold text-foreground">My Words</p>
                 <p className="text-xs text-muted-foreground">
-                  {allWords.filter(w => w.status !== 'known').length} saved word{allWords.filter(w => w.status !== 'known').length !== 1 ? 's' : ''}
+                  {allWords.filter(w => w.status !== 'known').length} saved word{allWords.filter(w => w.status !== 'known').length !== 1 ? 's' : ''} — tap to view &amp; edit
                 </p>
               </div>
             </div>
@@ -564,6 +570,155 @@ export function FlashcardView() {
             </div>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  // ===== WORD LIST MODE =====
+  if (mode === 'word-list') {
+    const learningWords = allWords
+      .filter(w => w.status !== 'known')
+      .sort((a, b) => (a.stability ?? -1) - (b.stability ?? -1)); // weakest / newest first
+
+    const filtered = wordListSearch.trim()
+      ? learningWords.filter(w =>
+          w.dutch.includes(wordListSearch.toLowerCase()) ||
+          w.english.toLowerCase().includes(wordListSearch.toLowerCase())
+        )
+      : learningWords;
+
+    return (
+      <div className="animate-fade-in space-y-4 pb-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <button onClick={goBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-4 w-4" /> Back
+          </button>
+          <span className="text-xs text-muted-foreground">{learningWords.length} word{learningWords.length !== 1 ? 's' : ''}</span>
+        </div>
+
+        <h2 className="font-heading text-xl font-bold text-foreground">My Words</h2>
+
+        {/* Practice button */}
+        {learningWords.length > 0 && (
+          <Button className="w-full gap-2" onClick={startLearningAll}>
+            Practice all ({learningWords.length})
+          </Button>
+        )}
+
+        {/* Search */}
+        {learningWords.length > 4 && (
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/50" />
+            <input
+              type="text"
+              value={wordListSearch}
+              onChange={e => setWordListSearch(e.target.value)}
+              placeholder="Search words…"
+              autoComplete="off"
+              className="w-full rounded-xl border border-border bg-card pl-8 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+          </div>
+        )}
+
+        {/* Word list */}
+        {filtered.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-8">No words found.</p>
+        ) : (
+          <div className="space-y-1.5">
+            {/* Column headers */}
+            <div className="grid grid-cols-[1fr_1fr_auto] gap-2 px-3 pb-1">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">English</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Dutch</span>
+              <span className="w-14" />
+            </div>
+
+            {filtered.map(word => (
+              <Card key={word.dutch} className="px-3 py-2.5">
+                {editingWord === word.dutch ? (
+                  // ── Edit row ──
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-2">
+                      <input
+                        value={editEnglish}
+                        onChange={e => setEditEnglish(e.target.value)}
+                        placeholder="English"
+                        autoComplete="off"
+                        className="rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+                      />
+                      <input
+                        value={editDutch}
+                        onChange={e => setEditDutch(e.target.value)}
+                        placeholder="Dutch"
+                        autoComplete="off"
+                        className="rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        className="flex-1 h-7 text-xs"
+                        disabled={!editDutch.trim() || !editEnglish.trim()}
+                        onClick={() => {
+                          if (editDutch.trim() && editEnglish.trim()) {
+                            updateWord(word.dutch, editDutch.trim(), editEnglish.trim());
+                            setEditingWord(null);
+                          }
+                        }}
+                      >
+                        Save
+                      </Button>
+                      <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => setEditingWord(null)}>
+                        Cancel
+                      </Button>
+                    </div>
+                  </div>
+                ) : confirmDeleteWord === word.dutch ? (
+                  // ── Delete confirm row ──
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="text-sm text-destructive font-medium truncate">Remove "{word.dutch}"?</p>
+                    <div className="flex gap-2 shrink-0">
+                      <button onClick={() => setConfirmDeleteWord(null)} className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1">Cancel</button>
+                      <button
+                        onClick={() => { removeWord(word.dutch); setConfirmDeleteWord(null); }}
+                        className="text-xs font-semibold text-white bg-destructive hover:bg-destructive/90 transition-colors px-3 py-1 rounded-md"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  // ── Normal row ──
+                  <div className="grid grid-cols-[1fr_1fr_auto] gap-2 items-center">
+                    <span className="text-sm text-muted-foreground truncate">{word.english}</span>
+                    <div className="min-w-0">
+                      <span className="text-sm font-medium text-foreground truncate block">{word.dutch}</span>
+                      {word.stability != null && (
+                        <span className="text-[10px] text-muted-foreground/60">
+                          {word.fsrsState === 'relearning' ? 'relearning' : `stability ${Math.round(word.stability)}d`}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex gap-1 shrink-0">
+                      <button
+                        onClick={() => { setEditingWord(word.dutch); setEditDutch(word.dutch); setEditEnglish(word.english); setConfirmDeleteWord(null); }}
+                        className="p-1.5 text-muted-foreground hover:text-foreground transition-colors rounded-md hover:bg-muted"
+                      >
+                        <Pencil className="h-3.5 w-3.5" />
+                      </button>
+                      <button
+                        onClick={() => { setConfirmDeleteWord(word.dutch); setEditingWord(null); }}
+                        className="p-1.5 text-muted-foreground hover:text-destructive transition-colors rounded-md hover:bg-destructive/10"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
     );
   }
