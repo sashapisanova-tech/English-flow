@@ -1,4 +1,4 @@
-export type WordStatus = 'new' | 'learning' | 'known';
+export type WordStatus = 'new' | 'learning' | 'known' | 'ignored';
 
 export interface DutchWord {
   dutch: string;

@@ -14,7 +14,7 @@ import { NEW_CARDS_DAILY_LIMIT } from '@/context/LearningContext';
 
 type SRSRating = 'again' | 'hard' | 'good' | 'easy';
 
-type FlashcardMode = 'browse' | 'my-words' | 'set-practice' | 'learned' | 'word-list' | 'custom-editor' | 'create-set';
+type FlashcardMode = 'browse' | 'my-words' | 'set-practice' | 'learned' | 'word-list' | 'archive' | 'custom-editor' | 'create-set';
 type Direction = 'dutch-to-english' | 'english-to-dutch';
 
 const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: string }> = {
@@ -62,9 +62,10 @@ export function FlashcardView() {
 
   const allWords       = useMemo(() => Object.values(vocabulary), [vocabulary]);
   const learnedWords   = useMemo(() => allWords.filter(w => w.status === 'known'), [allWords]);
+  const ignoredWords   = useMemo(() => allWords.filter(w => w.status === 'ignored'), [allWords]);
   const scheduledWords = useMemo(() => {
     const now = new Date();
-    return allWords.filter(w => w.status !== 'known' && w.nextReview && new Date(w.nextReview) > now);
+    return allWords.filter(w => w.status !== 'known' && w.status !== 'ignored' && w.nextReview && new Date(w.nextReview) > now);
   }, [allWords]);
 
   const currentWord    = mode === 'my-words' ? sessionQueue[currentIndex] ?? null : null;
@@ -187,7 +188,7 @@ export function FlashcardView() {
   const startLearned  = () => { setMode('learned'); };
 
   const startLearningAll = () => {
-    const words = allWords.filter(w => w.status !== 'known');
+    const words = allWords.filter(w => w.status !== 'known' && w.status !== 'ignored');
     setSessionQueue(words);
     setOriginalSession(words);
     setAgainKeys(new Set());
@@ -301,9 +302,9 @@ export function FlashcardView() {
         {/* Spaced Repetition Review */}
         {allWords.length > 0 && (() => {
           const today = new Date().toISOString().slice(0, 10);
-          const newWords   = allWords.filter(w => !w.stability && w.status !== 'known');
+          const newWords   = allWords.filter(w => !w.stability && w.status !== 'known' && w.status !== 'ignored');
           const newAllowed = Math.max(0, NEW_CARDS_DAILY_LIMIT - newCardsToday);
-          const reviewDue  = allWords.filter(w => w.stability && w.dueDate && w.dueDate <= today && w.status !== 'known');
+          const reviewDue  = allWords.filter(w => w.stability && w.dueDate && w.dueDate <= today && w.status !== 'known' && w.status !== 'ignored');
           return (
             <Card
               className={`card-hover cursor-pointer p-4 ${dueCount > 0 ? 'border-primary/30 bg-primary/5' : ''}`}
@@ -342,7 +343,7 @@ export function FlashcardView() {
         })()}
 
         {/* Learning card */}
-        {allWords.filter(w => w.status !== 'known').length > 0 && (
+        {allWords.filter(w => w.status !== 'known' && w.status !== 'ignored').length > 0 && (
           <Card
             className="card-hover cursor-pointer p-4 flex items-center justify-between border-amber-200/60 bg-amber-50/40"
             onClick={() => { setWordListSearch(''); setEditingWord(null); setConfirmDeleteWord(null); setMode('word-list'); }}
@@ -351,7 +352,7 @@ export function FlashcardView() {
               <div>
                 <p className="font-heading font-semibold text-foreground">My Words</p>
                 <p className="text-xs text-muted-foreground">
-                  {allWords.filter(w => w.status !== 'known').length} saved word{allWords.filter(w => w.status !== 'known').length !== 1 ? 's' : ''} — tap to view &amp; edit
+                  {allWords.filter(w => w.status !== 'known' && w.status !== 'ignored').length} saved word{allWords.filter(w => w.status !== 'known' && w.status !== 'ignored').length !== 1 ? 's' : ''} — tap to view &amp; edit
                 </p>
               </div>
             </div>
@@ -420,6 +421,20 @@ export function FlashcardView() {
                 <p className="font-heading font-semibold text-foreground">Learned Words</p>
                 <p className="text-xs text-muted-foreground">{learnedWords.length} word{learnedWords.length !== 1 ? 's' : ''} mastered</p>
               </div>
+            </div>
+            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+          </Card>
+        )}
+
+        {/* Archive */}
+        {ignoredWords.length > 0 && (
+          <Card
+            className="card-hover cursor-pointer p-4 flex items-center justify-between border-border bg-muted/30"
+            onClick={() => setMode('archive')}
+          >
+            <div>
+              <p className="font-heading font-semibold text-foreground">Archive</p>
+              <p className="text-xs text-muted-foreground">{ignoredWords.length} removed word{ignoredWords.length !== 1 ? 's' : ''} — tap to restore</p>
             </div>
             <ChevronRight className="h-5 w-5 text-muted-foreground" />
           </Card>
@@ -582,7 +597,7 @@ export function FlashcardView() {
   // ===== WORD LIST MODE =====
   if (mode === 'word-list') {
     const learningWords = allWords
-      .filter(w => w.status !== 'known')
+      .filter(w => w.status !== 'known' && w.status !== 'ignored')
       .sort((a, b) => (a.stability ?? -1) - (b.stability ?? -1)); // weakest / newest first
 
     const filtered = wordListSearch.trim()
@@ -681,14 +696,14 @@ export function FlashcardView() {
                 ) : confirmDeleteWord === word.dutch ? (
                   // ── Delete confirm row ──
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-sm text-destructive font-medium truncate">Remove "{word.dutch}"?</p>
+                    <p className="text-sm text-muted-foreground font-medium truncate">Archive "{word.dutch}"?</p>
                     <div className="flex gap-2 shrink-0">
                       <button onClick={() => setConfirmDeleteWord(null)} className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1">Cancel</button>
                       <button
                         onClick={() => { removeWord(word.dutch); setConfirmDeleteWord(null); }}
-                        className="text-xs font-semibold text-white bg-destructive hover:bg-destructive/90 transition-colors px-3 py-1 rounded-md"
+                        className="text-xs font-semibold text-foreground bg-muted hover:bg-muted/80 border border-border transition-colors px-3 py-1 rounded-md"
                       >
-                        Remove
+                        Archive
                       </button>
                     </div>
                   </div>
@@ -720,6 +735,51 @@ export function FlashcardView() {
                     </div>
                   </div>
                 )}
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ===== ARCHIVE MODE =====
+  if (mode === 'archive') {
+    return (
+      <div className="animate-fade-in space-y-4 pb-6">
+        <div className="flex items-center justify-between">
+          <button onClick={goBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-4 w-4" /> Back
+          </button>
+          <span className="text-xs text-muted-foreground">{ignoredWords.length} word{ignoredWords.length !== 1 ? 's' : ''}</span>
+        </div>
+
+        <h2 className="font-heading text-xl font-bold text-foreground">Archive</h2>
+        <p className="text-sm text-muted-foreground">These words are removed from your review queue. Restore any word to add it back to learning.</p>
+
+        {ignoredWords.length === 0 ? (
+          <Card className="p-6 text-center">
+            <p className="text-sm text-muted-foreground">No archived words.</p>
+          </Card>
+        ) : (
+          <div className="space-y-1.5">
+            <div className="grid grid-cols-[1fr_1fr_auto] gap-2 px-3 pb-1">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">English</span>
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Dutch</span>
+              <span className="w-16" />
+            </div>
+            {ignoredWords.map(word => (
+              <Card key={word.dutch} className="px-3 py-2.5">
+                <div className="grid grid-cols-[1fr_1fr_auto] gap-2 items-center">
+                  <span className="text-sm text-muted-foreground truncate">{word.english}</span>
+                  <span className="text-sm font-medium text-foreground truncate">{word.dutch}</span>
+                  <button
+                    onClick={() => updateWordStatus(word.dutch, 'new')}
+                    className="shrink-0 text-xs font-semibold text-primary border border-primary/30 rounded-lg px-2.5 py-1 hover:bg-primary/10 transition-colors"
+                  >
+                    Restore
+                  </button>
+                </div>
               </Card>
             ))}
           </div>
@@ -781,7 +841,7 @@ export function FlashcardView() {
   // ===== MY WORDS: empty / done states =====
   if (mode === 'my-words') {
     // No saved words at all
-    if (allWords.filter(w => w.status !== 'known').length === 0) {
+    if (allWords.filter(w => w.status !== 'known' && w.status !== 'ignored').length === 0) {
       return (
         <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
           <Button variant="ghost" className="self-start mb-4" onClick={goBack}>

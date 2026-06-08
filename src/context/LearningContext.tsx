@@ -288,20 +288,15 @@ export function LearningProvider({ children }: { children: ReactNode }) {
 
   const removeWord = useCallback((dutch: string) => {
     const key = dutch.toLowerCase();
-    // Write to blocklist FIRST — this is permanent until the user manually re-adds the word
-    addDeletedWord(key);
     setVocabulary(prev => {
-      if (!prev[key]) return prev;
-      const { [key]: _, ...rest } = prev;
-      return rest;
+      const word = prev[key];
+      if (!word) return prev;
+      // Mark as ignored rather than deleting — upsert always works, avoids RLS delete issues
+      const updated: DutchWord = { ...word, status: 'ignored' };
+      syncWord(updated);
+      return { ...prev, [key]: updated };
     });
-    // Fire-and-forget delete — if it fails, the blocklist still keeps the word out on reload
-    const u = userRef.current;
-    if (u) {
-      supabase.from('vocabulary').delete().match({ user_id: u.id, dutch: key })
-        .then(({ error }) => { if (error) console.error('[sync] vocab delete error:', error); });
-    }
-  }, []);
+  }, [syncWord]);
 
   const updateWord = useCallback((oldDutch: string, newDutch: string, newEnglish: string) => {
     const oldKey = oldDutch.toLowerCase();
@@ -353,7 +348,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   const getWordsForReview = useCallback(() => {
     const now = new Date();
     return Object.values(vocabulary)
-      .filter(w => w.status !== 'known')
+      .filter(w => w.status !== 'known' && w.status !== 'ignored')
       .filter(w => !w.nextReview || new Date(w.nextReview) <= now)
       .sort((a, b) => {
         if (!a.nextReview && b.nextReview) return -1;
@@ -368,7 +363,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     const newAllowed = Math.max(0, NEW_CARDS_DAILY_LIMIT - newCardsToday);
 
     const dueReviews = Object.values(vocabulary)
-      .filter(w => w.stability != null && w.dueDate && w.dueDate <= today && w.status !== 'known')
+      .filter(w => w.stability != null && w.dueDate && w.dueDate <= today && w.status !== 'known' && w.status !== 'ignored')
       .sort((a, b) => {
         const aRelearn = a.fsrsState === 'relearning' ? 0 : 1;
         const bRelearn = b.fsrsState === 'relearning' ? 0 : 1;
@@ -377,7 +372,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
       });
 
     const newCards = Object.values(vocabulary)
-      .filter(w => !w.stability && w.status !== 'known')
+      .filter(w => !w.stability && w.status !== 'known' && w.status !== 'ignored')
       .slice(0, newAllowed);
 
     return [...dueReviews, ...newCards];
@@ -573,9 +568,9 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   const dueCount = React.useMemo(() => {
     const today = todayUTC();
     const reviews = Object.values(vocabulary).filter(
-      w => w.stability != null && w.dueDate && w.dueDate <= today && w.status !== 'known'
+      w => w.stability != null && w.dueDate && w.dueDate <= today && w.status !== 'known' && w.status !== 'ignored'
     ).length;
-    const newWords = Object.values(vocabulary).filter(w => !w.stability && w.status !== 'known').length;
+    const newWords = Object.values(vocabulary).filter(w => !w.stability && w.status !== 'known' && w.status !== 'ignored').length;
     const newAllowed = Math.max(0, NEW_CARDS_DAILY_LIMIT - newCardsToday);
     return reviews + Math.min(newWords, newAllowed);
   }, [vocabulary, newCardsToday]);
