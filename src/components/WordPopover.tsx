@@ -190,7 +190,14 @@ export function WordPopover({
             // ── Regular word layout ──
             <>
               <div className="flex items-center justify-between">
-                <h4 className="font-heading text-lg font-semibold text-foreground">{word}</h4>
+                <div className="flex items-center gap-2">
+                  {liveArticle && (
+                    <span className={`px-2 py-0.5 rounded-md text-xs font-bold ${
+                      liveArticle === 'de' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
+                    }`}>{liveArticle}</span>
+                  )}
+                  <h4 className="font-heading text-lg font-semibold text-foreground">{word}</h4>
+                </div>
                 <span className={`level-badge ${status === 'known' ? 'bg-success text-success-foreground' : status === 'learning' ? 'bg-warning text-warning-foreground' : 'bg-accent text-accent-foreground'}`}>
                   {status}
                 </span>
