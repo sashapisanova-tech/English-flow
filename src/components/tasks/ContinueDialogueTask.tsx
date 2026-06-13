@@ -49,8 +49,16 @@ interface AiResponse { dutch: string; english: string; }
 interface GrammarReview {
   overallImpression: string;
   strongPoints: string[];
-  patternErrors: { type: string; example: string; correction: string; reason: string }[];
+  patternErrors: {
+    type: string;
+    typeDutch: string;
+    example: string;
+    correction: string;
+    reason: string;
+    reasonDutch: string;
+  }[];
   oneThingToFocus: string;
+  oneThingToFocusDutch: string;
 }
 
 const MAX_USER_TURNS = 5;
@@ -120,7 +128,23 @@ async function getGrammarReview(level: Level, topic: string, messages: Message[]
   if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
   const transcript = messages.map(m => m.role === 'user' ? `Learner: ${m.text}` : `AI: ${m.dutch}`).join('\n');
-  const system = `You are a Dutch language tutor reviewing a learner's conversation. Return JSON only: { "overallImpression": "...", "strongPoints": ["..."], "patternErrors": [{"type":"...","example":"...","correction":"...","reason":"..."}], "oneThingToFocus": "..." }
+  const system = `You are a Dutch language tutor reviewing a learner's conversation. Return JSON only, no markdown:
+{
+  "overallImpression": "2-3 sentences in English, warm and specific",
+  "strongPoints": ["English", "English"],
+  "patternErrors": [
+    {
+      "type": "error type in English",
+      "typeDutch": "hetzelfde in het Nederlands",
+      "example": "learner's Dutch sentence with error",
+      "correction": "corrected Dutch sentence",
+      "reason": "brief explanation in English",
+      "reasonDutch": "korte uitleg in het Nederlands"
+    }
+  ],
+  "oneThingToFocus": "one actionable tip in English",
+  "oneThingToFocusDutch": "hetzelfde in het Nederlands"
+}
 patternErrors = only errors appearing more than once OR one significant structural error, max 3. Tone: warm, specific, forward-looking.`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -163,9 +187,9 @@ function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveW
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={onClose}>
       <div className="absolute inset-0 bg-black/30" />
-      <div className="relative w-full max-w-md bg-background rounded-t-2xl p-5 space-y-4 shadow-2xl animate-fade-in" onClick={e => e.stopPropagation()}>
+      <div className="relative w-full max-w-md bg-background rounded-2xl p-5 space-y-4 shadow-2xl animate-fade-in" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between">
           <p className="font-heading font-bold text-foreground">Save a word</p>
           <button onClick={onClose} className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
@@ -566,16 +590,31 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
             <div className="space-y-2">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Patterns to work on</p>
               {review.patternErrors.map((pe, i) => (
-                <div key={i} className="rounded-lg bg-secondary/50 p-3 space-y-1">
-                  <p className="text-xs font-semibold text-foreground">{pe.type}</p>
-                  <p className="text-xs text-muted-foreground">{pe.example} → <span className="text-foreground font-medium">{pe.correction}</span></p>
-                  <p className="text-xs text-muted-foreground">{pe.reason}</p>
+                <div key={i} className="rounded-lg bg-secondary/50 p-3 space-y-1.5">
+                  <div className="flex flex-col">
+                    <p className="text-xs font-semibold text-foreground">{pe.type}</p>
+                    {pe.typeDutch && <p className="text-xs text-muted-foreground italic">{pe.typeDutch}</p>}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    <span className="line-through">{pe.example}</span>
+                    {' → '}
+                    <span className="text-foreground font-medium">{pe.correction}</span>
+                  </p>
+                  <div className="pt-0.5 border-t border-border/50 space-y-0.5">
+                    <p className="text-xs text-muted-foreground">{pe.reason}</p>
+                    {pe.reasonDutch && <p className="text-xs text-muted-foreground italic">{pe.reasonDutch}</p>}
+                  </div>
                 </div>
               ))}
             </div>
           )}
 
-          <p className="text-sm text-muted-foreground italic">{review.oneThingToFocus}</p>
+          <div className="space-y-0.5">
+            <p className="text-sm text-muted-foreground italic">{review.oneThingToFocus}</p>
+            {review.oneThingToFocusDutch && (
+              <p className="text-sm text-muted-foreground italic">{review.oneThingToFocusDutch}</p>
+            )}
+          </div>
           <Button className="w-full" onClick={handleReset}>Start new conversation</Button>
         </Card>
       )}
