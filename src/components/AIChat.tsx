@@ -121,7 +121,7 @@ export function AIChat() {
       {/* Floating button */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed right-4 z-40 flex h-13 w-13 items-center justify-center rounded-full bg-primary shadow-lg hover:bg-primary/90 transition-all active:scale-95"
+        className="fixed left-4 z-40 flex items-center justify-center rounded-full bg-primary shadow-lg hover:bg-primary/90 transition-all active:scale-95"
         style={{ bottom: 'calc(env(safe-area-inset-bottom) + 5rem)', width: 52, height: 52 }}
         aria-label="Open Dutch tutor chat"
       >
