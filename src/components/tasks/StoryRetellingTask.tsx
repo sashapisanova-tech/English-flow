@@ -1,12 +1,11 @@
 import { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  ArrowLeft, Volume2, Mic, ChevronRight,
+  ArrowLeft, Volume2,
   Sparkles, RotateCcw, Loader2, BookOpen, Star,
-  CheckCircle2, XCircle, ChevronDown, ChevronUp,
+  CheckCircle2, XCircle, ChevronDown, ChevronUp, Eye,
 } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { useCustomSets } from '@/hooks/useCustomSets';
@@ -15,7 +14,7 @@ import { playDutch, stopDutch } from '@/utils/playDutch';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
-type Phase = 'setup' | 'generating' | 'reading' | 'retelling' | 'evaluating' | 'feedback';
+type Phase = 'setup' | 'generating' | 'reading' | 'retelling' | 'submitted' | 'evaluating' | 'feedback';
 type WordSource = 'my-words' | 'set' | 'custom';
 type Level = 'A1' | 'A2' | 'B1';
 type Theme = 'any' | 'daily life' | 'adventure' | 'mystery';
@@ -23,6 +22,7 @@ type Theme = 'any' | 'daily life' | 'adventure' | 'mystery';
 interface GeneratedStory {
   title: string;
   dutch_sentences: string[];
+  english_sentences: string[];
   outline: string[];
   key_words: { dutch: string; english: string }[];
   new_words: { dutch: string; english: string }[];
@@ -53,6 +53,7 @@ JSON shape:
 {
   "title": "Short Dutch title (3–5 words)",
   "dutch_sentences": ["sentence 1", "sentence 2", ...],
+  "english_sentences": ["English translation of sentence 1", ...],
   "outline": ["Stage 1 in English", "Stage 2 in English", "Stage 3 in English"],
   "key_words": [{"dutch": "...", "english": "..."}, ...],
   "new_words": [{"dutch": "...", "english": "..."}, ...],
@@ -61,8 +62,9 @@ JSON shape:
 
 Rules:
 - Story: 90–130 words total, exactly 3 narrative stages matching outline[0–2].
+- english_sentences: one English sentence per Dutch sentence, natural translation.
 - Use every word from the input list at least once. Introduce at most 3 new words.
-- key_words: 6–8 words most needed to retell the story (critical nouns, verbs, adjectives).
+- key_words: 6–8 words/phrases most needed to retell (critical nouns, verbs, fixed phrases, separable verbs).
 - A1: present tense, SVO, 4–8 words/sentence. A2: +simple past, up to 12 words. B1: +future, relative clauses.
 - Correct Dutch V2 word order in main clauses. No passive/subjunctive at A1/A2.`;
 
@@ -141,7 +143,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   // Retelling state
-  const [transcript, setTranscript] = useState('');
+  const [retellText, setRetellText] = useState('');
 
   // Feedback state
   const [feedback, setFeedback] = useState<RetellingFeedback | null>(null);
@@ -182,7 +184,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
     setPhase('generating');
     setError(null);
     setStory(null);
-    setTranscript('');
+    setRetellText('');
     setFeedback(null);
     try {
       const userMsg = `words: ${JSON.stringify(words)}\nlevel: ${level}\ntheme: ${theme}`;
@@ -208,27 +210,33 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
     });
   }
 
+  // ── Submit retell → show unblurred original ──
+  function handleSubmit() {
+    if (!retellText.trim()) return;
+    setPhase('submitted');
+  }
+
   // ── Evaluate ──
   async function handleEvaluate() {
-    if (!story || !transcript.trim()) return;
+    if (!story || !retellText.trim()) return;
     setPhase('evaluating');
     try {
       const userMsg =
         `ORIGINAL STORY:\n${story.dutch_sentences.join(' ')}\n\n` +
         `STORY OUTLINE:\n${story.outline.map((p, i) => `${i + 1}. ${p}`).join('\n')}\n\n` +
-        `STUDENT'S RETELLING:\n${transcript.trim()}`;
+        `STUDENT'S RETELLING:\n${retellText.trim()}`;
       const raw = await callClaude(EVAL_PROMPT, userMsg);
       const parsed = JSON.parse(raw) as RetellingFeedback;
       setFeedback(parsed);
       setPhase('feedback');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Evaluation failed');
-      setPhase('retelling');
+      setPhase('submitted');
     }
   }
 
   function tryAgain() {
-    setTranscript('');
+    setRetellText('');
     setFeedback(null);
     setPhase('retelling');
   }
@@ -236,21 +244,25 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
   function newStory() {
     setPhase('setup');
     setStory(null);
-    setTranscript('');
+    setRetellText('');
     setFeedback(null);
   }
 
   // ─── RENDER ───────────────────────────────────────────────────────────────
 
-  // Header (shared)
   const header = (
     <div className="flex items-center gap-2">
       <button
-        onClick={phase === 'retelling' ? () => setPhase('reading') : phase === 'reading' ? newStory : onBack}
+        onClick={() => {
+          if (phase === 'retelling') setPhase('reading');
+          else if (phase === 'submitted') setPhase('retelling');
+          else if (phase === 'reading') newStory();
+          else onBack();
+        }}
         className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
-        {phase === 'retelling' ? 'Back to story' : phase === 'reading' ? 'Change story' : 'Tasks'}
+        {phase === 'retelling' ? 'Back to story' : phase === 'submitted' ? 'Edit retelling' : phase === 'reading' ? 'Change story' : 'Tasks'}
       </button>
     </div>
   );
@@ -280,7 +292,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
             <span className="text-xs font-semibold text-rose-700 uppercase tracking-wide">Story Retelling</span>
           </div>
           <p className="text-xs text-rose-600 leading-relaxed">
-            Read a short Dutch story, then hide it and retell it aloud using the outline and key words as support.
+            Read a short Dutch story, then retell it from memory using an English translation and key words as support.
           </p>
         </Card>
 
@@ -309,7 +321,6 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
             ))}
           </div>
 
-          {/* Set picker */}
           {wordSource === 'set' && (
             <div className="rounded-xl border border-border overflow-hidden">
               <button
@@ -341,7 +352,6 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
             </div>
           )}
 
-          {/* Custom words */}
           {wordSource === 'custom' && (
             <div>
               <Textarea
@@ -395,7 +405,6 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
           </div>
         </div>
 
-        {/* Generate button */}
         <Button
           className="w-full gap-2"
           onClick={handleGenerate}
@@ -456,12 +465,12 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
         <Card className="p-4 bg-amber-50 border-amber-200">
           <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">Read the story carefully</p>
           <p className="text-xs text-amber-600">
-            Listen and read a few times. When ready, you'll retell it from memory using an outline and key words.
+            Listen and read a few times. When ready, you'll retell it in Dutch — the original will be blurred so you write from memory.
           </p>
         </Card>
 
         <Button className="w-full gap-2" onClick={() => { stopDutch(); setIsPlaying(false); setPhase('retelling'); }}>
-          <Mic className="h-4 w-4" /> I'm ready to retell <ChevronRight className="h-4 w-4" />
+          I'm ready to retell
         </Button>
       </div>
     );
@@ -473,54 +482,117 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
       <div className="animate-fade-in space-y-5">
         {header}
 
-        {/* Outline */}
-        <Card className="p-4 space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-            <BookOpen className="h-3.5 w-3.5" /> Story outline
-          </p>
-          <ol className="space-y-1.5">
-            {story.outline.map((point, i) => (
-              <li key={i} className="flex items-start gap-2 text-sm text-foreground">
-                <span className="shrink-0 flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary">{i + 1}</span>
-                {point}
-              </li>
+        <h2 className="font-heading text-lg font-bold text-foreground">{story.title}</h2>
+
+        {/* Blurred Dutch text */}
+        <div className="relative">
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Dutch original</p>
+          <Card className="p-4 space-y-2 leading-relaxed select-none overflow-hidden">
+            {story.dutch_sentences.map((s, i) => (
+              <p key={i} className="text-sm text-foreground blur-sm">{s}</p>
             ))}
-          </ol>
-        </Card>
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <span className="text-xs text-muted-foreground/60 italic">hidden — retell from memory</span>
+            </div>
+          </Card>
+        </div>
+
+        {/* English translation */}
+        <div>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">English translation</p>
+          <Card className="p-4 space-y-2 leading-relaxed bg-blue-50/50 border-blue-100">
+            {(story.english_sentences ?? [story.dutch_sentences.join(' ')]).map((s, i) => (
+              <p key={i} className="text-sm text-foreground/80">{s}</p>
+            ))}
+          </Card>
+        </div>
 
         {/* Key words */}
-        <Card className="p-4 space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Key words</p>
+        <div>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Key words & phrases</p>
           <div className="flex flex-wrap gap-2">
             {story.key_words.map((kw, i) => (
-              <div key={i} className="rounded-lg border border-border bg-secondary/40 px-2.5 py-1">
+              <div key={i} className="rounded-lg border border-border bg-background px-2.5 py-1.5 flex items-center gap-1.5">
                 <span className="text-sm font-semibold text-foreground">{kw.dutch}</span>
-                <span className="text-xs text-muted-foreground ml-1.5">{kw.english}</span>
+                <span className="text-muted-foreground/40 text-xs">→</span>
+                <span className="text-xs text-muted-foreground">{kw.english}</span>
               </div>
             ))}
           </div>
-        </Card>
+        </div>
 
-        {/* Recording */}
-        <Card className="p-4 space-y-3">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-            <Mic className="h-3.5 w-3.5" /> Retell the story in Dutch
+        {/* Outline */}
+        <div>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5 flex items-center gap-1.5">
+            <BookOpen className="h-3 w-3" /> Outline
           </p>
+          <div className="space-y-1.5">
+            {story.outline.map((point, i) => (
+              <div key={i} className="flex items-start gap-2 text-sm text-foreground">
+                <span className="shrink-0 flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 text-xs font-bold text-primary">{i + 1}</span>
+                {point}
+              </div>
+            ))}
+          </div>
+        </div>
 
+        {/* Text input */}
+        <div>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Your retelling in Dutch</p>
           <Textarea
-            value={transcript}
-            onChange={e => setTranscript(e.target.value)}
-            placeholder="Type the story in your own Dutch words…"
-            className="text-sm min-h-[120px]"
+            value={retellText}
+            onChange={e => setRetellText(e.target.value)}
+            placeholder="Write the story in your own Dutch words…"
+            className="text-sm min-h-[130px]"
+            autoFocus
           />
-        </Card>
+        </div>
 
         <Button
           className="w-full gap-2"
-          onClick={handleEvaluate}
-          disabled={!transcript.trim()}
+          onClick={handleSubmit}
+          disabled={!retellText.trim()}
         >
-          <Sparkles className="h-4 w-4" /> Get feedback
+          Submit
+        </Button>
+      </div>
+    );
+  }
+
+  // ── SUBMITTED — compare Dutch original with retelling ──
+  if (phase === 'submitted' && story) {
+    return (
+      <div className="animate-fade-in space-y-5">
+        {header}
+
+        <h2 className="font-heading text-lg font-bold text-foreground">{story.title}</h2>
+
+        {/* Unblurred Dutch original */}
+        <div>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Dutch original</p>
+          <Card className="p-4 space-y-2 leading-relaxed border-emerald-200 bg-emerald-50/40">
+            {story.dutch_sentences.map((s, i) => (
+              <p key={i} className="text-sm text-foreground">{s}</p>
+            ))}
+          </Card>
+        </div>
+
+        {/* Student's retelling */}
+        <div>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Your retelling</p>
+          <Card className="p-4 border-primary/20 bg-primary/5">
+            <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">{retellText}</p>
+          </Card>
+        </div>
+
+        {error && (
+          <Card className="border-red-200 bg-red-50 p-3">
+            <p className="text-sm text-red-700">{error}</p>
+          </Card>
+        )}
+
+        <Button className="w-full gap-2" onClick={handleEvaluate}>
+          <Sparkles className="h-4 w-4" /> Get AI feedback
         </Button>
       </div>
     );
@@ -548,7 +620,6 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
           <p className="text-sm text-muted-foreground">{feedback.score}/5</p>
         </Card>
 
-        {/* Covered / missing */}
         {feedback.covered_points.length > 0 && (
           <Card className="p-4 space-y-2">
             <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wide flex items-center gap-1.5">
@@ -579,7 +650,6 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
           </Card>
         )}
 
-        {/* Feedback notes */}
         <Card className="p-4 space-y-3">
           <div>
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Vocabulary</p>
@@ -595,13 +665,20 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
           </div>
         </Card>
 
-        {/* Your retelling */}
+        {/* Compare original vs retelling */}
         <details className="rounded-xl border border-border overflow-hidden">
-          <summary className="cursor-pointer px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide bg-secondary/30 hover:bg-secondary/50 transition-colors">
-            Your retelling (tap to review)
+          <summary className="cursor-pointer px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide bg-secondary/30 hover:bg-secondary/50 transition-colors flex items-center gap-1.5">
+            <Eye className="h-3.5 w-3.5" /> Compare texts
           </summary>
-          <div className="p-4">
-            <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">{transcript}</p>
+          <div className="p-4 space-y-3">
+            <div>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Dutch original</p>
+              <p className="text-sm text-foreground/80 leading-relaxed">{story.dutch_sentences.join(' ')}</p>
+            </div>
+            <div>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Your retelling</p>
+              <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">{retellText}</p>
+            </div>
           </div>
         </details>
 

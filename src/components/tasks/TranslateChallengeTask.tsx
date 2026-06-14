@@ -1,168 +1,21 @@
-import { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, BookmarkPlus, X, ChevronDown, ChevronRight, Loader2, Sparkles } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { useCustomSets } from '@/hooks/useCustomSets';
+import { useAuth } from '@/context/AuthContext';
 import { Level } from '@/components/tasks/TaskFilters';
+import { savePracticeSession } from '@/lib/practiceSession';
+import { PREPARED_LEVELS, getAllPreparedSets } from '@/data/preparedSets';
 
 // ─── API key ──────────────────────────────────────────────────────────────────
 
 function getSavedKey(): string {
-  return localStorage.getItem('dutch-app-anthropic-key') || (import.meta as Record<string, unknown> & { env?: Record<string, string> }).env?.VITE_ANTHROPIC_API_KEY || '';
+  return localStorage.getItem('dutch-app-anthropic-key') || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
 }
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-type SourceType = 'texts' | 'flashcard_set' | 'theme';
-type SessionLength = 5 | 10 | 15;
-type Rating = 'easy' | 'hard';
-
-interface GeneratedSentence {
-  english: string;
-  dutch_answer: string;
-  word_bank: string[];          // A1 only
-  partial_word_bank: string[];  // A2 only
-  model_sentence?: { english: string; dutch: string };  // A2 only
-  focus_note?: string;          // B1 only
-  grammar_target: string;
-  feedback_hint: string;
-}
-
-interface SessionItem {
-  sentence: GeneratedSentence;
-  userAnswer: string;
-  rating: Rating | null;
-  annotation?: string;  // B1 post-submission feedback
-}
-
-// ─── Grammar config per level ─────────────────────────────────────────────────
-
-const GRAMMAR_FOCUSES: Record<Level, string[]> = {
-  A1: ['Word order', 'de/het', 'Present tense'],
-  A2: ['Inversion', 'Separable verbs', 'Simple past'],
-  B1: ['Subordinate clauses', 'Relative clauses', 'Perfect tense'],
-};
-
-const THEMES = [
-  'Daily life',
-  'Food & eating',
-  'Work & study',
-  'Travel',
-  'Amsterdam',
-  'Health',
-  'Relationships',
-  'Shopping',
-];
-
-// ─── Validation ───────────────────────────────────────────────────────────────
-
-const FORBIDDEN: Record<string, { maxWords: number; forbiddenWords: string[] }> = {
-  A1: { maxWords: 6, forbiddenWords: ['zich','zou','zouden','worden','wordt','werd','kunnen','moeten','willen','mogen'] },
-  A2: { maxWords: 12, forbiddenWords: ['zich','hoewel','terwijl','zodat'] },
-  B1: { maxWords: 45, forbiddenWords: [] },
-};
-
-function validateSentence(dutch: string, level: string): boolean {
-  const rules = FORBIDDEN[level];
-  if (!rules) return true;
-  const words = dutch.trim().split(/\s+/);
-  if (words.length > rules.maxWords) return false;
-  const lower = dutch.toLowerCase();
-  return !rules.forbiddenWords.some(w => lower.includes(w));
-}
-
-function validateA1WordBank(dutch: string, bank: string[]): boolean {
-  const answerWords = dutch.trim().split(/\s+/).map(w => w.replace(/[.,!?]/g, '').toLowerCase());
-  const bankWords = bank.map(w => w.toLowerCase());
-  if (answerWords.length !== bankWords.length) return false;
-  return [...answerWords].sort().every((w, i) => w === [...bankWords].sort()[i]);
-}
-
-// ─── System prompts ───────────────────────────────────────────────────────────
-
-function buildSystemPrompt(level: Level): string {
-  if (level === 'A1') {
-    return `You are a Dutch language teacher creating beginner (A1) translation exercises.
-
-Rules for A1:
-- 3–6 words maximum, single clause only
-- Present tense only, regular verbs only, one verb per sentence
-- Forbidden: separable verbs, reflexive (zich), relative clauses, modal verbs
-- Use ONLY words from vocabulary_pool (already read by user)
-- word_bank must contain EVERY word needed (punctuation stripped), nothing extra, all words shuffled
-- Good examples: "Sara drinkt koffie." / "Hij woont in Amsterdam." / "De tafel is groot."
-- Bad: "Sara doet de deur open." (separable) / "Zij voelt zich blij." (reflexive)
-
-Return ONLY valid JSON, no markdown:
-{
-  "english": "the English sentence to translate",
-  "dutch_answer": "the correct Dutch translation",
-  "word_bank": ["shuffled", "words", "no", "punctuation"],
-  "partial_word_bank": [],
-  "grammar_target": "one grammar point being practiced",
-  "feedback_hint": "one sentence tip for this specific grammar point"
-}`;
-  }
-  if (level === 'A2') {
-    return `You are a Dutch language teacher creating intermediate (A2) translation exercises.
-
-Rules for A2:
-- 8–12 words, one main clause + optional coordinating clause (en, maar, want, dus, of)
-- Present tense and simple past (imperfectum) allowed, separable verbs allowed
-- Forbidden: relative clauses, reflexive verbs (zich), perfect tense (hebben/zijn + past participle)
-- partial_word_bank = 2–3 new or harder words only (not every word)
-- model_sentence = one example sentence using the same grammar pattern (different topic)
-
-Return ONLY valid JSON, no markdown:
-{
-  "english": "the English sentence to translate",
-  "dutch_answer": "the correct Dutch translation",
-  "word_bank": [],
-  "partial_word_bank": ["key", "word1", "word2"],
-  "model_sentence": { "english": "example English", "dutch": "example Dutch" },
-  "grammar_target": "one grammar point being practiced",
-  "feedback_hint": "one sentence tip for this specific grammar point"
-}`;
-  }
-  // B1
-  return `You are a Dutch language teacher creating upper-intermediate (B1) translation exercises.
-
-Rules for B1:
-- 2–3 connected sentences, 20–45 words total
-- Subordinating conjunctions allowed (omdat, als, toen, terwijl, hoewel, zodat)
-- Relative clauses allowed (die, dat, waar)
-- Modal verbs allowed (kunnen, moeten, willen, mogen, zullen)
-- Perfect tense allowed (hebben/zijn + past participle)
-- focus_note = one line naming the grammar structure to watch (e.g. "verb-final in omdat-clause")
-- No word bank needed
-
-Return ONLY valid JSON, no markdown:
-{
-  "english": "2–3 connected English sentences to translate",
-  "dutch_answer": "the correct Dutch translation",
-  "word_bank": [],
-  "partial_word_bank": [],
-  "focus_note": "grammar note for the learner",
-  "grammar_target": "one grammar point being practiced",
-  "feedback_hint": "one sentence tip for this specific grammar point"
-}`;
-}
-
-// ─── API calls ────────────────────────────────────────────────────────────────
-
-interface GenerationPayload {
-  level: Level;
-  source_type: SourceType;
-  vocabulary_pool: string[];
-  flashcard_words: string[];
-  theme: string;
-  grammar_focus: string;
-  sentence_index: number;
-  session_length: number;
-}
-
-async function callClaude(system: string, user: string): Promise<string> {
+async function callClaude(system: string, user: string, maxTokens = 800): Promise<string> {
   const key = getSavedKey();
   if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
   const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -175,7 +28,7 @@ async function callClaude(system: string, user: string): Promise<string> {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-5',
-      max_tokens: 512,
+      max_tokens: maxTokens,
       system,
       messages: [{ role: 'user', content: user }],
     }),
@@ -185,830 +38,765 @@ async function callClaude(system: string, user: string): Promise<string> {
   return data.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
 }
 
-async function generateSentence(
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type Screen = 'config' | 'translate' | 'feedback';
+type Rating = 'easy' | 'hard';
+
+interface GeneratedText {
+  english: string;
+  hintWords: { english: string; dutch: string }[];  // new/unknown words with translations
+}
+
+interface Correction {
+  original: string;
+  corrected: string;
+  tip: string;
+}
+
+interface TranslationFeedback {
+  overallComment: string;
+  corrections: Correction[];
+  strengths: string[];
+  rating: 'great' | 'good' | 'needs_work';
+  grammarTargets: string[];  // for session tracking
+}
+
+// ─── Suggestions per level ────────────────────────────────────────────────────
+
+const SUGGESTIONS: Record<Level, string[]> = {
+  A1: ['at the bakery', 'my family', 'the weather today', 'at school', 'introducing myself', 'my morning routine', 'shopping for food'],
+  A2: ['ordering at a café', 'a trip to the market', 'planning a weekend', 'a day at work', 'at the doctor', 'making plans with a friend', 'a short diary entry'],
+  B1: ['a work meeting', 'discussing a news story', 'writing a formal email', 'defending an opinion', 'a job interview', 'life in the Netherlands', 'a neighbourhood dispute'],
+};
+
+// ─── API: generate English text ───────────────────────────────────────────────
+
+const LEVEL_GUIDE: Record<Level, string> = {
+  A1: `You are writing a very short, simple English text (3–5 sentences) that an absolute beginner will translate into Dutch.
+Rules:
+- Only simple present tense situations
+- Very common vocabulary: everyday objects, basic actions, familiar places
+- Short sentences (max 6 words each)
+- NO past tense, NO complex grammar, NO subordinate clauses
+- It should feel like a mini story or description a child could understand
+- Good: "My name is Sara. I live in Amsterdam. I have a cat. The cat is black and white. We drink coffee every morning."`,
+  A2: `You are writing a short English text (5–8 sentences) for an elementary Dutch learner to translate.
+Rules:
+- Mix of present and simple past tense
+- Everyday situations with natural dialogue or narration
+- Moderate sentence length (6–12 words)
+- Can include separable verb contexts, basic comparisons, times & days
+- Should feel like a short diary entry, conversation recap, or simple story`,
+  B1: `You are writing an English text (8–12 sentences) for an intermediate Dutch learner to translate.
+Rules:
+- Natural flowing prose — like a short article excerpt, email, or story
+- Include "because", "when", "although", "while" type structures
+- Can include: perfect tense contexts, modal verb situations, relative clauses
+- Should feel genuinely useful and interesting to translate`,
+};
+
+async function generateText(
   level: Level,
-  payload: GenerationPayload,
-): Promise<GeneratedSentence> {
-  const system = buildSystemPrompt(level);
-  const user = `Generate a Dutch translation exercise with this configuration:
-${JSON.stringify(payload, null, 2)}
+  userPrompt: string,
+  flashcardWords: string[],
+  vocabContext: string,
+  readingContext: string,
+): Promise<GeneratedText> {
+  const contextLines: string[] = [];
 
-This is sentence ${payload.sentence_index} of ${payload.session_length} in the session.
-Vary the vocabulary and grammar patterns — don't repeat the same structure.`;
-
-  for (let attempt = 0; attempt < 3; attempt++) {
-    const raw = await callClaude(system, user);
-    const parsed = JSON.parse(raw) as GeneratedSentence;
-
-    if (!validateSentence(parsed.dutch_answer, level)) continue;
-    if (level === 'A1' && parsed.word_bank.length > 0) {
-      if (!validateA1WordBank(parsed.dutch_answer, parsed.word_bank)) continue;
-    }
-    return parsed;
+  if (userPrompt.trim()) {
+    contextLines.push(`Topic/theme requested by the user: "${userPrompt.trim()}"`);
   }
-  // last attempt without strict validation
-  const raw = await callClaude(system, user);
-  return JSON.parse(raw) as GeneratedSentence;
+  if (flashcardWords.length > 0) {
+    contextLines.push(`Incorporate situations where these Dutch concepts naturally appear (write their English meanings into the story): ${flashcardWords.slice(0, 20).join(', ')}`);
+  }
+  if (readingContext) {
+    contextLines.push(`The learner is currently studying: "${readingContext}". Use related vocabulary and themes if no topic was specified.`);
+  }
+  if (!userPrompt.trim() && !flashcardWords.length && !readingContext) {
+    contextLines.push(`Choose any engaging, everyday topic appropriate for ${level} level.`);
+  }
+  if (vocabContext) {
+    contextLines.push(`Dutch words the learner already knows (do NOT include these in hintWords): ${vocabContext}`);
+  }
+
+  const system = `${LEVEL_GUIDE[level]}
+
+Return ONLY valid JSON, no markdown:
+{
+  "english": "the full English text to translate",
+  "hintWords": [
+    { "english": "word or short phrase from the text", "dutch": "Dutch translation" }
+  ]
+}
+For hintWords: scan your English text and pick 3–8 content words or short phrases whose Dutch translation the learner likely does NOT know yet (i.e. not in their known vocabulary). These are shown as vocabulary scaffolding. Skip extremely basic words (pronouns, "to be", "to have", numbers 1–10, days of the week if already known). If the learner's vocabulary is empty, include the most useful/challenging content words from the text.`;
+
+  const raw = await callClaude(system, contextLines.join('\n'), 700);
+  return JSON.parse(raw) as GeneratedText;
 }
 
-async function getB1Annotation(
-  userAnswer: string,
-  correctAnswer: string,
-  feedbackHint: string,
-): Promise<string> {
-  const system = `You are a Dutch language tutor giving brief, encouraging feedback.
-Given a learner's Dutch translation and the model answer, write 1–2 sentences focusing on the MOST important correction only.
-Be specific and concise. Do not list every error. Do not use bullet points.`;
-  const user = `Learner's answer: ${userAnswer}
-Model answer: ${correctAnswer}
-Grammar focus: ${feedbackHint}
+// ─── API: check translation ───────────────────────────────────────────────────
 
-Write 1–2 sentences of feedback on the most important point to correct.`;
-  return callClaude(system, user);
+const FEEDBACK_TONE: Record<Level, string> = {
+  A1: `Be VERY warm and encouraging. This is a beginner — never list more than 2 corrections. Focus only on the most essential A1 grammar rule. Start with genuine praise. The tone should feel like a kind teacher, not a strict examiner.`,
+  A2: `Be friendly and constructive. List 2–4 specific corrections with clear tips. Balance corrections with praise for what worked well.`,
+  B1: `Be precise and thorough. Can list up to 5 corrections. Be specific about grammar rules. Still warm but more detailed.`,
+};
+
+async function checkTranslation(
+  level: Level,
+  englishText: string,
+  dutchTranslation: string,
+): Promise<TranslationFeedback> {
+  const system = `You are a Dutch language tutor evaluating a learner's translation. ${FEEDBACK_TONE[level]}
+
+Return ONLY valid JSON, no markdown:
+{
+  "overallComment": "1–2 warm sentences summarising the translation quality",
+  "corrections": [
+    {
+      "original": "the phrase the learner wrote (in Dutch)",
+      "corrected": "the better Dutch version",
+      "tip": "one short explanation of why"
+    }
+  ],
+  "strengths": ["one specific thing they did well", "another if applicable"],
+  "rating": "great" | "good" | "needs_work",
+  "grammarTargets": ["grammar point 1", "grammar point 2"]
+}
+Notes:
+- corrections: only real errors, not style differences. For A1 max 2, A2 max 4, B1 max 5.
+- grammarTargets: the grammar patterns that had errors (e.g. "word order", "separable verbs"). Used for tracking. Empty array if no errors.
+- If the translation is empty or clearly not Dutch, set rating to "needs_work" and corrections to one entry asking them to try.`;
+
+  const userMsg = `Level: ${level}
+
+Original English text:
+"${englishText}"
+
+Learner's Dutch translation:
+"${dutchTranslation || '(empty — the learner did not write anything)'}"`;
+
+  const raw = await callClaude(system, userMsg, 900);
+  return JSON.parse(raw) as TranslationFeedback;
 }
 
-// ─── Word-by-word diff for A2 ─────────────────────────────────────────────────
+// ─── Save Word Modal ──────────────────────────────────────────────────────────
 
-type WordStatus = 'correct' | 'wrong-position' | 'wrong';
-
-function diffWords(userAnswer: string, dutchAnswer: string): { word: string; status: WordStatus }[] {
-  const normalize = (s: string) => s.toLowerCase().replace(/[.,!?]/g, '').trim();
-  const userWords = userAnswer.trim().split(/\s+/);
-  const answerWords = dutchAnswer.trim().split(/\s+/);
-
-  const answerNorm = answerWords.map(normalize);
-  const userNorm = userWords.map(normalize);
-
-  return userWords.map((word, i) => {
-    const n = normalize(word);
-    if (answerNorm[i] === n) return { word, status: 'correct' as WordStatus };
-    if (answerNorm.includes(n)) return { word, status: 'wrong-position' as WordStatus };
-    return { word, status: 'wrong' as WordStatus };
-  });
+interface SaveWordModalProps {
+  onClose: () => void;
+  onSave: (dutch: string, english: string, setId: string) => void;
+  onCreateAndSave: (dutch: string, english: string, setTitle: string) => void;
+  existingSets: { id: string; title: string; emoji: string }[];
 }
 
-// ─── A1 correctness check ─────────────────────────────────────────────────────
+function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveWordModalProps) {
+  const [dutch, setDutch] = useState('');
+  const [english, setEnglish] = useState('');
+  const [mode, setMode] = useState<'pick' | 'new'>('pick');
+  const [selectedSetId, setSelectedSetId] = useState(existingSets[0]?.id ?? '');
+  const [newSetTitle, setNewSetTitle] = useState('');
+  const [showSetPicker, setShowSetPicker] = useState(false);
+  const selectedSet = existingSets.find(s => s.id === selectedSetId);
 
-function checkA1Answer(placed: string[], dutchAnswer: string): boolean {
-  const normalize = (s: string) => s.toLowerCase().replace(/[.,!?]/g, '').trim();
-  const placedNorm = placed.map(normalize).join(' ');
-  const answerNorm = dutchAnswer.trim().split(/\s+/).map(normalize).join(' ');
-  return placedNorm === answerNorm;
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/30" />
+      <div className="relative w-full max-w-md bg-background rounded-2xl p-5 space-y-4 shadow-2xl animate-fade-in" onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between">
+          <p className="font-heading font-bold text-foreground">Save a word</p>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
+        </div>
+        <div className="space-y-2">
+          <input value={dutch} onChange={e => setDutch(e.target.value)} placeholder="Dutch word or phrase…" autoFocus autoComplete="off"
+            className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          <input value={english} onChange={e => setEnglish(e.target.value)} placeholder="Translation (optional)" autoComplete="off"
+            className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30" />
+        </div>
+        <div className="space-y-2">
+          <div className="flex gap-2">
+            <button onClick={() => setMode('pick')} className={`flex-1 rounded-lg border py-2 text-xs font-semibold transition-colors ${mode === 'pick' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground'}`}>Add to existing</button>
+            <button onClick={() => setMode('new')} className={`flex-1 rounded-lg border py-2 text-xs font-semibold transition-colors ${mode === 'new' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground'}`}>Create new set</button>
+          </div>
+          {mode === 'pick' && (
+            existingSets.length === 0 ? <p className="text-xs text-muted-foreground text-center py-2">No sets yet — create one first.</p> : (
+              <div className="relative">
+                <button onClick={() => setShowSetPicker(v => !v)} className="w-full flex items-center justify-between rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground">
+                  <span>{selectedSet ? `${selectedSet.emoji} ${selectedSet.title}` : 'Choose a set…'}</span>
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                </button>
+                {showSetPicker && (
+                  <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-xl shadow-lg z-10 overflow-hidden">
+                    {existingSets.map(s => (
+                      <button key={s.id} onClick={() => { setSelectedSetId(s.id); setShowSetPicker(false); }} className="w-full text-left px-3 py-2.5 text-sm hover:bg-muted transition-colors">
+                        {s.emoji} {s.title}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          )}
+          {mode === 'new' && (
+            <input value={newSetTitle} onChange={e => setNewSetTitle(e.target.value)} placeholder="New set name…" autoComplete="off"
+              className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30" />
+          )}
+        </div>
+        <Button className="w-full" onClick={() => {
+          if (!dutch.trim()) return;
+          if (mode === 'pick' && selectedSetId) onSave(dutch.trim(), english.trim(), selectedSetId);
+          else if (mode === 'new' && newSetTitle.trim()) onCreateAndSave(dutch.trim(), english.trim(), newSetTitle.trim());
+        }} disabled={!dutch.trim() || (mode === 'pick' && !selectedSetId) || (mode === 'new' && !newSetTitle.trim())}>
+          Save to flashcards
+        </Button>
+      </div>
+    </div>
+  );
 }
 
 // ─── Skeleton ─────────────────────────────────────────────────────────────────
 
 function Skeleton({ className = '' }: { className?: string }) {
-  return <div className={`animate-pulse bg-muted rounded ${className}`} />;
+  return <div className={`animate-pulse bg-muted rounded-lg ${className}`} />;
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
   const { vocabulary, texts } = useLearning();
-  const { sets } = useCustomSets();
+  const { sets, addWordToSet, createSet } = useCustomSets();
+  const { user } = useAuth();
 
-  // ── Config state ──────────────────────────────────────────────────────────
-  const [screen, setScreen] = useState<'config' | 'sentence' | 'feedback' | 'end'>('config');
+  // ── Config ────────────────────────────────────────────────────────────────
+  const [screen, setScreen] = useState<Screen>('config');
   const [level, setLevel] = useState<Level>('A2');
-  const [sourceType, setSourceType] = useState<SourceType>('texts');
+  const [userPrompt, setUserPrompt] = useState('');
+  const [useFlashcardSet, setUseFlashcardSet] = useState(false);
   const [selectedSetId, setSelectedSetId] = useState<string | null>(null);
-  const [selectedTheme, setSelectedTheme] = useState<string>('Daily life');
-  const [grammarFocus, setGrammarFocus] = useState<string>('');
-  const [sessionLength, setSessionLength] = useState<SessionLength>(5);
+  // prepared-set picker state
+  const [selectedSetSource, setSelectedSetSource] = useState<'my' | 'prepared' | null>(null);
+  const [selectedPreparedSetId, setSelectedPreparedSetId] = useState<string | null>(null);
+  const [openMySets, setOpenMySets] = useState(false);
+  const [openPreparedSets, setOpenPreparedSets] = useState(false);
+  const [openPreparedLevel, setOpenPreparedLevel] = useState<'A1' | 'A2' | 'B1' | 'B2' | null>(null);
 
-  // ── Session state ─────────────────────────────────────────────────────────
-  const [sessionItems, setSessionItems] = useState<SessionItem[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
+  // ── Session ───────────────────────────────────────────────────────────────
+  const [generatedText, setGeneratedText] = useState<GeneratedText | null>(null);
+  const [generating, setGenerating] = useState(false);
+  const [userTranslation, setUserTranslation] = useState('');
+  const [checking, setChecking] = useState(false);
+  const [feedback, setFeedback] = useState<TranslationFeedback | null>(null);
+  const [rating, setRating] = useState<Rating | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [currentSentence, setCurrentSentence] = useState<GeneratedSentence | null>(null);
+  const [showSaveWord, setShowSaveWord] = useState(false);
 
-  // ── A1 tile state ─────────────────────────────────────────────────────────
-  const [placedTiles, setPlacedTiles] = useState<string[]>([]);        // placed words in order
-  const [bankTiles, setBankTiles] = useState<string[]>([]);             // remaining words in bank
-
-  // ── A2/B1 textarea state ──────────────────────────────────────────────────
-  const [userInput, setUserInput] = useState('');
-
-  // ── Feedback state ────────────────────────────────────────────────────────
-  const [currentRating, setCurrentRating] = useState<Rating | null>(null);
-  const [b1Annotation, setB1Annotation] = useState<string | null>(null);
-  const [b1Loading, setB1Loading] = useState(false);
-
-  // ── Pre-generation ref ────────────────────────────────────────────────────
-  const pregenRef = useRef<Promise<GeneratedSentence> | null>(null);
-  const pregenResultRef = useRef<GeneratedSentence | null>(null);
-
-  // ── Vocabulary pool ───────────────────────────────────────────────────────
+  // ── Derived data ──────────────────────────────────────────────────────────
   const vocabPool = useMemo(() => {
-    const fromTexts = texts
-      .filter(t => t.completed)
-      .flatMap(t => Object.keys(t.words || {}));
-    const savedWords = Object.values(vocabulary).map(w => w.dutch);
-    return [...new Set([...fromTexts, ...savedWords])];
+    const fromTexts = texts.filter(t => t.completed).flatMap(t => Object.keys(t.words || {}));
+    const saved = Object.values(vocabulary).map(w => w.dutch);
+    return [...new Set([...fromTexts, ...saved])].slice(0, 60).join(', ');
   }, [texts, vocabulary]);
 
-  // ── Build generation payload ──────────────────────────────────────────────
-  const buildPayload = useCallback((index: number): GenerationPayload => {
-    let flashcardWords: string[] = [];
-    if (sourceType === 'flashcard_set' && selectedSetId) {
-      const set = sets.find(s => s.id === selectedSetId);
-      flashcardWords = set ? set.words.map(w => w.dutch) : [];
-    }
-    return {
-      level,
-      source_type: sourceType,
-      vocabulary_pool: sourceType === 'texts' ? vocabPool.slice(0, 80) : [],
-      flashcard_words: flashcardWords,
-      theme: sourceType === 'theme' ? selectedTheme : '',
-      grammar_focus: grammarFocus,
-      sentence_index: index + 1,
-      session_length: sessionLength,
-    };
-  }, [level, sourceType, selectedSetId, selectedTheme, grammarFocus, sessionLength, vocabPool, sets]);
+  const readingContext = useMemo(() => {
+    const completed = texts.filter(t => t.completed);
+    return completed.length > 0 ? completed[completed.length - 1].title ?? '' : '';
+  }, [texts]);
 
-  // ── Start session ─────────────────────────────────────────────────────────
-  async function handleStart() {
+  const selectedMySet = useMemo(() => sets.find(s => s.id === selectedSetId), [sets, selectedSetId]);
+  const selectedPreparedSet = useMemo(() => {
+    if (!selectedPreparedSetId) return null;
+    return getAllPreparedSets().find(s => s.id === selectedPreparedSetId) ?? null;
+  }, [selectedPreparedSetId]);
+  const flashcardWords = useMemo(() => {
+    if (!useFlashcardSet) return [];
+    if (selectedSetSource === 'my') return selectedMySet?.words.map(w => w.dutch) ?? [];
+    if (selectedSetSource === 'prepared') return selectedPreparedSet?.words.map(w => w.dutch) ?? [];
+    return [];
+  }, [useFlashcardSet, selectedSetSource, selectedMySet, selectedPreparedSet]);
+
+  const suggestions = SUGGESTIONS[level];
+
+  // ── Generate text ─────────────────────────────────────────────────────────
+  async function handleGenerate() {
     setError(null);
-    setLoading(true);
-    setScreen('sentence');
-    setCurrentIndex(0);
-    setSessionItems([]);
-    pregenRef.current = null;
-    pregenResultRef.current = null;
+    setGenerating(true);
+    setGeneratedText(null);
+    setUserTranslation('');
+    setFeedback(null);
+    setRating(null);
+    setScreen('translate');
     try {
-      const sentence = await generateSentence(level, buildPayload(0));
-      setCurrentSentence(sentence);
-      initSentenceUI(sentence);
-      // Pre-generate sentence 1
-      if (sessionLength > 1) {
-        kickoffPregen(1);
-      }
+      const result = await generateText(level, userPrompt, flashcardWords, vocabPool, readingContext);
+      setGeneratedText(result);
     } catch (e) {
       const msg = e instanceof Error ? e.message : '';
-      setError(msg === 'NO_KEY' ? 'API key missing — add it in Settings.' : 'Something went wrong. Retry?');
-      setScreen('config');
+      setError(msg === 'NO_KEY' ? 'API key missing — add it in Me → Settings.' : 'Could not generate text. Try again.');
     } finally {
-      setLoading(false);
+      setGenerating(false);
     }
   }
 
-  function initSentenceUI(sentence: GeneratedSentence) {
-    setPlacedTiles([]);
-    setUserInput('');
-    setCurrentRating(null);
-    setB1Annotation(null);
-    if (level === 'A1') {
-      // Shuffle the word bank
-      setBankTiles([...sentence.word_bank].sort(() => Math.random() - 0.5));
-    }
-  }
-
-  function kickoffPregen(index: number) {
-    if (index >= sessionLength) return;
-    pregenResultRef.current = null;
-    const p = generateSentence(level, buildPayload(index)).then(s => {
-      pregenResultRef.current = s;
-      return s;
-    }).catch(() => {
-      pregenResultRef.current = null;
-      return null as unknown as GeneratedSentence;
-    });
-    pregenRef.current = p;
-  }
-
-  // ── Submit answer ─────────────────────────────────────────────────────────
+  // ── Check translation ─────────────────────────────────────────────────────
   async function handleCheck() {
-    if (!currentSentence) return;
-
-    const answer = level === 'A1' ? placedTiles.join(' ') : userInput.trim();
-    const item: SessionItem = {
-      sentence: currentSentence,
-      userAnswer: answer,
-      rating: null,
-    };
-
-    setSessionItems(prev => [...prev, item]);
-    setScreen('feedback');
-
-    // B1 annotation
-    if (level === 'B1') {
-      setB1Loading(true);
-      try {
-        const ann = await getB1Annotation(answer, currentSentence.dutch_answer, currentSentence.feedback_hint);
-        setB1Annotation(ann);
-        setSessionItems(prev => {
-          const updated = [...prev];
-          updated[updated.length - 1] = { ...updated[updated.length - 1], annotation: ann };
-          return updated;
-        });
-      } catch {
-        setB1Annotation(null);
-      } finally {
-        setB1Loading(false);
-      }
-    }
-  }
-
-  // ── Rating ────────────────────────────────────────────────────────────────
-  function handleRate(rating: Rating) {
-    setCurrentRating(rating);
-    setSessionItems(prev => {
-      const updated = [...prev];
-      updated[updated.length - 1] = { ...updated[updated.length - 1], rating };
-      return updated;
-    });
-  }
-
-  // ── Next sentence ─────────────────────────────────────────────────────────
-  async function handleNext() {
-    const nextIndex = currentIndex + 1;
-    if (nextIndex >= sessionLength) {
-      setScreen('end');
-      return;
-    }
-    setCurrentIndex(nextIndex);
+    if (!generatedText) return;
+    setChecking(true);
     setError(null);
-
-    // Try to use pre-generated sentence
-    if (pregenResultRef.current) {
-      const sentence = pregenResultRef.current;
-      pregenResultRef.current = null;
-      setCurrentSentence(sentence);
-      initSentenceUI(sentence);
-      setScreen('sentence');
-      kickoffPregen(nextIndex + 1);
-      return;
-    }
-
-    // Wait for in-flight pre-gen or generate fresh
-    setLoading(true);
-    setScreen('sentence');
     try {
-      let sentence: GeneratedSentence;
-      if (pregenRef.current) {
-        sentence = await pregenRef.current;
-        pregenRef.current = null;
-        pregenResultRef.current = null;
-      } else {
-        sentence = await generateSentence(level, buildPayload(nextIndex));
+      const result = await checkTranslation(level, generatedText.english, userTranslation);
+      setFeedback(result);
+      setScreen('feedback');
+
+      // Save session for AI tutor
+      if (user) {
+        savePracticeSession({
+          user_id: user.id,
+          task_type: 'translate',
+          level,
+          grammar_focus: userPrompt.trim() || null,
+          easy_count: 0,
+          hard_count: 0,
+          correct_count: result.rating === 'great' ? 1 : 0,
+          session_length: 1,
+          hard_grammar_targets: result.grammarTargets,
+        });
       }
-      setCurrentSentence(sentence);
-      initSentenceUI(sentence);
-      kickoffPregen(nextIndex + 1);
     } catch (e) {
       const msg = e instanceof Error ? e.message : '';
-      setError(msg === 'NO_KEY' ? 'API key missing — add it in Settings.' : 'Something went wrong. Retry?');
+      setError(msg === 'NO_KEY' ? 'API key missing — add it in Me → Settings.' : 'Could not check translation. Try again.');
     } finally {
-      setLoading(false);
+      setChecking(false);
     }
   }
 
-  // ── A1 tile interactions ──────────────────────────────────────────────────
-  function placeTile(word: string, bankIndex: number) {
-    setPlacedTiles(prev => [...prev, word]);
-    setBankTiles(prev => prev.filter((_, i) => i !== bankIndex));
+  // ── Save word handlers ────────────────────────────────────────────────────
+  function handleSaveWord(dutch: string, english: string, setId: string) {
+    addWordToSet(setId, { dutch, english });
+    setShowSaveWord(false);
+  }
+  function handleCreateAndSave(dutch: string, english: string, setTitle: string) {
+    const newSet = createSet(setTitle, '📚');
+    addWordToSet(newSet.id, { dutch, english });
+    setShowSaveWord(false);
   }
 
-  function removeTile(word: string, placedIndex: number) {
-    setPlacedTiles(prev => prev.filter((_, i) => i !== placedIndex));
-    setBankTiles(prev => [...prev, word]);
-  }
-
-  // ── A1 check disabled ─────────────────────────────────────────────────────
-  const a1CheckDisabled = placedTiles.length === 0 || bankTiles.length > 0;
-
-  // ── A1 correctness ────────────────────────────────────────────────────────
-  const a1Correct = useMemo(() => {
-    if (!currentSentence || level !== 'A1') return false;
-    const lastItem = sessionItems[sessionItems.length - 1];
-    if (!lastItem) return false;
-    return checkA1Answer(lastItem.userAnswer.split(' '), currentSentence.dutch_answer);
-  }, [sessionItems, currentSentence, level]);
-
-  // ── Session summary stats ─────────────────────────────────────────────────
-  const endStats = useMemo(() => {
-    if (level === 'A1') {
-      let correct = 0;
-      let review = 0;
-      sessionItems.forEach(item => {
-        if (checkA1Answer(item.userAnswer.split(' '), item.sentence.dutch_answer)) correct++;
-        else review++;
+  // ── After rating — update session ──────────────────────────────────────────
+  function handleRate(r: Rating) {
+    setRating(r);
+    if (user && feedback) {
+      savePracticeSession({
+        user_id: user.id,
+        task_type: 'translate',
+        level,
+        grammar_focus: userPrompt.trim() || null,
+        easy_count: r === 'easy' ? 1 : 0,
+        hard_count: r === 'hard' ? 1 : 0,
+        correct_count: feedback.rating === 'great' ? 1 : 0,
+        session_length: 1,
+        hard_grammar_targets: feedback.grammarTargets,
       });
-      return { correct, review, easy: 0, hard: 0 };
     }
-    const easy = sessionItems.filter(i => i.rating === 'easy').length;
-    const hard = sessionItems.filter(i => i.rating === 'hard').length;
-    return { correct: 0, review: 0, easy, hard };
-  }, [sessionItems, level]);
-
-  const hardGrammarTarget = useMemo(() => {
-    const hardItems = sessionItems.filter(i => i.rating === 'hard');
-    if (hardItems.length === 0) return null;
-    const freq: Record<string, number> = {};
-    hardItems.forEach(i => {
-      const t = i.sentence.grammar_target;
-      freq[t] = (freq[t] || 0) + 1;
-    });
-    return Object.entries(freq).sort((a, b) => b[1] - a[1])[0][0];
-  }, [sessionItems]);
+  }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // ── Config screen ─────────────────────────────────────────────────────────
+  // CONFIG SCREEN
   // ─────────────────────────────────────────────────────────────────────────
 
   if (screen === 'config') {
     return (
+      <>
       <div className="animate-fade-in space-y-5 pb-8">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Tasks
-          </button>
-        </div>
+        <button onClick={onBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="h-4 w-4" /> Tasks
+        </button>
 
         <div>
           <h1 className="text-xl font-semibold text-foreground">Translate to Dutch</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Configure a practice session and translate sentences sentence by sentence.</p>
+          <p className="text-sm text-muted-foreground mt-0.5">The AI writes a text for your level — you translate it into Dutch.</p>
         </div>
 
-        {error && (
-          <Card className="border-destructive/30 bg-destructive/5 p-4">
-            <p className="text-sm text-destructive">{error}</p>
-          </Card>
-        )}
+        {error && <Card className="border-destructive/30 bg-destructive/5 p-4"><p className="text-sm text-destructive">{error}</p></Card>}
 
-        {/* Level */}
+        {/* Level — required */}
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Level</p>
-          <div className="flex gap-2 flex-wrap">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your level</p>
+          <div className="flex gap-2">
             {(['A1', 'A2', 'B1'] as Level[]).map(l => (
-              <button
-                key={l}
-                onClick={() => { setLevel(l); setGrammarFocus(''); }}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                  level === l
-                    ? 'bg-primary text-primary-foreground'
-                    : 'border border-border text-muted-foreground hover:border-primary/40'
-                }`}
-              >
+              <button key={l} onClick={() => { setLevel(l); setUserPrompt(''); }}
+                className={`rounded-full px-5 py-2 text-sm font-semibold transition-colors ${level === l ? 'bg-primary text-primary-foreground' : 'border border-border text-muted-foreground hover:border-primary/40'}`}>
                 {l}
               </button>
             ))}
           </div>
+          <p className="text-xs text-muted-foreground px-1">
+            {level === 'A1' && 'Very simple sentences, everyday vocabulary — great for beginners.'}
+            {level === 'A2' && 'Short paragraphs with past tense and everyday situations.'}
+            {level === 'B1' && 'Full paragraphs with complex grammar — subordinate clauses, perfect tense.'}
+          </p>
         </div>
 
-        {/* Source */}
+        {/* Prompt — optional */}
         <div className="space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Source</p>
-          <div className="flex gap-2 flex-wrap">
-            {[
-              { id: 'texts' as SourceType, label: 'My reading' },
-              { id: 'flashcard_set' as SourceType, label: 'Flashcard set' },
-              { id: 'theme' as SourceType, label: 'Theme' },
-            ].map(s => (
-              <button
-                key={s.id}
-                onClick={() => setSourceType(s.id)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                  sourceType === s.id
-                    ? 'bg-primary text-primary-foreground'
-                    : 'border border-border text-muted-foreground hover:border-primary/40'
-                }`}
-              >
-                {s.label}
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+            What do you want it to be about? <span className="font-normal normal-case text-muted-foreground">(optional)</span>
+          </p>
+          <textarea
+            value={userPrompt}
+            onChange={e => setUserPrompt(e.target.value)}
+            placeholder="Describe a topic, situation, or anything you want to practise… or pick a suggestion below."
+            rows={2}
+            className="w-full rounded-xl border border-border bg-card p-3 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+          />
+          {/* Suggestion chips */}
+          <div className="flex flex-wrap gap-2">
+            {suggestions.map(s => (
+              <button key={s} onClick={() => setUserPrompt(prev => prev ? `${prev}, ${s}` : s)}
+                className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                  userPrompt.includes(s)
+                    ? 'border-primary/50 bg-primary/10 text-primary'
+                    : 'border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
+                }`}>
+                {s}
               </button>
             ))}
           </div>
+        </div>
 
-          {/* Flashcard set picker */}
-          {sourceType === 'flashcard_set' && (
-            <div className="mt-2 space-y-1">
-              {sets.length === 0 ? (
-                <p className="text-xs text-muted-foreground">No custom sets yet. Create one in the Flashcards tab.</p>
-              ) : (
-                sets.map(s => (
-                  <button
-                    key={s.id}
-                    onClick={() => setSelectedSetId(s.id)}
-                    className={`w-full text-left rounded-xl border px-3 py-2.5 text-sm transition-colors ${
-                      selectedSetId === s.id
-                        ? 'border-primary/50 bg-primary/5 text-foreground'
-                        : 'border-border text-muted-foreground hover:border-primary/30'
-                    }`}
-                  >
-                    <span className="font-medium">{s.title}</span>
-                    <span className="text-xs text-muted-foreground ml-2">{s.words.length} words</span>
-                  </button>
-                ))
-              )}
-            </div>
-          )}
+        {/* Flashcard set — optional */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              Practice a flashcard set <span className="font-normal normal-case">(optional)</span>
+            </p>
+            <button
+              onClick={() => {
+                setUseFlashcardSet(v => !v);
+                setSelectedSetId(null);
+                setSelectedPreparedSetId(null);
+                setSelectedSetSource(null);
+                setOpenMySets(false);
+                setOpenPreparedSets(false);
+                setOpenPreparedLevel(null);
+              }}
+              className={`text-xs font-medium px-3 py-1 rounded-full border transition-colors ${useFlashcardSet ? 'border-primary/50 bg-primary/10 text-primary' : 'border-border text-muted-foreground'}`}
+            >
+              {useFlashcardSet ? 'On' : 'Off'}
+            </button>
+          </div>
 
-          {/* Theme picker */}
-          {sourceType === 'theme' && (
-            <div className="mt-2 flex gap-2 flex-wrap">
-              {THEMES.map(t => (
+          {useFlashcardSet && (
+            <div className="rounded-xl border border-border overflow-hidden divide-y divide-border">
+
+              {/* ── My sets ── */}
+              <div>
                 <button
-                  key={t}
-                  onClick={() => setSelectedTheme(t)}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                    selectedTheme === t
-                      ? 'bg-primary text-primary-foreground'
-                      : 'border border-border text-muted-foreground hover:border-primary/40'
-                  }`}
+                  onClick={() => setOpenMySets(v => !v)}
+                  className="w-full flex items-center justify-between px-3 py-3 text-sm font-medium text-foreground hover:bg-muted/40 transition-colors"
                 >
-                  {t}
+                  <span>My sets</span>
+                  <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${openMySets ? 'rotate-180' : ''}`} />
                 </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Grammar focus */}
-        <div className="space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Grammar focus <span className="font-normal normal-case">(optional)</span></p>
-          <div className="flex gap-2 flex-wrap">
-            {GRAMMAR_FOCUSES[level].map(g => (
-              <button
-                key={g}
-                onClick={() => setGrammarFocus(grammarFocus === g ? '' : g)}
-                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                  grammarFocus === g
-                    ? 'bg-primary text-primary-foreground'
-                    : 'border border-border text-muted-foreground hover:border-primary/40'
-                }`}
-              >
-                {g}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Session length */}
-        <div className="space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Session length</p>
-          <div className="flex gap-2">
-            {([5, 10, 15] as SessionLength[]).map(n => (
-              <button
-                key={n}
-                onClick={() => setSessionLength(n)}
-                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
-                  sessionLength === n
-                    ? 'bg-primary text-primary-foreground'
-                    : 'border border-border text-muted-foreground hover:border-primary/40'
-                }`}
-              >
-                {n}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <Button
-          className="w-full"
-          onClick={handleStart}
-          disabled={sourceType === 'flashcard_set' && !selectedSetId}
-        >
-          Start session
-        </Button>
-      </div>
-    );
-  }
-
-  // ─────────────────────────────────────────────────────────────────────────
-  // ── Sentence screen ───────────────────────────────────────────────────────
-  // ─────────────────────────────────────────────────────────────────────────
-
-  if (screen === 'sentence') {
-    return (
-      <div className="animate-fade-in space-y-4 pb-8">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <button
-            onClick={() => setScreen('config')}
-            className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back
-          </button>
-          <span className="text-sm text-muted-foreground tabular-nums">{currentIndex + 1} / {sessionLength}</span>
-        </div>
-
-        {error && (
-          <div className="space-y-2">
-            <p className="text-sm text-muted-foreground">{error}</p>
-            <Button variant="outline" size="sm" onClick={() => handleNext()}>Retry</Button>
-          </div>
-        )}
-
-        {loading && !error && (
-          <div className="space-y-3">
-            <Skeleton className="h-24 w-full" />
-            {level === 'A1' && <Skeleton className="h-12 w-full" />}
-            {level === 'A2' && <Skeleton className="h-16 w-full" />}
-            <Skeleton className="h-16 w-full" />
-            <Skeleton className="h-10 w-full" />
-          </div>
-        )}
-
-        {!loading && !error && currentSentence && (
-          <>
-            {/* A2 model sentence */}
-            {level === 'A2' && currentSentence.model_sentence && (
-              <Card className="bg-muted/50 border-border p-3 space-y-1">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Example pattern</p>
-                <p className="text-xs text-muted-foreground">{currentSentence.model_sentence.english}</p>
-                <p className="text-xs text-foreground font-medium">{currentSentence.model_sentence.dutch}</p>
-              </Card>
-            )}
-
-            {/* B1 focus note */}
-            {level === 'B1' && currentSentence.focus_note && (
-              <div className="rounded-lg bg-muted/50 border-l-2 border-primary/40 px-3 py-2">
-                <p className="text-xs text-muted-foreground">{currentSentence.focus_note}</p>
-              </div>
-            )}
-
-            {/* English sentence */}
-            <Card className="p-4">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Translate to Dutch</p>
-              <p className="text-base leading-relaxed text-foreground">{currentSentence.english}</p>
-            </Card>
-
-            {/* A1 tile interface */}
-            {level === 'A1' && (
-              <div className="space-y-3">
-                {/* Placed tiles row */}
-                <div className="min-h-12 rounded-xl border-2 border-dashed border-border bg-card p-3 flex flex-wrap gap-2">
-                  {placedTiles.length === 0 && (
-                    <span className="text-sm text-muted-foreground/50">Tap words below to build your sentence</span>
-                  )}
-                  {placedTiles.map((word, i) => (
-                    <button
-                      key={`placed-${i}-${word}`}
-                      onClick={() => removeTile(word, i)}
-                      className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-primary/20"
-                    >
-                      {word}
-                    </button>
-                  ))}
-                </div>
-
-                {/* Word bank */}
-                <div className="flex flex-wrap gap-2">
-                  {bankTiles.map((word, i) => (
-                    <button
-                      key={`bank-${i}-${word}`}
-                      onClick={() => placeTile(word, i)}
-                      className="rounded-full border border-primary/40 bg-card px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-primary/5"
-                    >
-                      {word}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* A2 / B1 textarea */}
-            {(level === 'A2' || level === 'B1') && (
-              <div className="space-y-2">
-                <textarea
-                  value={userInput}
-                  onChange={e => setUserInput(e.target.value)}
-                  placeholder="Write your Dutch translation here..."
-                  autoComplete="new-password"
-                  autoCorrect="off"
-                  autoCapitalize="none"
-                  spellCheck={false}
-                  rows={level === 'B1' ? 5 : 3}
-                  className="w-full rounded-xl border border-border bg-card p-4 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
-                />
-
-                {/* A2 partial word bank (reference only) */}
-                {level === 'A2' && currentSentence.partial_word_bank.length > 0 && (
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs text-muted-foreground">Key words:</span>
-                    {currentSentence.partial_word_bank.map((word, i) => (
-                      <span
-                        key={i}
-                        className="rounded-full border border-border bg-muted/50 px-2.5 py-0.5 text-xs text-muted-foreground"
+                {openMySets && (
+                  <div className="px-2 pb-2 space-y-0.5">
+                    {sets.length === 0 ? (
+                      <p className="text-xs text-muted-foreground px-2 py-2">No sets yet — create one in Cards.</p>
+                    ) : sets.map(s => (
+                      <button key={s.id}
+                        onClick={() => { setSelectedSetId(s.id); setSelectedPreparedSetId(null); setSelectedSetSource('my'); }}
+                        className={`w-full text-left rounded-lg px-3 py-2 text-sm transition-colors ${selectedSetSource === 'my' && selectedSetId === s.id ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'}`}
                       >
-                        {word}
-                      </span>
+                        {s.emoji} {s.title}
+                        <span className="text-xs ml-2 opacity-60">{s.words.length} words</span>
+                      </button>
                     ))}
                   </div>
                 )}
               </div>
-            )}
 
-            <Button
-              className="w-full"
-              onClick={handleCheck}
-              disabled={level === 'A1' ? a1CheckDisabled : !userInput.trim()}
-            >
-              Check
-            </Button>
-          </>
-        )}
+              {/* ── Prepared sets ── */}
+              <div>
+                <button
+                  onClick={() => setOpenPreparedSets(v => !v)}
+                  className="w-full flex items-center justify-between px-3 py-3 text-sm font-medium text-foreground hover:bg-muted/40 transition-colors"
+                >
+                  <span>Prepared sets</span>
+                  <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${openPreparedSets ? 'rotate-180' : ''}`} />
+                </button>
+                {openPreparedSets && (
+                  <div className="px-2 pb-2 space-y-0.5">
+                    {PREPARED_LEVELS.map(lvl => (
+                      <div key={lvl.level}>
+                        <button
+                          onClick={() => lvl.available && setOpenPreparedLevel(openPreparedLevel === lvl.level ? null : lvl.level)}
+                          disabled={!lvl.available}
+                          className={`w-full flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${!lvl.available ? 'opacity-40 cursor-not-allowed' : 'hover:bg-muted/50'}`}
+                        >
+                          <span className={`font-medium ${lvl.available ? 'text-foreground' : 'text-muted-foreground'}`}>
+                            {lvl.level}
+                            {!lvl.available && <span className="text-xs font-normal ml-2 text-muted-foreground">coming soon</span>}
+                          </span>
+                          {lvl.available && (
+                            openPreparedLevel === lvl.level
+                              ? <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
+                              : <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                          )}
+                        </button>
+
+                        {lvl.available && openPreparedLevel === lvl.level && (
+                          <div className="ml-3 pl-2 border-l border-border space-y-0.5 mb-1">
+                            {lvl.sets.map(s => (
+                              <button key={s.id}
+                                onClick={() => { setSelectedPreparedSetId(s.id); setSelectedSetId(null); setSelectedSetSource('prepared'); }}
+                                className={`w-full text-left rounded-lg px-3 py-2 text-sm transition-colors ${selectedSetSource === 'prepared' && selectedPreparedSetId === s.id ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'}`}
+                              >
+                                {s.emoji} {s.title}
+                                <span className="text-xs ml-2 opacity-60">{s.words.length} words</span>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Selected set hint */}
+          {useFlashcardSet && (selectedMySet || selectedPreparedSet) && (
+            <p className="text-xs text-muted-foreground px-1">
+              The AI will write a text using words from <span className="font-medium text-foreground">
+                {selectedSetSource === 'my' ? `${selectedMySet!.emoji} ${selectedMySet!.title}` : `${selectedPreparedSet!.emoji} ${selectedPreparedSet!.title}`}
+              </span>.
+            </p>
+          )}
+        </div>
+
+        <Button className="w-full py-5 text-base font-semibold gap-2" onClick={handleGenerate}>
+          <Sparkles className="h-4 w-4" />
+          Generate my text
+        </Button>
       </div>
+      </>
     );
   }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // ── Feedback screen ───────────────────────────────────────────────────────
+  // TRANSLATE SCREEN
   // ─────────────────────────────────────────────────────────────────────────
 
-  if (screen === 'feedback') {
-    const lastItem = sessionItems[sessionItems.length - 1];
-    const sentence = lastItem?.sentence ?? currentSentence;
-
+  if (screen === 'translate') {
     return (
+      <>
       <div className="animate-fade-in space-y-4 pb-8">
-        {/* Header */}
         <div className="flex items-center justify-between">
-          <span className="text-sm font-medium text-foreground">Feedback</span>
-          <span className="text-sm text-muted-foreground tabular-nums">{currentIndex + 1} / {sessionLength}</span>
+          <button onClick={() => setScreen('config')} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <ArrowLeft className="h-4 w-4" /> Back
+          </button>
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{level}</span>
         </div>
 
-        {sentence && (
-          <>
-            {/* Correct answer */}
-            <Card className="border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950/30 p-4 space-y-1">
-              <p className="text-xs font-semibold text-green-700 dark:text-green-400 uppercase tracking-wide">Correct Dutch</p>
-              <p className="text-base font-medium text-green-900 dark:text-green-100">{sentence.dutch_answer}</p>
-            </Card>
+        {error && <Card className="border-destructive/30 bg-destructive/5 p-4"><p className="text-sm text-destructive">{error}</p></Card>}
 
-            {/* A1: correct / review */}
-            {level === 'A1' && lastItem && (
-              <Card className="p-4">
-                {checkA1Answer(lastItem.userAnswer.split(' ').filter(Boolean), sentence.dutch_answer) ? (
-                  <p className="text-sm font-medium text-green-700">Correct</p>
-                ) : (
-                  <>
-                    <p className="text-sm font-medium text-orange-600 mb-2">Review needed</p>
-                    <p className="text-xs text-muted-foreground">Your answer: <span className="text-foreground">{lastItem.userAnswer}</span></p>
-                  </>
-                )}
-              </Card>
-            )}
-
-            {/* A2: word-by-word diff */}
-            {level === 'A2' && lastItem && (
-              <Card className="p-4 space-y-2">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your answer</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {diffWords(lastItem.userAnswer, sentence.dutch_answer).map((item, i) => (
-                    <span
-                      key={i}
-                      className={`rounded px-1.5 py-0.5 text-sm font-medium ${
-                        item.status === 'correct'
-                          ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300'
-                          : item.status === 'wrong-position'
-                          ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/40 dark:text-orange-300'
-                          : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300'
-                      }`}
-                    >
-                      {item.word}
-                    </span>
+        {/* English text card */}
+        {generating ? (
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-4/5" />
+            {level !== 'A1' && <>
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-3/4" />
+            </>}
+          </div>
+        ) : generatedText ? (
+          <Card className="p-4 space-y-2">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Translate this into Dutch</p>
+            <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">{generatedText.english}</p>
+            {/* Unknown word hints */}
+            {generatedText.hintWords.length > 0 && (
+              <div className="pt-2 border-t border-border/50 space-y-1.5">
+                <p className="text-xs text-muted-foreground font-medium">New words in this text:</p>
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                  {generatedText.hintWords.map((w, i) => (
+                    <div key={i} className="flex items-center gap-1.5 text-xs">
+                      <span className="text-muted-foreground truncate">{w.english}</span>
+                      <span className="text-muted-foreground/40 shrink-0">→</span>
+                      <span className="font-medium text-foreground truncate">{w.dutch}</span>
+                    </div>
                   ))}
                 </div>
-                <div className="flex items-center gap-3 pt-1 text-xs text-muted-foreground">
-                  <span><span className="inline-block w-2 h-2 rounded-sm bg-green-400 mr-1" />correct</span>
-                  <span><span className="inline-block w-2 h-2 rounded-sm bg-orange-400 mr-1" />wrong position</span>
-                  <span><span className="inline-block w-2 h-2 rounded-sm bg-red-400 mr-1" />wrong word</span>
-                </div>
-              </Card>
-            )}
-
-            {/* B1 annotation */}
-            {level === 'B1' && (
-              <Card className="p-4">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">Feedback</p>
-                {b1Loading ? (
-                  <div className="space-y-2">
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-4 w-3/4" />
-                  </div>
-                ) : b1Annotation ? (
-                  <p className="text-sm text-foreground leading-relaxed">{b1Annotation}</p>
-                ) : (
-                  <p className="text-xs text-muted-foreground">Your answer: {lastItem?.userAnswer}</p>
-                )}
-              </Card>
-            )}
-
-            {/* Grammar hint */}
-            <Card className="bg-muted/30 p-3">
-              <p className="text-xs text-muted-foreground leading-relaxed">{sentence.feedback_hint}</p>
-            </Card>
-
-            {/* Easy / Hard (A2 + B1) */}
-            {level !== 'A1' && (
-              <div className="space-y-2">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">How did it go?</p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => handleRate('easy')}
-                    className={`flex-1 rounded-xl border py-2 text-sm font-medium transition-colors ${
-                      currentRating === 'easy'
-                        ? 'border-green-400 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-900/30 dark:text-green-300'
-                        : 'border-border text-muted-foreground hover:border-green-300'
-                    }`}
-                  >
-                    Easy
-                  </button>
-                  <button
-                    onClick={() => handleRate('hard')}
-                    className={`flex-1 rounded-xl border py-2 text-sm font-medium transition-colors ${
-                      currentRating === 'hard'
-                        ? 'border-orange-400 bg-orange-50 text-orange-700 dark:border-orange-700 dark:bg-orange-900/30 dark:text-orange-300'
-                        : 'border-border text-muted-foreground hover:border-orange-300'
-                    }`}
-                  >
-                    Hard
-                  </button>
-                </div>
               </div>
             )}
+          </Card>
+        ) : null}
 
-            <Button className="w-full" onClick={handleNext}>
-              {currentIndex + 1 >= sessionLength ? 'See results' : 'Next'}
+        {/* Translation textarea */}
+        {!generating && generatedText && (
+          <>
+            <div className="space-y-1.5">
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your Dutch translation</p>
+              <textarea
+                value={userTranslation}
+                onChange={e => setUserTranslation(e.target.value)}
+                placeholder="Write your Dutch translation here…"
+                autoComplete="new-password"
+                autoCorrect="off"
+                autoCapitalize="none"
+                spellCheck={false}
+                rows={level === 'A1' ? 4 : level === 'A2' ? 6 : 9}
+                className="w-full rounded-xl border border-border bg-card p-3 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
+              />
+              <p className="text-xs text-muted-foreground px-1">Take your time — there's no timer. Write as naturally as you can.</p>
+            </div>
+
+            <Button
+              className="w-full py-5 text-base font-semibold gap-2"
+              onClick={handleCheck}
+              disabled={checking || !userTranslation.trim()}
+            >
+              {checking ? <><Loader2 className="h-4 w-4 animate-spin" /> Checking…</> : 'Check my translation'}
             </Button>
+
+            <button onClick={() => setShowSaveWord(true)}
+              className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors mx-auto">
+              <BookmarkPlus className="h-3.5 w-3.5" /> Save a word while you work
+            </button>
           </>
         )}
       </div>
+
+      {showSaveWord && (
+        <SaveWordModal onClose={() => setShowSaveWord(false)} onSave={handleSaveWord} onCreateAndSave={handleCreateAndSave} existingSets={sets} />
+      )}
+      </>
     );
   }
 
   // ─────────────────────────────────────────────────────────────────────────
-  // ── End screen ────────────────────────────────────────────────────────────
+  // FEEDBACK SCREEN
   // ─────────────────────────────────────────────────────────────────────────
 
-  if (screen === 'end') {
+  if (screen === 'feedback' && feedback) {
+    const ratingColors = {
+      great: { card: 'border-green-200 bg-green-50', label: 'text-green-700', badge: 'bg-green-100 text-green-800' },
+      good: { card: 'border-blue-200 bg-blue-50', label: 'text-blue-700', badge: 'bg-blue-100 text-blue-800' },
+      needs_work: { card: 'border-orange-200 bg-orange-50', label: 'text-orange-700', badge: 'bg-orange-100 text-orange-800' },
+    }[feedback.rating];
+    const ratingLabel = { great: 'Great job!', good: 'Good effort!', needs_work: 'Keep going!' }[feedback.rating];
+
     return (
-      <div className="animate-fade-in space-y-5 pb-8">
-        <div>
-          <h1 className="text-xl font-semibold text-foreground">Session complete</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">{sessionLength} sentences completed</p>
+      <>
+      <div className="animate-fade-in space-y-4 pb-8">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold text-foreground">Feedback</span>
+          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{level}</span>
         </div>
 
-        <Card className="p-5 space-y-3">
-          {level === 'A1' ? (
-            <>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Correct</span>
-                <span className="font-semibold text-green-600">{endStats.correct}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">To review</span>
-                <span className="font-semibold text-orange-600">{endStats.review}</span>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Easy</span>
-                <span className="font-semibold text-green-600">{endStats.easy}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Hard</span>
-                <span className="font-semibold text-orange-600">{endStats.hard}</span>
-              </div>
-            </>
-          )}
+        {/* Overall */}
+        <Card className={`p-4 space-y-1 ${ratingColors.card}`}>
+          <div className="flex items-center gap-2">
+            <p className={`text-xs font-bold uppercase tracking-wide ${ratingColors.label}`}>{ratingLabel}</p>
+            <span className={`text-xs font-semibold rounded-full px-2 py-0.5 ${ratingColors.badge}`}>{feedback.rating.replace('_', ' ')}</span>
+          </div>
+          <p className="text-sm text-foreground leading-relaxed">{feedback.overallComment}</p>
         </Card>
 
-        {level !== 'A1' && hardGrammarTarget && (
-          <Card className="bg-muted/30 p-4">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Next time focus on</p>
-            <p className="text-sm text-foreground">{hardGrammarTarget}</p>
-          </Card>
+        {/* Strengths */}
+        {feedback.strengths.length > 0 && (
+          <div className="space-y-1.5">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">What you did well</p>
+            <ul className="space-y-1">
+              {feedback.strengths.map((s, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-foreground">
+                  <span className="text-green-500 mt-0.5 shrink-0">✓</span>
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
-        <div className="space-y-2">
-          <Button
-            className="w-full"
-            onClick={() => {
-              setScreen('config');
-              setSessionItems([]);
-              setCurrentIndex(0);
-              setCurrentSentence(null);
-              setError(null);
-            }}
-          >
-            Practice again
+        {/* Corrections */}
+        {feedback.corrections.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              {level === 'A1' ? 'One thing to remember' : 'Corrections'}
+            </p>
+            {feedback.corrections.map((c, i) => (
+              <Card key={i} className="p-3 space-y-1.5 border-border">
+                <div className="flex gap-2 text-sm flex-wrap">
+                  <span className="line-through text-muted-foreground">{c.original}</span>
+                  <span className="text-muted-foreground/40">→</span>
+                  <span className="font-medium text-foreground">{c.corrected}</span>
+                </div>
+                <p className="text-xs text-muted-foreground leading-relaxed">{c.tip}</p>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        {/* Your translation (collapsed reference) */}
+        <details className="group">
+          <summary className="text-xs text-muted-foreground hover:text-foreground cursor-pointer transition-colors list-none flex items-center gap-1">
+            <span className="group-open:rotate-90 inline-block transition-transform">›</span>
+            View your translation
+          </summary>
+          <Card className="mt-2 p-3 bg-muted/30 border-border">
+            <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-wrap">{userTranslation}</p>
+          </Card>
+        </details>
+
+        {/* Easy / Hard */}
+        <div className="space-y-1.5">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">How did it feel?</p>
+          <div className="flex gap-2">
+            <button onClick={() => handleRate('easy')}
+              className={`flex-1 rounded-xl border py-2.5 text-sm font-semibold transition-colors ${rating === 'easy' ? 'border-green-400 bg-green-50 text-green-700' : 'border-border text-muted-foreground hover:border-green-300'}`}>
+              Easy
+            </button>
+            <button onClick={() => handleRate('hard')}
+              className={`flex-1 rounded-xl border py-2.5 text-sm font-semibold transition-colors ${rating === 'hard' ? 'border-orange-400 bg-orange-50 text-orange-700' : 'border-border text-muted-foreground hover:border-orange-300'}`}>
+              Hard
+            </button>
+          </div>
+        </div>
+
+        {/* Save word */}
+        {rating === 'hard' ? (
+          <button onClick={() => setShowSaveWord(true)}
+            className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-orange-300 bg-orange-50 px-3 py-2.5 text-sm font-medium text-orange-700 hover:bg-orange-100 transition-colors">
+            <BookmarkPlus className="h-4 w-4" /> Save a word from this text
+          </button>
+        ) : (
+          <button onClick={() => setShowSaveWord(true)}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-primary transition-colors">
+            <BookmarkPlus className="h-3.5 w-3.5" /> Save a word
+          </button>
+        )}
+
+        {/* Actions */}
+        <div className="space-y-2 pt-1">
+          <Button className="w-full" onClick={() => {
+            setScreen('config');
+            setFeedback(null);
+            setRating(null);
+            setGeneratedText(null);
+            setUserTranslation('');
+            setError(null);
+          }}>
+            Try another text
           </Button>
-          <Button variant="outline" className="w-full" onClick={onBack}>
-            Back to Tasks
-          </Button>
+          <Button variant="outline" className="w-full" onClick={onBack}>Back to Tasks</Button>
         </div>
       </div>
+
+      {showSaveWord && (
+        <SaveWordModal onClose={() => setShowSaveWord(false)} onSave={handleSaveWord} onCreateAndSave={handleCreateAndSave} existingSets={sets} />
+      )}
+      </>
     );
   }
 

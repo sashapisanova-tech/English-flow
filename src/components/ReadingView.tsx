@@ -6,10 +6,10 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  ArrowLeft, ArrowRight, Volume2, BookmarkPlus, Check,
+  ArrowLeft, ArrowRight, Volume2, BookmarkPlus, Bookmark, Check,
   Mic, Loader2, Star, RotateCcw,
   CheckCircle, XCircle, Brain, ClipboardCheck,
-  PenLine, Shuffle,
+  PenLine, Shuffle, Eye, Sparkles, X,
 } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { getKeywordsForText, getSeparableVerbsForText, getFixedExpressionsForText, getSplitExpressionsForText } from '@/data/vocabulary';
@@ -30,6 +30,7 @@ interface PhrasePopup {
   anchorY: number;
   translation: string;
   translating: boolean;
+  position: 'left' | 'above' | 'below';
 }
 
 // ─── Translation cache (AI-powered) ─────────────────────────────────────────
@@ -172,9 +173,11 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
   const [popup, setPopup] = useState<PhrasePopup | null>(null);
   const [saveState, setSaveState] = useState<'idle' | 'saved'>('idle');
   const popupRef = useRef<HTMLDivElement>(null);
+  const exprPopupRef = useRef<HTMLDivElement>(null);
 
   const [exprPopup, setExprPopup] = useState<{
     phrase: string; english: string; sentence: string; savedState: 'idle' | 'saved';
+    x: number; anchorY: number; position: 'left' | 'above' | 'below';
   } | null>(null);
 
   // ── TTS ──
@@ -182,6 +185,7 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
 
   // ── Exercise tabs ──
   const [activeTab, setActiveTab] = useState<ExerciseTab | null>(null);
+  const [isTextRevealed, setIsTextRevealed] = useState(false);
 
   // ── Quiz state ──
   const [quizAnswers, setQuizAnswers] = useState<Record<number, number>>({});
@@ -203,10 +207,11 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
   const [builderDone, setBuilderDone] = useState(false);
 
   // ── Retelling state ──
-  type RetellingPhase = 'idle' | 'loading' | 'ready' | 'evaluating' | 'feedback';
+  type RetellingPhase = 'idle' | 'loading' | 'ready' | 'submitted' | 'evaluating' | 'feedback';
   const [retellingPhase, setRetellingPhase] = useState<RetellingPhase>('idle');
   const [retellingData, setRetellingData] = useState<RetellingOutline | null>(null);
   const [retellingTranscript, setRetellingTranscript] = useState('');
+  const [retellingTranslation, setRetellingTranslation] = useState<string | null>(null);
   const [retellingFeedback, setRetellingFeedback] = useState<RetellingFeedback | null>(null);
 
   // ── Reset all exercise state when the text changes ──
@@ -226,6 +231,7 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
     setRetellingPhase('idle');
     setRetellingData(null);
     setRetellingTranscript('');
+    setRetellingTranslation(null);
     setRetellingFeedback(null);
   }, [text.id]);
 
@@ -432,6 +438,20 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
 
   // ─── Phrase popup handlers ────────────────────────────────────────────────
 
+  function computePopupPos(rect: DOMRect, popupWidth: number, estimatedHeight = 180):
+    { x: number; anchorY: number; position: 'left' | 'above' | 'below' } {
+    const isMobile = window.innerWidth < 768;
+    if (!isMobile && rect.left >= popupWidth + 20) {
+      return { x: Math.max(8, rect.left - popupWidth - 12), anchorY: rect.top + rect.height / 2, position: 'left' };
+    }
+    const rawX = rect.left + rect.width / 2 - popupWidth / 2;
+    const x = Math.max(8, Math.min(rawX, window.innerWidth - popupWidth - 8));
+    if (rect.top >= estimatedHeight + 16) {
+      return { x, anchorY: rect.top - 8, position: 'above' };
+    }
+    return { x, anchorY: rect.bottom + 8, position: 'below' };
+  }
+
   function dismissPopup() {
     setPopup(null);
     setSaveState('idle');
@@ -446,10 +466,8 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
       const range = sel?.getRangeAt(0);
       const rect = range?.getBoundingClientRect();
       if (!rect || rect.width === 0) return;
-      const cardW = 224;
-      const rawX = rect.left + rect.width / 2 - cardW / 2;
-      const x = Math.max(8, Math.min(rawX, window.innerWidth - cardW - 8));
-      setPopup({ text: selected, x, anchorY: rect.top - 8, translation: '', translating: true });
+      const { x, anchorY, position } = computePopupPos(rect, 224, 180);
+      setPopup({ text: selected, x, anchorY, translation: '', translating: true, position });
       setSaveState('idle');
       const t = await fetchPhraseTranslation(selected);
       setPopup(prev => prev ? { ...prev, translation: t, translating: false } : null);
@@ -461,10 +479,13 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
       if (popup && popupRef.current && !popupRef.current.contains(e.target as Node)) {
         dismissPopup();
       }
+      if (exprPopup && exprPopupRef.current && !exprPopupRef.current.contains(e.target as Node)) {
+        setExprPopup(null);
+      }
     }
     document.addEventListener('pointerdown', onPointerDown);
     return () => document.removeEventListener('pointerdown', onPointerDown);
-  }, [popup]);
+  }, [popup, exprPopup]);
 
   function handleSavePhrase() {
     if (!popup || saveState === 'saved') return;
@@ -505,7 +526,11 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
           <span
             key={i}
             className="word-expression word-clickable"
-            onClick={() => setExprPopup({ phrase: exprInfo.phrase, english: exprInfo.english, sentence: sentenceForExpr, savedState: 'idle' })}
+            onClick={(e) => {
+              const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+              const { x, anchorY, position } = computePopupPos(rect, 288, 220);
+              setExprPopup({ phrase: exprInfo.phrase, english: exprInfo.english, sentence: sentenceForExpr, savedState: 'idle', x, anchorY, position });
+            }}
           >
             {exprInfo.displayText}
           </span>
@@ -530,12 +555,17 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
             {leadPunct}
             <span
               className="word-expression word-clickable"
-              onClick={() => setExprPopup({
-                phrase: splitEntry.display ?? `${splitEntry.word1} … ${splitEntry.word2}`,
-                english: splitEntry.english,
-                sentence: sent,
-                savedState: 'idle',
-              })}
+              onClick={(e) => {
+                const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                const { x, anchorY, position } = computePopupPos(rect, 288, 220);
+                setExprPopup({
+                  phrase: splitEntry.display ?? `${splitEntry.word1} … ${splitEntry.word2}`,
+                  english: splitEntry.english,
+                  sentence: sent,
+                  savedState: 'idle',
+                  x, anchorY, position,
+                });
+              }}
             >
               {wordOnly}
             </span>
@@ -578,9 +608,10 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
 
   // ─── Retelling ────────────────────────────────────────────────────────────
 
-  function startRetelling() {
+  async function startRetelling() {
     setRetellingTranscript('');
     setRetellingFeedback(null);
+    setRetellingTranslation(null);
     const { outlineStages } = levelConfig;
     const wordEntries = Object.entries(text.words || {}).slice(0, 8).map(([dutch, v]) => ({ dutch, english: v.english }));
     const outline = outlineStages === 2
@@ -589,6 +620,17 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
       ? ['How the story begins', 'What happens next', 'The key event or problem', 'How the story ends']
       : ['What happens at the beginning', 'What happens in the middle', 'How the story ends'];
     setRetellingData({ outline, key_words: wordEntries });
+    setRetellingPhase('loading');
+    try {
+      const translation = await callClaude(
+        'You are a Dutch-to-English translator. Translate the Dutch text naturally and fluently. Return ONLY the English translation, no explanation.',
+        text.content,
+        400,
+      );
+      setRetellingTranslation(translation);
+    } catch {
+      setRetellingTranslation(null);
+    }
     setRetellingPhase('ready');
   }
 
@@ -614,6 +656,7 @@ Return ONLY valid JSON, no markdown:
   function resetRetelling() {
     setRetellingPhase('idle');
     setRetellingTranscript('');
+    setRetellingTranslation(null);
     setRetellingFeedback(null);
     setRetellingData(null);
   }
@@ -669,8 +712,19 @@ Return ONLY valid JSON, no markdown:
         <div
           ref={popupRef}
           className="fixed z-[70] animate-fade-in w-56"
-          style={{ left: popup.x, top: popup.anchorY, transform: 'translateY(-100%)' }}
+          style={{
+            left: popup.x,
+            top: popup.anchorY,
+            transform: popup.position === 'left' ? 'translateY(-50%)' : popup.position === 'above' ? 'translateY(-100%)' : 'translateY(0)',
+          }}
         >
+          {/* Up arrow when popup is below the selection */}
+          {popup.position === 'below' && (
+            <div className="flex justify-center">
+              <div className="h-0 w-0 border-l-[8px] border-r-[8px] border-b-[8px] border-l-transparent border-r-transparent border-b-card"
+                style={{ filter: 'drop-shadow(0 -1px 0 hsl(var(--border)))' }} />
+            </div>
+          )}
           <div className="rounded-2xl bg-card border border-border shadow-xl overflow-hidden">
             <div className="px-3 pt-3 pb-1.5">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Dutch</p>
@@ -686,11 +740,11 @@ Return ONLY valid JSON, no markdown:
             <button
               onPointerDown={e => { e.stopPropagation(); handleSavePhrase(); }}
               className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-semibold transition-all active:scale-95 ${
-                saveState === 'saved' ? 'bg-green-500 text-white' : 'bg-primary text-primary-foreground hover:opacity-90'
+                saveState === 'saved' ? 'bg-secondary text-foreground' : 'bg-primary text-primary-foreground hover:opacity-90'
               }`}
             >
               {saveState === 'saved'
-                ? <><Check className="h-4 w-4" /> Saved to flashcards!</>
+                ? <><Bookmark className="h-4 w-4 fill-current" /> Saved</>
                 : <><BookmarkPlus className="h-4 w-4" /> Save to flashcards</>
               }
             </button>
@@ -705,23 +759,42 @@ Return ONLY valid JSON, no markdown:
               Ask Daan about this
             </button>
           </div>
-          <div className="flex justify-center mt-0">
-            <div className="h-0 w-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-card"
-              style={{ filter: 'drop-shadow(0 1px 0 hsl(var(--border)))' }} />
-          </div>
+          {/* Right arrow when popup is to the left of the selection (desktop) */}
+          {popup.position === 'left' && (
+            <div
+              className="absolute top-1/2 -translate-y-1/2 h-0 w-0 border-t-[8px] border-b-[8px] border-l-[8px] border-t-transparent border-b-transparent border-l-card"
+              style={{ right: '-8px', filter: 'drop-shadow(1px 0 0 hsl(var(--border)))' }}
+            />
+          )}
+          {/* Down arrow when popup is above the selection */}
+          {popup.position === 'above' && (
+            <div className="flex justify-center">
+              <div className="h-0 w-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-card"
+                style={{ filter: 'drop-shadow(0 1px 0 hsl(var(--border)))' }} />
+            </div>
+          )}
         </div>
       )}
 
-      {/* Expression popup */}
+      {/* Expression popup — positioned near the clicked phrase */}
       {exprPopup && (
         <div
-          className="fixed inset-0 z-[70] flex items-end justify-center pb-6 px-4"
-          onClick={() => setExprPopup(null)}
+          ref={exprPopupRef}
+          className="fixed z-[70] animate-fade-in w-72 relative"
+          style={{
+            left: exprPopup.x,
+            top: exprPopup.anchorY,
+            transform: exprPopup.position === 'left' ? 'translateY(-50%)' : exprPopup.position === 'above' ? 'translateY(-100%)' : 'translateY(0)',
+          }}
         >
-          <div
-            className="w-full max-w-sm rounded-2xl bg-card border border-border shadow-2xl overflow-hidden animate-fade-in"
-            onClick={e => e.stopPropagation()}
-          >
+          {/* Up arrow when popup is below the phrase */}
+          {exprPopup.position === 'below' && (
+            <div className="flex justify-center">
+              <div className="h-0 w-0 border-l-[8px] border-r-[8px] border-b-[8px] border-l-transparent border-r-transparent border-b-card"
+                style={{ filter: 'drop-shadow(0 -1px 0 hsl(var(--border)))' }} />
+            </div>
+          )}
+          <div className="rounded-2xl bg-card border border-border shadow-2xl overflow-hidden">
             <div className="px-4 pt-4 pb-2 flex items-center gap-2">
               <span className="rounded bg-green-100 px-1.5 py-0.5 text-xs font-semibold text-green-700">fixed expression</span>
             </div>
@@ -742,10 +815,13 @@ Return ONLY valid JSON, no markdown:
                   setTimeout(() => setExprPopup(null), 1400);
                 }}
                 className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all active:scale-95 ${
-                  exprPopup.savedState === 'saved' ? 'bg-green-500 text-white' : 'bg-primary text-primary-foreground hover:opacity-90'
+                  exprPopup.savedState === 'saved' ? 'bg-secondary text-foreground' : 'bg-primary text-primary-foreground hover:opacity-90'
                 }`}
               >
-                {exprPopup.savedState === 'saved' ? '✓ Saved!' : '＋ Save to flashcards'}
+                {exprPopup.savedState === 'saved'
+                  ? <><Bookmark className="h-4 w-4 fill-current" /> Saved</>
+                  : '＋ Save to flashcards'
+                }
               </button>
               <button
                 onClick={() => {
@@ -758,18 +834,60 @@ Return ONLY valid JSON, no markdown:
               </button>
             </div>
           </div>
+          {/* Right arrow when popup is to the left of the phrase (desktop) */}
+          {exprPopup.position === 'left' && (
+            <div
+              className="absolute top-1/2 -translate-y-1/2 h-0 w-0 border-t-[8px] border-b-[8px] border-l-[8px] border-t-transparent border-b-transparent border-l-card"
+              style={{ right: '-8px', filter: 'drop-shadow(1px 0 0 hsl(var(--border)))' }}
+            />
+          )}
+          {/* Down arrow when popup is above the phrase */}
+          {exprPopup.position === 'above' && (
+            <div className="flex justify-center">
+              <div className="h-0 w-0 border-l-[8px] border-r-[8px] border-t-[8px] border-l-transparent border-r-transparent border-t-card"
+                style={{ filter: 'drop-shadow(0 1px 0 hsl(var(--border)))' }} />
+            </div>
+          )}
         </div>
       )}
 
       {/* Reading text */}
-      <Card className="p-6 md:p-8" onMouseUp={handleSelectionEnd} onTouchEnd={handleSelectionEnd}>
-        <div className="reading-text leading-[2.2]">{renderText()}</div>
-      </Card>
+      <div className="relative">
+        <Card
+          className={`p-6 md:p-8${activeTab !== null ? ' select-none' : ''}${activeTab !== null && !isTextRevealed ? ' cursor-pointer' : ''}`}
+          onMouseDown={() => { if (activeTab !== null) setIsTextRevealed(true); }}
+          onTouchStart={() => { if (activeTab !== null) setIsTextRevealed(true); }}
+          onMouseUp={() => { setIsTextRevealed(false); handleSelectionEnd(); }}
+          onTouchEnd={() => { setIsTextRevealed(false); handleSelectionEnd(); }}
+          onMouseLeave={() => setIsTextRevealed(false)}
+        >
+          <div className={`reading-text leading-[2.2] transition-[filter] duration-150${activeTab !== null && !isTextRevealed ? ' blur-sm' : ''}`}>
+            {renderText()}
+          </div>
+        </Card>
+        {activeTab !== null && !isTextRevealed && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none rounded-xl">
+            <span className="flex items-center gap-1.5 rounded-full border border-border/50 bg-background/90 px-3 py-1.5 text-sm italic text-muted-foreground shadow-sm">
+              <Eye className="h-3.5 w-3.5" /> Press to read
+            </span>
+          </div>
+        )}
+      </div>
 
 
       {/* ── Practice exercises ────────────────────────────────────────────── */}
       <div className="space-y-3">
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Practice exercises</p>
+        <div className="flex items-center justify-between">
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Practice exercises</p>
+          {activeTab !== null && (
+            <button
+              onClick={() => { setActiveTab(null); setIsTextRevealed(false); }}
+              className="flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-xs text-muted-foreground transition-colors hover:border-destructive/50 hover:text-destructive"
+            >
+              <X className="h-3 w-3" /> Exit task
+            </button>
+          )}
+        </div>
 
         {/* Tab row — scrollable so all 5 fit on mobile */}
         <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
@@ -1139,11 +1257,42 @@ Return ONLY valid JSON, no markdown:
           <Card className="animate-fade-in p-5 space-y-4">
             <h3 className="font-heading text-base font-semibold">Retell the Story</h3>
 
-            {(retellingPhase === 'ready' || retellingPhase === 'evaluating') && retellingData && (
+            {/* Loading translation */}
+            {retellingPhase === 'loading' && (
+              <div className="flex items-center gap-2 py-4 text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-sm">Preparing translation…</span>
+              </div>
+            )}
+
+            {/* Ready — write retelling */}
+            {retellingPhase === 'ready' && retellingData && (
               <div className="space-y-4">
+                    {/* English translation */}
+                {retellingTranslation && (
+                  <div>
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">English translation</p>
+                    <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-3">
+                      <p className="text-sm text-foreground/80 leading-relaxed">{retellingTranslation}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Key words */}
+                <div>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Key words & phrases</p>
+                  <div className="flex flex-wrap gap-2">
+                    {retellingData.key_words.map((kw, i) => (
+                      <div key={i} className="rounded-lg border border-border bg-background px-2.5 py-1.5">
+                        <span className="text-sm font-semibold text-foreground">{kw.dutch}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 {/* Outline */}
-                <div className="space-y-2">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Outline</p>
+                <div>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Outline</p>
                   <ol className="space-y-1.5">
                     {retellingData.outline.map((pt, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm text-foreground">
@@ -1154,51 +1303,66 @@ Return ONLY valid JSON, no markdown:
                   </ol>
                 </div>
 
-                {/* Key words */}
-                <div className="space-y-2">
-                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Key words</p>
-                  <div className="flex flex-wrap gap-2">
-                    {retellingData.key_words.map((kw, i) => (
-                      <div key={i} className="rounded-lg border border-border bg-secondary/40 px-2.5 py-1">
-                        <span className="text-sm font-semibold text-foreground">{kw.dutch}</span>
-                        <span className="text-xs text-muted-foreground ml-1.5">{kw.english}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
                 {/* Text input */}
                 <div className="space-y-2">
-                  <div className="rounded-lg bg-rose-50 border border-rose-200 px-3 py-2">
-                    <p className="text-xs font-semibold text-rose-700 flex items-center gap-1.5 mb-0.5">
-                      <Mic className="h-3.5 w-3.5" /> Try speaking aloud first!
-                    </p>
-                    <p className="text-xs text-rose-600">
-                      Speaking Dutch out loud — even at home — dramatically speeds up fluency. Retell the story out loud, then type it below for AI feedback.
-                    </p>
-                  </div>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Your retelling in Dutch</p>
                   <Textarea
                     value={retellingTranscript}
                     onChange={e => setRetellingTranscript(e.target.value)}
-                    placeholder="Type the story in your own Dutch words…"
-                    className="text-sm min-h-[100px]"
-                    disabled={retellingPhase === 'evaluating'}
+                    placeholder="Write the story in your own Dutch words…"
+                    className="text-sm min-h-[110px]"
                   />
                   <Button
-                    className="w-full gap-2"
-                    onClick={evaluateRetelling}
-                    disabled={!retellingTranscript.trim() || retellingPhase === 'evaluating'}
+                    className="w-full"
+                    onClick={() => setRetellingPhase('submitted')}
+                    disabled={!retellingTranscript.trim()}
                   >
-                    {retellingPhase === 'evaluating'
-                      ? <><Loader2 className="h-4 w-4 animate-spin" /> Evaluating…</>
-                      : <><Star className="h-4 w-4" /> Get feedback</>
-                    }
+                    Submit
                   </Button>
                 </div>
               </div>
             )}
 
-            {retellingPhase === 'feedback' && retellingFeedback && (
+            {/* Submitted — compare original with retelling */}
+            {retellingPhase === 'submitted' && retellingData && (
+              <div className="space-y-4 animate-fade-in">
+                {/* Unblurred Dutch original */}
+                <div>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Dutch original</p>
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50/40 p-3">
+                    <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{text.content}</p>
+                  </div>
+                </div>
+
+                {/* Student's retelling */}
+                <div>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Your retelling</p>
+                  <div className="rounded-xl border border-primary/20 bg-primary/5 p-3">
+                    <p className="text-sm text-foreground whitespace-pre-wrap leading-relaxed">{retellingTranscript}</p>
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setRetellingPhase('ready')}>
+                    <PenLine className="h-3.5 w-3.5" /> Edit
+                  </Button>
+                  <Button className="flex-1 gap-2" onClick={evaluateRetelling}>
+                    <Sparkles className="h-4 w-4" /> Get AI feedback
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {/* Evaluating */}
+            {retellingPhase === 'evaluating' && (
+              <div className="flex items-center gap-2 py-4 text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span className="text-sm">Evaluating your retelling…</span>
+              </div>
+            )}
+
+            {/* Feedback */}
+            {retellingPhase === 'feedback' && retellingFeedback && retellingData && (
               <div className="space-y-4 animate-fade-in">
                 {/* Score */}
                 <div className="flex items-center gap-3">
@@ -1233,6 +1397,23 @@ Return ONLY valid JSON, no markdown:
                   <p><span className="font-semibold">Grammar:</span> {retellingFeedback.grammar_feedback}</p>
                   <p className="font-medium text-primary">{retellingFeedback.encouragement}</p>
                 </div>
+
+                {/* Compare texts */}
+                <details className="rounded-xl border border-border overflow-hidden">
+                  <summary className="cursor-pointer px-3 py-2 text-[10px] font-semibold text-muted-foreground uppercase tracking-wide bg-secondary/30 hover:bg-secondary/50 transition-colors flex items-center gap-1.5">
+                    <Eye className="h-3 w-3" /> Compare texts
+                  </summary>
+                  <div className="p-3 space-y-3">
+                    <div>
+                      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Dutch original</p>
+                      <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">{text.content}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Your retelling</p>
+                      <p className="text-xs text-foreground whitespace-pre-wrap leading-relaxed">{retellingTranscript}</p>
+                    </div>
+                  </div>
+                </details>
 
                 <div className="flex gap-2">
                   <Button variant="outline" size="sm" className="gap-2" onClick={resetRetelling}>

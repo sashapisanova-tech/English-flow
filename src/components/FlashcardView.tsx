@@ -41,6 +41,10 @@ export function FlashcardView() {
   const [a1VerbsOpen, setA1VerbsOpen]   = useState(false);
   const [a1NounsOpen, setA1NounsOpen]   = useState(false);
   const [a1AdjOpen, setA1AdjOpen]       = useState(false);
+  const [a2Open, setA2Open]             = useState(false);
+  const [a2VerbsOpen, setA2VerbsOpen]   = useState(false);
+  const [a2NounsOpen, setA2NounsOpen]   = useState(false);
+  const [a2AdjsOpen, setA2AdjsOpen]     = useState(false);
   const [practiceQueue, setPracticeQueue] = useState<FlashcardSetWord[]>([]);
   const [isShuffled, setIsShuffled]     = useState(false);
   const [savedWords, setSavedWords]     = useState<Set<string>>(new Set());
@@ -291,6 +295,10 @@ export function FlashcardView() {
     const a1VerbSets = a1Sets.filter(s => s.folder === 'Verbs');
     const a1NounSets = a1Sets.filter(s => s.folder === 'Nouns');
     const a1AdjSets  = a1Sets.filter(s => s.folder === 'Adjectives');
+    const a2Sets = flashcardSets.filter(s => s.level === 'A2');
+    const a2VerbSets  = a2Sets.filter(s => s.folder === 'Verbs');
+    const a2NounSets  = a2Sets.filter(s => s.folder === 'Nouns');
+    const a2AdjSets   = a2Sets.filter(s => s.folder === 'Adjectives');
     const groupedSets = Object.entries(categoryLabels).map(([cat, info]) => ({
       category: cat as FlashcardSetCategory,
       ...info,
@@ -549,6 +557,118 @@ export function FlashcardView() {
                     {a1AdjOpen && (
                       <div className="space-y-2 mt-2">
                         {a1AdjSets.map(set => (
+                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
+                            <div className="flex items-center gap-3">
+                              <span className="text-lg">{set.emoji}</span>
+                              <div>
+                                <p className="text-sm font-medium text-foreground">{set.title}</p>
+                                <p className="text-xs text-muted-foreground">{set.words.length} adjectives</p>
+                              </div>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* A2 Level folder */}
+        {a2Sets.length > 0 && (
+          <div>
+            <button
+              onClick={() => setA2Open(v => !v)}
+              className="w-full flex items-center justify-between mb-2"
+            >
+              <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
+                A2 Level
+                <span className="text-xs font-normal text-muted-foreground">
+                  {a2VerbSets.reduce((t, s) => t + s.words.length, 0)} verbs · {a2NounSets.reduce((t, s) => t + s.words.length, 0)} nouns · {a2AdjSets.reduce((t, s) => t + s.words.length, 0)} adjectives
+                </span>
+              </h3>
+              <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${a2Open ? 'rotate-180' : ''}`} />
+            </button>
+            {a2Open && (
+              <div className="ml-3 border-l-2 border-border pl-3 space-y-3">
+                {/* Verbs subfolder */}
+                {a2VerbSets.length > 0 && (
+                  <div>
+                    <button
+                      onClick={() => setA2VerbsOpen(v => !v)}
+                      className="w-full flex items-center justify-between py-1"
+                    >
+                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+                        Verbs <span className="font-normal normal-case">({a2VerbSets.length} sets)</span>
+                      </span>
+                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a2VerbsOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {a2VerbsOpen && (
+                      <div className="space-y-2 mt-2">
+                        {a2VerbSets.map(set => (
+                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
+                            <div className="flex items-center gap-3">
+                              <span className="text-lg">{set.emoji}</span>
+                              <div>
+                                <p className="text-sm font-medium text-foreground">{set.title}</p>
+                                <p className="text-xs text-muted-foreground">{set.words.length} verbs</p>
+                              </div>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {/* Nouns subfolder */}
+                {a2NounSets.length > 0 && (
+                  <div>
+                    <button
+                      onClick={() => setA2NounsOpen(v => !v)}
+                      className="w-full flex items-center justify-between py-1"
+                    >
+                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+                        Nouns <span className="font-normal normal-case">({a2NounSets.length} sets)</span>
+                      </span>
+                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a2NounsOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {a2NounsOpen && (
+                      <div className="space-y-2 mt-2">
+                        {a2NounSets.map(set => (
+                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
+                            <div className="flex items-center gap-3">
+                              <span className="text-lg">{set.emoji}</span>
+                              <div>
+                                <p className="text-sm font-medium text-foreground">{set.title}</p>
+                                <p className="text-xs text-muted-foreground">{set.words.length} nouns</p>
+                              </div>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {/* Adjectives subfolder */}
+                {a2AdjSets.length > 0 && (
+                  <div>
+                    <button
+                      onClick={() => setA2AdjsOpen(v => !v)}
+                      className="w-full flex items-center justify-between py-1"
+                    >
+                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+                        Adjectives <span className="font-normal normal-case">({a2AdjSets.length} sets)</span>
+                      </span>
+                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a2AdjsOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {a2AdjsOpen && (
+                      <div className="space-y-2 mt-2">
+                        {a2AdjSets.map(set => (
                           <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
                             <div className="flex items-center gap-3">
                               <span className="text-lg">{set.emoji}</span>

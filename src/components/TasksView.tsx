@@ -1,14 +1,14 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { TranslateChallengeTask } from './tasks/TranslateChallengeTask';
-import { MicroJournalTask } from './tasks/MicroJournalTask';
-import { SentenceBuilderTask } from './tasks/SentenceBuilderTask';
 import { ContinueDialogueTask } from './tasks/ContinueDialogueTask';
-import { GuidedJournalTask } from './tasks/GuidedJournalTask';
-import { GapFillTask } from './tasks/GapFillTask';
-import { ErrorCorrectionTask } from './tasks/ErrorCorrectionTask';
-import { ArrowLeftRight, PenLine, Layers, MessageCircle, BookMarked, PuzzleIcon, Pencil, ChevronRight } from 'lucide-react';
+import { ArrowLeftRight, MessageCircle, ChevronRight } from 'lucide-react';
 
-type ActiveTask = 'translate' | 'journal' | 'builder' | 'dialogue' | 'guided-journal' | 'gap-fill' | 'error-correction' | null;
+type ActiveTask = 'translate' | 'dialogue' | null;
+
+interface TasksViewProps {
+  initialTask?: ActiveTask;
+  onTaskLaunched?: () => void;
+}
 
 const tasks = [
   {
@@ -16,62 +16,29 @@ const tasks = [
     icon: ArrowLeftRight,
     title: 'Translate to Dutch',
     tag: 'Translation',
-    description: 'Read an English text and write your Dutch translation. Get instant AI corrections.',
-  },
-  {
-    id: 'journal' as const,
-    icon: PenLine,
-    title: 'Micro Journal',
-    tag: 'Writing',
-    description: 'Pick a prompt, write 2–4 Dutch sentences, get gentle feedback on your key mistakes.',
-  },
-  {
-    id: 'builder' as const,
-    icon: Layers,
-    title: 'Sentence Builder',
-    tag: 'Grammar',
-    description: 'Tap word tiles to form the correct Dutch sentence. Five rounds, level-matched.',
+    description: 'Translate English sentences into Dutch at your level — type your answer and get warm, level-aware AI feedback.',
   },
   {
     id: 'dialogue' as const,
     icon: MessageCircle,
     title: 'Chat with AI',
     tag: 'Conversation',
-    description: 'Hold a short Dutch conversation with an AI partner. Grammar notes at the end.',
-  },
-  {
-    id: 'guided-journal' as const,
-    icon: BookMarked,
-    title: 'Guided Journal',
-    tag: 'Personal',
-    description: 'A journaling prompt built from texts you have read — reuses your vocabulary, adapts to your level.',
-  },
-  {
-    id: 'gap-fill' as const,
-    icon: PuzzleIcon,
-    title: 'Gap Fill',
-    tag: 'Grammar',
-    description: 'Fill in missing verbs, articles and prepositions from sentences you have already read. Grammar-targeted, level-aware.',
-  },
-  {
-    id: 'error-correction' as const,
-    icon: Pencil,
-    title: 'Error Correction',
-    tag: 'Grammar',
-    description: 'A Dutch sentence with one deliberate grammar mistake. Find it, rewrite it correctly, and understand why — exercises adapt to your past errors.',
+    description: 'Hold a short Dutch conversation with an AI partner. Save words to flashcards. Grammar review at the end.',
   },
 ];
 
-export function TasksView() {
-  const [activeTask, setActiveTask] = useState<ActiveTask>(null);
+export function TasksView({ initialTask = null, onTaskLaunched }: TasksViewProps) {
+  const [activeTask, setActiveTask] = useState<ActiveTask>(initialTask);
+
+  useEffect(() => {
+    if (initialTask) {
+      setActiveTask(initialTask);
+      onTaskLaunched?.();
+    }
+  }, [initialTask]);
 
   if (activeTask === 'translate') return <TranslateChallengeTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'journal')   return <MicroJournalTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'builder')   return <SentenceBuilderTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'dialogue')       return <ContinueDialogueTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'guided-journal') return <GuidedJournalTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'gap-fill')         return <GapFillTask         onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'error-correction') return <ErrorCorrectionTask onBack={() => setActiveTask(null)} />;
+  if (activeTask === 'dialogue')  return <ContinueDialogueTask   onBack={() => setActiveTask(null)} />;
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -86,17 +53,12 @@ export function TasksView() {
             onClick={() => setActiveTask(task.id)}
             className="w-full text-left group flex items-center gap-4 rounded-2xl border border-border bg-card px-4 py-4 transition-all hover:border-foreground/25 hover:shadow-sm active:scale-[0.99]"
           >
-            {/* Number */}
             <span className="shrink-0 font-heading text-xs font-semibold text-muted-foreground/50 w-5 text-right tabular-nums">
               {String(idx + 1).padStart(2, '0')}
             </span>
-
-            {/* Icon */}
             <span className="shrink-0 flex h-9 w-9 items-center justify-center rounded-xl bg-muted">
               <task.icon className="h-4 w-4 text-foreground/70" />
             </span>
-
-            {/* Text */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-0.5">
                 <span className="font-heading font-semibold text-sm text-foreground">{task.title}</span>
@@ -104,8 +66,6 @@ export function TasksView() {
               </div>
               <p className="text-xs text-muted-foreground leading-snug">{task.description}</p>
             </div>
-
-            {/* Arrow */}
             <ChevronRight className="shrink-0 h-4 w-4 text-muted-foreground/40 group-hover:text-muted-foreground transition-colors" />
           </button>
         ))}

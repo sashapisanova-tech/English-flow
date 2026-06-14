@@ -587,16 +587,16 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
   },
   'm2-8': {
     'samen aan tafel': { english: 'together at the table' },
-    'niemand wil':    { english: 'nobody wants to' },
+    'maar niemand wil al naar huis': { english: 'nobody wants to go home yet' },
   },
   'm2-9': {
     'aan de hand':    { english: "what's going on / the matter" },
     'dat snap ik':    { english: 'I understand that' },
     'dat is lief':    { english: "that's sweet/kind" },
-    'het moeilijk':   { english: 'a hard time / difficult' },
+    'heeft het moeilijk': { english: 'is having a hard time' },
   },
   'm2-10': {
-    'een foto':       { english: 'a photo' },
+    'maakt een foto van': { english: 'takes a photo of' },
     'praten over':    { english: 'to talk about' },
     'alles voelt licht en goed': { english: 'everything feels light and good' },
   },

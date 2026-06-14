@@ -15,8 +15,10 @@ import { ReadingText, Level, Module } from '@/types/dutch';
 import heroImage from '@/assets/hero-dutch.jpg';
 import { getLevelInfo, getXPProgress } from '@/utils/levels';
 import { ReadingOnboarding, useReadingOnboarding } from '@/components/ReadingOnboarding';
+import { TutorView } from '@/components/TutorView';
 
 type Tab = 'home' | 'reading' | 'flashcards' | 'progress' | 'tasks';
+type TutorLaunch = { task: 'translate' | 'dialogue'; grammarFocus?: string; level?: string } | null;
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
@@ -27,6 +29,7 @@ export default function DashboardPage() {
   const [openModule, setOpenModule] = useState<Module | null>(null);
   const [readingLevel, setReadingLevel] = useState<Level | null>(null);
   const [readingModule, setReadingModule] = useState<Module | null>(null);
+  const [tutorLaunch, setTutorLaunch] = useState<TutorLaunch>(null);
   const [editingGoals, setEditingGoals] = useState(false);
   const [goalTexts, setGoalTexts] = useState<string>('');
   const [goalCards, setGoalCards] = useState<string>('');
@@ -65,6 +68,12 @@ export default function DashboardPage() {
 
   const { texts } = useLearning();
   const { show: showReadingOnboarding, dismiss: dismissReadingOnboarding } = useReadingOnboarding();
+
+  function handleTutorLaunch(task: 'translate' | 'dialogue', grammarFocus?: string, level?: string) {
+    setTutorLaunch({ task, grammarFocus, level });
+    setTabResetKeys(prev => ({ ...prev, tasks: prev.tasks + 1 }));
+    setActiveTab('tasks');
+  }
 
   const handleSelectText = (text: ReadingText) => {
     setSelectedText(text);
@@ -229,6 +238,9 @@ export default function DashboardPage() {
               </Card>
             </div>
 
+            {/* AI Tutor */}
+            <TutorView onLaunchTask={handleTutorLaunch} />
+
             {/* Continue Reading */}
             <div>
               <h3 className="mb-3 font-heading font-semibold text-foreground">Continue Reading</h3>
@@ -263,7 +275,13 @@ export default function DashboardPage() {
         )}
 
         {activeTab === 'flashcards' && <FlashcardView key={tabResetKeys.flashcards} />}
-        {activeTab === 'tasks' && <TasksView key={tabResetKeys.tasks} />}
+        {activeTab === 'tasks' && (
+          <TasksView
+            key={tabResetKeys.tasks}
+            initialTask={tutorLaunch?.task ?? null}
+            onTaskLaunched={() => setTutorLaunch(null)}
+          />
+        )}
         {activeTab === 'progress' && <MeView key={tabResetKeys.progress} />}
       </div>
 

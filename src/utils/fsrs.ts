@@ -33,7 +33,7 @@ const FACTOR = 19 / 81; // derived so R(S,S) = 0.9
 
 export const DESIRED_RETENTION = 0.9;
 
-export type FSRSRating = 1 | 3; // Again | Good
+export type FSRSRating = 1 | 2 | 3 | 4; // Again | Hard | Good | Easy
 export type FSRSState  = 'new' | 'learning' | 'review' | 'relearning';
 
 export interface FSRSCard {
@@ -67,13 +67,17 @@ function updateDifficulty(d: number, rating: FSRSRating): number {
   return clamp(d + delta + meanReversion, 1, 10);
 }
 
-function stabilityAfterRecall(d: number, s: number, r: number): number {
-  return s * (
+function stabilityAfterRecall(d: number, s: number, r: number, rating: FSRSRating): number {
+  const base = s * (
     Math.exp(W[8]) *
     (11 - d) *
     Math.pow(s, -W[9]) *
     (Math.exp(W[10] * (1 - r)) - 1) + 1
   );
+  // Apply hard penalty (w15) or easy bonus (w16) per FSRS-4.5 spec
+  if (rating === 2) return base * W[15];
+  if (rating === 4) return base * W[16];
+  return base;
 }
 
 function stabilityAfterForgetting(d: number, s: number, r: number): number {
@@ -126,13 +130,21 @@ export function fsrsReview(
 
   if (card.state === 'learning' || card.state === 'relearning') {
     if (rating === 1) {
-      // Again while still in learning — restart
+      // Again — restart from scratch
       s        = initStability(1);
       newState = 'learning';
+    } else if (rating === 2) {
+      // Hard — small boost, stay in learning
+      s        = Math.max(card.stability, initStability(2));
+      newState = 'learning';
+    } else if (rating === 3) {
+      // Good — graduate once stability ≥ 5 days
+      s        = Math.max(card.stability, initStability(3));
+      newState = s >= 5 ? 'review' : 'learning';
     } else {
-      // Good — use the larger of the recall formula and the init stability
-      s        = Math.max(card.stability, initStability(rating));
-      newState = s >= 5 ? 'review' : 'learning'; // graduate at 5+ days stability
+      // Easy — graduate immediately with full easy stability
+      s        = Math.max(card.stability, initStability(4));
+      newState = 'review';
     }
   } else {
     // card.state === 'review'
@@ -140,7 +152,7 @@ export function fsrsReview(
       s        = clamp(stabilityAfterForgetting(card.difficulty, card.stability, r), 0.1, 365);
       newState = 'relearning';
     } else {
-      s        = clamp(stabilityAfterRecall(card.difficulty, card.stability, r), 0.1, 365);
+      s        = clamp(stabilityAfterRecall(card.difficulty, card.stability, r, rating), 0.1, 365);
       newState = 'review';
     }
   }

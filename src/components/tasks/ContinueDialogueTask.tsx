@@ -1,15 +1,80 @@
-import { useState, useMemo, useRef, useEffect } from 'react';
+import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Send, BookmarkPlus, X, Plus, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Send, BookmarkPlus, X, ChevronDown, Loader2, Sparkles } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { useCustomSets } from '@/hooks/useCustomSets';
+import { useAuth } from '@/context/AuthContext';
 import { TaskFilters, Level } from './TaskFilters';
+import { savePracticeSession } from '@/lib/practiceSession';
 
 const API_KEY_STORAGE = 'dutch-app-anthropic-key';
 
 function getSavedKey(): string {
   return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
+}
+
+// ─── Auto-translate helpers (shared with CustomSetEditor) ─────────────────────
+
+async function fetchWordInfo(dutch: string): Promise<{ translation: string; article?: 'de' | 'het' }> {
+  const key = getSavedKey();
+  if (!key || key === 'your_api_key_here') {
+    try {
+      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(dutch)}&langpair=nl|en`);
+      const data = await res.json();
+      return { translation: (data?.responseData?.translatedText as string) || '' };
+    } catch { return { translation: '' }; }
+  }
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 40,
+        system: 'You are a Dutch dictionary. Reply with JSON only, no markdown: {"translation":"<1-4 word English translation>","article":"de" or "het" or null}. Use null for article if the word is not a noun.',
+        messages: [{ role: 'user', content: `Dutch word: "${dutch}"` }],
+      }),
+    });
+    if (!res.ok) return { translation: '' };
+    const data = await res.json() as { content: { text: string }[] };
+    const raw = data.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+    const parsed = JSON.parse(raw) as { translation: string; article?: string | null };
+    return {
+      translation: parsed.translation || '',
+      article: parsed.article === 'de' ? 'de' : parsed.article === 'het' ? 'het' : undefined,
+    };
+  } catch { return { translation: '' }; }
+}
+
+async function generateExample(dutch: string): Promise<string> {
+  const key = getSavedKey();
+  if (!key || key === 'your_api_key_here') return '';
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 80,
+        system: 'You are a Dutch language teacher. Generate ONE short, natural Dutch A1–A2 sentence using the given word. Return ONLY the Dutch sentence — no translation, no explanation.',
+        messages: [{ role: 'user', content: `Word: ${dutch}` }],
+      }),
+    });
+    if (!res.ok) return '';
+    const data = await res.json() as { content: { text: string }[] };
+    return data.content[0].text.trim();
+  } catch { return ''; }
 }
 
 // ─── Level-aware topic suggestions ───────────────────────────────────────────
@@ -162,27 +227,51 @@ patternErrors = only errors appearing more than once OR one significant structur
 
 interface SaveWordModalProps {
   onClose: () => void;
-  onSave: (dutch: string, english: string, setId: string) => void;
-  onCreateAndSave: (dutch: string, english: string, setTitle: string) => void;
+  onSave: (dutch: string, english: string, example: string, article: 'de' | 'het' | undefined, setId: string) => void;
+  onCreateAndSave: (dutch: string, english: string, example: string, article: 'de' | 'het' | undefined, setTitle: string) => void;
   existingSets: { id: string; title: string; emoji: string }[];
 }
 
 function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveWordModalProps) {
   const [dutch, setDutch] = useState('');
   const [english, setEnglish] = useState('');
+  const [example, setExample] = useState('');
+  const [article, setArticle] = useState<'de' | 'het' | undefined>(undefined);
+  const [fetching, setFetching] = useState(false);
+  const [generating, setGenerating] = useState(false);
   const [mode, setMode] = useState<'pick' | 'new'>('pick');
   const [selectedSetId, setSelectedSetId] = useState(existingSets[0]?.id ?? '');
   const [newSetTitle, setNewSetTitle] = useState('');
   const [showSetPicker, setShowSetPicker] = useState(false);
+  const lastFetchedRef = useRef('');
 
   const selectedSet = existingSets.find(s => s.id === selectedSetId);
+
+  // Auto-fetch translation + article + example after user stops typing for 700ms
+  useEffect(() => {
+    const word = dutch.trim();
+    if (!word || word === lastFetchedRef.current) return;
+    const timer = setTimeout(async () => {
+      lastFetchedRef.current = word;
+      setFetching(true);
+      const info = await fetchWordInfo(word);
+      if (info.translation && !english.trim()) setEnglish(info.translation);
+      if (info.article) setArticle(info.article);
+      setFetching(false);
+      setGenerating(true);
+      const ex = await generateExample(word);
+      if (ex) setExample(ex);
+      setGenerating(false);
+    }, 700);
+    return () => clearTimeout(timer);
+  }, [dutch]);
 
   function handleSave() {
     if (!dutch.trim()) return;
     if (mode === 'pick' && selectedSetId) {
-      onSave(dutch.trim(), english.trim(), selectedSetId);
+      onSave(dutch.trim(), english.trim(), example.trim(), article, selectedSetId);
     } else if (mode === 'new' && newSetTitle.trim()) {
-      onCreateAndSave(dutch.trim(), english.trim(), newSetTitle.trim());
+      onCreateAndSave(dutch.trim(), english.trim(), example.trim(), article, newSetTitle.trim());
     }
   }
 
@@ -196,36 +285,64 @@ function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveW
         </div>
 
         <div className="space-y-2">
-          <input
-            value={dutch}
-            onChange={e => setDutch(e.target.value)}
-            placeholder="Dutch word or phrase…"
-            autoFocus
-            autoComplete="off"
-            className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
-          />
+          {/* Dutch word with article badge */}
+          <div className="flex gap-2 items-center">
+            {article && (
+              <span className={`shrink-0 px-2.5 py-2 rounded-xl text-xs font-bold border ${article === 'de' ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-pink-50 border-pink-200 text-pink-700'}`}>
+                {article}
+              </span>
+            )}
+            <input
+              value={dutch}
+              onChange={e => { setDutch(e.target.value); setArticle(undefined); setExample(''); lastFetchedRef.current = ''; }}
+              placeholder="Dutch word or phrase…"
+              autoFocus
+              autoComplete="off"
+              className="flex-1 rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+            {fetching && <Loader2 className="h-4 w-4 text-muted-foreground animate-spin shrink-0" />}
+          </div>
+
+          {/* Translation */}
           <input
             value={english}
             onChange={e => setEnglish(e.target.value)}
-            placeholder="Translation (optional)"
+            placeholder={fetching ? 'Fetching translation…' : 'Translation (optional)'}
             autoComplete="off"
             className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
+
+          {/* Example sentence */}
+          <div className="relative">
+            <input
+              value={example}
+              onChange={e => setExample(e.target.value)}
+              placeholder={generating ? 'Generating example…' : 'Example sentence (optional)'}
+              autoComplete="off"
+              className="w-full rounded-xl border border-border bg-card px-3 py-2.5 pr-8 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
+            />
+            {generating
+              ? <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground animate-spin" />
+              : dutch.trim() && (
+                <button
+                  onClick={async () => { setGenerating(true); const ex = await generateExample(dutch.trim()); if (ex) setExample(ex); setGenerating(false); }}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
+                  title="Regenerate example"
+                >
+                  <Sparkles className="h-3.5 w-3.5" />
+                </button>
+              )
+            }
+          </div>
         </div>
 
         {/* Set picker */}
         <div className="space-y-2">
           <div className="flex gap-2">
-            <button
-              onClick={() => setMode('pick')}
-              className={`flex-1 rounded-lg border py-2 text-xs font-semibold transition-colors ${mode === 'pick' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground'}`}
-            >
+            <button onClick={() => setMode('pick')} className={`flex-1 rounded-lg border py-2 text-xs font-semibold transition-colors ${mode === 'pick' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground'}`}>
               Add to existing set
             </button>
-            <button
-              onClick={() => setMode('new')}
-              className={`flex-1 rounded-lg border py-2 text-xs font-semibold transition-colors ${mode === 'new' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground'}`}
-            >
+            <button onClick={() => setMode('new')} className={`flex-1 rounded-lg border py-2 text-xs font-semibold transition-colors ${mode === 'new' ? 'border-primary bg-primary/5 text-primary' : 'border-border text-muted-foreground'}`}>
               Create new set
             </button>
           </div>
@@ -235,21 +352,14 @@ function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveW
               <p className="text-xs text-muted-foreground text-center py-2">No sets yet — create one first.</p>
             ) : (
               <div className="relative">
-                <button
-                  onClick={() => setShowSetPicker(v => !v)}
-                  className="w-full flex items-center justify-between rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground"
-                >
+                <button onClick={() => setShowSetPicker(v => !v)} className="w-full flex items-center justify-between rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground">
                   <span>{selectedSet ? `${selectedSet.emoji} ${selectedSet.title}` : 'Choose a set…'}</span>
                   <ChevronDown className="h-4 w-4 text-muted-foreground" />
                 </button>
                 {showSetPicker && (
                   <div className="absolute top-full left-0 right-0 mt-1 bg-background border border-border rounded-xl shadow-lg z-10 overflow-hidden">
                     {existingSets.map(s => (
-                      <button
-                        key={s.id}
-                        onClick={() => { setSelectedSetId(s.id); setShowSetPicker(false); }}
-                        className="w-full text-left px-3 py-2.5 text-sm hover:bg-muted transition-colors"
-                      >
+                      <button key={s.id} onClick={() => { setSelectedSetId(s.id); setShowSetPicker(false); }} className="w-full text-left px-3 py-2.5 text-sm hover:bg-muted transition-colors">
                         {s.emoji} {s.title}
                       </button>
                     ))}
@@ -260,21 +370,13 @@ function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveW
           )}
 
           {mode === 'new' && (
-            <input
-              value={newSetTitle}
-              onChange={e => setNewSetTitle(e.target.value)}
-              placeholder="New set name…"
-              autoComplete="off"
-              className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
+            <input value={newSetTitle} onChange={e => setNewSetTitle(e.target.value)} placeholder="New set name…" autoComplete="off"
+              className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30" />
           )}
         </div>
 
-        <Button
-          className="w-full"
-          onClick={handleSave}
-          disabled={!dutch.trim() || (mode === 'pick' && !selectedSetId) || (mode === 'new' && !newSetTitle.trim())}
-        >
+        <Button className="w-full" onClick={handleSave}
+          disabled={!dutch.trim() || fetching || (mode === 'pick' && !selectedSetId) || (mode === 'new' && !newSetTitle.trim())}>
           Save to flashcards
         </Button>
       </div>
@@ -289,6 +391,7 @@ type Screen = 'config' | 'topic' | 'chat';
 export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
   const { texts, pastErrors, addPastError } = useLearning();
   const { sets: customSets, addWordToSet, createSet } = useCustomSets();
+  const { user } = useAuth();
 
   const recentTopics = useMemo(() =>
     texts.filter(t => t.completed).slice(-3).map(t => t.title),
@@ -373,6 +476,20 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
       for (const pe of result.patternErrors) {
         addPastError({ type: pe.type, example: pe.example, date: new Date().toISOString() });
       }
+      // Save session for AI tutor analysis
+      if (user) {
+        savePracticeSession({
+          user_id: user.id,
+          task_type: 'dialogue',
+          level,
+          grammar_focus: null,
+          easy_count: 0,
+          hard_count: result.patternErrors.length,
+          correct_count: result.strongPoints.length,
+          session_length: userTurns,
+          hard_grammar_targets: result.patternErrors.map(e => e.type),
+        });
+      }
     } catch (e) {
       const msg = e instanceof Error ? e.message : 'Unknown error';
       setError(msg === 'NO_KEY' ? 'Add your Anthropic API key in the Me tab → Settings.' : msg);
@@ -394,14 +511,14 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
     setCustomTopic('');
   }
 
-  function handleSaveWord(dutch: string, english: string, setId: string) {
-    addWordToSet(setId, { dutch, english });
+  function handleSaveWord(dutch: string, english: string, example: string, article: 'de' | 'het' | undefined, setId: string) {
+    addWordToSet(setId, { dutch, english, example: example || undefined, article });
     setShowSaveWord(false);
   }
 
-  function handleCreateAndSave(dutch: string, english: string, setTitle: string) {
+  function handleCreateAndSave(dutch: string, english: string, example: string, article: 'de' | 'het' | undefined, setTitle: string) {
     const newSet = createSet(setTitle, '💬');
-    addWordToSet(newSet.id, { dutch, english });
+    addWordToSet(newSet.id, { dutch, english, example: example || undefined, article });
     setShowSaveWord(false);
   }
 
