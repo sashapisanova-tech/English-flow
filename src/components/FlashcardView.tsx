@@ -45,6 +45,10 @@ export function FlashcardView() {
   const [a2VerbsOpen, setA2VerbsOpen]   = useState(false);
   const [a2NounsOpen, setA2NounsOpen]   = useState(false);
   const [a2AdjsOpen, setA2AdjsOpen]     = useState(false);
+  const [b1Open, setB1Open]             = useState(false);
+  const [b1VerbsOpen, setB1VerbsOpen]   = useState(false);
+  const [b1NounsOpen, setB1NounsOpen]   = useState(false);
+  const [b1AdjsOpen, setB1AdjsOpen]     = useState(false);
   const [practiceQueue, setPracticeQueue] = useState<FlashcardSetWord[]>([]);
   const [isShuffled, setIsShuffled]     = useState(false);
   const [savedWords, setSavedWords]     = useState<Set<string>>(new Set());
@@ -299,6 +303,10 @@ export function FlashcardView() {
     const a2VerbSets  = a2Sets.filter(s => s.folder === 'Verbs');
     const a2NounSets  = a2Sets.filter(s => s.folder === 'Nouns');
     const a2AdjSets   = a2Sets.filter(s => s.folder === 'Adjectives');
+    const b1Sets = flashcardSets.filter(s => s.level === 'B1');
+    const b1VerbSets  = b1Sets.filter(s => s.folder === 'Verbs');
+    const b1NounSets  = b1Sets.filter(s => s.folder === 'Nouns');
+    const b1AdjSets   = b1Sets.filter(s => s.folder === 'Adjectives');
     const groupedSets = Object.entries(categoryLabels).map(([cat, info]) => ({
       category: cat as FlashcardSetCategory,
       ...info,
@@ -375,6 +383,12 @@ export function FlashcardView() {
             <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
               My Sets
             </h3>
+            <button
+              onClick={openCreateSet}
+              className="flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+            >
+              <Plus className="h-3 w-3" /> New set
+            </button>
           </div>
           {customSets.length === 0 ? (
             <Card
@@ -669,6 +683,118 @@ export function FlashcardView() {
                     {a2AdjsOpen && (
                       <div className="space-y-2 mt-2">
                         {a2AdjSets.map(set => (
+                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
+                            <div className="flex items-center gap-3">
+                              <span className="text-lg">{set.emoji}</span>
+                              <div>
+                                <p className="text-sm font-medium text-foreground">{set.title}</p>
+                                <p className="text-xs text-muted-foreground">{set.words.length} adjectives</p>
+                              </div>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* B1 Level folder */}
+        {b1Sets.length > 0 && (
+          <div>
+            <button
+              onClick={() => setB1Open(v => !v)}
+              className="w-full flex items-center justify-between mb-2"
+            >
+              <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
+                B1 Level
+                <span className="text-xs font-normal text-muted-foreground">
+                  {b1VerbSets.reduce((t, s) => t + s.words.length, 0)} verbs · {b1NounSets.reduce((t, s) => t + s.words.length, 0)} nouns · {b1AdjSets.reduce((t, s) => t + s.words.length, 0)} adjectives
+                </span>
+              </h3>
+              <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${b1Open ? 'rotate-180' : ''}`} />
+            </button>
+            {b1Open && (
+              <div className="ml-3 border-l-2 border-border pl-3 space-y-3">
+                {/* Verbs subfolder */}
+                {b1VerbSets.length > 0 && (
+                  <div>
+                    <button
+                      onClick={() => setB1VerbsOpen(v => !v)}
+                      className="w-full flex items-center justify-between py-1"
+                    >
+                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+                        Verbs <span className="font-normal normal-case">({b1VerbSets.length} sets)</span>
+                      </span>
+                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${b1VerbsOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {b1VerbsOpen && (
+                      <div className="space-y-2 mt-2">
+                        {b1VerbSets.map(set => (
+                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
+                            <div className="flex items-center gap-3">
+                              <span className="text-lg">{set.emoji}</span>
+                              <div>
+                                <p className="text-sm font-medium text-foreground">{set.title}</p>
+                                <p className="text-xs text-muted-foreground">{set.words.length} verbs</p>
+                              </div>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {/* Nouns subfolder */}
+                {b1NounSets.length > 0 && (
+                  <div>
+                    <button
+                      onClick={() => setB1NounsOpen(v => !v)}
+                      className="w-full flex items-center justify-between py-1"
+                    >
+                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+                        Nouns <span className="font-normal normal-case">({b1NounSets.length} sets)</span>
+                      </span>
+                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${b1NounsOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {b1NounsOpen && (
+                      <div className="space-y-2 mt-2">
+                        {b1NounSets.map(set => (
+                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
+                            <div className="flex items-center gap-3">
+                              <span className="text-lg">{set.emoji}</span>
+                              <div>
+                                <p className="text-sm font-medium text-foreground">{set.title}</p>
+                                <p className="text-xs text-muted-foreground">{set.words.length} nouns</p>
+                              </div>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                          </Card>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {/* Adjectives subfolder */}
+                {b1AdjSets.length > 0 && (
+                  <div>
+                    <button
+                      onClick={() => setB1AdjsOpen(v => !v)}
+                      className="w-full flex items-center justify-between py-1"
+                    >
+                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+                        Adjectives <span className="font-normal normal-case">({b1AdjSets.length} sets)</span>
+                      </span>
+                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${b1AdjsOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {b1AdjsOpen && (
+                      <div className="space-y-2 mt-2">
+                        {b1AdjSets.map(set => (
                           <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
                             <div className="flex items-center gap-3">
                               <span className="text-lg">{set.emoji}</span>
