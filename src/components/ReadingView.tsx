@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { ReadingText } from '@/types/dutch';
+import { recordTextRead } from '@/lib/textReadHistory';
 import { WordPopover } from '@/components/WordPopover';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -12,6 +13,7 @@ import {
   PenLine, Shuffle, Eye, Sparkles, X,
 } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
+import { toast } from 'sonner';
 import { getKeywordsForText, getSeparableVerbsForText, getFixedExpressionsForText, getSplitExpressionsForText } from '@/data/vocabulary';
 import type { SeparableVerbEntry, FixedExpressionEntry, SplitExpressionEntry } from '@/data/vocabulary';
 import type { Level } from '@/types/dutch';
@@ -167,7 +169,7 @@ interface RetellingFeedback {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) {
-  const { markTextCompleted, vocabulary, addWord } = useLearning();
+  const { markTextCompleted, vocabulary, addWord, removeWord } = useLearning();
 
   // ── Phrase popup ──
   const [popup, setPopup] = useState<PhrasePopup | null>(null);
@@ -213,6 +215,9 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
   const [retellingTranscript, setRetellingTranscript] = useState('');
   const [retellingTranslation, setRetellingTranslation] = useState<string | null>(null);
   const [retellingFeedback, setRetellingFeedback] = useState<RetellingFeedback | null>(null);
+
+  // Track every text open in localStorage for the AI tutor
+  useEffect(() => { recordTextRead(text.id); }, [text.id]);
 
   // ── Reset all exercise state when the text changes ──
   useEffect(() => {
@@ -780,7 +785,7 @@ Return ONLY valid JSON, no markdown:
       {exprPopup && (
         <div
           ref={exprPopupRef}
-          className="fixed z-[70] animate-fade-in w-72 relative"
+          className="fixed z-[70] animate-fade-in w-72"
           style={{
             left: exprPopup.x,
             top: exprPopup.anchorY,
@@ -808,21 +813,34 @@ Return ONLY valid JSON, no markdown:
               </div>
             )}
             <div className="flex gap-2 px-4 pb-4">
-              <button
-                onClick={() => {
-                  addWord(exprPopup.phrase, exprPopup.english, { example: exprPopup.sentence });
-                  setExprPopup(prev => prev ? { ...prev, savedState: 'saved' } : null);
-                  setTimeout(() => setExprPopup(null), 1400);
-                }}
-                className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all active:scale-95 ${
-                  exprPopup.savedState === 'saved' ? 'bg-secondary text-foreground' : 'bg-primary text-primary-foreground hover:opacity-90'
-                }`}
-              >
-                {exprPopup.savedState === 'saved'
-                  ? <><Bookmark className="h-4 w-4 fill-current" /> Saved</>
-                  : '＋ Save to flashcards'
-                }
-              </button>
+              {(() => {
+                const exprKey = exprPopup.phrase.toLowerCase();
+                const exprSaved = !!vocabulary[exprKey] && vocabulary[exprKey]?.status !== 'ignored';
+                return (
+                  <button
+                    onClick={() => {
+                      if (exprSaved) {
+                        removeWord(exprKey);
+                        toast(`"${exprPopup.phrase}" removed from cards`, { duration: 3000 });
+                      } else {
+                        addWord(exprKey, exprPopup.english, { example: exprPopup.sentence });
+                        toast(`"${exprPopup.phrase}" saved to learning`, {
+                          duration: 4000,
+                          action: { label: 'Undo', onClick: () => removeWord(exprKey) },
+                        });
+                      }
+                    }}
+                    className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all active:scale-95 ${
+                      exprSaved ? 'bg-secondary text-foreground' : 'bg-primary text-primary-foreground hover:opacity-90'
+                    }`}
+                  >
+                    {exprSaved
+                      ? <><Bookmark className="h-4 w-4 fill-current" /> Saved</>
+                      : '＋ Save to flashcards'
+                    }
+                  </button>
+                );
+              })()}
               <button
                 onClick={() => {
                   window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this Dutch expression for me: "${exprPopup.phrase}"` } }));

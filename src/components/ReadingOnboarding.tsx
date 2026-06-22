@@ -433,7 +433,10 @@ export function useReadingOnboarding() {
 
   useEffect(() => {
     if (!localStorage.getItem(STORAGE_KEY)) {
-      const t = setTimeout(() => setShow(true), 400);
+      const t = setTimeout(() => {
+        localStorage.setItem(STORAGE_KEY, 'true');
+        setShow(true);
+      }, 400);
       return () => clearTimeout(t);
     }
   }, []);

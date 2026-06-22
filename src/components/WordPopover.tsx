@@ -88,7 +88,7 @@ export function WordPopover({
 
   // For separable verbs, check saved state by infinitive
   const saveKey = separableVerb ? separableVerb.infinitive.split(' ')[0].toLowerCase() : word.toLowerCase();
-  const isSaved = !!vocabulary[saveKey];
+  const isSaved = !!vocabulary[saveKey] && vocabulary[saveKey]?.status !== 'ignored';
 
   const statusClass = separableVerb
     ? 'word-separable'
@@ -121,20 +121,19 @@ export function WordPopover({
       const inf = separableVerb.infinitive.split(' ')[0];
       if (isSaved) {
         removeWord(inf);
+        toast(`"${inf}" removed from cards`, { duration: 3000 });
       } else {
         addWord(inf, separableVerb.english, { example: effectiveExample });
         toast(`"${inf}" saved to learning`, {
           duration: 4000,
-          action: {
-            label: 'Undo',
-            onClick: () => removeWord(inf),
-          },
+          action: { label: 'Undo', onClick: () => removeWord(inf) },
         });
       }
       return;
     }
     if (isSaved) {
       removeWord(word);
+      toast(`"${word}" removed from cards`, { duration: 3000 });
     } else {
       addWord(word, liveTranslation || translation || word, {
         plural, example: effectiveExample, exampleTranslation,
@@ -142,10 +141,7 @@ export function WordPopover({
       });
       toast(`"${word}" saved to learning`, {
         duration: 4000,
-        action: {
-          label: 'Undo',
-          onClick: () => removeWord(word),
-        },
+        action: { label: 'Undo', onClick: () => removeWord(word) },
       });
     }
   };
@@ -198,9 +194,11 @@ export function WordPopover({
                   )}
                   <h4 className="font-heading text-lg font-semibold text-foreground">{word}</h4>
                 </div>
-                <span className={`level-badge ${status === 'known' ? 'bg-success text-success-foreground' : status === 'learning' ? 'bg-warning text-warning-foreground' : 'bg-accent text-accent-foreground'}`}>
-                  {status}
-                </span>
+                {status !== 'ignored' && (
+                  <span className={`level-badge ${status === 'known' ? 'bg-success text-success-foreground' : status === 'learning' ? 'bg-warning text-warning-foreground' : 'bg-accent text-accent-foreground'}`}>
+                    {status}
+                  </span>
+                )}
               </div>
               {loading ? (
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">

@@ -524,6 +524,32 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
     'zet':     { infinitive: 'aanzetten',     english: 'to turn on',    prefix: 'aan'  },
     'schrijft':{ infinitive: 'terugschrijven', english: 'to write back', prefix: 'terug'},
   },
+  // ===== A2 MODULE 1 — Everyday Independence =====
+  'a2m1-1': {
+    'rust':  { infinitive: 'uitrusten', english: 'to rest / recover', prefix: 'uit' },
+  },
+  'a2m1-4': {
+    'denkt': { infinitive: 'nadenken',  english: 'to think it over',  prefix: 'na'  },
+  },
+  'a2m1-5': {
+    'hangt': { infinitive: 'ophangen',   english: 'to hang up (the phone)',    prefix: 'op'  },
+    'trekt': { infinitive: 'aantrekken', english: 'to put on (clothing)',       prefix: 'aan' },
+    'zet':   { infinitive: 'opzetten',   english: 'to put on (e.g. a kettle)', prefix: 'op'  },
+  },
+  'a2m1-7': {
+    'schrijft': { infinitive: 'opschrijven', english: 'to write down', prefix: 'op' },
+    'pakt':     { infinitive: 'oppakken',    english: 'to pick up',    prefix: 'op' },
+  },
+  'a2m1-8': {
+    'vult': { infinitive: 'invullen', english: 'to fill in', prefix: 'in' },
+  },
+  'a2m1-9': {
+    'maakt': { infinitive: 'openmaken', english: 'to open', prefix: 'open' },
+  },
+  'a2m1-10': {
+    'maak':  { infinitive: 'afmaken',    english: 'to finish',          prefix: 'af'  },
+    'trekt': { infinitive: 'aantrekken', english: 'to put on (clothing)', prefix: 'aan' },
+  },
 };
 
 export function getSeparableVerbsForText(textId: string): Record<string, SeparableVerbEntry> {
@@ -681,6 +707,53 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
   'm5-10': {
     'heb veel geleerd':       { english: 'learned a lot' },
     'blij met hoe het gaat':  { english: 'happy with how things are going' },
+  },
+  // ===== A2 MODULE 1 — Everyday Independence =====
+  'a2m1-1': {
+    'dat is prima':                   { english: "that's fine / great" },
+    'blij dat het niets ernstig is':  { english: 'glad nothing is seriously wrong' },
+  },
+  'a2m1-2': {
+    'wat nu':           { english: 'what now?' },
+    'ik ben iets later':{ english: "I'll be a bit late" },
+    'geen probleem':    { english: 'no problem' },
+  },
+  'a2m1-3': {
+    'ik kom eraan':      { english: "I'm on my way" },
+    'helemaal vergeten': { english: 'completely forgot' },
+  },
+  'a2m1-4': {
+    'reageert meteen':  { english: 'responds right away' },
+    "met z'n drieën":   { english: 'just the three of us' },
+  },
+  'a2m1-5': {
+    'doet het niet':    { english: "isn't working / doesn't work" },
+    'er gebeurt niets': { english: 'nothing happens' },
+    'zo snel mogelijk': { english: 'as soon as possible' },
+    'kom maar':         { english: 'come on over' },
+  },
+  'a2m1-6': {
+    'heeft last van zijn keel': { english: 'has a sore throat' },
+    'niet op voorraad':         { english: 'not in stock' },
+    'drie keer per dag':        { english: 'three times a day' },
+  },
+  'a2m1-7': {
+    'dat spaart tijd':    { english: 'that saves time' },
+    'eet je vanavond mee':{ english: 'are you joining for dinner tonight?' },
+  },
+  'a2m1-8': {
+    'wat erg':        { english: 'how terrible!' },
+    'toch vervelend': { english: 'still annoying though' },
+  },
+  'a2m1-9': {
+    'begrijpt niet alles':      { english: "doesn't understand everything" },
+    'zoekt het op':             { english: 'looks it up' },
+    'het gaat inderdaad snel':  { english: 'it really goes quickly' },
+  },
+  'a2m1-10': {
+    'goed idee':       { english: 'good idea' },
+    'hoe was jouw dag':{ english: 'how was your day?' },
+    'in plaats van':   { english: 'instead of' },
   },
 };
 

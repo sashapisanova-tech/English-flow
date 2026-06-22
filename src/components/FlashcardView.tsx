@@ -391,13 +391,9 @@ export function FlashcardView() {
             </button>
           </div>
           {customSets.length === 0 ? (
-            <Card
-              className="card-hover cursor-pointer border-dashed p-4 flex items-center justify-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-              onClick={openCreateSet}
-            >
-              <Plus className="h-4 w-4" />
-              <span className="text-sm">Create your first custom set</span>
-            </Card>
+            <p className="text-xs text-muted-foreground px-1 leading-relaxed">
+              Group words your own way — save tricky vocab, themed lists, or lesson notes into a custom set.
+            </p>
           ) : (
             <div className="space-y-2">
               {customSets.map(cs => (
