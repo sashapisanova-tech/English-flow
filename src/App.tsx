@@ -6,10 +6,14 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { LearningProvider } from "@/context/LearningContext";
 import { AuthScreen } from "@/components/AuthScreen";
+import { AppOnboarding, APP_ONBOARDING_KEY } from "@/components/AppOnboarding";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabase";
 import DashboardPage from "./pages/DashboardPage";
 import NotFound from "./pages/NotFound";
 import { AIChat } from "@/components/AIChat";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 class ErrorBoundary extends React.Component<
   { children: React.ReactNode },
@@ -45,10 +49,83 @@ class ErrorBoundary extends React.Component<
   }
 }
 
+// ─── Email verification gate ──────────────────────────────────────────────────
+// Shown when a user signed up with email/password but hasn't clicked the link yet.
+// Google OAuth users are auto-verified by Supabase and never see this.
+
+function EmailVerificationGate() {
+  const { user, signOut } = useAuth();
+  const [resent, setResent] = useState(false);
+  const [resending, setResending] = useState(false);
+
+  const resend = async () => {
+    if (!user?.email) return;
+    setResending(true);
+    await supabase.auth.resend({ type: 'signup', email: user.email });
+    setResent(true);
+    setResending(false);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4">
+      <div className="mb-8 text-center">
+        <h1 className="font-heading text-3xl font-bold text-foreground">Dutch Flow</h1>
+        <p className="text-muted-foreground mt-1">Learn Dutch with spaced repetition</p>
+      </div>
+      <Card className="w-full max-w-sm p-6 space-y-5 text-center">
+        <div className="h-16 w-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
+          <span className="text-3xl">✉️</span>
+        </div>
+        <div className="space-y-2">
+          <h2 className="font-heading font-semibold text-foreground">Check your inbox</h2>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            We sent a verification link to{' '}
+            <strong className="text-foreground">{user?.email}</strong>.
+            Click it to activate your account, then come back here.
+          </p>
+        </div>
+        {resent ? (
+          <p className="text-xs font-medium text-green-600">Email sent — check your inbox (and spam folder).</p>
+        ) : (
+          <Button variant="outline" className="w-full" onClick={resend} disabled={resending}>
+            {resending ? 'Sending…' : 'Resend verification email'}
+          </Button>
+        )}
+        <button
+          onClick={signOut}
+          className="text-xs text-muted-foreground underline underline-offset-2"
+        >
+          Sign out and use a different email
+        </button>
+      </Card>
+    </div>
+  );
+}
+
+// ─── App content ──────────────────────────────────────────────────────────────
+
 const queryClient = new QueryClient();
 
 function AppContent() {
   const { user, loading } = useAuth();
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  // Show onboarding on first login after email is confirmed
+  useEffect(() => {
+    if (user?.email_confirmed_at && !localStorage.getItem(APP_ONBOARDING_KEY)) {
+      setShowOnboarding(true);
+    }
+  }, [user]);
+
+  // Listen for replay trigger dispatched from MeView
+  useEffect(() => {
+    const handler = () => {
+      localStorage.removeItem(APP_ONBOARDING_KEY);
+      setShowOnboarding(true);
+    };
+    window.addEventListener('show-app-tour', handler);
+    return () => window.removeEventListener('show-app-tour', handler);
+  }, []);
 
   if (loading) {
     return (
@@ -62,6 +139,9 @@ function AppContent() {
 
   if (!user) return <AuthScreen />;
 
+  // Hard gate — email/password users must verify before accessing the app
+  if (!user.email_confirmed_at) return <EmailVerificationGate />;
+
   return (
     <LearningProvider>
       <Toaster />
@@ -73,6 +153,9 @@ function AppContent() {
         </Routes>
       </BrowserRouter>
       <AIChat />
+      {showOnboarding && (
+        <AppOnboarding onDone={() => setShowOnboarding(false)} />
+      )}
     </LearningProvider>
   );
 }

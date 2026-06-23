@@ -5,6 +5,8 @@ import { getLevelInfo } from '@/utils/levels';
 import { fsrsReview, FSRSCard, FSRSRating } from '@/utils/fsrs';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
+import { useStreak, StreakState } from '@/hooks/useStreak';
+import { toast } from '@/components/ui/sonner';
 
 const VOCAB_STORAGE_KEY     = 'dutch-vocabulary-v1';
 const STATS_STORAGE_KEY     = 'dutch-player-stats-v1';
@@ -95,6 +97,8 @@ interface LearningState {
   reviewWord:           (dutch: string, correct: boolean) => void;
   setGoals:             (textsGoal: number, flashcardsGoal: number) => void;
   addPastError:         (error: PastError) => void;
+  streak:               StreakState;
+  recordActivity:       () => void;
 }
 
 const LearningContext = createContext<LearningState | null>(null);
@@ -105,6 +109,19 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const userRef = useRef(user);
   useEffect(() => { userRef.current = user; }, [user]);
+
+  const { streakState, loadStreak, recordActivity: doRecordActivity } = useStreak(user?.id ?? null);
+
+  const triggerActivity = useCallback(() => {
+    doRecordActivity().then(({ freezeConsumed }) => {
+      if (freezeConsumed) {
+        toast('🧊 Streak saved by freeze!', {
+          description: 'A freeze was automatically used to protect your streak.',
+          duration: 6000,
+        });
+      }
+    });
+  }, [doRecordActivity]);
 
   const [syncing, setSyncing] = useState(false);
 
@@ -200,6 +217,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         console.error('Supabase load error:', e);
       }
       setSyncing(false);
+      loadStreak();
     })();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
@@ -418,11 +436,13 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     });
     setDailyGoal(prev => ({ ...prev, textsRead: prev.textsRead + 1 }));
     addXP(20);
-  }, [addXP]);
+    triggerActivity();
+  }, [addXP, triggerActivity]);
 
   const incrementFlashcards = useCallback(() => {
     setDailyGoal(prev => ({ ...prev, flashcardsReviewed: prev.flashcardsReviewed + 1 }));
-  }, []);
+    triggerActivity();
+  }, [triggerActivity]);
 
   /**
    * Rate a word with Again / Hard / Good / Easy using full FSRS-4.5.
@@ -564,6 +584,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     <LearningContext.Provider value={{
       vocabulary, texts, dailyGoal, xp, level, syncing, dueCount, newCardsToday,
       pastErrors, addPastError,
+      streak: streakState, recordActivity: triggerActivity,
       addXP, addWord, removeWord, updateWord, updateWordStatus,
       getWordsForReview, getWordsDueForReview, enrollWord, reviewWordSRS,
       markTextCompleted, incrementFlashcards, reviewWord, setGoals,

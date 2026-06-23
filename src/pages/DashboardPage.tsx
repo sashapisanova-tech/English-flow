@@ -25,7 +25,7 @@ export default function DashboardPage() {
   const [readingLevel, setReadingLevel] = useState<Level | null>(null);
   const [readingModule, setReadingModule] = useState<Module | null>(null);
   const [tutorLaunch, setTutorLaunch] = useState<TutorLaunch>(null);
-  const { syncing, dueCount, dailyGoal, vocabulary } = useLearning();
+  const { syncing, dueCount, dailyGoal, vocabulary, streak } = useLearning();
   const wordCount = Object.keys(vocabulary).length;
 
   useEffect(() => {
@@ -114,17 +114,22 @@ export default function DashboardPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-heading text-2xl font-bold text-foreground leading-none">
-                  {dailyGoal.streak} day{dailyGoal.streak !== 1 ? 's' : ''}
+                  {streak.currentStreak} day{streak.currentStreak !== 1 ? 's' : ''}
                 </p>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  {dailyGoal.streak === 0
+                  {streak.currentStreak === 0
                     ? 'Practice today to start your streak'
-                    : dailyGoal.streak < 3
+                    : streak.currentStreak < 3
                     ? 'Great start — keep showing up!'
-                    : dailyGoal.streak < 7
+                    : streak.currentStreak < 7
                     ? 'Building momentum — nice!'
                     : 'Consistent learner — impressive!'}
                 </p>
+                {streak.freezesAvailable > 0 && (
+                  <p className="text-[10px] text-muted-foreground mt-1">
+                    🧊 {streak.freezesAvailable} freeze{streak.freezesAvailable !== 1 ? 's' : ''} available
+                  </p>
+                )}
               </div>
               <div className="text-right shrink-0">
                 <p className="text-xs font-semibold text-foreground">{wordCount}</p>
