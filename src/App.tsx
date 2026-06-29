@@ -32,8 +32,8 @@ class ErrorBoundary extends React.Component<
             <h1 className="text-xl font-bold text-destructive">Something went wrong</h1>
             <pre className="text-xs bg-secondary p-4 rounded-lg overflow-auto whitespace-pre-wrap">
               {this.state.error.message}
-              {"\n\n"}
-              {this.state.error.stack}
+              {import.meta.env.DEV && "\n\n"}
+              {import.meta.env.DEV && this.state.error.stack}
             </pre>
             <button
               className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm"
@@ -139,8 +139,10 @@ function AppContent() {
 
   if (!user) return <AuthScreen />;
 
-  // Hard gate — email/password users must verify before accessing the app
-  if (!user.email_confirmed_at) return <EmailVerificationGate />;
+  // Only block email/password users who haven't confirmed their email.
+  // Google OAuth users are always verified by Google — don't gate them.
+  const isEmailProvider = (user.app_metadata?.provider ?? 'email') === 'email';
+  if (isEmailProvider && !user.email_confirmed_at) return <EmailVerificationGate />;
 
   return (
     <LearningProvider>

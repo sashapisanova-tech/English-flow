@@ -22,7 +22,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // onAuthStateChange fires for INITIAL_SESSION (on load), SIGNED_IN (after OAuth redirect),
     // and SIGNED_OUT — making it the single source of truth so there's no race with getSession()
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('[auth]', event, session?.user?.email ?? null);
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
