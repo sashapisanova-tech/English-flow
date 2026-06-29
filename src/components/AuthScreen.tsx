@@ -70,12 +70,12 @@ export function AuthScreen() {
               onClick={async () => {
                 setGoogleLoading(true);
                 setError(null);
-                try {
-                  await signInWithGoogle();
-                } catch {
-                  setError('Google sign-in failed. Please try again.');
+                const { error } = await signInWithGoogle();
+                if (error) {
+                  setError(`Google sign-in failed: ${error}`);
                   setGoogleLoading(false);
                 }
+                // on success the page redirects — no need to reset loading
               }}
               disabled={googleLoading || loading}
               className="w-full flex items-center justify-center gap-3 rounded-md border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground hover:bg-secondary transition-colors disabled:opacity-60 disabled:cursor-not-allowed"

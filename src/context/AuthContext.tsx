@@ -8,7 +8,7 @@ interface AuthState {
   loading: boolean;
   signUp:          (email: string, password: string) => Promise<{ error: string | null }>;
   signIn:          (email: string, password: string) => Promise<{ error: string | null }>;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: () => Promise<{ error: string | null }>;
   signOut:         () => Promise<void>;
 }
 
@@ -48,11 +48,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error?.message ?? null };
   };
 
-  const signInWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
+  const signInWithGoogle = async (): Promise<{ error: string | null }> => {
+    const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: window.location.origin },
+      options: {
+        redirectTo: window.location.origin,
+        queryParams: { access_type: 'offline', prompt: 'consent' },
+      },
     });
+    return { error: error?.message ?? null };
   };
 
   const signOut = async () => {
