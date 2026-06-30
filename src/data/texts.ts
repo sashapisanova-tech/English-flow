@@ -9,6 +9,8 @@ import { moduleA2_2Texts } from './module-a2-2-social';
 import { moduleA2_3Texts } from './module-a2-3-living';
 import { moduleA2_4Texts } from './module-a2-4-work';
 import { moduleA2_5Texts } from './module-a2-5-adventures';
+import { moduleB1_1Texts } from './module-b1-1-sleep-habits';
+import { moduleB1_2Texts } from './module-b1-2-city-change';
 
 export const sampleTexts: ReadingText[] = [
   ...module1Texts,
@@ -21,4 +23,6 @@ export const sampleTexts: ReadingText[] = [
   ...moduleA2_3Texts,
   ...moduleA2_4Texts,
   ...moduleA2_5Texts,
+  ...moduleB1_1Texts,
+  ...moduleB1_2Texts,
 ];

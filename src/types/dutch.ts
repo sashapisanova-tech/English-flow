@@ -33,7 +33,9 @@ export type Module =
   | 'a2-social'
   | 'a2-living'
   | 'a2-work'
-  | 'a2-adventures';
+  | 'a2-adventures'
+  | 'b1-sleep-habits'
+  | 'b1-city-change';
 
 export interface ReadingText {
   id: string;
