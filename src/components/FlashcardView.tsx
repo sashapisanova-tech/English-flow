@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, X, RotateCcw, ArrowLeft, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2, Pencil, Search } from 'lucide-react';
+import { Check, X, RotateCcw, ArrowLeft, ArrowRight, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2, Pencil, Search } from 'lucide-react';
 import { playDutch, stopDutch } from '@/utils/playDutch';
 import { useLearning } from '@/context/LearningContext';
 import { flashcardSets } from '@/data/flashcardSets';
@@ -1295,7 +1295,7 @@ export function FlashcardView() {
         </div>
       </div>
 
-      {/* Action row: ← Prev  ·  Shuffle */}
+      {/* Action row: ← Prev  ·  Shuffle  ·  → Next */}
       <div className="flex items-center justify-center gap-8 -mt-2">
         <button
           onClick={goPrevCard}
@@ -1314,6 +1314,16 @@ export function FlashcardView() {
             aria-label="Shuffle"
           >
             <Shuffle className="h-4 w-4" />
+          </button>
+        )}
+        {mode === 'set-practice' && (
+          <button
+            onClick={() => advanceCard(currentIndex < totalCards - 1 ? currentIndex + 1 : totalCards)}
+            disabled={currentIndex >= totalCards - 1}
+            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-25"
+            aria-label="Next card"
+          >
+            <ArrowRight className="h-4 w-4" />
           </button>
         )}
       </div>
@@ -1424,41 +1434,48 @@ export function FlashcardView() {
               </div>
             );
           })()}
-          {(mode === 'my-words' || mode === 'set-practice') ? (
-            <div className="flex justify-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleSRSRating('again')}
-                className="gap-1 border-destructive/30 text-destructive hover:bg-destructive/10 text-xs px-3 flex-1"
-              >
-                Again
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleSRSRating('hard')}
-                className="gap-1 border-orange-300 text-orange-600 hover:bg-orange-50 text-xs px-3 flex-1"
-              >
-                Hard
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleSRSRating('good')}
-                className="gap-1 border-primary/30 text-primary hover:bg-primary/10 text-xs px-3 flex-1"
-              >
-                Good
-              </Button>
-              <Button
-                size="sm"
-                onClick={() => handleSRSRating('easy')}
-                className="gap-1 bg-success text-success-foreground hover:bg-success/90 text-xs px-3 flex-1"
-              >
-                Easy
-              </Button>
+          {(mode === 'my-words' || mode === 'set-practice') && (
+            <div className="flex flex-col items-center gap-2 w-full">
+              {mode === 'set-practice' && (
+                <p className="text-xs text-muted-foreground text-center">
+                  Rate a card to add it to your spaced repetition queue
+                </p>
+              )}
+              <div className="flex justify-center gap-2 w-full">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleSRSRating('again')}
+                  className="gap-1 border-destructive/30 text-destructive hover:bg-destructive/10 text-xs px-3 flex-1"
+                >
+                  Again
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleSRSRating('hard')}
+                  className="gap-1 border-orange-300 text-orange-600 hover:bg-orange-50 text-xs px-3 flex-1"
+                >
+                  Hard
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleSRSRating('good')}
+                  className="gap-1 border-primary/30 text-primary hover:bg-primary/10 text-xs px-3 flex-1"
+                >
+                  Good
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={() => handleSRSRating('easy')}
+                  className="gap-1 bg-success text-success-foreground hover:bg-success/90 text-xs px-3 flex-1"
+                >
+                  Easy
+                </Button>
+              </div>
             </div>
-          ) : null}
+          )}
         </div>
       )}
     </div>
