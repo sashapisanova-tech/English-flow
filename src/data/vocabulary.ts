@@ -543,6 +543,47 @@ export const textKeywords: Record<string, KeywordMap> = {
     opdrachten: 'instructions / assignments', inhouden: 'to hold back / restrain oneself',
     afwassen: 'to do the dishes', onbekend: 'unfamiliar / unknown', teken: 'sign',
   },
+
+  // ===== B1 MODULE 5 — Kunst en wat het doet =====
+  'b1m5-1': {
+    penseel: 'paintbrush', ezel: 'easel', tentoonstelling: 'exhibition',
+    vertrouwen: 'confidence / trust', benoemen: 'to name / put into words', afstand: 'distance',
+  },
+  'b1m5-2': {
+    hersengebieden: 'brain areas', landschap: 'landscape', kleurvlak: 'colour field / patch',
+    bedoeling: 'intention', esthetische: 'aesthetic', verbazing: 'amazement / wonder',
+    kenmerk: 'characteristic / feature', spiegel: 'mirror',
+  },
+  'b1m5-3': {
+    voorkeur: 'preference', volgorde: 'order / sequence', bezoeker: 'visitor',
+    uiterlijk: 'at the latest', regelen: 'to arrange / organise', verzekering: 'insurance',
+  },
+  'b1m5-4': {
+    rimpel: 'wrinkle / furrow', voorhoofd: 'forehead', kantelt: 'tilts',
+  },
+  'b1m5-5': {
+    doorzettingsvermogen: 'perseverance / determination', bereidheid: 'willingness',
+    onzekerheid: 'uncertainty', opdrachten: 'commissions / assignments', bijbanen: 'side jobs',
+    fondsen: 'funds', gehonoreerd: 'awarded / funded', concurrentie: 'competition',
+    zichtbaarheid: 'visibility', winstgevend: 'profitable',
+  },
+  'b1m5-6': {
+    zenuwachtig: 'nervous', beleefd: 'polite', verdeelde: 'distributed / divided',
+  },
+  'b1m5-7': {
+    verraste: 'surprised', triomfantelijk: 'triumphantly', uitleg: 'explanation',
+  },
+  'b1m5-8': {
+    kloof: 'gap / gulf', noodzakelijk: 'necessary', treffend: 'aptly / fittingly',
+    smaak: 'taste', onderscheid: 'distinction', aanpassingen: 'adjustments',
+    verlamt: 'paralyses', vermomt: 'disguises itself', veeleisend: 'demanding / high-standard',
+  },
+  'b1m5-9': {
+    onaangenaam: 'unpleasant', schetsboek: 'sketchbook', potlood: 'pencil',
+  },
+  'b1m5-10': {
+    opmerkingen: 'remarks / comments', geraden: 'guessed', verband: 'connection / link',
+  },
 };
 
 export function getKeywordsForText(textId: string): KeywordMap {
@@ -869,6 +910,53 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
     nemen:  { infinitive: 'overnemen',    english: 'to take over',        prefix: 'over'   },
     houdt:  { infinitive: 'tegenhouden',  english: 'to hold back / stop', prefix: 'tegen'  },
   },
+
+  // ===== B1 MODULE 5 — Kunst en wat het doet =====
+  'b1m5-1': {
+    keek:   { infinitive: 'aankijken',  english: 'to look at',  prefix: 'aan' },
+    zette:  { infinitive: 'opzetten',   english: 'to put on',   prefix: 'op'  },
+    schonk: { infinitive: 'inschenken', english: 'to pour',     prefix: 'in'  },
+  },
+  'b1m5-2': {
+    hangt:  { infinitive: 'samenhangen', english: 'to be connected (with)', prefix: 'samen' },
+    houden: { infinitive: 'vasthouden',  english: 'to hold / maintain',     prefix: 'vast'  },
+  },
+  'b1m5-3': {
+    dacht:  { infinitive: 'nadenken',    english: 'to think / reflect', prefix: 'na'  },
+    schreef: { infinitive: 'opschrijven', english: 'to write down',      prefix: 'op'  },
+    keek:   { infinitive: 'opkijken',    english: 'to look up',         prefix: 'op'  },
+    legde:  { infinitive: 'uitleggen',   english: 'to explain',         prefix: 'uit' },
+  },
+  'b1m5-4': {
+    keek: { infinitive: 'aankijken',     english: 'to look at',           prefix: 'aan'     },
+    reed: { infinitive: 'voorbijrijden', english: 'to drive / ride past',  prefix: 'voorbij' },
+  },
+  'b1m5-6': {
+    spreken: { infinitive: 'afspreken', english: 'to arrange to meet',           prefix: 'af'   },
+    ging:    { infinitive: 'overgaan',  english: 'to turn to (a topic)',          prefix: 'over' },
+    dacht:   { infinitive: 'nadenken',  english: 'to think / reflect',           prefix: 'na'   },
+    keek:    { infinitive: 'aankijken', english: 'to look at',                   prefix: 'aan'  },
+    stond:   { infinitive: 'opstaan',   english: 'to get up',                    prefix: 'op'   },
+  },
+  'b1m5-7': {
+    gingen:  { infinitive: 'doorgaan',   english: 'to continue / go on', prefix: 'door'  },
+    draaide: { infinitive: 'omdraaien',  english: 'to turn around',      prefix: 'om'    },
+    liep:    { infinitive: 'langslopen', english: 'to walk past',        prefix: 'langs' },
+    dronk:   { infinitive: 'opdrinken',  english: 'to drink up / finish', prefix: 'op'   },
+  },
+  'b1m5-8': {
+    gaan: { infinitive: 'doorgaan', english: 'to continue / go on', prefix: 'door' },
+  },
+  'b1m5-9': {
+    stond:   { infinitive: 'opstaan',        english: 'to get up',       prefix: 'op'    },
+    schreef: { infinitive: 'terugschrijven', english: 'to write back',   prefix: 'terug' },
+    sloeg:   { infinitive: 'openslaan',      english: 'to open (a book)', prefix: 'open' },
+  },
+  'b1m5-10': {
+    dacht: { infinitive: 'nadenken',  english: 'to think / reflect', prefix: 'na'  },
+    keek:  { infinitive: 'aankijken', english: 'to look at',         prefix: 'aan' },
+    stond: { infinitive: 'opstaan',   english: 'to get up',          prefix: 'op'  },
+  },
 };
 
 export function getSeparableVerbsForText(textId: string): Record<string, SeparableVerbEntry> {
@@ -1189,6 +1277,32 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
   'b1m3-10': {
     'een goed teken': { english: 'a good sign' },
     "met z'n allen":  { english: 'all together / as a group' },
+  },
+
+  // ===== B1 MODULE 5 — Kunst en wat het doet =====
+  'b1m5-2': {
+    'maakt een verschil': { english: 'makes a difference' },
+  },
+  'b1m5-3': {
+    'een week van tevoren': { english: 'a week in advance' },
+  },
+  'b1m5-4': {
+    'behoefte aan': { english: 'need for / desire for' },
+  },
+  'b1m5-5': {
+    'eerder uitzondering dan regel': { english: 'more the exception than the rule' },
+  },
+  'b1m5-6': {
+    'hoe dan ook': { english: 'anyhow / in any case' },
+  },
+  'b1m5-7': {
+    'vanuit een afstand': { english: 'from a distance' },
+  },
+  'b1m5-8': {
+    'in werkelijkheid': { english: 'in reality' },
+  },
+  'b1m5-10': {
+    'zonder aanleiding': { english: 'without reason / out of the blue' },
   },
 };
 

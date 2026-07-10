@@ -45,9 +45,9 @@ Ze schonk thee in en ging zitten. Morgen zou ze verder beslissen. Vanavond was h
 
 Emotie en herkenning
 
-Wanneer mensen naar beeldende kunst kijken, activeren ze hersengebieden die ook actief zijn bij het verwerken van emoties en sociale situaties. Een schilderij van een gezicht, een landschap of een abstracte kleurvlak kan gevoelens oproepen die de kijker niet had verwacht — en dat gevoel hoeft niets te maken te hebben met de bedoeling van de kunstenaar.
+Wanneer mensen naar beeldende kunst kijken, activeren ze hersengebieden die ook actief zijn bij het verwerken van emoties en sociale situaties. Een schilderij van een gezicht, een landschap of een abstract kleurvlak kan gevoelens oproepen die de kijker niet had verwacht — en dat gevoel hoeft niets te maken te hebben met de bedoeling van de kunstenaar.
 
-Onderzoekers noemen dit het esthetisch effect: de ervaring van schoonheid, onrust, herkenning of verbazing die een werk oproept. Die ervaring is deels universeel — veel mensen reageren sterker op bepaalde kleuren, vormen en compositieprincipes — maar deels ook diep persoonlijk. Wat iemand in een werk ziet, hangt samen met zijn eigen herinneringen, associaties en stemming op dat moment.
+Onderzoekers noemen dit het esthetische effect: de ervaring van schoonheid, onrust, herkenning of verbazing die een werk oproept. Die ervaring is deels universeel — veel mensen reageren sterker op bepaalde kleuren, vormen en compositieprincipes — maar deels ook diep persoonlijk. Wat iemand in een werk ziet, hangt samen met zijn eigen herinneringen, associaties en stemming op dat moment.
 
 Waarom variatie interessant is
 
@@ -129,7 +129,7 @@ Lisa bedankte haar. Buiten op straat bleef ze even staan. Sterk. Ze wist niet of
     title: 'Anna en het grote doek',
     titleTranslation: 'Anna and the Large Canvas',
     level: 'B1', module: M, moduleTitle: MT,
-    content: `Op zondag bracht Lisa het grote doek naar Anna's appartement om het te laten zien. Ze had er behoefte aan dat iemand het zag voor de opening — niet om feedback te krijgen, maar gewoon om te weten hoe het in een andere ruimte voelde.
+    content: `Op zondag bracht Lisa het grote doek naar Anna's appartement om het te laten zien. Ze had er behoefte aan dat iemand het voor de opening zag — niet om feedback te krijgen, maar gewoon om te weten hoe het in een andere ruimte voelde.
 
 Anna hielp haar het doek tegen de muur te zetten. Ze deed een stap achteruit en keek.
 
@@ -315,7 +315,7 @@ Wat helpt, is het onderscheid maken tussen twijfel die informeert en twijfel die
 
 Waarom het niet verdwijnt
 
-Zelfs succesvolle kunstenaars houden twijfelen. Ze leren er niet mee te stoppen, maar ermee om te gaan — te beseffen dat onzekerheid over het eigen werk geen signaal is dat het werk slecht is, maar dat het gemaakt is door iemand die het serieus neemt.`,
+Zelfs succesvolle kunstenaars blijven twijfelen. Ze leren er niet mee te stoppen, maar ermee om te gaan — te beseffen dat onzekerheid over het eigen werk geen signaal is dat het werk slecht is, maar dat het gemaakt is door iemand die het serieus neemt.`,
     words: {
       structureel:      { english: 'structural / ongoing' },
       zelfkritisch:     { english: 'self-critical' },
