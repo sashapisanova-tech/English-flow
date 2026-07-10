@@ -123,7 +123,10 @@ export function WordPopover({
         removeWord(inf);
         toast(`"${inf}" removed from cards`, { duration: 3000 });
       } else {
-        addWord(inf, separableVerb.english, { example: effectiveExample });
+        addWord(inf, separableVerb.english, {
+          example: effectiveExample,
+          ...(sentence ? { sentenceSource: 'text' as const } : {}),
+        });
         toast(`"${inf}" saved to learning`, {
           duration: 4000,
           action: { label: 'Undo', onClick: () => removeWord(inf) },
@@ -138,6 +141,7 @@ export function WordPopover({
       addWord(word, liveTranslation || translation || word, {
         plural, example: effectiveExample, exampleTranslation,
         ...(liveArticle ? { article: liveArticle } : {}),
+        ...(sentence ? { sentenceSource: 'text' as const } : {}),
       });
       toast(`"${word}" saved to learning`, {
         duration: 4000,

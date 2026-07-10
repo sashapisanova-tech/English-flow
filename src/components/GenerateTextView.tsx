@@ -82,7 +82,9 @@ export function GenerateTextView({ level, onBack, onTextGenerated }: GenerateTex
       const randomThemes = suggestedThemes;
       effectiveTheme = randomThemes[Math.floor(Math.random() * randomThemes.length)];
     } else if (themeMode === 'custom') {
-      effectiveTheme = customTheme.trim() || 'Dagelijkse routine';
+      // Strip anything that isn't letters, spaces, digits, or common punctuation
+      // to prevent prompt injection via the custom theme field
+      effectiveTheme = customTheme.trim().replace(/[^\p{L}\p{N}\s\-'&]/gu, '').slice(0, 100) || 'Dagelijkse routine';
     } else {
       effectiveTheme = selectedTheme;
     }
@@ -276,6 +278,7 @@ Return ONLY a JSON object — no markdown fences, no explanation, just the raw J
             onChange={e => setCustomTheme(e.target.value)}
             placeholder="Describe your theme..."
             className="text-sm"
+            maxLength={100}
           />
         )}
 

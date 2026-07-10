@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo, useRef, type ReactNode } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check, X, RotateCcw, ArrowLeft, ArrowRight, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2, Pencil, Search } from 'lucide-react';
@@ -16,6 +16,17 @@ type SRSRating = 'again' | 'hard' | 'good' | 'easy';
 
 type FlashcardMode = 'browse' | 'my-words' | 'set-practice' | 'learned' | 'word-list' | 'archive' | 'custom-editor' | 'create-set';
 type Direction = 'dutch-to-english' | 'english-to-dutch';
+
+/** Wrap occurrences of `word` in the sentence with <strong> for emphasis. */
+function highlightWord(sentence: string, word: string): ReactNode {
+  const wordLower = word.toLowerCase();
+  const parts = sentence.split(new RegExp(`(${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'));
+  return parts.map((part, i) =>
+    part.toLowerCase() === wordLower
+      ? <strong key={i} className="text-foreground font-semibold not-italic">{part}</strong>
+      : part
+  );
+}
 
 const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: string }> = {
   verbs:      { label: 'Verbs',      emoji: '' },
@@ -1272,10 +1283,12 @@ export function FlashcardView() {
                   }`}>{displayWord.article}</span>
                 )}
                 <p className="font-heading text-3xl font-bold text-foreground">{front}</p>
-                {direction === 'dutch-to-english' && exampleSentence && !displayWord.article && (
-                  <p className="mt-3 text-sm italic text-muted-foreground">"{exampleSentence}"</p>
+                {direction === 'dutch-to-english' && exampleSentence && (
+                  <p className="mt-2 text-sm italic text-muted-foreground leading-snug">
+                    {highlightWord(exampleSentence, displayWord.dutch)}
+                  </p>
                 )}
-                <p className="mt-4 text-xs text-muted-foreground">Tap to reveal</p>
+                <p className="mt-3 text-xs text-muted-foreground">Tap to reveal</p>
               </div>
             </Card>
             <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20">
@@ -1289,6 +1302,11 @@ export function FlashcardView() {
                   }`}>{displayWord.article}</span>
                 )}
                 <p className="font-heading text-3xl font-bold text-accent-foreground">{back}</p>
+                {direction === 'english-to-dutch' && exampleSentence && (
+                  <p className="mt-2 text-sm italic text-muted-foreground leading-snug">
+                    {highlightWord(exampleSentence, displayWord.dutch)}
+                  </p>
+                )}
               </div>
             </Card>
           </div>
@@ -1396,24 +1414,6 @@ export function FlashcardView() {
         </Card>
       )}
 
-      {mode === 'set-practice' && displayWord && (
-        <div className="flex justify-center">
-          <button
-            onClick={saveCurrentWord}
-            disabled={savedWords.has(displayWord.dutch)}
-            className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-all ${
-              savedWords.has(displayWord.dutch)
-                ? 'border-green-300 bg-green-50 text-green-600 cursor-default'
-                : 'border-border text-muted-foreground hover:border-primary hover:text-primary'
-            }`}
-          >
-            {savedWords.has(displayWord.dutch)
-              ? <><Check className="h-3.5 w-3.5" /> Saved to Learning</>
-              : <><BookmarkPlus className="h-3.5 w-3.5" /> Save to Learning</>
-            }
-          </button>
-        </div>
-      )}
 
       {flipped && (
         <div className="flex flex-col items-center gap-3 animate-fade-in">

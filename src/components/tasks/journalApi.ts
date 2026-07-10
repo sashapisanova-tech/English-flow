@@ -129,11 +129,13 @@ corrections can be [] if there are no significant errors.`;
 
   const pastErrorTypes = pastErrors.slice(-10).map(e => e.type).join(', ') || 'none yet';
 
+  const safeResponse = userResponse.slice(0, 2000);
+
   const userMsg = `Level: ${level}
 Prompt given: ${prompt.prompt_nl}
 Target words: ${prompt.targetWords.join(', ')}
 Student's Dutch response:
-${userResponse}
+${safeResponse}
 Past error types to keep in mind: ${pastErrorTypes}`;
 
   const res = await fetch('https://api.anthropic.com/v1/messages', {

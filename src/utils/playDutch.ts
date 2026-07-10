@@ -7,7 +7,24 @@ export interface PlayDutchOptions {
 }
 
 // ─── Audio cache: avoids re-fetching the same text+voice combination ─────────
-const audioCache = new Map<string, string>(); // key → object URL
+const AUDIO_CACHE_MAX = 50;
+const audioCache = new Map<string, string>(); // key → object URL (LRU: oldest entry first)
+
+function audioCacheSet(key: string, url: string) {
+  if (audioCache.has(key)) audioCache.delete(key); // refresh position
+  audioCache.set(key, url);
+  if (audioCache.size > AUDIO_CACHE_MAX) {
+    const oldest = audioCache.keys().next().value!;
+    URL.revokeObjectURL(audioCache.get(oldest)!);
+    audioCache.delete(oldest);
+  }
+}
+
+function audioCacheGet(key: string): string | undefined {
+  const url = audioCache.get(key);
+  if (url) { audioCache.delete(key); audioCache.set(key, url); } // move to end (most recent)
+  return url;
+}
 
 let currentAudio: HTMLAudioElement | null = null;
 
@@ -29,7 +46,7 @@ async function playWithOpenAI(text: string, options?: PlayDutchOptions): Promise
   stopDutch();
   options?.onStart?.(); // fire immediately so UI shows Stop button while fetching
 
-  let url = audioCache.get(cacheKey);
+  let url = audioCacheGet(cacheKey);
   if (!url) {
     const res = await fetch('https://api.openai.com/v1/audio/speech', {
       method: 'POST',
@@ -47,7 +64,7 @@ async function playWithOpenAI(text: string, options?: PlayDutchOptions): Promise
     if (!res.ok) throw new Error(`OpenAI TTS error ${res.status}`);
     const blob = await res.blob();
     url = URL.createObjectURL(blob);
-    audioCache.set(cacheKey, url);
+    audioCacheSet(cacheKey, url);
   }
 
   const audio = new Audio(url);

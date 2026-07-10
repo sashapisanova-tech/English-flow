@@ -18,6 +18,9 @@ export interface DutchWord {
   // SRS scheduling fields
   dueDate?:  string;  // UTC date string e.g. "2026-05-18" — when this word is next due
   interval?: number;  // current interval in days (for the simplified Again/Good/Easy system)
+  // Example sentence provenance
+  sentenceSource?: 'text' | 'ai';  // 'text' = extracted from reading, 'ai' = generated
+  sourceTextId?:   string;         // reading text ID when sentenceSource is 'text'
 }
 
 export type Level = 'A0' | 'A1' | 'A2' | 'B1' | 'B2';
@@ -35,7 +38,10 @@ export type Module =
   | 'a2-work'
   | 'a2-adventures'
   | 'b1-sleep-habits'
-  | 'b1-city-change';
+  | 'b1-city-change'
+  | 'b1-food-health'
+  | 'b1-tech-attention'
+  | 'b1-art-creativity';
 
 export interface ReadingText {
   id: string;

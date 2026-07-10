@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode } from 'react';
 import { DutchWord, WordStatus, DailyGoal, ReadingText } from '@/types/dutch';
+import { generateExampleSentence } from '@/utils/sentenceUtils';
 import { sampleTexts } from '@/data/texts';
 import { getLevelInfo } from '@/utils/levels';
 import { fsrsReview, FSRSCard, FSRSRating } from '@/utils/fsrs';
@@ -38,11 +39,14 @@ function wordToRow(userId: string, w: DutchWord) {
     difficulty:        w.difficulty  ?? null,
     fsrs_state:        w.fsrsState   ?? null,
     times_encountered: w.timesEncountered,
-    example:           w.example     ?? null,
-    plural:            w.plural      ?? null,
-    due_date:          w.dueDate     ?? null,
-    interval:          w.interval    ?? null,
-    updated_at:        new Date().toISOString(),
+    example:             w.example            ?? null,
+    plural:              w.plural             ?? null,
+    due_date:            w.dueDate            ?? null,
+    interval:            w.interval           ?? null,
+    sentence_source:     w.sentenceSource     ?? null,
+    source_text_id:      w.sourceTextId       ?? null,
+    example_translation: w.exampleTranslation ?? null,
+    updated_at:          new Date().toISOString(),
   };
 }
 
@@ -58,10 +62,13 @@ function rowToWord(row: Record<string, unknown>): DutchWord {
     stability:        row.stability   != null ? (row.stability   as number)  : undefined,
     difficulty:       row.difficulty  != null ? (row.difficulty  as number)  : undefined,
     fsrsState:        row.fsrs_state  ? (row.fsrs_state as DutchWord['fsrsState']) : undefined,
-    example:          row.example     ? (row.example    as string)           : undefined,
-    plural:           row.plural      ? (row.plural     as string)           : undefined,
-    dueDate:          row.due_date    ? (row.due_date   as string)           : undefined,
-    interval:         row.interval   != null ? (row.interval    as number)   : undefined,
+    example:            row.example          ? (row.example          as string)                   : undefined,
+    exampleTranslation: row.example_translation ? (row.example_translation as string)             : undefined,
+    plural:             row.plural           ? (row.plural           as string)                   : undefined,
+    dueDate:            row.due_date         ? (row.due_date         as string)                   : undefined,
+    interval:           row.interval        != null ? (row.interval  as number)                   : undefined,
+    sentenceSource:     row.sentence_source  ? (row.sentence_source  as DutchWord['sentenceSource']) : undefined,
+    sourceTextId:       row.source_text_id   ? (row.source_text_id   as string)                   : undefined,
   };
 }
 
@@ -196,7 +203,10 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         }
 
         // ── Vocabulary ──
-        const vocabData = vocabRes.data;
+        if (vocabRes.error) {
+          console.error('[sync] vocab fetch error:', vocabRes.error);
+        }
+        const vocabData = vocabRes.error ? null : vocabRes.data;
         if (vocabData && vocabData.length > 0) {
           // Supabase is source of truth — load all rows including ignored ones
           const remoteVocab: Record<string, DutchWord> = {};
@@ -250,9 +260,25 @@ export function LearningProvider({ children }: { children: ReactNode }) {
 
   // ── Mutations ────────────────────────────────────────────────────────────
 
-  const addWord = useCallback((dutch: string, english: string, extras?: Partial<DutchWord>) => {
+  // Patches the example sentence on an existing word — used after async AI generation.
+  // No-ops if the word already has an example (never overwrites real content).
+  const updateWordExample = useCallback((dutch: string, example: string, sentenceSource: 'ai' | 'text') => {
+    const key = dutch.toLowerCase();
     setVocabulary(prev => {
-      const existing = prev[dutch.toLowerCase()];
+      const word = prev[key];
+      if (!word || word.example) return prev;
+      const updated: DutchWord = { ...word, example, sentenceSource };
+      syncWord(updated);
+      return { ...prev, [key]: updated };
+    });
+  }, [syncWord]);
+
+  const addWord = useCallback((dutch: string, english: string, extras?: Partial<DutchWord>) => {
+    const key = dutch.toLowerCase();
+    let shouldGenerateExample = false;
+
+    setVocabulary(prev => {
+      const existing = prev[key];
       if (existing) {
         const updated: DutchWord = {
           ...existing,
@@ -263,19 +289,27 @@ export function LearningProvider({ children }: { children: ReactNode }) {
           interval: existing.interval ?? 1,
         };
         syncWord(updated);
-        return { ...prev, [dutch.toLowerCase()]: updated };
+        return { ...prev, [key]: updated };
       }
       addXP(2);
       const newWord: DutchWord = {
-        dutch: dutch.toLowerCase(), english,
+        dutch: key, english,
         status: 'new', timesEncountered: 1, reviewInterval: 1,
         dueDate: todayUTC(), interval: 1,
         ...extras,
       };
+      if (!newWord.example) shouldGenerateExample = true;
       syncWord(newWord);
-      return { ...prev, [dutch.toLowerCase()]: newWord };
+      return { ...prev, [key]: newWord };
     });
-  }, [addXP, syncWord]);
+
+    // Fire-and-forget AI example generation for words saved without a sentence
+    if (shouldGenerateExample) {
+      generateExampleSentence(key, english)
+        .then(sentence => { if (sentence) updateWordExample(key, sentence, 'ai'); })
+        .catch(() => {});
+    }
+  }, [addXP, syncWord, updateWordExample]);
 
   const removeWord = useCallback((dutch: string) => {
     const key = dutch.toLowerCase();
@@ -303,7 +337,8 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         return { ...prev, [newKey]: updated };
       } else {
         // Dutch word changed — delete old key, insert new one
-        if (u) supabase.from('vocabulary').delete().match({ user_id: u.id, dutch: oldKey });
+        if (u) supabase.from('vocabulary').delete().match({ user_id: u.id, dutch: oldKey })
+          .then(({ error }) => { if (error) console.error('[sync] vocab delete error:', error); });
         syncWord(updated);
         const { [oldKey]: _, ...rest } = prev;
         return { ...rest, [newKey]: updated };

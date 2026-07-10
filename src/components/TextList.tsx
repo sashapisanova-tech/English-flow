@@ -26,8 +26,11 @@ const moduleInfo: { key: Module; number: number; label: string; emoji: string; l
   { key: 'a2-living',      number: 3, label: 'Leven in Nederland',           emoji: '', level: 'A2' },
   { key: 'a2-work',        number: 4, label: 'Werk & Studie',                emoji: '', level: 'A2' },
   { key: 'a2-adventures',  number: 5, label: 'Kleine Avonturen',             emoji: '', level: 'A2' },
-  { key: 'b1-sleep-habits', number: 1, label: 'Slaap, stress en gewoonten', emoji: '', level: 'B1' },
-  { key: 'b1-city-change',  number: 2, label: 'Hoe steden veranderen',       emoji: '', level: 'B1' },
+  { key: 'b1-sleep-habits',  number: 1, label: 'Slaap, stress en gewoonten', emoji: '', level: 'B1' },
+  { key: 'b1-city-change',   number: 2, label: 'Hoe steden veranderen',       emoji: '', level: 'B1' },
+  { key: 'b1-food-health',   number: 3, label: 'Eten en gezondheid',          emoji: '', level: 'B1' },
+  { key: 'b1-tech-attention', number: 4, label: 'Technologie en aandacht',     emoji: '', level: 'B1' },
+  { key: 'b1-art-creativity', number: 5, label: 'Kunst en wat het doet',       emoji: '', level: 'B1' },
 ];
 
 const levelMeta: Record<Level, { subtitle: string }> = {
@@ -41,7 +44,7 @@ const levelMeta: Record<Level, { subtitle: string }> = {
 const levels: { key: Level; label: string; description: string; available: boolean }[] = [
   { key: 'A1', label: 'A1 — Beginner',     description: '50 texts · 5 modules', available: true },
   { key: 'A2', label: 'A2 — Elementary',   description: '50 texts · 5 modules', available: true },
-  { key: 'B1', label: 'B1 — Intermediate', description: '20 texts · 2 modules', available: true },
+  { key: 'B1', label: 'B1 — Intermediate', description: '50 texts · 5 modules', available: true },
 ];
 
 export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpenModule }: TextListProps) {

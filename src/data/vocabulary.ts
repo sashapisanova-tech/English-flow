@@ -377,6 +377,172 @@ export const textKeywords: Record<string, KeywordMap> = {
     moeilijk: 'difficult', momenten: 'moments',
     vrienden: 'friends', plekken: 'places', gewoonten: 'habits',
   },
+
+  // ===== B1 MODULE 1 — Slaap, stress en gewoonten =====
+  'b1m1-1': {
+    plafond: 'ceiling', leegte: 'emptiness / void', slok: 'sip',
+    achterop: 'on the back (of a bike)', haast: 'rush / hurry',
+  },
+  'b1m1-2': {
+    allesbehalve: 'anything but / far from', slaaptekort: 'sleep deficit',
+    uitgeput: 'exhausted', ononderbroken: 'uninterrupted',
+    verwerken: 'to process', versterkt: 'strengthened',
+    onthoudt: 'retains / remembers', drukte: 'busyness',
+    vertraagt: 'slows down',
+  },
+  'b1m1-3': {
+    ruikt: 'smells (of)', zeep: 'soap', onaardig: 'unkind / matter-of-factly',
+    vaststellend: 'matter-of-factly / stating a fact', diensten: 'work shifts',
+    gewoonte: 'habit', ontspanning: 'relaxation',
+  },
+  'b1m1-4': {
+    fronst: 'frowns', zwijgt: 'is silent / says nothing',
+    spanning: 'tension / stress', realiseert: 'realises',
+  },
+  'b1m1-5': {
+    nauwelijks: 'barely / hardly', signaal: 'signal / cue',
+    beloning: 'reward', afleiding: 'distraction', wilskracht: 'willpower',
+    besteden: 'to spend / devote', patroon: 'pattern',
+    gedrag: 'behaviour', verergert: 'worsens', regelmaat: 'regularity',
+  },
+  'b1m1-6': {
+    oppervlakte: 'surface', uitputting: 'exhaustion', oever: 'bank (of water)',
+    kwartier: 'quarter hour', stilte: 'silence', redelijk: 'reasonably / fairly',
+    getwijfeld: 'doubted / hesitated',
+  },
+  'b1m1-7': {
+    kennelijk: 'apparently / evidently', luchtig: 'light-heartedly / casually',
+    vermoeid: 'tired / fatigued', kapot: 'broken / worn out',
+    passeerden: 'passed each other', verdieping: 'floor / storey',
+  },
+  'b1m1-8': {
+    waakzaamheid: 'alertness / vigilance', bewustzijn: 'awareness / consciousness',
+    verminderen: 'to reduce', gevolg: 'consequence / effect',
+    tegenovergestelde: 'opposite', toestand: 'state / condition', eenvoudig: 'simple',
+  },
+  'b1m1-9': {
+    wekker: 'alarm clock', notitieboek: 'notebook',
+    herinnert: 'remembers', besluit: 'decides',
+  },
+  'b1m1-10': {
+    overdreven: 'exaggerated', hardop: 'out loud', meent: 'means sincerely',
+    zwaarte: 'heaviness / weight', roert: 'stirs', bezet: 'occupied / taken',
+    droog: 'dryly / drily',
+  },
+
+  // ===== B1 MODULE 2 — Hoe steden veranderen =====
+  'b1m2-1': {
+    steiger: 'scaffolding', briefje: 'note / notice', trouw: 'loyalty',
+    onrustig: 'restless / uneasy', huurprijzen: 'rent prices',
+  },
+  'b1m2-2': {
+    kern: 'core', woningen: 'housing units / dwellings', tegelijkertijd: 'at the same time',
+    verhuren: 'to rent out', betaalbaar: 'affordable', stijgen: 'to rise (of prices)',
+    inkomens: 'incomes', bewoners: 'residents', gemeenschap: 'community',
+    geleidelijk: 'gradually', beleid: 'policy', gemeente: 'municipality',
+    beschermd: 'protected', oplossing: 'solution',
+  },
+  'b1m2-3': {
+    rij: 'row', gracht: 'canal', fabriek: 'factory',
+    eigenaar: 'owner', missen: 'to miss', verlies: 'loss',
+  },
+  'b1m2-4': {
+    compacter: 'more terse / more compact', aanwezig: 'present', feit: 'fact',
+    wandeling: 'walk / stroll', verhaal: 'story', ontdekken: 'to discover',
+  },
+  'b1m2-5': {
+    geschiedenis: 'history', gedeelde: 'shared', leefbaar: 'livable',
+    bedreigt: 'threatens', stedelijke: 'urban', leefbaarheid: 'liveability',
+    verantwoordelijk: 'responsible', omgeving: 'environment / surroundings',
+    groeten: 'to greet', onopvallende: 'inconspicuous', ondernemers: 'entrepreneurs',
+    verhuizen: 'to move house', rand: 'edge / outskirts', herkennen: 'to recognise',
+  },
+  'b1m2-6': {
+    prachtig: 'gorgeous / splendid', vernietigen: 'to destroy',
+    kloppen: 'to ring true / be correct', aanval: 'attack',
+    naïef: 'naive', vorm: 'shape / form', keuze: 'choice',
+  },
+  'b1m2-7': {
+    bord: 'sign / board', zelfgemaakt: 'homemade / self-made', verdere: 'further',
+    bijeenkomst: 'meeting / gathering', recht: 'right', verdrongen: 'displaced / pushed out',
+    uiteindelijk: 'eventually', leidt: 'leads / chairs', huurverhogingen: 'rent increases',
+    achteraan: 'at the back', aantekeningen: 'notes',
+  },
+  'b1m2-8': {
+    verzet: 'resistance', bereiken: 'to achieve / reach', belangen: 'interests',
+    uitstel: 'postponement / delay', grenzen: 'limits', vastgoedbedrijven: 'real estate companies',
+    juridische: 'legal', bovendien: 'moreover', ingewikkelder: 'more complicated',
+    woningbouw: 'housing development', ontwikkelaars: 'developers',
+    strengere: 'stricter', aankoop: 'purchase', stem: 'voice',
+  },
+  'b1m2-9': {
+    magere: 'meagre / slim', winst: 'gain / profit', deels: 'partly',
+    markt: 'market', aandacht: 'attention', nieuwsgierig: 'curious',
+  },
+  'b1m2-10': {
+    uitstapje: 'outing', oefening: 'exercise / practice', gevels: 'facades',
+    hoogte: 'height', vervangen: 'replaced', gebruiker: 'user',
+    verhoudingen: 'proportions', roest: 'rust', hek: 'fence',
+    beseffen: 'to realise', ontworpen: 'designed', opeenstapeling: 'accumulation / pile-up',
+    toevallig: 'accidental / by chance',
+  },
+
+  // ===== B1 MODULE 3 — Eten en gezondheid =====
+  'b1m3-1': {
+    aanrecht: 'kitchen counter', knoflook: 'garlic', snijden: 'to cut / chop',
+    gedachten: 'thoughts', geur: 'smell / scent', vult: 'fills',
+    specerijen: 'spices', komijn: 'cumin', kaneel: 'cinnamon',
+    roert: 'stirs', sissen: 'to sizzle / hiss', bewolkt: 'cloudy / overcast',
+    vastzet: 'settles / clings (of a smell)',
+  },
+  'b1m3-2': {
+    brandstof: 'fuel', bereiden: 'to prepare / cook', eiwit: 'protein',
+    koolhydraten: 'carbohydrates', peulvruchten: 'legumes / pulses', bevat: 'contains',
+    toevoegingen: 'additives', beschikbaarheid: 'availability', aanpassingen: 'adjustments',
+    haalbare: 'achievable / feasible', radicale: 'radical',
+  },
+  'b1m3-3': {
+    gedekt: 'set / laid (table)', kleed: 'cloth / tablecloth', meegenomen: 'brought along',
+    geometrische: 'geometric', gestoofde: 'stewed / braised', geroosterde: 'roasted',
+    proef: 'taste / detect', benoemen: 'to name / identify', hartig: 'savoury',
+    ondenkbaar: 'unthinkable', gelaagd: 'layered / complex', diplomatiek: 'diplomatic',
+  },
+  'b1m3-4': {
+    eetcultuur: 'food culture', handelsnatie: 'trading nation', pragmatisch: 'pragmatic',
+    verankerd: 'ingrained / anchored', porties: 'portions', presentatie: 'presentation',
+    uitgebreide: 'extensive / elaborate', tafelen: 'to dine (at length)',
+    aanbod: 'range / supply', duurzaamheid: 'sustainability',
+  },
+  'b1m3-5': {
+    stilte: 'silence', streng: 'strict', feit: 'fact', discussie: 'discussion / argument',
+    realiseert: 'realises', gemis: 'longing / sense of loss', tegelijk: 'at the same time',
+    gedroogde: 'dried', vers: 'fresh',
+  },
+  'b1m3-6': {
+    benoemen: 'to name / identify', opschept: 'serves oneself / helps oneself to more',
+    nieuwsgierig: 'curious', verspil: 'waste', belooft: 'promises', aarzelt: 'hesitates',
+    gerecht: 'dish / meal',
+  },
+  'b1m3-7': {
+    beïnvloeden: 'to influence / affect', stemming: 'mood', vetzuren: 'fatty acids',
+    vermoeidheid: 'fatigue / tiredness', grijpen: 'to reach (for)', behoefte: 'need',
+    onregelmatige: 'irregular', 'kant-en-klaar': 'ready-made / convenience (food)',
+  },
+  'b1m3-8': {
+    expres: 'on purpose / deliberately', bezig: 'busy / occupied',
+    doorgeschilderd: 'painted without stopping', vensterbank: 'windowsill',
+    neergezet: 'put down / placed', ezel: 'easel', onrustigs: 'something unsettling',
+  },
+  'b1m3-9': {
+    verbondenheid: 'connection / togetherness', herkomst: 'origin / background',
+    oproepen: 'to evoke / call up', bereiken: 'to reach', stabiele: 'stable',
+    uitingen: 'expressions / manifestations', buitengesloten: 'excluded / left out',
+    geleidelijk: 'gradually', spanning: 'tension',
+  },
+  'b1m3-10': {
+    opdrachten: 'instructions / assignments', inhouden: 'to hold back / restrain oneself',
+    afwassen: 'to do the dishes', onbekend: 'unfamiliar / unknown', teken: 'sign',
+  },
 };
 
 export function getKeywordsForText(textId: string): KeywordMap {
@@ -549,6 +715,159 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
   'a2m1-10': {
     'maak':  { infinitive: 'afmaken',    english: 'to finish',          prefix: 'af'  },
     'trekt': { infinitive: 'aantrekken', english: 'to put on (clothing)', prefix: 'aan' },
+  },
+
+  // ===== B1 MODULE 1 — Slaap, stress en gewoonten =====
+  'b1m1-1': {
+    wordt:    { infinitive: 'wakker worden',   english: 'to wake up',          prefix: 'wakker'  },
+    staat:    { infinitive: 'opstaan',         english: 'to get up',           prefix: 'op'      },
+    gaat:     { infinitive: 'doorgaan',        english: 'to continue / go on', prefix: 'door'    },
+    fietst:   { infinitive: 'voorbijfietsen',  english: 'to cycle past',       prefix: 'voorbij' },
+    vraagt:   { infinitive: 'zich afvragen',   english: 'to wonder',           prefix: 'af'      },
+    schrijft: { infinitive: 'terugschrijven',  english: 'to write back',       prefix: 'terug'   },
+    zet:      { infinitive: 'neerzetten',      english: 'to put down',         prefix: 'neer'    },
+    drinkt:   { infinitive: 'opdrinken',       english: 'to drink up',         prefix: 'op'      },
+  },
+  'b1m1-2': {
+    ruimen: { infinitive: 'opruimen',      english: 'to clear away / tidy up',  prefix: 'op'     },
+    maken:  { infinitive: 'vastmaken',     english: 'to consolidate / fix',      prefix: 'vast'   },
+    bouwt:  { infinitive: 'opbouwen',      english: 'to build up',               prefix: 'op'     },
+    geven:  { infinitive: 'afgeven',       english: 'to emit / give off',         prefix: 'af'     },
+    lost:   { infinitive: 'oplossen',      english: 'to solve / dissolve',        prefix: 'op'     },
+    wordt:  { infinitive: 'wakker worden', english: 'to wake up',                 prefix: 'wakker' },
+  },
+  'b1m1-3': {
+    klopt:   { infinitive: 'aankloppen',    english: 'to knock',            prefix: 'aan'     },
+    kom:     { infinitive: 'binnenkomen',   english: 'to come in',          prefix: 'binnen'  },
+    schenkt: { infinitive: 'inschenken',    english: 'to pour (in)',         prefix: 'in'      },
+    ziet:    { infinitive: 'eruitzien',     english: 'to look / appear',     prefix: 'uit'     },
+    denkt:   { infinitive: 'nadenken',      english: 'to think / reflect',   prefix: 'na'      },
+    rijdt:   { infinitive: 'voorbijrijden', english: 'to drive / ride past', prefix: 'voorbij' },
+  },
+  'b1m1-4': {
+    denkt: { infinitive: 'nadenken',   english: 'to think / reflect', prefix: 'na'    },
+    kijkt: { infinitive: 'aankijken',  english: 'to look at',         prefix: 'aan'   },
+    komt:  { infinitive: 'eruit komen', english: 'to come out',       prefix: 'eruit' },
+  },
+  'b1m1-5': {
+    wordt:  { infinitive: 'wakker worden', english: 'to wake up',       prefix: 'wakker' },
+    worden: { infinitive: 'bewust worden', english: 'to become aware',  prefix: 'bewust' },
+  },
+  'b1m1-6': {
+    dacht: { infinitive: 'nadenken',   english: 'to think / reflect', prefix: 'na'  },
+    keek:  { infinitive: 'aankijken',  english: 'to look at',         prefix: 'aan' },
+    komen: { infinitive: 'erin komen', english: 'to get into it',     prefix: 'in'  },
+  },
+  'b1m1-7': {
+    komt:   { infinitive: 'tegenkomen',       english: 'to run into / encounter', prefix: 'tegen'      },
+    ziet:   { infinitive: 'eruitzien',        english: 'to look / appear',         prefix: 'uit'        },
+    houdt:  { infinitive: 'openhouden',       english: 'to hold open',             prefix: 'open'       },
+    vraagt: { infinitive: 'zich afvragen',    english: 'to wonder',                prefix: 'af'         },
+    stapt:  { infinitive: 'instappen',        english: 'to step in',               prefix: 'in'         },
+    haalt:  { infinitive: 'ophalen (schouders)', english: 'to shrug',              prefix: 'op'         },
+  },
+  'b1m1-8': {
+    stralen: { infinitive: 'uitstralen', english: 'to emit / radiate',      prefix: 'uit' },
+    denkt:   { infinitive: 'nadenken',   english: 'to think / reflect',     prefix: 'na'  },
+    leggen:  { infinitive: 'wegleggen',  english: 'to put away / set aside', prefix: 'weg' },
+  },
+  'b1m1-9': {
+    wordt:    { infinitive: 'wakker worden', english: 'to wake up',              prefix: 'wakker' },
+    pakt:     { infinitive: 'oppakken',      english: 'to pick up',              prefix: 'op'     },
+    legt:     { infinitive: 'terugleggen',   english: 'to put back',             prefix: 'terug'  },
+    merkt:    { infinitive: 'opmerken',      english: 'to notice',               prefix: 'op'     },
+    schrijft: { infinitive: 'opschrijven',   english: 'to write down',           prefix: 'op'     },
+    houden:   { infinitive: 'volhouden',     english: 'to keep up / persevere',  prefix: 'vol'    },
+  },
+  'b1m1-10': {
+    ziet:  { infinitive: 'eruitzien',         english: 'to look / appear',  prefix: 'uit'        },
+    kijkt: { infinitive: 'aankijken',         english: 'to look at',        prefix: 'aan'        },
+    lopen: { infinitive: 'voorbijlopen',      english: 'to walk past',      prefix: 'voorbij'    },
+    leunt: { infinitive: 'achterover leunen', english: 'to lean back',      prefix: 'achterover' },
+  },
+
+  // ===== B1 MODULE 2 — Hoe steden veranderen =====
+  'b1m2-1': {
+    kijkt: { infinitive: 'aankijken',          english: 'to look at',      prefix: 'aan'        },
+    haalt: { infinitive: 'schouders ophalen',  english: 'to shrug',        prefix: 'op'         },
+    leunt: { infinitive: 'achterover leunen',  english: 'to lean back',    prefix: 'achterover' },
+  },
+  'b1m2-2': {
+    grijpen: { infinitive: 'ingrijpen', english: 'to intervene', prefix: 'in' },
+  },
+  'b1m2-3': {
+    gegaan: { infinitive: 'omhooggaan', english: 'to go up',   prefix: 'omhoog' },
+    kijkt:  { infinitive: 'aankijken',  english: 'to look at', prefix: 'aan'    },
+  },
+  'b1m2-4': {
+    vraag: { infinitive: 'zich afvragen', english: 'to wonder',             prefix: 'af'      },
+    ziet:  { infinitive: 'aanzien',       english: 'to tell / notice from', prefix: 'aan'     },
+    denkt: { infinitive: 'nadenken',      english: 'to think / reflect',    prefix: 'na'      },
+    kijkt: { infinitive: 'aankijken',     english: 'to look at',            prefix: 'aan'     },
+    rijdt: { infinitive: 'voorbijrijden', english: 'to drive / ride past',  prefix: 'voorbij' },
+  },
+  'b1m2-5': {
+    roept: { infinitive: 'oproepen', english: 'to raise / evoke', prefix: 'op' },
+  },
+  'b1m2-6': {
+    denkt: { infinitive: 'nadenken',          english: 'to think / reflect',     prefix: 'na'         },
+    kijkt: { infinitive: 'aankijken',         english: 'to look at',             prefix: 'aan'        },
+    haalt: { infinitive: 'schouders ophalen', english: 'to shrug',               prefix: 'op'         },
+    laat:  { infinitive: 'loslaten',          english: 'to let go',              prefix: 'los'        },
+    staan: { infinitive: 'stilstaan',         english: 'to stand still / pause', prefix: 'stil'       },
+  },
+  'b1m2-7': {
+    schrijft: { infinitive: 'terugschrijven', english: 'to write back', prefix: 'terug' },
+    ga:       { infinitive: 'meegaan',        english: 'to come along', prefix: 'mee'   },
+    vraagt:   { infinitive: 'zich afvragen',  english: 'to wonder',     prefix: 'af'    },
+  },
+  'b1m2-9': {
+    vraag: { infinitive: 'zich afvragen', english: 'to wonder',          prefix: 'af'     },
+    gaan:  { infinitive: 'omhooggaan',   english: 'to go up',            prefix: 'omhoog' },
+    gaat:  { infinitive: 'verdergaan',   english: 'to continue / go on', prefix: 'verder' },
+    kijkt: { infinitive: 'aankijken',    english: 'to look at',          prefix: 'aan'    },
+  },
+  'b1m2-10': {
+    ziet: { infinitive: 'eruitzien', english: 'to look / appear', prefix: 'uit' },
+  },
+
+  // ===== B1 MODULE 3 — Eten en gezondheid =====
+  'b1m3-1': {
+    ademt:  { infinitive: 'inademen',    english: 'to breathe in',     prefix: 'in'   },
+    denken: { infinitive: 'nadenken',    english: 'to think / reflect', prefix: 'na'   },
+    voegt:  { infinitive: 'toevoegen',   english: 'to add',             prefix: 'toe'  },
+    houden: { infinitive: 'vasthouden',  english: 'to hold on to',      prefix: 'vast' },
+  },
+  'b1m3-2': {
+    raakt: { infinitive: 'tekortraken', english: 'to run short of', prefix: 'tekort' },
+  },
+  'b1m3-3': {
+    denkt: { infinitive: 'nadenken', english: 'to think / reflect', prefix: 'na' },
+  },
+  'b1m3-4': {
+    valt: { infinitive: 'opvallen', english: 'to stand out / be noticeable', prefix: 'op' },
+  },
+  'b1m3-6': {
+    denkt: { infinitive: 'nadenken',  english: 'to think / reflect', prefix: 'na'  },
+    kijkt: { infinitive: 'aankijken', english: 'to look at',          prefix: 'aan' },
+    biedt: { infinitive: 'aanbieden', english: 'to offer',            prefix: 'aan' },
+    bouw:  { infinitive: 'opbouwen',  english: 'to build up',         prefix: 'op'  },
+  },
+  'b1m3-8': {
+    gaat:   { infinitive: 'voorbijgaan',  english: 'to go by / pass',   prefix: 'voorbij' },
+    stuurt: { infinitive: 'terugsturen',  english: 'to send back',       prefix: 'terug'   },
+    houden: { infinitive: 'ophouden',     english: 'to stop / cease',    prefix: 'op'      },
+  },
+  'b1m3-9': {
+    passen: { infinitive: 'aanpassen', english: 'to adapt',           prefix: 'aan'  },
+    pas:    { infinitive: 'aanpassen', english: 'to adapt',           prefix: 'aan'  },
+    houd:   { infinitive: 'vasthouden', english: 'to hold on to',     prefix: 'vast' },
+  },
+  'b1m3-10': {
+    vegen:  { infinitive: 'opvegen',      english: 'to wipe up / mop up', prefix: 'op'     },
+    denkt:  { infinitive: 'nadenken',     english: 'to think / reflect',  prefix: 'na'     },
+    nemen:  { infinitive: 'overnemen',    english: 'to take over',        prefix: 'over'   },
+    houdt:  { infinitive: 'tegenhouden',  english: 'to hold back / stop', prefix: 'tegen'  },
   },
 };
 
@@ -754,6 +1073,122 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
     'goed idee':       { english: 'good idea' },
     'hoe was jouw dag':{ english: 'how was your day?' },
     'in plaats van':   { english: 'instead of' },
+  },
+
+  // ===== B1 MODULE 1 — Slaap, stress en gewoonten =====
+  'b1m1-1': {
+    'op volle kracht draaien': { english: 'to run at full capacity' },
+    'voor het eerst in weken': { english: 'for the first time in weeks' },
+    'geen zin':                { english: 'no motivation / not feel like it' },
+    'gelijk had':              { english: 'to be right (gelijk hebben)' },
+  },
+  'b1m1-2': {
+    'in slaap te vallen': { english: 'to fall asleep (in slaap vallen)' },
+  },
+  'b1m1-3': {
+    'voelde zich schuldig': { english: 'felt guilty (zich schuldig voelen)' },
+  },
+  'b1m1-4': {
+    'zonder inleiding':  { english: 'without preamble / without introduction' },
+    'ongelijk heeft':    { english: 'to be wrong (ongelijk hebben)' },
+    'niets bijzonders':  { english: 'nothing special / out of the ordinary' },
+  },
+  'b1m1-5': {
+    'in de weg zitten':   { english: 'to get in the way' },
+    'op de lange termijn':{ english: 'in the long run' },
+  },
+  'b1m1-6': {
+    'op dezelfde toon': { english: 'in the same tone' },
+    'aan gewend was':   { english: 'was used to (ergens aan gewend zijn)' },
+  },
+  'b1m1-7': {
+    'een dag of twee': { english: 'a day or two' },
+  },
+  'b1m1-8': {
+    'in de praktijk': { english: 'in practice' },
+  },
+  'b1m1-9': {
+    'als een reflex': { english: 'like a reflex / automatically' },
+    'het went':       { english: 'you get used to it' },
+  },
+  'b1m1-10': {
+    'zonder scherpte': { english: 'without sharpness / harshness' },
+    'dit telt ook':    { english: 'this counts too' },
+  },
+
+  // ===== B1 MODULE 2 — Hoe steden veranderen =====
+  'b1m2-3': {
+    'wel eens': { english: 'ever / at some point' },
+  },
+  'b1m2-4': {
+    'ergens mee zit': { english: 'to be bothered by something' },
+  },
+  'b1m2-5': {
+    'derde plekken':         { english: 'third places' },
+    'zich verbonden voelen': { english: 'to feel connected to something' },
+  },
+  'b1m2-6': {
+    'op zichzelf': { english: 'in itself' },
+  },
+  'b1m2-7': {
+    'van in de vijftig': { english: "in one's fifties" },
+    'zo nu en dan':      { english: 'every now and then' },
+  },
+  'b1m2-8': {
+    'druk uitoefenen':   { english: 'to exert pressure' },
+    'van buitenaf':      { english: 'from the outside' },
+    'eisen stellen aan': { english: 'to make demands of' },
+    'in ieder geval':    { english: 'in any case' },
+  },
+  'b1m2-9': {
+    'ook al': { english: 'even though / even if' },
+  },
+
+  // ===== B1 MODULE 3 — Eten en gezondheid =====
+  'b1m3-1': {
+    'koken leer je met je handen': { english: 'cooking you learn with your hands' },
+    'voor alles eromheen':         { english: 'for everything around it' },
+  },
+  'b1m3-2': {
+    'het gaat om balans en variatie': { english: 'it is about balance and variety' },
+    'tekort aan':                     { english: 'short of / lacking in' },
+  },
+  'b1m3-3': {
+    'wat vind je van':               { english: 'what do you think of' },
+    'dat is bij mij thuis ondenkbaar': { english: "that's unthinkable where I'm from" },
+    'zoet en hartig gaan samen':     { english: 'sweet and savoury go together' },
+  },
+  'b1m3-4': {
+    'het gaat om':    { english: 'it is about' },
+    'iets rustigs aan': { english: 'something calm / restful about it' },
+    'de standaard is': { english: 'the standard / norm is' },
+  },
+  'b1m3-5': {
+    'als een feit':          { english: 'as a fact / matter-of-factly' },
+    'zonder discussie':      { english: 'without discussion / unquestioningly' },
+    'tegelijk hier en daar': { english: 'at once here and there' },
+  },
+  'b1m3-6': {
+    'er goed in':             { english: 'good at it' },
+    'het is vooral een gewoonte': { english: "it's mostly a habit" },
+    'koken kost tijd':        { english: 'cooking takes time' },
+  },
+  'b1m3-7': {
+    'in plaats van': { english: 'instead of' },
+    'gevolgen voor': { english: 'consequences for' },
+  },
+  'b1m3-8': {
+    'niet expres':      { english: 'not on purpose' },
+    'dat snap ik niet': { english: "I don't understand that" },
+    'als een compliment': { english: 'as a compliment' },
+  },
+  'b1m3-9': {
+    'een grens vormen':     { english: 'to form a boundary / barrier' },
+    'een vorm van identiteit': { english: 'a form of identity' },
+  },
+  'b1m3-10': {
+    'een goed teken': { english: 'a good sign' },
+    "met z'n allen":  { english: 'all together / as a group' },
   },
 };
 

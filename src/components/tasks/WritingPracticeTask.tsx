@@ -217,7 +217,11 @@ export function WritingPracticeTask({ onBack }: { onBack: () => void }) {
             placeholder="Vandaag ga ik naar de supermarkt. Ik koop brood en melk..."
             className="w-full rounded-xl border border-border bg-card p-4 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
             rows={6}
+            maxLength={2000}
           />
+          <p className={`text-right text-xs mt-1 ${journalText.length >= 1800 ? 'text-destructive' : 'text-muted-foreground'}`}>
+            {journalText.length} / 2000
+          </p>
 
           <Button className="w-full" onClick={handleJournalSubmit} disabled={loading || !journalText.trim()}>
             {loading ? 'Checking your Dutch…' : 'Get feedback'}

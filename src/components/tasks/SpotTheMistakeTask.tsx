@@ -23,6 +23,7 @@ function getSavedKey() {
 
 async function generateSentences(words: string[], level: string): Promise<Sentence[]> {
   const key = getSavedKey();
+  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -88,8 +89,9 @@ export function SpotTheMistakeTask({ onBack }: { onBack: () => void }) {
       setSentences(result);
       setSentenceIdx(0); setUserAnswers([]); setRevealed(false);
       setPhase('playing');
-    } catch {
-      setError('Could not generate sentences. Try again.');
+    } catch (e) {
+      const msg = e instanceof Error ? e.message : '';
+      setError(msg === 'NO_KEY' ? 'API key missing — add it in Tasks → My Story first.' : 'Could not generate sentences. Try again.');
       setPhase('setup');
     }
   }

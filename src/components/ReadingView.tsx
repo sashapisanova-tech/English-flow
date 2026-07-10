@@ -907,8 +907,8 @@ Return ONLY valid JSON, no markdown:
           )}
         </div>
 
-        {/* Tab row — scrollable so all 5 fit on mobile */}
-        <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+        {/* Tab row — centered, wraps on very small screens */}
+        <div className="flex gap-2 flex-wrap justify-center pb-1">
           {/* 1 — Comprehension quiz */}
           {text.comprehensionQuestions && (
             <button
