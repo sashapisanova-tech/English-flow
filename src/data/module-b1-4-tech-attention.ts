@@ -367,7 +367,7 @@ Privacy is geen alles-of-niets keuze. Kleine aanpassingen — minder apps, meer 
 
 Ze vinden een plek op het gras. Iemand heeft een kleed meegenomen. Tom heeft iets te drinken gekocht bij de kraam bij de ingang. Ze gaan zitten.
 
-In het begin is er nog wat gepraat over werk, over de week, over kleine dingen. Maar na een tijdje wordt het stiller. Marc liegt op zijn rug en kijkt naar de lucht. Lisa tekent iets in een notitieboekje. Fatima heeft haar ogen dicht. Tom leest.
+In het begin is er nog wat gepraat over werk, over de week, over kleine dingen. Maar na een tijdje wordt het stiller. Marc ligt op zijn rug en kijkt naar de lucht. Lisa tekent iets in een notitieboekje. Fatima heeft haar ogen dicht. Tom leest.
 
 Anna kijkt om zich heen. Om haar heen liggen telefoons — maar niemand pakt ze op. Het is geen afspraak. Het is gewoon zo gegaan.
 

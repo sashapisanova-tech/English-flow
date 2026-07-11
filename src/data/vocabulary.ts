@@ -584,6 +584,30 @@ export const textKeywords: Record<string, KeywordMap> = {
   'b1m5-10': {
     opmerkingen: 'remarks / comments', geraden: 'guessed', verband: 'connection / link',
   },
+
+  // ===== B1 MODULE 4 — Technologie en aandacht =====
+  'b1m4-1': { ontwerper: 'designer', notificatie: 'notification', concentratie: 'concentration', stoort: 'disturbs / bothers', twijfelde: 'doubted / hesitated', dringend: 'urgent' },
+  'b1m4-2': { hulpbron: 'resource', multitasking: 'multitasking', wissel: 'switch / shift', onderbreking: 'interruption', tijdsblokken: 'time blocks', schermtijd: 'screen time' },
+  'b1m4-3': { kwijt: 'lost / gone', afgeleid: 'distracted', consequent: 'consistently', verveling: 'boredom', angst: 'anxiety / fear', gebaar: 'gesture / motion', automatisch: 'automatically' },
+  'b1m4-4': { welzijn: 'well-being', eenduidig: 'unambiguous / clear-cut', vergelijking: 'comparison', ontevredenheid: 'dissatisfaction', prikkels: 'stimuli / triggers', omkeerbaar: 'reversible', correlationeel: 'correlational' },
+  'b1m4-5': { bakje: 'small tray / box', verzet: 'resistance', bereikbaar: 'reachable / contactable', aangehouden: 'maintained / kept up', misloopt: 'misses out (on)', aanwezig: 'present', studeer: 'I study' },
+  'b1m4-6': { afdwingt: 'compels / forces', herkent: 'recognises', leeg: 'empty', strategie: 'strategy', opvoeding: 'upbringing / parenting', prettig: 'pleasant / nice' },
+  'b1m4-7': { maatstaf: 'standard / criterion', opgeteld: 'added up / in total', problematisch: 'problematic', verwerken: 'to process', signalen: 'signals', tijdslimieten: 'time limits', oprecht: 'sincere / genuine' },
+  'b1m4-8': { oppakte: 'picked up', relatie: 'relationship', vergadering: 'meeting', stilte: 'silence', ongemakkelijk: 'uncomfortable / awkward', neiging: 'tendency / inclination', bladzijden: 'pages' },
+  'b1m4-9': { gegevens: 'data / details', gebruikersvoorwaarden: 'terms of use', advertenties: 'advertisements', personaliseren: 'to personalise', toestemming: 'permission / consent', bewustzijn: 'awareness / consciousness' },
+  'b1m4-10': { kraam: 'stall / stand', kleed: 'blanket / cloth', notitieboekje: 'notebook / notepad', pleidooi: 'plea / argument', verdragen: 'to bear / endure', afstand: 'distance', glimlacht: 'smiles' },
+
+  // ===== B1 MODULE 6 — Natuur en het Nederlandse landschap =====
+  'b1m6-1': { sindsdien: 'since then', opluchting: 'relief', verdediging: 'justification / defence', vaag: 'vague', bouwplaats: 'building site / construction site', benoemen: 'to name / put into words' },
+  'b1m6-2': { zeeniveau: 'sea level', waterbeheersing: 'water management', middeleeuwen: 'Middle Ages', vijand: 'enemy', bondgenoot: 'ally', waterschap: 'water board / regional water authority', stammen: 'to date back (to) / originate (from)', ingepolderd: 'reclaimed (land)' },
+  'b1m6-3': { ruis: 'noise / static', noodzaak: 'necessity', beslissingen: 'decisions', grens: 'boundary / border' },
+  'b1m6-4': { dichtbevolkt: 'densely populated', wildernis: 'wilderness', ongerepte: 'untouched / pristine', heide: 'heath / moorland', verlangen: 'desire / longing', wezenlijk: 'essential / fundamental' },
+  'b1m6-5': { hek: 'fence / gate', sloot: 'ditch', bitterheid: 'bitterness', knikte: 'nodded (knikken)', nakijken: 'to check / inspect', pompinstallatie: 'pump installation' },
+  'b1m6-6': { aanwezigheid: 'presence', afwezigheid: 'absence', destijds: 'at the time / back then', herstel: 'recovery / restoration', spanning: 'tension / stress' },
+  'b1m6-7': { watersnoodramp: 'flood disaster', grootschalig: 'large-scale', stormvloedkering: 'storm surge barrier', kustlijn: 'coastline', vertegenwoordigers: 'representatives', zeespiegel: 'sea level' },
+  'b1m6-8': { voorsteden: 'suburbs', beantwoorden: 'to answer / reply to', flatgebouwen: 'apartment blocks', onaangenaam: 'unpleasant' },
+  'b1m6-9': { ademhaling: 'breathing', stemming: 'mood', welzijn: 'well-being', weids: 'vast / expansive', onderbreking: 'interruption', tijdsgevoel: 'sense of time' },
+  'b1m6-10': { omschrijving: 'description', duif: 'dove / pigeon', kijker: 'viewer / observer', verantwoordelijk: 'responsible' },
 };
 
 export function getKeywordsForText(textId: string): KeywordMap {
@@ -957,6 +981,84 @@ export const textSeparableVerbs: Record<string, Record<string, SeparableVerbEntr
     keek:  { infinitive: 'aankijken', english: 'to look at',         prefix: 'aan' },
     stond: { infinitive: 'opstaan',   english: 'to get up',          prefix: 'op'  },
   },
+
+  // ===== B1 MODULE 4 — Technologie en aandacht =====
+  'b1m4-1': {
+    pakt:   { infinitive: 'oppakken',    english: 'to pick up',        prefix: 'op'    },
+    legt:   { infinitive: 'terugleggen', english: 'to put back',       prefix: 'terug' },
+    kijkt:  { infinitive: 'opkijken',    english: 'to look up',        prefix: 'op'    },
+    staat:  { infinitive: 'opstaan',     english: 'to get up',         prefix: 'op'    },
+    denken: { infinitive: 'nadenken',    english: 'to think / reflect', prefix: 'na'   },
+  },
+  'b1m4-2': {
+    schakelen: { infinitive: 'uitschakelen', english: 'to switch off / disable', prefix: 'uit'  },
+    houden:    { infinitive: 'vasthouden',   english: 'to hold on to / maintain', prefix: 'vast' },
+  },
+  'b1m4-3': {
+    denkt: { infinitive: 'nadenken',    english: 'to think / reflect', prefix: 'na'    },
+    kijkt: { infinitive: 'aankijken',   english: 'to look at',         prefix: 'aan'   },
+    pakt:  { infinitive: 'oppakken',    english: 'to pick up',         prefix: 'op'    },
+    legt:  { infinitive: 'terugleggen', english: 'to put back',        prefix: 'terug' },
+  },
+  'b1m4-4': {
+    tonen: { infinitive: 'aantonen', english: 'to demonstrate / prove', prefix: 'aan' },
+  },
+  'b1m4-5': {
+    zet: { infinitive: 'wegzetten', english: 'to put away', prefix: 'weg' },
+  },
+  'b1m4-6': {
+    houd: { infinitive: 'aanhouden', english: 'to maintain / keep up', prefix: 'aan' },
+    leg:  { infinitive: 'wegleggen', english: 'to put aside / put down', prefix: 'weg' },
+  },
+  'b1m4-8': {
+    denkt: { infinitive: 'nadenken',   english: 'to think / reflect', prefix: 'na'   },
+    pakt:  { infinitive: 'oppakken',   english: 'to pick up',         prefix: 'op'   },
+    legt:  { infinitive: 'neerleggen', english: 'to put down',        prefix: 'neer' },
+    raken: { infinitive: 'aanraken',   english: 'to touch',           prefix: 'aan'  },
+  },
+  'b1m4-10': {
+    pakt: { infinitive: 'oppakken', english: 'to pick up', prefix: 'op' },
+  },
+
+  // ===== B1 MODULE 6 — Natuur en het Nederlandse landschap =====
+  'b1m6-1': {
+    sloot: { infinitive: 'afsluiten', english: 'to lock up / close off', prefix: 'af' },
+    nam:   { infinitive: 'innemen',   english: 'to take up (space)',      prefix: 'in' },
+  },
+  'b1m6-2': {
+    gaat:    { infinitive: 'doorgaan',    english: 'to continue',           prefix: 'door'  },
+    leverde: { infinitive: 'opleveren',   english: 'to yield / produce',    prefix: 'op'    },
+    houden:  { infinitive: 'buitenhouden', english: 'to keep out / keep at bay', prefix: 'buiten' },
+  },
+  'b1m6-3': {
+    ging: { infinitive: 'doorgaan', english: 'to continue', prefix: 'door' },
+  },
+  'b1m6-5': {
+    keek:   { infinitive: 'aankijken', english: 'to look at', prefix: 'aan' },
+    haalde: { infinitive: 'ophalen',   english: 'to shrug (schouders ophalen)', prefix: 'op' },
+  },
+  'b1m6-6': {
+    bleef:  { infinitive: 'binnenblijven', english: 'to stay inside',  prefix: 'binnen' },
+    rusten: { infinitive: 'uitrusten',     english: 'to rest / recover', prefix: 'uit'  },
+  },
+  'b1m6-7': {
+    passen: { infinitive: 'toepassen', english: 'to apply',              prefix: 'toe'  },
+    gaan:   { infinitive: 'overgaan',  english: 'to be about (a topic)', prefix: 'over' },
+  },
+  'b1m6-8': {
+    reed:  { infinitive: 'terugrijden', english: 'to drive / ride back', prefix: 'terug' },
+    vroeg: { infinitive: 'afvragen',    english: 'to wonder',            prefix: 'af'    },
+    zette: { infinitive: 'neerzetten',  english: 'to put down',          prefix: 'neer'  },
+    dacht: { infinitive: 'nadenken',    english: 'to think / reflect',   prefix: 'na'    },
+  },
+  'b1m6-9': {
+    gaan: { infinitive: 'omgaan', english: 'to deal with', prefix: 'om' },
+  },
+  'b1m6-10': {
+    dacht: { infinitive: 'nadenken',    english: 'to think / reflect', prefix: 'na'    },
+    keek:  { infinitive: 'aankijken',   english: 'to look at',         prefix: 'aan'   },
+    liep:  { infinitive: 'voorbijlopen', english: 'to walk past',      prefix: 'voorbij' },
+  },
 };
 
 export function getSeparableVerbsForText(textId: string): Record<string, SeparableVerbEntry> {
@@ -1304,6 +1406,20 @@ export const textFixedExpressions: Record<string, Record<string, FixedExpression
   'b1m5-10': {
     'zonder aanleiding': { english: 'without reason / out of the blue' },
   },
+
+  // ===== B1 MODULE 4 — Technologie en aandacht =====
+  'b1m4-1':  { 'in de gaten':        { english: 'aware of / onto (something)' } },
+  'b1m4-3':  { 'meer in het moment': { english: 'more in the moment / more present' } },
+  'b1m4-4':  { 'zich bewust zijn van': { english: 'to be aware of' } },
+  'b1m4-7':  { 'in plaats van':      { english: 'instead of' } },
+  'b1m4-8':  { 'aan niets bijzonders': { english: 'of nothing in particular' } },
+  'b1m4-10': { 'op de achtergrond':  { english: 'in the background' } },
+
+  // ===== B1 MODULE 6 — Natuur en het Nederlandse landschap =====
+  'b1m6-1': { 'vrij genomen':         { english: 'took time off (vrij nemen)' } },
+  'b1m6-5': { 'boven het hoofd':      { english: 'above one\'s head / at bay (water boven het hoofd houden)' } },
+  'b1m6-7': { 'op lange termijn':     { english: 'in the long term' } },
+  'b1m6-8': { 'onder woorden brengen': { english: 'to put into words' } },
 };
 
 export function getFixedExpressionsForText(textId: string): Record<string, FixedExpressionEntry> {

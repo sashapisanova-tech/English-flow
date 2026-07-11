@@ -14,6 +14,7 @@ import { moduleB1_2Texts } from './module-b1-2-city-change';
 import { moduleB1_3Texts } from './module-b1-3-food-health';
 import { moduleB1_4Texts } from './module-b1-4-tech-attention';
 import { moduleB1_5Texts } from './module-b1-5-art-creativity';
+import { moduleB1_6Texts } from './module-b1-6-nature-landscape';
 
 export const sampleTexts: ReadingText[] = [
   ...module1Texts,
@@ -31,4 +32,5 @@ export const sampleTexts: ReadingText[] = [
   ...moduleB1_3Texts,
   ...moduleB1_4Texts,
   ...moduleB1_5Texts,
+  ...moduleB1_6Texts,
 ];
