@@ -30,7 +30,8 @@ const moduleInfo: { key: Module; number: number; label: string; emoji: string; l
   { key: 'b1-city-change',   number: 2, label: 'Hoe steden veranderen',       emoji: '', level: 'B1' },
   { key: 'b1-food-health',   number: 3, label: 'Eten en gezondheid',          emoji: '', level: 'B1' },
   { key: 'b1-tech-attention', number: 4, label: 'Technologie en aandacht',     emoji: '', level: 'B1' },
-  { key: 'b1-art-creativity', number: 5, label: 'Kunst en wat het doet',       emoji: '', level: 'B1' },
+  { key: 'b1-art-creativity',      number: 5, label: 'Kunst en wat het doet',                emoji: '', level: 'B1' },
+  { key: 'b1-nature-landscape',    number: 6, label: 'Natuur en het Nederlandse landschap', emoji: '', level: 'B1' },
 ];
 
 const levelMeta: Record<Level, { subtitle: string }> = {
@@ -44,7 +45,7 @@ const levelMeta: Record<Level, { subtitle: string }> = {
 const levels: { key: Level; label: string; description: string; available: boolean }[] = [
   { key: 'A1', label: 'A1 — Beginner',     description: '50 texts · 5 modules', available: true },
   { key: 'A2', label: 'A2 — Elementary',   description: '50 texts · 5 modules', available: true },
-  { key: 'B1', label: 'B1 — Intermediate', description: '50 texts · 5 modules', available: true },
+  { key: 'B1', label: 'B1 — Intermediate', description: '60 texts · 6 modules', available: true },
 ];
 
 export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpenModule }: TextListProps) {

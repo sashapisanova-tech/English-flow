@@ -41,7 +41,8 @@ export type Module =
   | 'b1-city-change'
   | 'b1-food-health'
   | 'b1-tech-attention'
-  | 'b1-art-creativity';
+  | 'b1-art-creativity'
+  | 'b1-nature-landscape';
 
 export interface ReadingText {
   id: string;
