@@ -37,7 +37,7 @@ const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: strin
 };
 
 export function FlashcardView() {
-  const { getWordsForReview, getWordsDueForReview, reviewWordSRS, enrollWord, vocabulary, dailyGoal, addWord, removeWord, updateWord, updateWordStatus, dueCount, newCardsToday } = useLearning();
+  const { getWordsForReview, getWordsDueForReview, reviewWordSRS, vocabulary, addWord, removeWord, updateWord, updateWordStatus, dueCount, newCardsToday } = useLearning();
   const { sets: customSets, createSet, deleteSet, addWordToSet, removeWordFromSet, updateWordInSet } = useCustomSets();
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
@@ -107,8 +107,7 @@ export function FlashcardView() {
       if (!correct) setAgainKeys(prev => new Set(prev).add(currentWord.dutch.toLowerCase()));
     }
     if (mode === 'set-practice' && currentSetWord) {
-      enrollWord(currentSetWord.dutch, currentSetWord.english);
-      reviewWordSRS(currentSetWord.dutch, rating);
+      reviewWordSRS(currentSetWord.dutch, rating, currentSetWord.english);
     }
     advanceCard(currentIndex < totalCards - 1 ? currentIndex + 1 : totalCards);
   };
@@ -119,8 +118,7 @@ export function FlashcardView() {
       if (rating === 'again') setAgainKeys(prev => new Set(prev).add(currentWord.dutch.toLowerCase()));
     }
     if (mode === 'set-practice' && currentSetWord) {
-      enrollWord(currentSetWord.dutch, currentSetWord.english);
-      reviewWordSRS(currentSetWord.dutch, rating);
+      reviewWordSRS(currentSetWord.dutch, rating, currentSetWord.english);
     }
     advanceCard(currentIndex < totalCards - 1 ? currentIndex + 1 : totalCards);
   };

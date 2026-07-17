@@ -65,7 +65,7 @@ function rowToWord(row: Record<string, unknown>): DutchWord {
     example:            row.example          ? (row.example          as string)                   : undefined,
     exampleTranslation: row.example_translation ? (row.example_translation as string)             : undefined,
     plural:             row.plural           ? (row.plural           as string)                   : undefined,
-    dueDate:            row.due_date         ? (row.due_date         as string)                   : undefined,
+    dueDate:            row.due_date         ? (row.due_date as string).slice(0, 10)               : undefined,
     interval:           row.interval        != null ? (row.interval  as number)                   : undefined,
     sentenceSource:     row.sentence_source  ? (row.sentence_source  as DutchWord['sentenceSource']) : undefined,
     sourceTextId:       row.source_text_id   ? (row.source_text_id   as string)                   : undefined,
@@ -98,7 +98,7 @@ interface LearningState {
   getWordsForReview:    () => DutchWord[];
   getWordsDueForReview: () => DutchWord[];
   enrollWord:           (dutch: string, english: string) => void;
-  reviewWordSRS:        (dutch: string, rating: 'again' | 'hard' | 'good' | 'easy') => void;
+  reviewWordSRS:        (dutch: string, rating: 'again' | 'hard' | 'good' | 'easy', english?: string) => void;
   markTextCompleted:    (textId: string) => void;
   incrementFlashcards:  () => void;
   reviewWord:           (dutch: string, correct: boolean) => void;
@@ -483,12 +483,24 @@ export function LearningProvider({ children }: { children: ReactNode }) {
    * Rate a word with Again / Hard / Good / Easy using full FSRS-4.5.
    * Replaces the old simple-multiplier approach.
    */
-  const reviewWordSRS = useCallback((dutch: string, rating: 'again' | 'hard' | 'good' | 'easy') => {
+  const reviewWordSRS = useCallback((dutch: string, rating: 'again' | 'hard' | 'good' | 'easy', english?: string) => {
     const key = dutch.toLowerCase();
     const now = new Date();
     setVocabulary(prev => {
-      const word = prev[key];
-      if (!word) return prev;
+      let word = prev[key];
+
+      // Atomically create the word when called from set-practice (no separate enrollWord needed).
+      // This eliminates the race where enrollWord's upsert (dueDate=today) could land after
+      // reviewWordSRS's upsert (dueDate=future), resetting the card to due-today.
+      if (!word) {
+        if (!english) return prev;
+        addXP(2);
+        word = {
+          dutch: key, english,
+          status: 'new', timesEncountered: 1, reviewInterval: 1,
+          dueDate: todayUTC(), interval: 1,
+        };
+      }
 
       const card: FSRSCard | null = word.stability != null ? {
         stability:  word.stability,
@@ -524,6 +536,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         interval:   result.interval,
         dueDate,
         lastReview: now.toISOString(),
+        nextReview: new Date(now.getTime() + result.interval * 86_400_000),
       };
       syncWord(updated);
 
@@ -538,6 +551,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     if (rating === 'easy') addXP(10);
     else if (rating !== 'again') addXP(5);
   }, [incrementFlashcards, addXP, syncWord, incrementNewCards]);
+
 
   const reviewWord = useCallback((dutch: string, correct: boolean) => {
     const now = new Date();

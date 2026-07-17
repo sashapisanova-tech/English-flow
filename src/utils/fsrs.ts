@@ -112,11 +112,13 @@ export function fsrsReview(
   rating: FSRSRating,
   now:    Date = new Date(),
 ): FSRSResult {
-  // ── First-ever review ──
+  // ── First-ever review (new card) ──
+  // FSRS 4.5 spec: Again/Hard → learning step, Good/Easy → graduate directly to review.
   if (!card || card.state === 'new') {
     const s = initStability(rating);
     const d = initDifficulty(rating);
-    return { stability: s, difficulty: d, state: 'learning', interval: nextInterval(s) };
+    const state: FSRSState = rating >= 3 ? 'review' : 'learning';
+    return { stability: s, difficulty: d, state, interval: nextInterval(s) };
   }
 
   const elapsedDays = Math.max(0,
@@ -130,20 +132,14 @@ export function fsrsReview(
 
   if (card.state === 'learning' || card.state === 'relearning') {
     if (rating === 1) {
-      // Again — restart from scratch
+      // Again — restart the learning step
       s        = initStability(1);
       newState = 'learning';
-    } else if (rating === 2) {
-      // Hard — small boost, stay in learning
-      s        = Math.max(card.stability, initStability(2));
-      newState = 'learning';
-    } else if (rating === 3) {
-      // Good — graduate once stability ≥ 5 days
-      s        = Math.max(card.stability, initStability(3));
-      newState = s >= 5 ? 'review' : 'learning';
     } else {
-      // Easy — graduate immediately with full easy stability
-      s        = Math.max(card.stability, initStability(4));
+      // Hard / Good / Easy — graduate to review using the recall formula.
+      // Using stabilityAfterRecall (same as review state) grows stability correctly
+      // instead of the old Math.max(stability, initStability) which kept stability frozen.
+      s        = clamp(stabilityAfterRecall(card.difficulty, card.stability, r, rating), 0.1, 365);
       newState = 'review';
     }
   } else {
