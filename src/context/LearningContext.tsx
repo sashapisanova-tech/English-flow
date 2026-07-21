@@ -523,9 +523,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         now.getUTCMonth(),
         now.getUTCDate() + result.interval,
       ));
-      const dueDate = result.state === 'relearning'
-        ? todayUTC()
-        : dueDateObj.toISOString().slice(0, 10);
+      const dueDate = dueDateObj.toISOString().slice(0, 10);
 
       const updated: DutchWord = {
         ...word,

@@ -873,8 +873,8 @@ export function FlashcardView() {
 
         {/* Practice button */}
         {learningWords.length > 0 && (
-          <Button className="w-full gap-2" onClick={startLearningAll}>
-            Practice all ({learningWords.length})
+          <Button variant="outline" className="w-full gap-2" onClick={startLearningAll}>
+            Free practice — all words ({learningWords.length})
           </Button>
         )}
 
