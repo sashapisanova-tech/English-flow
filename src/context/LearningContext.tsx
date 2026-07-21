@@ -253,9 +253,18 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   const syncWord = useCallback((word: DutchWord) => {
     const u = userRef.current;
     if (!u) return;
+    const row = wordToRow(u.id, word);
+    console.log('[srs] saving', word.dutch, '→ stability:', row.stability, 'due_date:', row.due_date, 'fsrs_state:', row.fsrs_state, 'difficulty:', row.difficulty);
     supabase.from('vocabulary')
-      .upsert(wordToRow(u.id, word), { onConflict: 'user_id,dutch' })
-      .then(({ error }) => { if (error) console.error('[sync] vocab upsert error:', error); });
+      .upsert(row, { onConflict: 'user_id,dutch' })
+      .then(({ error }) => {
+        if (error) {
+          console.error('[srs] SAVE FAILED for', word.dutch, error);
+          toast.error(`Save failed: ${error.message}`, { duration: 8000 });
+        } else {
+          console.log('[srs] saved OK:', word.dutch, '→ due', row.due_date);
+        }
+      });
   }, []);
 
   // ── Mutations ────────────────────────────────────────────────────────────
@@ -524,6 +533,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         now.getUTCDate() + result.interval,
       ));
       const dueDate = dueDateObj.toISOString().slice(0, 10);
+      console.log('[srs] reviewed', dutch, rating, '→ interval:', result.interval, 'days, dueDate:', dueDate, 'stability:', result.stability, 'state:', result.state);
 
       const updated: DutchWord = {
         ...word,
