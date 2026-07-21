@@ -13,9 +13,12 @@ ALTER TABLE public.vocabulary
   ADD COLUMN IF NOT EXISTS review_interval    INTEGER DEFAULT 1,
   ADD COLUMN IF NOT EXISTS last_review        TEXT,
   ADD COLUMN IF NOT EXISTS stability          FLOAT,
+  ADD COLUMN IF NOT EXISTS difficulty         FLOAT,
+  ADD COLUMN IF NOT EXISTS next_review        TEXT,
   ADD COLUMN IF NOT EXISTS fsrs_state         TEXT,
   ADD COLUMN IF NOT EXISTS times_encountered  INTEGER DEFAULT 1,
   ADD COLUMN IF NOT EXISTS example            TEXT,
+  ADD COLUMN IF NOT EXISTS plural             TEXT,
   ADD COLUMN IF NOT EXISTS due_date           TEXT,
   ADD COLUMN IF NOT EXISTS interval           INTEGER;
 
