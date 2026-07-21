@@ -1,10 +1,8 @@
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Settings2, Volume2, Eye, EyeOff, CheckCircle2, Loader2 } from 'lucide-react';
+import { Settings2, Volume2, CheckCircle2, Loader2 } from 'lucide-react';
 import {
-  getVoicePreset, setVoicePreset, getOpenAIKey, setOpenAIKey,
+  getVoicePreset, setVoicePreset, getOpenAIKey,
   VOICE_LABELS, type VoicePreset,
 } from '@/utils/ttsSettings';
 import { playDutch, stopDutch } from '@/utils/playDutch';
@@ -14,27 +12,12 @@ const PREVIEW_TEXT = 'Hoi! Mijn naam is Daan. Ik help je Nederlands leren.';
 export function VoiceSettings({ visible = false }: { visible?: boolean }) {
   const [open, setOpen] = useState(false);
   const [preset, setPreset] = useState<VoicePreset>(getVoicePreset);
-  const [keyInput, setKeyInput] = useState('');
-  const [savedKey, setSavedKey] = useState(getOpenAIKey);
-  const [showKey, setShowKey] = useState(false);
+  const savedKey = getOpenAIKey();
   const [previewing, setPreviewing] = useState<VoicePreset | null>(null);
 
   function handleSelectPreset(p: VoicePreset) {
     setPreset(p);
     setVoicePreset(p);
-  }
-
-  function handleSaveKey() {
-    const trimmed = keyInput.trim();
-    setOpenAIKey(trimmed);
-    setSavedKey(trimmed);
-    setKeyInput('');
-  }
-
-  function handleRemoveKey() {
-    setOpenAIKey('');
-    setSavedKey('');
-    setKeyInput('');
   }
 
   async function handlePreview(p: VoicePreset) {
@@ -120,52 +103,6 @@ export function VoiceSettings({ visible = false }: { visible?: boolean }) {
                 <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
                   Voice preview requires an OpenAI key. Without it, your browser's default Dutch voice is used.
                 </p>
-              )}
-            </div>
-
-            {/* OpenAI key */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">OpenAI API key</p>
-              {savedKey ? (
-                <div className="flex items-center justify-between rounded-xl border border-border bg-secondary/30 px-3 py-2.5">
-                  <div>
-                    <p className="text-xs font-semibold text-foreground">Key saved ✓</p>
-                    <p className="text-xs text-muted-foreground font-mono">sk-…{savedKey.slice(-4)}</p>
-                  </div>
-                  <button
-                    onClick={handleRemoveKey}
-                    className="text-xs text-destructive underline underline-offset-2 hover:opacity-80"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-2">
-                  <p className="text-xs text-muted-foreground leading-relaxed">
-                    Get a free key at <span className="font-mono font-bold">platform.openai.com</span> → API Keys.
-                    Costs ~$0.01 per reading text. Stored only in your browser.
-                  </p>
-                  <div className="flex gap-2">
-                    <div className="relative flex-1">
-                      <Input
-                        type={showKey ? 'text' : 'password'}
-                        placeholder="sk-proj-..."
-                        value={keyInput}
-                        onChange={e => setKeyInput(e.target.value)}
-                        onKeyDown={e => e.key === 'Enter' && handleSaveKey()}
-                        className="pr-9 text-sm font-mono"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setShowKey(v => !v)}
-                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground"
-                      >
-                        {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      </button>
-                    </div>
-                    <Button onClick={handleSaveKey} disabled={!keyInput.trim()}>Save</Button>
-                  </div>
-                </div>
               )}
             </div>
 
