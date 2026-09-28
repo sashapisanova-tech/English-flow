@@ -17,7 +17,7 @@ const SENTENCES = [
 ];
 
 async function generateSentencesForLevel(level: string): Promise<{ dutch: string; english: string }[]> {
-  const apiKey = localStorage.getItem('dutch-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
+  const apiKey = localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
   if (!apiKey || apiKey === 'your_api_key_here') {
     return [...SENTENCES].sort(() => Math.random() - 0.5).slice(0, 5);
   }

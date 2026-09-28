@@ -15,7 +15,7 @@ async function translateWord(word: string): Promise<string> {
   if (cache[key]) return cache[key];
   try {
     const apiKey =
-      localStorage.getItem('dutch-app-anthropic-key') ||
+      localStorage.getItem('english-app-anthropic-key') ||
       (import.meta.env.VITE_ANTHROPIC_API_KEY as string) ||
       '';
     if (apiKey && apiKey !== 'your_api_key_here') {
@@ -31,7 +31,7 @@ async function translateWord(word: string): Promise<string> {
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 40,
           system:
-            'You are a Dutch-to-English dictionary. Return only the English translation of the Dutch word or short phrase, nothing else.',
+            'You are an English dictionary. Return only a simple 1–4 word definition or translation of the English word or short phrase, nothing else.',
           messages: [{ role: 'user', content: word }],
         }),
       });

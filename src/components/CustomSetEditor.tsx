@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { ArrowLeft, Plus, Trash2, Sparkles, Loader2, ChevronRight, Pencil } from 'lucide-react';
 import type { CustomSet, CustomWord } from '@/hooks/useCustomSets';
 
-const API_KEY_STORAGE = 'dutch-app-anthropic-key';
+const API_KEY_STORAGE = 'english-app-anthropic-key';
 function getSavedKey() {
   return localStorage.getItem(API_KEY_STORAGE) || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
 }
@@ -36,8 +36,8 @@ async function fetchWordInfo(dutch: string): Promise<WordInfo> {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 40,
-        system: 'You are a Dutch dictionary. Reply with JSON only, no markdown: {"translation":"<1-4 word English translation>","article":"de" or "het" or null}. Use null for article if the word is not a noun.',
-        messages: [{ role: 'user', content: `Dutch word: "${dutch}"` }],
+        system: 'You are an English dictionary. Reply with JSON only, no markdown: {"translation":"<1-4 word simple definition or translation>","article":null}.',
+        messages: [{ role: 'user', content: `English word: "${dutch}"` }],
       }),
     });
     if (!res.ok) return { translation: '' };
@@ -66,7 +66,7 @@ async function generateExample(dutch: string): Promise<string> {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 80,
-        system: 'You are a Dutch language teacher. Generate ONE short, natural Dutch A1–A2 sentence using the given word. Return ONLY the Dutch sentence — no translation, no explanation.',
+        system: 'You are an English language teacher. Generate ONE short, natural English A1–A2 sentence using the given word. Return ONLY the English sentence — no translation, no explanation.',
         messages: [{ role: 'user', content: `Word: ${dutch}` }],
       }),
     });
@@ -178,7 +178,7 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
 
         <div className="space-y-2">
           <div>
-            <label className="text-xs text-muted-foreground mb-1 block">Dutch word</label>
+            <label className="text-xs text-muted-foreground mb-1 block">English word</label>
             <div className="flex gap-2">
               {/* Article badge */}
               {article && (

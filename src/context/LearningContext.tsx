@@ -9,11 +9,11 @@ import { useAuth } from '@/context/AuthContext';
 import { useStreak, StreakState } from '@/hooks/useStreak';
 import { toast } from '@/components/ui/sonner';
 
-const VOCAB_STORAGE_KEY     = 'dutch-vocabulary-v1';
-const STATS_STORAGE_KEY     = 'dutch-player-stats-v1';
-const TEXT_PROGRESS_KEY     = 'dutch-text-progress-v1';
-const GOALS_STORAGE_KEY     = 'dutch-daily-goals-v1';
-const NEW_CARDS_TODAY_KEY   = 'dutch-new-cards-today-v1';
+const VOCAB_STORAGE_KEY     = 'english-vocabulary-v1';
+const STATS_STORAGE_KEY     = 'english-player-stats-v1';
+const TEXT_PROGRESS_KEY     = 'english-text-progress-v1';
+const GOALS_STORAGE_KEY     = 'english-daily-goals-v1';
+const NEW_CARDS_TODAY_KEY   = 'english-new-cards-today-v1';
 
 export const NEW_CARDS_DAILY_LIMIT = 20;
 
@@ -626,13 +626,13 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   }, [vocabulary, newCardsToday]);
 
   const [pastErrors, setPastErrors] = useState<PastError[]>(() => {
-    try { return JSON.parse(localStorage.getItem('dutch-past-errors-v1') || '[]'); } catch { return []; }
+    try { return JSON.parse(localStorage.getItem('english-past-errors-v1') || '[]'); } catch { return []; }
   });
 
   const addPastError = useCallback((error: PastError) => {
     setPastErrors(prev => {
       const updated = [...prev, error].slice(-50); // keep last 50
-      try { localStorage.setItem('dutch-past-errors-v1', JSON.stringify(updated)); } catch {}
+      try { localStorage.setItem('english-past-errors-v1', JSON.stringify(updated)); } catch {}
       return updated;
     });
   }, []);

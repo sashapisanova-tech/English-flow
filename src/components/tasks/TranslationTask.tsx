@@ -241,7 +241,7 @@ export function TranslationTask({ onBack }: { onBack: () => void }) {
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type in Dutch..."
+            placeholder="Type in English..."
             disabled={checked}
             className={`text-center text-lg font-medium pr-10 ${
               checked && results[currentIdx] === true

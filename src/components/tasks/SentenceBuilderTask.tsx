@@ -5,7 +5,7 @@ import { ArrowLeft, CheckCircle2, XCircle, RotateCcw } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { TaskFilters, Level } from './TaskFilters';
 
-const API_KEY_STORAGE = 'dutch-app-anthropic-key';
+const API_KEY_STORAGE = 'english-app-anthropic-key';
 
 function getSavedKey(): string {
   return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
@@ -32,7 +32,7 @@ async function checkCompatibility(
   const key = getSavedKey();
   if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
-  const system = `You are a Dutch vocabulary exercise assistant. Given 3 Dutch words, confirm they can plausibly appear together in one natural Dutch sentence. If not, suggest replacing the least compatible word with a semantically compatible alternative from the given vocabulary list. Return JSON only: { "approved": true/false, "words": ["word1","word2","word3"], "hint": "" }`;
+  const system = `You are an English vocabulary exercise assistant. Given 3 English words, confirm they can plausibly appear together in one natural English sentence. If not, suggest replacing the least compatible word with a semantically compatible alternative from the given vocabulary list. Return JSON only: { "approved": true/false, "words": ["word1","word2","word3"], "hint": "" }`;
 
   const userMsg = `Level: ${level}\nCandidate words: ${candidateWords.join(', ')}\nFull vocabulary list (for replacement if needed): ${allWords.slice(0, 30).join(', ')}`;
 
@@ -69,7 +69,7 @@ async function evaluateSentence(
   const key = getSavedKey();
   if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
-  const system = `Evaluate whether the learner used all 3 target words correctly in a grammatically valid Dutch sentence. Do not penalize creativity. Return JSON only: { "allWordsUsed": true/false, "grammaticallyValid": true/false, "feedback": "...", "correctedVersion": "" }`;
+  const system = `Evaluate whether the learner used all 3 target words correctly in a grammatically valid English sentence. Do not penalize creativity. Return JSON only: { "allWordsUsed": true/false, "grammaticallyValid": true/false, "feedback": "...", "correctedVersion": "" }`;
 
   const userMsg = `Level: ${level}\nTarget words: ${words.join(', ')}\nLearner's sentence: ${userSentence}`;
 
@@ -183,7 +183,7 @@ export function SentenceBuilderTask({ onBack }: { onBack: () => void }) {
         <div>
           <h2 className="font-heading text-xl font-bold text-foreground">Sentence Builder</h2>
           <p className="text-sm text-muted-foreground mt-0.5">
-            Write one natural Dutch sentence using three words from your vocabulary.
+            Write one natural English sentence using three words from your vocabulary.
           </p>
         </div>
 

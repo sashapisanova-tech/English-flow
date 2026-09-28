@@ -40,7 +40,7 @@ interface RetellingFeedback {
 
 // ─── API helpers ─────────────────────────────────────────────────────────────
 
-const API_KEY_STORAGE = 'dutch-app-anthropic-key';
+const API_KEY_STORAGE = 'english-app-anthropic-key';
 function getSavedKey() {
   return localStorage.getItem(API_KEY_STORAGE) || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
 }

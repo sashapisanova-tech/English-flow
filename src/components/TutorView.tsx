@@ -8,8 +8,8 @@ import { getRecentSessions, PracticeSessionRow } from '@/lib/practiceSession';
 import { getTextReadHistory, daysSince } from '@/lib/textReadHistory';
 import { getGrammarTags } from '@/data/textGrammarTags';
 
-const API_KEY_STORAGE = 'dutch-app-anthropic-key';
-const CACHE_KEY = 'dutch-tutor-daily-cache';
+const API_KEY_STORAGE = 'english-app-anthropic-key';
+const CACHE_KEY = 'english-tutor-daily-cache';
 
 function getSavedKey(): string {
   return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
@@ -144,7 +144,7 @@ export function TutorView({ onLaunchTask, onOpenText, onGoToFlashcards }: TutorV
       hard_grammar: s.hard_grammar_targets,
     }));
 
-    const prompt = `You are a Dutch language coach. Analyze this learner's data and return ONLY valid JSON.
+    const prompt = `You are an English language coach. Analyze this learner's data and return ONLY valid JSON.
 
 PRACTICE SESSIONS (newest first, may be empty if new learner):
 ${sessions.length > 0 ? JSON.stringify(sessionSummary, null, 2) : '(no practice sessions yet)'}

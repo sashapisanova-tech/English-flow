@@ -41,7 +41,7 @@ async function fetchPhraseTranslation(phrase: string): Promise<string> {
   const key = phrase.toLowerCase();
   if (translationCache[key]) return translationCache[key];
   try {
-    const apiKey = localStorage.getItem('dutch-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
+    const apiKey = localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
     if (apiKey && apiKey !== 'your_api_key_here') {
       // Use Claude for contextual translation
       const res = await fetch('https://api.anthropic.com/v1/messages', {
@@ -55,7 +55,7 @@ async function fetchPhraseTranslation(phrase: string): Promise<string> {
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 60,
-          system: 'You are a Dutch-to-English translator. Translate the given Dutch word or phrase into natural English within its context. Reply with ONLY the English translation, nothing else.',
+          system: 'You are a helpful language translator. Translate the given English word or phrase into natural simple language within its context. Reply with ONLY the translation, nothing else.',
           messages: [{ role: 'user', content: phrase }],
         }),
       });
@@ -118,7 +118,7 @@ function getLevelConfig(level: Level): LevelConfig {
 
 // ─── Claude helper ────────────────────────────────────────────────────────────
 async function callClaude(system: string, user: string, maxTokens = 512): Promise<string> {
-  const apiKey = localStorage.getItem('dutch-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
+  const apiKey = localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
   if (!apiKey || apiKey === 'your_api_key_here') throw new Error('NO_KEY');
   const res = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
@@ -628,7 +628,7 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
     setRetellingPhase('loading');
     try {
       const translation = await callClaude(
-        'You are a Dutch-to-English translator. Translate the Dutch text naturally and fluently. Return ONLY the English translation, no explanation.',
+        'You are a helpful translator. Translate the English text naturally and fluently into simple language. Return ONLY the translation, no explanation.',
         text.content,
         400,
       );
@@ -644,11 +644,11 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
     setRetellingPhase('evaluating');
     try {
       const raw = await callClaude(
-        `You are a Dutch language teacher giving feedback on a student's retelling. ${levelConfig.evalContext}
+        `You are an English language teacher giving feedback on a student's retelling. ${levelConfig.evalContext}
 IMPORTANT: Evaluate ONLY the language quality — vocabulary richness, grammar accuracy, sentence structure, and word choices. Do NOT mention story content, missing plot points, or what the student forgot to include. The goal is language practice, not comprehension testing.
 Return ONLY valid JSON, no markdown:
-{"score":1-5,"covered_points":["specific Dutch phrases or words used well"],"missing_points":[],"vocabulary_feedback":"feedback on word choices only","grammar_feedback":"feedback on grammar and sentence structure only","encouragement":"motivating note about their Dutch language progress"}`,
-        `TEXT LEVEL: ${text.level}\n\nORIGINAL STORY (for language reference):\n${text.content}\n\nSTUDENT'S DUTCH RETELLING:\n${retellingTranscript.trim()}`,
+{"score":1-5,"covered_points":["specific English phrases or words used well"],"missing_points":[],"vocabulary_feedback":"feedback on word choices only","grammar_feedback":"feedback on grammar and sentence structure only","encouragement":"motivating note about their English language progress"}`,
+        `TEXT LEVEL: ${text.level}\n\nORIGINAL STORY (for language reference):\n${text.content}\n\nSTUDENT'S ENGLISH RETELLING:\n${retellingTranscript.trim()}`,
         600,
       );
       setRetellingFeedback(JSON.parse(raw) as RetellingFeedback);
@@ -1034,13 +1034,13 @@ Return ONLY valid JSON, no markdown:
           <Card className="animate-fade-in space-y-5 p-5">
             <h3 className="font-heading text-base font-semibold">Word Recall</h3>
             <p className="text-xs text-muted-foreground -mt-3">
-              Choose the Dutch word that matches each English meaning.
+              Choose the English word that matches each meaning.
               {' '}<span className="font-medium">{levelConfig.maxOptions} choices</span> · {retrievalTotal} questions ({text.level})
             </p>
             {retrievalQuestions.map((q, qi) => (
               <div key={qi} className="space-y-2">
                 <p className="text-sm font-medium text-foreground">
-                  What is the Dutch word for <span className="font-bold">"{q.english}"</span>?
+                  What is the English word for <span className="font-bold">"{q.english}"</span>?
                 </p>
                 <div className="grid grid-cols-2 gap-1.5">
                   {q.options.map((opt, oi) => {
@@ -1323,11 +1323,11 @@ Return ONLY valid JSON, no markdown:
 
                 {/* Text input */}
                 <div className="space-y-2">
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Your retelling in Dutch</p>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Your retelling in English</p>
                   <Textarea
                     value={retellingTranscript}
                     onChange={e => setRetellingTranscript(e.target.value)}
-                    placeholder="Write the story in your own Dutch words…"
+                    placeholder="Write the story in your own English words…"
                     className="text-sm min-h-[110px]"
                   />
                   <Button

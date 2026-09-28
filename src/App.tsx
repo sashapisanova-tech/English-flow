@@ -69,8 +69,8 @@ function EmailVerificationGate() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4">
       <div className="mb-8 text-center">
-        <h1 className="font-heading text-3xl font-bold text-foreground">Dutch Flow</h1>
-        <p className="text-muted-foreground mt-1">Learn Dutch with spaced repetition</p>
+        <h1 className="font-heading text-3xl font-bold text-foreground">English Flow</h1>
+        <p className="text-muted-foreground mt-1">Learn English with spaced repetition</p>
       </div>
       <Card className="w-full max-w-sm p-6 space-y-5 text-center">
         <div className="h-16 w-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center">

@@ -1,6 +1,6 @@
 // ─── Shared journal API utility ───────────────────────────────────────────────
 
-const API_KEY_STORAGE = 'dutch-app-anthropic-key';
+const API_KEY_STORAGE = 'english-app-anthropic-key';
 
 function getSavedKey(): string {
   return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';

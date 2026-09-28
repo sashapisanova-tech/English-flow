@@ -18,7 +18,7 @@ interface Sentence {
 type Phase = 'setup' | 'loading' | 'playing' | 'self-correct' | 'done';
 
 function getSavedKey() {
-  return localStorage.getItem('dutch-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
+  return localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
 }
 
 async function generateSentences(words: string[], level: string): Promise<Sentence[]> {

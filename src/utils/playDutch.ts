@@ -75,16 +75,16 @@ async function playWithOpenAI(text: string, options?: PlayDutchOptions): Promise
 }
 
 // ─── Browser TTS fallback ─────────────────────────────────────────────────────
-let dutchVoice: SpeechSynthesisVoice | null | undefined = undefined;
+let englishVoice: SpeechSynthesisVoice | null | undefined = undefined;
 
-function resolveDutchVoice(): SpeechSynthesisVoice | null {
-  if (dutchVoice !== undefined) return dutchVoice;
+function resolveEnglishVoice(): SpeechSynthesisVoice | null {
+  if (englishVoice !== undefined) return englishVoice;
   const voices = window.speechSynthesis.getVoices();
-  dutchVoice =
-    voices.find(v => v.lang === 'nl-NL') ??
-    voices.find(v => v.lang.startsWith('nl')) ??
+  englishVoice =
+    voices.find(v => v.lang === 'en-US') ??
+    voices.find(v => v.lang.startsWith('en')) ??
     null;
-  return dutchVoice;
+  return englishVoice;
 }
 
 function playWithBrowser(text: string, options?: PlayDutchOptions): void {
@@ -92,10 +92,10 @@ function playWithBrowser(text: string, options?: PlayDutchOptions): void {
   window.speechSynthesis.cancel();
 
   const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'nl-NL';
-  utt.rate = options?.rate ?? 0.85;
+  utt.lang = 'en-US';
+  utt.rate = options?.rate ?? 0.9;
 
-  const voice = resolveDutchVoice();
+  const voice = resolveEnglishVoice();
   if (voice) utt.voice = voice;
 
   if (options?.onStart) utt.onstart = options.onStart;
@@ -103,8 +103,8 @@ function playWithBrowser(text: string, options?: PlayDutchOptions): void {
 
   if (!voice && window.speechSynthesis.getVoices().length === 0) {
     window.speechSynthesis.addEventListener('voiceschanged', () => {
-      dutchVoice = undefined;
-      const v = resolveDutchVoice();
+      englishVoice = undefined;
+      const v = resolveEnglishVoice();
       if (v) utt.voice = v;
       window.speechSynthesis.speak(utt);
     }, { once: true });

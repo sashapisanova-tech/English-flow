@@ -12,7 +12,7 @@ import { PREPARED_LEVELS, getAllPreparedSets } from '@/data/preparedSets';
 // ─── API key ──────────────────────────────────────────────────────────────────
 
 function getSavedKey(): string {
-  return localStorage.getItem('dutch-app-anthropic-key') || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
+  return localStorage.getItem('english-app-anthropic-key') || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
 }
 
 async function callClaude(system: string, user: string, maxTokens = 800): Promise<string> {

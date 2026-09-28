@@ -6,7 +6,7 @@ import { ArrowLeft, RotateCcw, Sparkles, BookOpen, Languages } from 'lucide-reac
 import { useLearning } from '@/context/LearningContext';
 import { TappableDutchText } from '@/components/TappableDutchText';
 
-const API_KEY_STORAGE = 'dutch-app-anthropic-key';
+const API_KEY_STORAGE = 'english-app-anthropic-key';
 
 type Mode = 'read' | 'translate';
 type Theme = 'daily life' | 'adventure' | 'mystery' | 'any';

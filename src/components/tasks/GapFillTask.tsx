@@ -5,7 +5,7 @@ import { ArrowLeft, CheckCircle2, XCircle, RotateCcw, Sparkles } from 'lucide-re
 import { useLearning } from '@/context/LearningContext';
 import { TaskFilters, Level } from './TaskFilters';
 
-const API_KEY_STORAGE = 'dutch-app-anthropic-key';
+const API_KEY_STORAGE = 'english-app-anthropic-key';
 function getSavedKey() {
   return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
 }

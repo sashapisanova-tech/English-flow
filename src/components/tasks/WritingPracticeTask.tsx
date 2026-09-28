@@ -23,9 +23,9 @@ const DICTATION_SENTENCES = [
 ];
 
 function getJournalSystem(level: string) {
-  return `You are a friendly Dutch language tutor helping with daily journal practice. The student's CEFR level is ${level}.
+  return `You are a friendly English language tutor helping with daily journal practice. The student's CEFR level is ${level}.
 
-The student writes 3–5 Dutch sentences. Your job:
+The student writes 3–5 English sentences. Your job:
 1. Identify up to 4 errors (grammar, spelling, word order, verb conjugation) appropriate to ${level} level
 2. For each error show the wrong phrase and the correct version with a brief English explanation
 3. Rewrite their full text correctly while keeping their meaning
@@ -53,7 +53,7 @@ interface JournalFeedback {
 }
 
 function getSavedKey(): string {
-  return localStorage.getItem('dutch-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
+  return localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
 }
 
 async function getJournalFeedback(text: string, level: string): Promise<JournalFeedback> {
@@ -206,7 +206,7 @@ export function WritingPracticeTask({ onBack }: { onBack: () => void }) {
 
           <Card className="bg-green-50 border-green-200 p-4">
             <p className="text-xs text-green-700 leading-relaxed">
-              Write <span className="font-bold">3–5 Dutch sentences</span> about your day or anything you like.
+              Write <span className="font-bold">3–5 English sentences</span> about your day or anything you like.
               Claude will correct your Dutch and explain each mistake.
             </p>
           </Card>

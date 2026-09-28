@@ -308,10 +308,10 @@ function StepExercises() {
       </div>
       <div className="rounded-xl border border-border bg-card px-4 py-3 text-xs text-muted-foreground">
         {active === 0 && <p>Multiple-choice comprehension questions about the text.</p>}
-        {active === 1 && <p>Choose the correct Dutch word for each English meaning.</p>}
-        {active === 2 && <p>Key vocabulary is hidden — type the Dutch word from memory.</p>}
-        {active === 3 && <p>Tap word tiles to build the correct Dutch sentence.</p>}
-        {active === 4 && <p>Retell the story in Dutch — AI reads and gives you feedback.</p>}
+        {active === 1 && <p>Choose the correct English word for each meaning.</p>}
+        {active === 2 && <p>Key vocabulary is hidden — type the English word from memory.</p>}
+        {active === 3 && <p>Tap word tiles to build the correct English sentence.</p>}
+        {active === 4 && <p>Retell the story in English — AI reads and gives you feedback.</p>}
       </div>
     </div>
   );
@@ -331,7 +331,7 @@ const STEPS = [
   },
   {
     title: 'Tap any word',
-    body: 'Tap a single Dutch word to instantly see its translation, grammar info, and an example sentence. Save it to your flashcards with one tap.',
+    body: 'Tap a single English word to instantly see its meaning, grammar info, and an example sentence. Save it to your flashcards with one tap.',
     Visual: StepTapWord,
   },
   {

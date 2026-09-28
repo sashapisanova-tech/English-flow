@@ -132,7 +132,7 @@ export function DailyChallengeTask({ onBack }: { onBack: () => void }) {
           <span className="text-xs font-semibold text-orange-700 uppercase tracking-wide">Daily Challenge</span>
         </div>
         <p className="text-xs text-orange-700 leading-relaxed">
-          One challenge per day · 3 minutes · type as many Dutch words as you can from English prompts. Build your streak!
+          One challenge per day · 3 minutes · type as many English words as you can from prompts. Build your streak!
         </p>
       </Card>
 
@@ -172,7 +172,7 @@ export function DailyChallengeTask({ onBack }: { onBack: () => void }) {
       <div className="space-y-2">
         <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && submitWord()}
-          placeholder="Type the Dutch word…" autoComplete="off" autoCorrect="off" spellCheck={false}
+          placeholder="Type the English word…" autoComplete="off" autoCorrect="off" spellCheck={false}
           className="w-full rounded-xl border border-border px-4 py-3 text-center text-lg font-medium outline-none focus:border-primary transition-colors" />
         <div className="flex gap-2">
           <Button variant="outline" className="flex-1" onClick={() => { setAttempted(a => a + 1); setInput(''); if (wordIdx + 1 >= queue.length) { clearInterval(timerRef.current!); finish(); } else setWordIdx(i => i + 1); }}>Skip</Button>

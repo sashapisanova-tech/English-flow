@@ -8,7 +8,7 @@ import { useAuth } from '@/context/AuthContext';
 import { TaskFilters, Level } from './TaskFilters';
 import { savePracticeSession } from '@/lib/practiceSession';
 
-const API_KEY_STORAGE = 'dutch-app-anthropic-key';
+const API_KEY_STORAGE = 'english-app-anthropic-key';
 
 function getSavedKey(): string {
   return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';

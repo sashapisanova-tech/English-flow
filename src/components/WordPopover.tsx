@@ -27,12 +27,12 @@ async function fetchWordInfo(word: string, sentence?: string): Promise<WordInfo>
   const key = sentence ? `${word.toLowerCase()}||${sentence}` : word.toLowerCase();
   if (wordInfoCache[key]) return wordInfoCache[key];
   try {
-    const apiKey = localStorage.getItem('dutch-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
+    const apiKey = localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
     if (apiKey && apiKey !== 'your_api_key_here') {
       const contextSentence = sentence && sentence.toLowerCase().includes(word.toLowerCase()) ? sentence : undefined;
       const userMsg = contextSentence
-        ? `Dutch word: "${word}" in context: "${contextSentence}"`
-        : `Dutch word: "${word}"`;
+        ? `English word: "${word}" in context: "${contextSentence}"`
+        : `English word: "${word}"`;
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {

@@ -1,7 +1,7 @@
 export type VoicePreset = 'feminine' | 'male' | 'funny';
 
-const VOICE_KEY    = 'dutch-tts-voice';
-const OPENAI_KEY   = 'dutch-app-openai-key';
+const VOICE_KEY    = 'english-tts-voice';
+const OPENAI_KEY   = 'english-app-openai-key';
 
 // OpenAI voice IDs for each preset
 export const VOICE_MAP: Record<VoicePreset, string> = {

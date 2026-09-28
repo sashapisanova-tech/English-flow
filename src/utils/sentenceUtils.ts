@@ -16,7 +16,7 @@ export function extractSentence(content: string, word: string): string | null {
  */
 export async function generateExampleSentence(dutch: string, english: string): Promise<string | null> {
   if (pendingGenerations.has(dutch)) return null;
-  const apiKey = localStorage.getItem('dutch-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
+  const apiKey = localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
   if (!apiKey || apiKey === 'your_api_key_here') return null;
 
   pendingGenerations.add(dutch);
@@ -32,10 +32,10 @@ export async function generateExampleSentence(dutch: string, english: string): P
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 80,
-        system: 'You are a Dutch language teacher. Write one short, natural Dutch sentence (max 15 words) that clearly uses the given word in context. Reply with the sentence only — no quotes, no explanation.',
+        system: 'You are an English language teacher. Write one short, natural English sentence (max 15 words) that clearly uses the given word in context. Reply with the sentence only — no quotes, no explanation.',
         messages: [{
           role: 'user',
-          content: `Dutch word: "${dutch}" (English: "${english}"). Write one example sentence in Dutch.`,
+          content: `English word: "${dutch}" (Translation: "${english}"). Write one example sentence in English.`,
         }],
       }),
     });

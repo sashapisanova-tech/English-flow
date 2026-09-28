@@ -184,14 +184,14 @@ function StepTasks() {
       {[
         {
           emoji: '✏️',
-          title: 'Translate to Dutch',
-          desc: 'See an English sentence → write it in Dutch → AI gives warm feedback',
+          title: 'Translate to English',
+          desc: 'See a sentence in your language → write it in English → AI gives warm feedback',
           bg: 'bg-blue-50 border-blue-100',
         },
         {
           emoji: '💬',
           title: 'Chat with AI',
-          desc: 'Hold a real Dutch conversation with an AI partner and save new words mid-chat',
+          desc: 'Hold a real English conversation with an AI partner and save new words mid-chat',
           bg: 'bg-green-50 border-green-100',
         },
       ].map(({ emoji, title, desc, bg }) => (
@@ -247,12 +247,12 @@ function StepCoach() {
 
 const STEPS = [
   {
-    title: 'Welcome to Dutch Flow',
+    title: 'Welcome to English Flow',
     body: "You're about to learn Dutch the way linguists recommend — lots of reading first, vocabulary second, and real practice third.",
     Visual: StepWelcome,
   },
   {
-    title: 'Read Dutch texts at your level',
+    title: 'Read English texts at your level',
     body: 'Pick A1 for complete beginners, A2 if you already know some basics. Each level has 50 texts across 5 modules, ordered easiest to hardest.',
     Visual: StepLevels,
   },

@@ -68,7 +68,7 @@ export function GenerateTextView({ level, onBack, onTextGenerated }: GenerateTex
 
   async function handleGenerate() {
     const apiKey =
-      localStorage.getItem('dutch-app-anthropic-key') ||
+      localStorage.getItem('english-app-anthropic-key') ||
       (import.meta as any).env?.VITE_ANTHROPIC_API_KEY ||
       '';
 
@@ -97,10 +97,10 @@ export function GenerateTextView({ level, onBack, onTextGenerated }: GenerateTex
         : 'Narrative / short story';
 
     const levelGuide = level === 'A1'
-      ? 'A1 (beginner): very simple sentences, present tense, high-frequency words only (top 500 Dutch words), short sentences max 10 words'
+      ? 'A1 (beginner): very simple sentences, present tense, high-frequency words only (top 500 English words), short sentences max 10 words'
       : 'A2 (elementary): simple past tense allowed, everyday vocabulary, slightly varied sentence length';
 
-    const prompt = `Write a high-quality Dutch reading text for a ${level} language learner.
+    const prompt = `Write a high-quality English reading text for a ${level} language learner.
 
 SPECIFICATIONS:
 - Word count: ~${wordCount} words
@@ -111,28 +111,28 @@ ${grammarFocus.length > 0 ? `- Grammar to demonstrate: ${grammarFocus.join(', ')
 ${flashcardWords.length > 0 ? `- Naturally incorporate some of these words where they fit: ${flashcardWords.slice(0, 15).join(', ')}` : ''}
 
 QUALITY REQUIREMENTS (strictly enforce):
-1. Every Dutch sentence must be 100% grammatically correct
+1. Every English sentence must be 100% grammatically correct
 2. Every word must be semantically appropriate — no nonsensical word choices to force a rhyme or fill space
 3. If poem: use a consistent AABB or ABAB rhyme scheme; every rhyme must make real semantic sense; never use an obscure or wrong word just to rhyme
 4. If dialogue: natural, realistic conversation; name each speaker clearly ("Anna:", "Tom:")
 5. If narrative: clear beginning–middle–end; coherent story
-6. All punctuation must follow standard Dutch rules (comma before "maar", "want", "omdat" clauses etc.)
+6. All punctuation must follow standard English rules
 7. Double-check every sentence for grammar errors before returning
 
 Return ONLY a JSON object — no markdown fences, no explanation, just the raw JSON:
 {
-  "title": "Dutch title",
-  "titleTranslation": "English translation of title",
-  "content": "The complete Dutch text",
+  "title": "English title",
+  "titleTranslation": "Translation of title in the learner's language",
+  "content": "The complete English text",
   "words": {
-    "dutch_word": { "english": "English translation", "example": "exact sentence from the text containing this word" }
+    "english_word": { "english": "definition or translation", "example": "exact sentence from the text containing this word" }
   },
   "comprehensionQuestions": [
-    { "question": "Dutch question about the text?", "options": ["Option A", "Option B", "Option C", "Option D"], "correctIndex": 0 }
+    { "question": "Question about the text?", "options": ["Option A", "Option B", "Option C", "Option D"], "correctIndex": 0 }
   ]
 }
 
-"words": include 6–10 vocabulary items that are genuinely useful for a ${level} learner. Keys must be lowercase Dutch words exactly as they appear in the content.
+"words": include 6–10 vocabulary items that are genuinely useful for a ${level} learner. Keys must be lowercase English words exactly as they appear in the content.
 "comprehensionQuestions": 2–3 questions that require reading comprehension to answer (not trivially obvious).`;
 
     setLoading(true);
@@ -151,7 +151,7 @@ Return ONLY a JSON object — no markdown fences, no explanation, just the raw J
           model: 'claude-sonnet-4-5',
           max_tokens: 2000,
           system:
-            'You are an expert Dutch language teacher and native Dutch writer. You create pedagogically sound, grammatically perfect reading texts for language learners. You always verify Dutch grammar and word choice before returning. You respond with valid JSON only — no markdown fences, no explanation, just the raw JSON object.',
+            'You are an expert English language teacher and native English writer. You create pedagogically sound, grammatically perfect reading texts for language learners. You always verify English grammar and word choice before returning. You respond with valid JSON only — no markdown fences, no explanation, just the raw JSON object.',
           messages: [{ role: 'user', content: prompt }],
         }),
       });

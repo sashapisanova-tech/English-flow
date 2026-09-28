@@ -5,7 +5,7 @@ import { ArrowLeft, CheckCircle2, XCircle, RotateCcw, AlertTriangle } from 'luci
 import { useLearning } from '@/context/LearningContext';
 import { TaskFilters, Level } from './TaskFilters';
 
-const API_KEY_STORAGE = 'dutch-app-anthropic-key';
+const API_KEY_STORAGE = 'english-app-anthropic-key';
 function getSavedKey() {
   return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
 }
@@ -34,7 +34,7 @@ async function generateErrorSentence(
   const key = getSavedKey();
   if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
-  const system = `You are a Dutch language exercise generator. Generate a Dutch sentence with exactly one grammatical error that a real learner at the given level would plausibly make. Never invent typos or nonsense — only real grammar mistakes.
+  const system = `You are an English language exercise generator. Generate an English sentence with exactly one grammatical error that a real learner at the given level would plausibly make. Never invent typos or nonsense — only real grammar mistakes.
 
 Return JSON only, no markdown:
 {
@@ -89,7 +89,7 @@ async function evaluateCorrection(
   const key = getSavedKey();
   if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
-  const system = `You are a warm, encouraging Dutch language tutor. Evaluate whether the learner's correction is right, then explain what was wrong in the original sentence. Always show the correct sentence. Keep tone supportive, never clinical. One short paragraph max.
+  const system = `You are a warm, encouraging English language tutor. Evaluate whether the learner's correction is right, then explain what was wrong in the original sentence. Always show the correct sentence. Keep tone supportive, never clinical. One short paragraph max.
 
 Return JSON only, no markdown:
 {
@@ -209,7 +209,7 @@ export function ErrorCorrectionTask({ onBack }: { onBack: () => void }) {
         <div>
           <h2 className="font-heading text-xl font-bold text-foreground">Error Correction</h2>
           <p className="text-sm text-muted-foreground mt-0.5">
-            A Dutch sentence with one grammar mistake. Find it, fix it, understand why.
+            An English sentence with one grammar mistake. Find it, fix it, understand why.
           </p>
         </div>
 
