@@ -6,6 +6,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { BookmarkPlus, Check, Loader2 } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
+import { claudeFetch } from '@/lib/ai';
 
 // ─── Translation helper (shared cache) ────────────────────────────────────────
 const cache: Record<string, string> = {};
@@ -14,19 +15,9 @@ async function translateWord(word: string): Promise<string> {
   const key = word.toLowerCase();
   if (cache[key]) return cache[key];
   try {
-    const apiKey =
-      localStorage.getItem('english-app-anthropic-key') ||
-      (import.meta.env.VITE_ANTHROPIC_API_KEY as string) ||
-      '';
-    if (apiKey && apiKey !== 'your_api_key_here') {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+    { // Claude first; falls back to MyMemory below
+      const res = await claudeFetch({
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 40,

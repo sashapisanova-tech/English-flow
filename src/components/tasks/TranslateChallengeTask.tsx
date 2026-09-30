@@ -8,24 +8,11 @@ import { useAuth } from '@/context/AuthContext';
 import { Level } from '@/components/tasks/TaskFilters';
 import { savePracticeSession } from '@/lib/practiceSession';
 import { PREPARED_LEVELS, getAllPreparedSets } from '@/data/preparedSets';
-
-// ─── API key ──────────────────────────────────────────────────────────────────
-
-function getSavedKey(): string {
-  return localStorage.getItem('english-app-anthropic-key') || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
-}
+import { claudeFetch } from '@/lib/ai';
 
 async function callClaude(system: string, user: string, maxTokens = 800): Promise<string> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-sonnet-4-5',
       max_tokens: maxTokens,

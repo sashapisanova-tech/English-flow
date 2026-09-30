@@ -1,4 +1,5 @@
-import { getOpenAIKey, getOpenAIVoiceId } from '@/utils/ttsSettings';
+import { getOpenAIVoiceId } from '@/utils/ttsSettings';
+import { speechFetch } from '@/lib/ai';
 
 export interface PlayDutchOptions {
   rate?: number;
@@ -39,7 +40,6 @@ export function stopDutch() {
 
 // ─── OpenAI TTS ───────────────────────────────────────────────────────────────
 async function playWithOpenAI(text: string, options?: PlayDutchOptions): Promise<void> {
-  const apiKey = getOpenAIKey();
   const voice  = getOpenAIVoiceId();
   const cacheKey = `${voice}:${text}`;
 
@@ -48,19 +48,7 @@ async function playWithOpenAI(text: string, options?: PlayDutchOptions): Promise
 
   let url = audioCacheGet(cacheKey);
   if (!url) {
-    const res = await fetch('https://api.openai.com/v1/audio/speech', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'tts-1',
-        voice,
-        input: text,
-        speed: 0.9,
-      }),
-    });
+    const res = await speechFetch({ voice, input: text, speed: 0.9 });
     if (!res.ok) throw new Error(`OpenAI TTS error ${res.status}`);
     const blob = await res.blob();
     url = URL.createObjectURL(blob);
@@ -116,14 +104,9 @@ function playWithBrowser(text: string, options?: PlayDutchOptions): void {
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 export function playDutch(text: string, options?: PlayDutchOptions): void {
-  const openAIKey = getOpenAIKey();
-  if (openAIKey) {
-    // OpenAI TTS is async — fire and forget; callers use onStart/onEnd callbacks
-    playWithOpenAI(text, options).catch(() => {
-      // If OpenAI fails, fall back to browser TTS
-      playWithBrowser(text, options);
-    });
-  } else {
+  // OpenAI TTS is async — fire and forget; callers use onStart/onEnd callbacks
+  playWithOpenAI(text, options).catch(() => {
+    // If OpenAI fails, fall back to browser TTS
     playWithBrowser(text, options);
-  }
+  });
 }

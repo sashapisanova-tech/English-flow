@@ -1,10 +1,7 @@
+import { claudeFetch } from '@/lib/ai';
 // ─── Shared journal API utility ───────────────────────────────────────────────
 
-const API_KEY_STORAGE = 'english-app-anthropic-key';
 
-function getSavedKey(): string {
-  return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
-}
 
 export interface JournalPrompt {
   prompt_nl: string;
@@ -33,8 +30,6 @@ export async function generateJournalPrompt(
   weakWords: { dutch: string; english: string }[],
   anchored: boolean,
 ): Promise<JournalPrompt> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
   const textContext = completedTexts.length > 0
     ? completedTexts.map(t => `- "${t.title}": ${t.excerpt}`).join('\n')
@@ -69,14 +64,8 @@ Return ONLY this JSON, no markdown:
   "targetWords": ["word1", "word2", "word3"]
 }`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 600,
@@ -101,8 +90,6 @@ export async function evaluateJournalResponse(
   userResponse: string,
   pastErrors: { type: string }[],
 ): Promise<JournalFeedback> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
   const system = `You are a warm, encouraging Dutch language tutor reviewing a student's journal entry.
 
@@ -138,14 +125,8 @@ Student's Dutch response:
 ${safeResponse}
 Past error types to keep in mind: ${pastErrorTypes}`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-sonnet-4-5',
       max_tokens: 900,

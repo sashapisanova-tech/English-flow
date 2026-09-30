@@ -61,7 +61,11 @@ function EmailVerificationGate() {
   const resend = async () => {
     if (!user?.email) return;
     setResending(true);
-    await supabase.auth.resend({ type: 'signup', email: user.email });
+    await supabase.auth.resend({
+      type: 'signup',
+      email: user.email,
+      options: { emailRedirectTo: window.location.origin },
+    });
     setResent(true);
     setResending(false);
   };

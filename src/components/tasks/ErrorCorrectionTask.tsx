@@ -4,11 +4,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, CheckCircle2, XCircle, RotateCcw, AlertTriangle } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { TaskFilters, Level } from './TaskFilters';
+import { claudeFetch } from '@/lib/ai';
 
-const API_KEY_STORAGE = 'english-app-anthropic-key';
-function getSavedKey() {
-  return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
-}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -31,8 +28,6 @@ async function generateErrorSentence(
   pastErrorTypes: string[],
   textTitles: string[],
 ): Promise<ErrorSentence> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
   const system = `You are an English language exercise generator. Generate an English sentence with exactly one grammatical error that a real learner at the given level would plausibly make. Never invent typos or nonsense — only real grammar mistakes.
 
@@ -57,14 +52,8 @@ A2 error types: wrong auxiliary (ben vs heb), separable verb not split, verb not
 
 One error per sentence only.`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 300,
@@ -86,8 +75,6 @@ async function evaluateCorrection(
   explanation: string,
   userAnswer: string,
 ): Promise<EvaluationResult> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
   const system = `You are a warm, encouraging English language tutor. Evaluate whether the learner's correction is right, then explain what was wrong in the original sentence. Always show the correct sentence. Keep tone supportive, never clinical. One short paragraph max.
 
@@ -106,14 +93,8 @@ Learner's answer: ${userAnswer}
 If correct: confirm + explain what was wrong in the original and why, so they understand even if they guessed.
 If wrong: show the correct version, explain what was wrong in the original, and briefly note what their version did differently.`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 300,

@@ -5,8 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowLeft, RotateCcw, Sparkles, BookOpen, Languages } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { TappableDutchText } from '@/components/TappableDutchText';
+import { claudeFetch } from '@/lib/ai';
 
-const API_KEY_STORAGE = 'english-app-anthropic-key';
 
 type Mode = 'read' | 'translate';
 type Theme = 'daily life' | 'adventure' | 'mystery' | 'any';
@@ -52,9 +52,6 @@ Return this exact JSON shape:
 For mode "read", still include english_sentences as an empty array [].
 words_used must list every word from the input words array that actually appears in the story.`;
 
-function getSavedKey(): string {
-  return localStorage.getItem(API_KEY_STORAGE) || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
-}
 
 async function generateStory(
   words: string[],
@@ -62,21 +59,10 @@ async function generateStory(
   theme: Theme,
   mode: Mode,
 ): Promise<StoryResponse> {
-  const apiKey = getSavedKey();
-  if (!apiKey || apiKey === 'your_api_key_here') {
-    throw new Error('NO_KEY');
-  }
-
   const userMessage = `words: ${JSON.stringify(words)}\nlevel: ${level}\ntheme: ${theme}\nmode: ${mode}`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 1024,

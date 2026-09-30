@@ -4,12 +4,9 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, CheckCircle2, XCircle, RotateCcw } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { TaskFilters, Level } from './TaskFilters';
+import { claudeFetch } from '@/lib/ai';
 
-const API_KEY_STORAGE = 'english-app-anthropic-key';
 
-function getSavedKey(): string {
-  return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
-}
 
 interface CompatibilityResult {
   approved: boolean;
@@ -29,21 +26,13 @@ async function checkCompatibility(
   candidateWords: string[],
   allWords: string[],
 ): Promise<CompatibilityResult> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
   const system = `You are an English vocabulary exercise assistant. Given 3 English words, confirm they can plausibly appear together in one natural English sentence. If not, suggest replacing the least compatible word with a semantically compatible alternative from the given vocabulary list. Return JSON only: { "approved": true/false, "words": ["word1","word2","word3"], "hint": "" }`;
 
   const userMsg = `Level: ${level}\nCandidate words: ${candidateWords.join(', ')}\nFull vocabulary list (for replacement if needed): ${allWords.slice(0, 30).join(', ')}`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 300,
@@ -66,21 +55,13 @@ async function evaluateSentence(
   words: string[],
   userSentence: string,
 ): Promise<FeedbackResult> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
   const system = `Evaluate whether the learner used all 3 target words correctly in a grammatically valid English sentence. Do not penalize creativity. Return JSON only: { "allWordsUsed": true/false, "grammaticallyValid": true/false, "feedback": "...", "correctedVersion": "" }`;
 
   const userMsg = `Level: ${level}\nTarget words: ${words.join(', ')}\nLearner's sentence: ${userSentence}`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 400,

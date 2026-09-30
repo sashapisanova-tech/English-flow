@@ -6,6 +6,7 @@ import { useLearning } from '@/context/LearningContext';
 import { playDutch } from '@/utils/playDutch';
 import { toast } from '@/components/ui/sonner';
 import type { SeparableVerbEntry } from '@/data/vocabulary';
+import { claudeFetch } from '@/lib/ai';
 
 interface WordPopoverProps {
   word: string;
@@ -27,20 +28,13 @@ async function fetchWordInfo(word: string, sentence?: string): Promise<WordInfo>
   const key = sentence ? `${word.toLowerCase()}||${sentence}` : word.toLowerCase();
   if (wordInfoCache[key]) return wordInfoCache[key];
   try {
-    const apiKey = localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
-    if (apiKey && apiKey !== 'your_api_key_here') {
+    { // Claude first; falls back to MyMemory below
       const contextSentence = sentence && sentence.toLowerCase().includes(word.toLowerCase()) ? sentence : undefined;
       const userMsg = contextSentence
         ? `English word: "${word}" in context: "${contextSentence}"`
         : `English word: "${word}"`;
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await claudeFetch({
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 40,

@@ -6,6 +6,7 @@ import { ArrowLeft, Loader2, CheckCircle2, XCircle, RotateCcw, ChevronDown, Chev
 import { useCustomSets } from '@/hooks/useCustomSets';
 import { flashcardSets } from '@/data/flashcardSets';
 import { TappableDutchText } from '@/components/TappableDutchText';
+import { claudeFetch } from '@/lib/ai';
 
 interface Sentence {
   dutch: string;
@@ -17,21 +18,10 @@ interface Sentence {
 
 type Phase = 'setup' | 'loading' | 'playing' | 'self-correct' | 'done';
 
-function getSavedKey() {
-  return localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
-}
 
 async function generateSentences(words: string[], level: string): Promise<Sentence[]> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 800,

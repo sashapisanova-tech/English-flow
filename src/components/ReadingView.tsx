@@ -18,6 +18,7 @@ import { getKeywordsForText, getSeparableVerbsForText, getFixedExpressionsForTex
 import type { SeparableVerbEntry, FixedExpressionEntry, SplitExpressionEntry } from '@/data/vocabulary';
 import type { Level } from '@/types/dutch';
 import { playDutch, stopDutch } from '@/utils/playDutch';
+import { claudeFetch } from '@/lib/ai';
 
 interface ReadingViewProps {
   text: ReadingText;
@@ -41,17 +42,10 @@ async function fetchPhraseTranslation(phrase: string): Promise<string> {
   const key = phrase.toLowerCase();
   if (translationCache[key]) return translationCache[key];
   try {
-    const apiKey = localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
-    if (apiKey && apiKey !== 'your_api_key_here') {
+    { // Claude first; falls back to MyMemory below
       // Use Claude for contextual translation
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await claudeFetch({
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 60,
@@ -66,7 +60,7 @@ async function fetchPhraseTranslation(phrase: string): Promise<string> {
         return t;
       }
     }
-    // Fallback to MyMemory if no API key
+    // Fallback to MyMemory if Claude fails
     const res = await fetch(
       `https://api.mymemory.translated.net/get?q=${encodeURIComponent(phrase)}&langpair=nl|en`
     );
@@ -118,16 +112,8 @@ function getLevelConfig(level: Level): LevelConfig {
 
 // ─── Claude helper ────────────────────────────────────────────────────────────
 async function callClaude(system: string, user: string, maxTokens = 512): Promise<string> {
-  const apiKey = localStorage.getItem('english-app-anthropic-key') || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
-  if (!apiKey || apiKey === 'your_api_key_here') throw new Error('NO_KEY');
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: maxTokens,

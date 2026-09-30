@@ -1,7 +1,6 @@
 export type VoicePreset = 'feminine' | 'male' | 'funny';
 
 const VOICE_KEY    = 'english-tts-voice';
-const OPENAI_KEY   = 'english-app-openai-key';
 
 // OpenAI voice IDs for each preset
 export const VOICE_MAP: Record<VoicePreset, string> = {
@@ -22,15 +21,6 @@ export function getVoicePreset(): VoicePreset {
 
 export function setVoicePreset(v: VoicePreset) {
   localStorage.setItem(VOICE_KEY, v);
-}
-
-export function getOpenAIKey(): string {
-  return localStorage.getItem(OPENAI_KEY) || import.meta.env.VITE_OPENAI_API_KEY || '';
-}
-
-export function setOpenAIKey(key: string) {
-  if (key) localStorage.setItem(OPENAI_KEY, key);
-  else localStorage.removeItem(OPENAI_KEY);
 }
 
 export function getOpenAIVoiceId(): string {

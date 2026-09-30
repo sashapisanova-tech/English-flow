@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { ArrowLeft, Loader2, Sparkles, Shuffle } from 'lucide-react';
 import { ReadingText } from '@/types/dutch';
 import { useCustomSets } from '@/hooks/useCustomSets';
+import { claudeFetch } from '@/lib/ai';
 
 interface GenerateTextViewProps {
   level: 'A1' | 'A2' | string;
@@ -67,16 +68,6 @@ export function GenerateTextView({ level, onBack, onTextGenerated }: GenerateTex
   }
 
   async function handleGenerate() {
-    const apiKey =
-      localStorage.getItem('english-app-anthropic-key') ||
-      (import.meta as any).env?.VITE_ANTHROPIC_API_KEY ||
-      '';
-
-    if (!apiKey || apiKey === 'your_api_key_here') {
-      setError('Add your Anthropic API key in Settings (Me tab) to generate texts.');
-      return;
-    }
-
     let effectiveTheme: string;
     if (themeMode === 'surprise') {
       const randomThemes = suggestedThemes;
@@ -139,14 +130,8 @@ Return ONLY a JSON object — no markdown fences, no explanation, just the raw J
     setError('');
 
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await claudeFetch({
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-access': 'true',
-        },
         body: JSON.stringify({
           model: 'claude-sonnet-4-5',
           max_tokens: 2000,

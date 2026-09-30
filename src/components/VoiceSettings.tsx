@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Settings2, Volume2, CheckCircle2, Loader2 } from 'lucide-react';
 import {
-  getVoicePreset, setVoicePreset, getOpenAIKey,
+  getVoicePreset, setVoicePreset,
   VOICE_LABELS, type VoicePreset,
 } from '@/utils/ttsSettings';
 import { playDutch, stopDutch } from '@/utils/playDutch';
@@ -12,7 +12,6 @@ const PREVIEW_TEXT = 'Hoi! Mijn naam is Daan. Ik help je Nederlands leren.';
 export function VoiceSettings({ visible = false }: { visible?: boolean }) {
   const [open, setOpen] = useState(false);
   const [preset, setPreset] = useState<VoicePreset>(getVoicePreset);
-  const savedKey = getOpenAIKey();
   const [previewing, setPreviewing] = useState<VoicePreset | null>(null);
 
   function handleSelectPreset(p: VoicePreset) {
@@ -61,9 +60,7 @@ export function VoiceSettings({ visible = false }: { visible?: boolean }) {
               </button>
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {savedKey
-                ? 'OpenAI TTS active — natural Dutch voices'
-                : 'Browser TTS active — add an OpenAI key for natural voices'}
+              Natural AI voices
             </p>
           </SheetHeader>
 
@@ -99,11 +96,6 @@ export function VoiceSettings({ visible = false }: { visible?: boolean }) {
                   </div>
                 ))}
               </div>
-              {!savedKey && (
-                <p className="text-xs text-amber-600 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-                  Voice preview requires an OpenAI key. Without it, your browser's default Dutch voice is used.
-                </p>
-              )}
             </div>
 
             <p className="text-xs text-muted-foreground text-center pb-2">

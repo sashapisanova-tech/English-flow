@@ -4,35 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ArrowLeft, Plus, Trash2, Sparkles, Loader2, ChevronRight, Pencil } from 'lucide-react';
 import type { CustomSet, CustomWord } from '@/hooks/useCustomSets';
+import { claudeFetch } from '@/lib/ai';
 
-const API_KEY_STORAGE = 'english-app-anthropic-key';
-function getSavedKey() {
-  return localStorage.getItem(API_KEY_STORAGE) || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
-}
 
 const EMOJI_OPTIONS = ['📝','🌍','🍎','🏠','🚀','💼','🎵','🐾','🌿','⚡','🏖️','🎯','🔤','💬','🧳'];
 
 interface WordInfo { translation: string; article?: 'de' | 'het' }
 
 async function fetchWordInfo(dutch: string): Promise<WordInfo> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') {
-    // fallback: MyMemory translation only
-    try {
-      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(dutch)}&langpair=nl|en`);
-      const data = await res.json();
-      return { translation: (data?.responseData?.translatedText as string) || '' };
-    } catch { return { translation: '' }; }
-  }
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await claudeFetch({
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 40,
@@ -52,17 +34,9 @@ async function fetchWordInfo(dutch: string): Promise<WordInfo> {
 }
 
 async function generateExample(dutch: string): Promise<string> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') return '';
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await claudeFetch({
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 80,

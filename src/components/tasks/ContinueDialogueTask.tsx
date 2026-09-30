@@ -7,33 +7,16 @@ import { useCustomSets } from '@/hooks/useCustomSets';
 import { useAuth } from '@/context/AuthContext';
 import { TaskFilters, Level } from './TaskFilters';
 import { savePracticeSession } from '@/lib/practiceSession';
+import { claudeFetch } from '@/lib/ai';
 
-const API_KEY_STORAGE = 'english-app-anthropic-key';
 
-function getSavedKey(): string {
-  return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
-}
 
 // ─── Auto-translate helpers (shared with CustomSetEditor) ─────────────────────
 
 async function fetchWordInfo(dutch: string): Promise<{ translation: string; article?: 'de' | 'het' }> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') {
-    try {
-      const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(dutch)}&langpair=nl|en`);
-      const data = await res.json();
-      return { translation: (data?.responseData?.translatedText as string) || '' };
-    } catch { return { translation: '' }; }
-  }
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await claudeFetch({
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 40,
@@ -53,17 +36,9 @@ async function fetchWordInfo(dutch: string): Promise<{ translation: string; arti
 }
 
 async function generateExample(dutch: string): Promise<string> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') return '';
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await claudeFetch({
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 80,
@@ -147,12 +122,9 @@ Return each response as JSON: {"dutch":"...","english":"..."}`;
 // ─── API helpers ──────────────────────────────────────────────────────────────
 
 async function getOpeningMessage(level: Level, topic: string): Promise<AiResponse> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
     body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 256, system: makeSystemPrompt(level, topic), messages: [{ role: 'user', content: 'Start the conversation with a Dutch greeting related to the topic.' }] }),
   });
   if (!res.ok) throw new Error(`API error ${res.status}`);
@@ -162,8 +134,6 @@ async function getOpeningMessage(level: Level, topic: string): Promise<AiRespons
 }
 
 async function sendTurn(level: Level, topic: string, history: Message[], userText: string): Promise<AiResponse & { ended: boolean }> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
   const apiMessages: { role: 'user' | 'assistant'; content: string }[] = [];
   for (const msg of history) {
@@ -172,9 +142,8 @@ async function sendTurn(level: Level, topic: string, history: Message[], userTex
   }
   apiMessages.push({ role: 'user', content: userText });
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
     body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 512, system: makeSystemPrompt(level, topic), messages: apiMessages }),
   });
   if (!res.ok) throw new Error(`API error ${res.status}`);
@@ -189,8 +158,6 @@ async function sendTurn(level: Level, topic: string, history: Message[], userTex
 }
 
 async function getGrammarReview(level: Level, topic: string, messages: Message[], pastErrorTypes: string[]): Promise<GrammarReview> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
   const transcript = messages.map(m => m.role === 'user' ? `Learner: ${m.text}` : `AI: ${m.dutch}`).join('\n');
   const system = `You are a Dutch language tutor reviewing a learner's conversation. Return JSON only, no markdown:
@@ -212,9 +179,8 @@ async function getGrammarReview(level: Level, topic: string, messages: Message[]
 }
 patternErrors = only errors appearing more than once OR one significant structural error, max 3. Tone: warm, specific, forward-looking.`;
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
     body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 800, system, messages: [{ role: 'user', content: `Level: ${level}\nTopic: ${topic}\nConversation transcript:\n${transcript}\nPast error types: ${pastErrorTypes.join(', ') || 'none yet'}` }] }),
   });
   if (!res.ok) throw new Error(`API error ${res.status}`);

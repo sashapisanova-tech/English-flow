@@ -7,13 +7,10 @@ import { useLearning } from '@/context/LearningContext';
 import { getRecentSessions, PracticeSessionRow } from '@/lib/practiceSession';
 import { getTextReadHistory, daysSince } from '@/lib/textReadHistory';
 import { getGrammarTags } from '@/data/textGrammarTags';
+import { claudeFetch } from '@/lib/ai';
 
-const API_KEY_STORAGE = 'english-app-anthropic-key';
 const CACHE_KEY = 'english-tutor-daily-cache';
 
-function getSavedKey(): string {
-  return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
-}
 
 interface TutorActivity {
   title: string;
@@ -115,8 +112,6 @@ export function TutorView({ onLaunchTask, onOpenText, onGoToFlashcards }: TutorV
   }
 
   async function fetchAnalysis(sessions: PracticeSessionRow[]): Promise<TutorAnalysis> {
-    const key = getSavedKey();
-    if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
     const history = getTextReadHistory();
     const totalWords = Object.keys(vocabulary).length;
@@ -182,14 +177,8 @@ Rules:
 - skillBalance reflects estimated current level (0=very weak, 100=strong)
 - All text must be SHORT`;
 
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await claudeFetch({
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true',
-      },
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1000,

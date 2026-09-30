@@ -4,11 +4,8 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, CheckCircle2, XCircle, RotateCcw, Sparkles } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { TaskFilters, Level } from './TaskFilters';
+import { claudeFetch } from '@/lib/ai';
 
-const API_KEY_STORAGE = 'english-app-anthropic-key';
-function getSavedKey() {
-  return localStorage.getItem(API_KEY_STORAGE) || (import.meta as any).env?.VITE_ANTHROPIC_API_KEY || '';
-}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -29,8 +26,6 @@ async function generateGaps(
   weakWords: { word: string; stability: number }[],
   level: Level,
 ): Promise<GapItem[]> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
 
   // Pick up to 10 candidate sentences (4–14 words, from up to 3 texts)
   const candidates: { title: string; sentence: string }[] = [];
@@ -97,14 +92,8 @@ Return ONLY a JSON array — no markdown, no explanation:
     .map((c, i) => `${i + 1}. [${c.title}] ${c.sentence}`)
     .join('\n');
 
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 1200,

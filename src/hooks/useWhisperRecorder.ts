@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { getOpenAIKey } from '@/utils/ttsSettings';
+import { transcribeFetch } from '@/lib/ai';
 
 export type RecordState = 'idle' | 'recording' | 'transcribing' | 'done' | 'error';
 
@@ -13,8 +13,6 @@ export function useWhisperRecorder({ onTranscript }: UseWhisperRecorderOptions) 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
-
-  const hasOpenAIKey = !!getOpenAIKey();
 
   const startRecording = useCallback(async () => {
     setError(null);
@@ -59,25 +57,13 @@ export function useWhisperRecorder({ onTranscript }: UseWhisperRecorderOptions) 
   }, []);
 
   async function transcribe(blob: Blob, mimeType: string) {
-    const apiKey = getOpenAIKey();
-    if (!apiKey) {
-      setError('No OpenAI key. Add one in Voice Settings (⚙️).');
-      setRecordState('error');
-      return;
-    }
-
     try {
       const ext = mimeType.includes('mp4') ? 'mp4' : mimeType.includes('ogg') ? 'ogg' : 'webm';
       const formData = new FormData();
       formData.append('file', new File([blob], `recording.${ext}`, { type: mimeType }));
-      formData.append('model', 'whisper-1');
-      formData.append('language', 'nl'); // Dutch — improves accuracy significantly
+      formData.append('language', 'en'); // English — improves accuracy significantly
 
-      const res = await fetch('https://api.openai.com/v1/audio/transcriptions', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${apiKey}` },
-        body: formData,
-      });
+      const res = await transcribeFetch(formData);
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
@@ -99,5 +85,5 @@ export function useWhisperRecorder({ onTranscript }: UseWhisperRecorderOptions) 
     chunksRef.current = [];
   }
 
-  return { recordState, error, hasOpenAIKey, startRecording, stopRecording, reset };
+  return { recordState, error, startRecording, stopRecording, reset };
 }

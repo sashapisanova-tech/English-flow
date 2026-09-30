@@ -11,6 +11,7 @@ import { useLearning } from '@/context/LearningContext';
 import { useCustomSets } from '@/hooks/useCustomSets';
 import { flashcardSets } from '@/data/flashcardSets';
 import { playDutch, stopDutch } from '@/utils/playDutch';
+import { claudeFetch } from '@/lib/ai';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -40,10 +41,6 @@ interface RetellingFeedback {
 
 // ─── API helpers ─────────────────────────────────────────────────────────────
 
-const API_KEY_STORAGE = 'english-app-anthropic-key';
-function getSavedKey() {
-  return localStorage.getItem(API_KEY_STORAGE) || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
-}
 
 const STORY_PROMPT = `You are a Dutch language story generator for a beginner language learning app.
 Generate a short Dutch story optimised for retelling practice.
@@ -83,16 +80,8 @@ Return ONLY a valid JSON object — no markdown fences, no extra text.
 Scoring: 1=very little, 2=some gaps, 3=most points, 4=all main points, 5=complete+fluent. Be encouraging.`;
 
 async function callClaude(system: string, user: string): Promise<string> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 1024,

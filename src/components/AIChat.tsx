@@ -2,12 +2,9 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { MessageCircle, Send, X } from 'lucide-react';
+import { claudeFetch } from '@/lib/ai';
 
-const API_KEY_STORAGE = 'english-app-anthropic-key';
 
-function getSavedKey(): string {
-  return localStorage.getItem(API_KEY_STORAGE) || import.meta.env.VITE_ANTHROPIC_API_KEY || '';
-}
 
 const SYSTEM_PROMPT = `You are Emma, a friendly English language tutor for beginners (A1–B1 level).
 Your student is learning English and may ask you anything about the language: grammar, vocabulary, pronunciation, word order, verb conjugation, tenses, articles, and more.
@@ -26,16 +23,8 @@ interface Message {
 }
 
 async function sendMessage(messages: Message[]): Promise<string> {
-  const key = getSavedKey();
-  if (!key || key === 'your_api_key_here') throw new Error('NO_KEY');
-  const res = await fetch('https://api.anthropic.com/v1/messages', {
+  const res = await claudeFetch({
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-    },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 512,
