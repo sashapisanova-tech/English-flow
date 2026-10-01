@@ -240,7 +240,9 @@ Texts are also read aloud by a British voice in the app.
 
 ## 13. Data format
 
-Each module is one file `src/data/module-<level>-<n>-<slug>.ts` exporting a
+Each module is one file `src/data/english/module-<level>-<n>-<slug>.ts` (e.g.
+`module-a1-1-flatmates.ts`), added in course order to `englishModules` in
+`src/data/english/index.ts`. It exports a
 `ReadingText[]`, in the same shape the app already uses:
 
 ```ts
@@ -293,6 +295,10 @@ new fields are coming.
 ## 15. Review checklist
 
 The reviewer checks every item and sends back specific fixes.
+
+Run the automatic checker first: `npx vitest run src/test/content.test.ts`.
+It covers the measurable items; tone, grammar focus, naturalness and
+translation quality still need the reviewer.
 
 - [ ] Length, sentence length and key-word count are within the level limits.
 - [ ] Coverage: ≥ 90% known without help and ≥ 98% known or key words (checker result).

@@ -49,7 +49,7 @@ async function fetchPhraseTranslation(phrase: string): Promise<string> {
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 60,
-          system: 'You are a helpful language translator. Translate the given English word or phrase into natural simple language within its context. Reply with ONLY the translation, nothing else.',
+          system: 'You are a helpful language translator. Translate the given English word or phrase into natural, simple Russian. Reply with ONLY the Russian translation, nothing else.',
           messages: [{ role: 'user', content: phrase }],
         }),
       });
@@ -62,7 +62,7 @@ async function fetchPhraseTranslation(phrase: string): Promise<string> {
     }
     // Fallback to MyMemory if Claude fails
     const res = await fetch(
-      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(phrase)}&langpair=nl|en`
+      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(phrase)}&langpair=en|ru`
     );
     const data = await res.json();
     const t = (data?.responseData?.translatedText as string) || '';
@@ -236,8 +236,9 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
   }, [text.id, text.words]);
 
   const separableVerbs = useMemo(() => getSeparableVerbsForText(text.id), [text.id]);
-  const fixedExpressions = useMemo(() => getFixedExpressionsForText(text.id), [text.id]);
-  const splitExpressions = useMemo(() => getSplitExpressionsForText(text.id), [text.id]);
+  // Texts carry their own expressions; the per-ID maps in vocabulary.ts are the legacy source
+  const fixedExpressions = useMemo(() => text.expressions ?? getFixedExpressionsForText(text.id), [text.id, text.expressions]);
+  const splitExpressions = useMemo(() => text.splitExpressions ?? getSplitExpressionsForText(text.id), [text.id, text.splitExpressions]);
 
   const prefixToVerb = useMemo(() => {
     const map: Record<string, SeparableVerbEntry> = {};
@@ -868,6 +869,12 @@ Return ONLY valid JSON, no markdown:
           <div className={`reading-text leading-[2.2] transition-[filter] duration-150${activeTab !== null && !isTextRevealed ? ' blur-sm' : ''}`}>
             {renderText()}
           </div>
+          {text.grammarNote && (
+            <div className="mt-5 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-primary">Grammar spotlight</p>
+              <p className="mt-1 text-sm leading-relaxed text-foreground">{text.grammarNote}</p>
+            </div>
+          )}
         </Card>
         {activeTab !== null && !isTextRevealed && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none rounded-xl">
@@ -976,6 +983,9 @@ Return ONLY valid JSON, no markdown:
             {text.comprehensionQuestions.map((q, qi) => (
               <div key={qi} className="space-y-2">
                 <p className="font-medium text-sm text-foreground">{q.question}</p>
+                {q.questionTranslation && (
+                  <p className="-mt-1 text-xs text-muted-foreground">{q.questionTranslation}</p>
+                )}
                 <div className="flex flex-col gap-1.5">
                   {q.options.map((opt, oi) => {
                     const selected = quizAnswers[qi] === oi;

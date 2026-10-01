@@ -53,8 +53,16 @@ export interface ReadingText {
   moduleTitle?: string;
   content: string;
   words: Record<string, { english: string; plural?: string; example?: string; exampleTranslation?: string }>;
+  /** Multi-word chunks whose words stand together in the text (highlighted green). */
+  expressions?: Record<string, { english: string }>;
+  /** Two words of one chunk separated in the sentence, e.g. "turn it off" (highlighted green). */
+  splitExpressions?: { word1: string; word2: string; english: string; display?: string }[];
+  /** Short grammar spotlight in the learner's language, pointing at a sentence in the text. */
+  grammarNote?: string;
   comprehensionQuestions?: {
     question: string;
+    /** The question in the learner's language (A1). */
+    questionTranslation?: string;
     options: string[];
     correctIndex: number;
   }[];

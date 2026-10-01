@@ -1,0 +1,108 @@
+import { describe, it, expect } from 'vitest';
+import { candidates, checkCourse, sentencesOf, type WordLists } from '@/lib/contentCheck';
+import type { ReadingText } from '@/types/dutch';
+
+const lists: WordLists = {
+  starter: ['a', 'the', 'is', 'are', 'she', 'he', 'it', 'in', 'and', 'my', 'this', 'not', 'do', 'you', 'have', 'i', 'here', 'very', 'big', 'small', 'room']
+    .map(word => ({ word, pos: 'general', ru: 'x', topic: 'general' })),
+  a1: [
+    { word: 'flatmate', pos: 'noun', ru: 'сосед', topic: 'home' },
+    { word: 'kitchen', pos: 'noun', ru: 'кухня', topic: 'home' },
+    { word: 'fridge', pos: 'noun', ru: 'холодильник', topic: 'home' },
+    { word: 'go', pos: 'verb', ru: 'идти', topic: 'general', past: 'went', pp: 'gone' },
+    { word: 'get up', pos: 'phrase', ru: 'вставать', topic: 'general' },
+  ],
+  a2: [],
+  b1: [],
+};
+
+function text(overrides: Partial<ReadingText>): ReadingText {
+  return {
+    id: 'a1m1-1',
+    title: 'Test',
+    titleTranslation: 'Тест',
+    level: 'A1',
+    module: 'a1-test' as ReadingText['module'],
+    moduleTitle: 'Test',
+    content: 'This is my flatmate.\n\nHe is in the kitchen.',
+    words: { flatmate: { english: 'сосед' }, kitchen: { english: 'кухня' } },
+    comprehensionQuestions: [],
+    grammarNote: 'Пример.',
+    completed: false,
+    ...overrides,
+  };
+}
+
+const messages = (t: ReadingText) => checkCourse([[t]], lists).errors.map(e => e.message).join('\n');
+
+describe('candidates', () => {
+  const irregular = new Map([['went', 'go']]);
+  it('finds base forms of inflected words', () => {
+    expect(candidates('flatmates', irregular)).toContain('flatmate');
+    expect(candidates('stopped', irregular)).toContain('stop');
+    expect(candidates('making', irregular)).toContain('make');
+    expect(candidates('cities', irregular)).toContain('city');
+    expect(candidates('went', irregular)).toContain('go');
+  });
+  it('expands contractions', () => {
+    expect(candidates("don't", irregular)).toContain('do');
+    expect(candidates("she's", irregular)).toContain('she');
+    expect(candidates("can't", irregular)).toContain('can');
+  });
+});
+
+describe('sentencesOf', () => {
+  it('splits on sentence ends and paragraphs', () => {
+    expect(sentencesOf('Hi. How are you?\n\nFine!')).toEqual(['Hi.', 'How are you?', 'Fine!']);
+  });
+});
+
+describe('checkCourse', () => {
+  it('reports a key word missing from the text', () => {
+    expect(messages(text({ words: { fridge: { english: 'холодильник' } } }))).toMatch(/"fridge" is not in the text/);
+  });
+
+  it('accepts key words that appear in the text', () => {
+    expect(messages(text({}))).not.toMatch(/is not in the text/);
+  });
+
+  it('asks for multi-word keys to move to expressions', () => {
+    expect(messages(text({ words: { 'get up': { english: 'вставать' } } }))).toMatch(/put it in expressions/);
+  });
+
+  it('flags unknown words in coverage', () => {
+    const msg = messages(text({ content: 'This is my flatmate.\n\nHe is in the garden.' }));
+    expect(msg).toMatch(/Unknown: .*garden/);
+  });
+
+  it('treats names as neither known nor unknown', () => {
+    const { coverage } = checkCourse([[text({ content: 'Lena is my flatmate.\n\nLena is in the kitchen.' })]], lists);
+    expect(coverage['a1m1-1'].unknown).not.toContain('lena');
+  });
+
+  it('flags a correct answer copied from the text', () => {
+    const q = { question: 'Where is he?', questionTranslation: 'Где он?', options: ['In the room', 'in the kitchen', 'Here'], correctIndex: 1 };
+    expect(messages(text({ comprehensionQuestions: [q] }))).toMatch(/copied from the text/);
+  });
+
+  it('requires Russian question translations at A1', () => {
+    const q = { question: 'Who is he?', options: ['A', 'B', 'C'], correctIndex: 0 };
+    expect(messages(text({ comprehensionQuestions: [q] }))).toMatch(/questionTranslation/);
+  });
+
+  it('flags American spelling', () => {
+    expect(messages(text({ content: 'This is my flatmate.\n\nHe is in the apartment.' }))).toMatch(/American spelling.*apartment/);
+  });
+
+  it('flags a word taught twice', () => {
+    const second = text({ id: 'a1m1-2', words: { flatmates: { english: 'соседи' } }, content: 'My flatmates are here.\n\nThe kitchen is small.' });
+    const errors = checkCourse([[text({}), second]], lists).errors.map(e => e.message).join('\n');
+    expect(errors).toMatch(/"flatmates" was already taught in a1m1-1/);
+  });
+
+  it('counts recycled words from earlier episodes', () => {
+    const second = text({ id: 'a1m1-2', words: { fridge: { english: 'холодильник' } }, content: 'The fridge is big.\n\nIt is very small.' });
+    const errors = checkCourse([[text({}), second]], lists).errors.map(e => e.message).join('\n');
+    expect(errors).toMatch(/reuses 0 key items from the previous two episodes; need 2/);
+  });
+});
