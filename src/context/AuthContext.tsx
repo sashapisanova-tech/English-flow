@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import type { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/lib/supabase';
+import { claimUserData, clearUserData } from '@/lib/userStorage';
 
 interface AuthState {
   user:    User | null;
@@ -24,6 +25,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // and SIGNED_OUT — making it the single source of truth so there's no race with getSession()
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       console.log('[auth]', event, session?.user?.email ?? null);
+      // Must run before setUser so the app never reads another account's local progress
+      if (session?.user) claimUserData(session.user.id, event === 'INITIAL_SESSION');
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
@@ -59,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    clearUserData();
   };
 
   return (
