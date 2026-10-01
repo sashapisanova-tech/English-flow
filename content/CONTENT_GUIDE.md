@@ -108,16 +108,20 @@ Each text is one object in the module's file. What every field means:
 
 Two numbers, both checked automatically:
 
-1. **At least 90% of the words are known without any help.** Key words count
-   as unknown here. That's why there are so few key words per text.
+1. **Known without any help: at least 90% at A1, 93% at A2, 95% at B1.** Key
+   words count as unknown here. That's why there are so few key words per text.
+   A1 is lower only because its texts are so short that a few key words are
+   already a large share.
 2. **At least 98% are known or key words.** In other words, words that are
    neither known nor glossed (the ones a learner would have to tap and ask the
    AI about) are at most 2 in every 100.
 
 *Research on reading finds that below about 95% coverage readers stop
 following the meaning and start decoding, and that around 98% is needed for
-comfortable reading. Glossed key words help bridge the gap, which is why 90%
-without help is acceptable as long as nearly everything else is known.*
+comfortable reading. Glossed key words help bridge the gap, which is why less
+than 98% without help is acceptable as long as nearly everything else is known.
+The computed numbers are optimistic (a learner has forgotten some "known" words),
+so each level is set as high as its text length allows.*
 
 "Known" has a precise meaning, so it can be checked:
 - the **starter list**: function words, pronouns, numbers, days and the ~150
@@ -301,7 +305,7 @@ It covers the measurable items; tone, grammar focus, naturalness and
 translation quality still need the reviewer.
 
 - [ ] Length, sentence length and key-word count are within the level limits.
-- [ ] Coverage: ≥ 90% known without help and ≥ 98% known or key words (checker result).
+- [ ] Coverage: known without help ≥ 90% (A1) / 93% (A2) / 95% (B1), and ≥ 98% known or key words (checker result).
 - [ ] At least 70% of key words come from the level word list; no headword taught before.
 - [ ] Every key word and expression appears in the text exactly as written; split expressions have both words in one sentence.
 - [ ] Recycling: at least 3 words from the previous two episodes; module totals met.

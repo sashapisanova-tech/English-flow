@@ -47,7 +47,8 @@ const A1_RAMP: Record<number, { words: [number, number]; avgSentence: number }> 
   2: { words: [60, 100], avgSentence: 10 },
 };
 
-const MIN_KNOWN = 0.9;
+// Known without help: as strict as each level allows (guide §6). Short A1 texts can't go higher.
+const MIN_KNOWN: Record<LevelKey, number> = { a1: 0.9, a2: 0.93, b1: 0.95 };
 const MIN_KNOWN_OR_KEY = 0.98;
 const MIN_FROM_LEVEL_LIST = 0.7;
 
@@ -87,7 +88,7 @@ const CONTRACTIONS: Record<string, string[]> = {
 export function candidates(word: string, irregular: Map<string, string>): string[] {
   const w = normaliseApostrophes(word.toLowerCase());
   const out = new Set<string>([w]);
-  const add = (s: string) => { if (s.length > 1) out.add(s); };
+  const add = (s: string) => { if (s.length > 1 || s === 'i' || s === 'a') out.add(s); };
 
   if (CONTRACTIONS[w]) CONTRACTIONS[w].forEach(add);
   const apos = w.match(/^([a-z]+)'(s|m|re|ve|ll|d|t)$/);
@@ -158,14 +159,21 @@ export function checkCourse(modules: ReadingText[][], lists: WordLists): CheckRe
     }
   });
 
-  /** Canonical form used for comparing words: the first candidate found in any word list. */
-  const canon = (w: string) => candidates(w, irregular).find(c => allListWords.has(c)) ?? w.toLowerCase();
+  /** Base forms of a word; a word that is itself a list headword isn't reduced further (bed ≠ be + -ed). */
+  const lemmas = (w: string) => {
+    const lower = normaliseApostrophes(w.toLowerCase());
+    if (!allListWords.has(lower)) return candidates(lower, irregular);
+    const irr = irregular.get(lower);
+    return irr ? [lower, irr] : [lower];
+  };
+  /** Canonical form used for comparing words: the first base form found in any word list. */
+  const canon = (w: string) => lemmas(w).find(c => allListWords.has(c)) ?? w.toLowerCase();
 
   const known = new Set<string>();
   const addKnown = (item: string) => {
-    item.toLowerCase().split(/\s+/).forEach(part => candidates(part, irregular).forEach(c => known.add(c)));
+    item.toLowerCase().split(/\s+/).forEach(part => lemmas(part).forEach(c => known.add(c)));
   };
-  const isKnown = (token: string) => /^\d/.test(token) || candidates(token, irregular).some(c => known.has(c));
+  const isKnown = (token: string) => /^\d/.test(token) || lemmas(token).some(c => known.has(c));
 
   lists.starter.forEach(e => addKnown(e.word));
   let knownLevel: LevelKey | null = null;
@@ -196,7 +204,7 @@ export function checkCourse(modules: ReadingText[][], lists: WordLists): CheckRe
     texts.forEach(t => sentencesOf(t.content).forEach(s => tokensOf(s).forEach(tok => {
       if (/^[A-Z]/.test(tok)) capSeen.add(tok.toLowerCase()); else lowerSeen.add(tok.toLowerCase());
     })));
-    const names = new Set([...capSeen].filter(w => !lowerSeen.has(w) && !allListWords.has(canon(w))));
+    const names = new Set([...capSeen].filter(w => !lowerSeen.has(w) && !lemmas(w).some(c => allListWords.has(c))));
 
     texts.forEach((t, ei) => {
       const id = t.id;
@@ -272,21 +280,28 @@ export function checkCourse(modules: ReadingText[][], lists: WordLists): CheckRe
 
       // ── Coverage ──
       const keyParts = new Set<string>();
-      keys.all.forEach(k => k.split(' ').forEach(p => candidates(p, irregular).forEach(c => keyParts.add(c))));
+      keys.all.forEach(k => k.split(' ').forEach(p => lemmas(p).forEach(c => keyParts.add(c))));
+      // A key item counts as unknown only the first time it appears: once glossed, the
+      // learner knows it for the rest of the text, and repeating it helps them learn it.
       let nKnown = 0, nKey = 0, counted = 0;
       const unknown: string[] = [];
+      const glossed = new Set<string>();
       for (const tok of tokens) {
         if (names.has(tok.toLowerCase())) continue;
         counted++;
+        const forms = lemmas(tok);
         if (isKnown(tok)) nKnown++;
-        else if (candidates(tok, irregular).some(c => keyParts.has(c))) nKey++;
+        else if (forms.some(c => keyParts.has(c))) {
+          const base = forms.find(c => keyParts.has(c))!;
+          if (glossed.has(base)) nKnown++; else { glossed.add(base); nKey++; }
+        }
         else unknown.push(tok.toLowerCase());
       }
       const pk = nKnown / Math.max(1, counted);
       const pkk = (nKnown + nKey) / Math.max(1, counted);
       const unknownList = [...new Set(unknown)];
       coverage[id] = { known: pk, knownOrKey: pkk, unknown: unknownList };
-      if (pk < MIN_KNOWN) err(id, `${(pk * 100).toFixed(1)}% known without help; need ${MIN_KNOWN * 100}%`);
+      if (pk < MIN_KNOWN[parsed.level]) err(id, `${(pk * 100).toFixed(1)}% known without help; need ${MIN_KNOWN[parsed.level] * 100}%`);
       if (pkk < MIN_KNOWN_OR_KEY) err(id, `${(pkk * 100).toFixed(1)}% known or key; need ${MIN_KNOWN_OR_KEY * 100}%. Unknown: ${unknownList.join(', ')}`);
 
       // ── Recycling ──

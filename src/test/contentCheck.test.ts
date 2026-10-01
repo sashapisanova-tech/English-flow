@@ -94,6 +94,23 @@ describe('checkCourse', () => {
     expect(messages(text({ content: 'This is my flatmate.\n\nHe is in the apartment.' }))).toMatch(/American spelling.*apartment/);
   });
 
+  it("doesn't reduce list headwords to shorter words (bed is not be + -ed)", () => {
+    const withBed: WordLists = { ...lists, a1: [...lists.a1, { word: 'bed', pos: 'noun', ru: 'кровать', topic: 'home' }] };
+    const { coverage } = checkCourse([[text({ content: 'This is my flatmate.\n\nHe is in the bed.' })]], withBed);
+    expect(coverage['a1m1-1'].unknown).toContain('bed');
+  });
+
+  it("doesn't treat I'm as a name", () => {
+    const { coverage } = checkCourse([[text({ content: "I'm in the kitchen.\n\nThis is my flatmate." })]], lists);
+    expect(coverage['a1m1-1'].known).toBe(1 - 2 / 8);
+  });
+
+  it('counts a repeated key word as unknown only once', () => {
+    const { coverage } = checkCourse([[text({ content: 'This is my flatmate. My flatmate is here.\n\nHe is in the kitchen.' })]], lists);
+    // 13 words: flatmate (first) and kitchen are key; the second flatmate counts as known
+    expect(coverage['a1m1-1'].known).toBeCloseTo(11 / 13);
+  });
+
   it('flags a word taught twice', () => {
     const second = text({ id: 'a1m1-2', words: { flatmates: { english: 'соседи' } }, content: 'My flatmates are here.\n\nThe kitchen is small.' });
     const errors = checkCourse([[text({}), second]], lists).errors.map(e => e.message).join('\n');

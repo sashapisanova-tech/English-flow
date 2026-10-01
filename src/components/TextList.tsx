@@ -15,23 +15,26 @@ interface TextListProps {
   setOpenModule: Dispatch<SetStateAction<Module | null>>;
 }
 
+// Module keys match the `module` field of the texts (content/CURRICULUM.md)
 const moduleInfo: { key: Module; number: number; label: string; emoji: string; level: Level }[] = [
-  { key: 'daily-survival',        number: 1, label: 'Daily Survival',        emoji: '', level: 'A1' },
-  { key: 'social-life',           number: 2, label: 'Social Life',           emoji: '', level: 'A1' },
-  { key: 'transport-city',        number: 3, label: 'City & Movement',       emoji: '', level: 'A1' },
-  { key: 'work-study',            number: 4, label: 'Work & Study',          emoji: '', level: 'A1' },
-  { key: 'everyday-conversations',number: 5, label: 'Personal Development',  emoji: '', level: 'A1' },
-  { key: 'a2-independence', number: 1, label: 'Everyday Independence',       emoji: '', level: 'A2' },
-  { key: 'a2-social',      number: 2, label: 'Social Interaction',           emoji: '', level: 'A2' },
-  { key: 'a2-living',      number: 3, label: 'Leven in Nederland',           emoji: '', level: 'A2' },
-  { key: 'a2-work',        number: 4, label: 'Werk & Studie',                emoji: '', level: 'A2' },
-  { key: 'a2-adventures',  number: 5, label: 'Kleine Avonturen',             emoji: '', level: 'A2' },
-  { key: 'b1-sleep-habits',  number: 1, label: 'Slaap, stress en gewoonten', emoji: '', level: 'B1' },
-  { key: 'b1-city-change',   number: 2, label: 'Hoe steden veranderen',       emoji: '', level: 'B1' },
-  { key: 'b1-food-health',   number: 3, label: 'Eten en gezondheid',          emoji: '', level: 'B1' },
-  { key: 'b1-tech-attention', number: 4, label: 'Technologie en aandacht',     emoji: '', level: 'B1' },
-  { key: 'b1-art-creativity',      number: 5, label: 'Kunst en wat het doet',                emoji: '', level: 'B1' },
-  { key: 'b1-nature-landscape',    number: 6, label: 'Natuur en het Nederlandse landschap', emoji: '', level: 'B1' },
+  { key: 'a1-flatmates',     number: 1, label: 'New Flatmates',            emoji: '', level: 'A1' },
+  { key: 'a1-cafe',          number: 2, label: 'The Café Shift',           emoji: '', level: 'A1' },
+  { key: 'a1-london',        number: 3, label: 'Lost in London',           emoji: '', level: 'A1' },
+  { key: 'a1-group-chat',    number: 4, label: 'The Group Chat',           emoji: '', level: 'A1' },
+  { key: 'a1-challenge',     number: 5, label: '30-Day Challenge',         emoji: '', level: 'A1' },
+  { key: 'a2-interview',     number: 1, label: 'The Job Interview',        emoji: '', level: 'A2' },
+  { key: 'a2-festival',      number: 2, label: 'Festival Weekend',         emoji: '', level: 'A2' },
+  { key: 'a2-swipe-right',   number: 3, label: 'Swipe Right',              emoji: '', level: 'A2' },
+  { key: 'a2-flat-hunting',  number: 4, label: 'Flat Hunting',             emoji: '', level: 'A2' },
+  { key: 'a2-influencer',    number: 5, label: 'The Influencer Experiment', emoji: '', level: 'A2' },
+  { key: 'a2-road-trip',     number: 6, label: 'Road Trip to Scotland',    emoji: '', level: 'A2' },
+  { key: 'b1-startup',       number: 1, label: 'The Startup',              emoji: '', level: 'B1' },
+  { key: 'b1-hostel',        number: 2, label: 'Mystery at the Hostel',    emoji: '', level: 'B1' },
+  { key: 'b1-burnout',       number: 3, label: 'Burnout',                  emoji: '', level: 'B1' },
+  { key: 'b1-podcast',       number: 4, label: 'Podcast Hosts',            emoji: '', level: 'B1' },
+  { key: 'b1-green-street',  number: 5, label: 'The Green Street',         emoji: '', level: 'B1' },
+  { key: 'b1-family-dinner', number: 6, label: 'Family Dinner',            emoji: '', level: 'B1' },
+  { key: 'b1-year-abroad',   number: 7, label: 'One Year Abroad',          emoji: '', level: 'B1' },
 ];
 
 const levelMeta: Record<Level, { subtitle: string }> = {
@@ -43,9 +46,9 @@ const levelMeta: Record<Level, { subtitle: string }> = {
 };
 
 const levels: { key: Level; label: string; description: string; available: boolean }[] = [
-  { key: 'A1', label: 'A1 — Beginner',     description: '50 texts · 5 modules', available: true },
-  { key: 'A2', label: 'A2 — Elementary',   description: '50 texts · 5 modules', available: true },
-  { key: 'B1', label: 'B1 — Intermediate', description: '60 texts · 6 modules', available: true },
+  { key: 'A1', label: 'A1 — Beginner',     description: '40 texts · 5 modules', available: true },
+  { key: 'A2', label: 'A2 — Elementary',   description: '48 texts · 6 modules', available: true },
+  { key: 'B1', label: 'B1 — Intermediate', description: '56 texts · 7 modules', available: true },
 ];
 
 export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpenModule }: TextListProps) {
@@ -155,8 +158,8 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
           return (
             <Card
               key={mod.key}
-              onClick={() => setOpenModule(mod.key)}
-              className="card-hover cursor-pointer p-4 active:scale-[0.98] transition-transform relative overflow-hidden"
+              onClick={() => total > 0 && setOpenModule(mod.key)}
+              className={`p-4 relative overflow-hidden ${total > 0 ? 'card-hover cursor-pointer active:scale-[0.98] transition-transform' : 'opacity-60'}`}
             >
               <div className="absolute top-0 left-4 h-1.5 w-12 rounded-b-md bg-primary/40" />
               <div className="flex items-center gap-3 pt-1">
@@ -173,11 +176,13 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
                       <div className="h-full bg-primary transition-all" style={{ width: `${progressPct}%` }} />
                     </div>
                     <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4">
-                      {done}/{total}
+                      {total > 0 ? `${done}/${total}` : 'Coming soon'}
                     </Badge>
                   </div>
                 </div>
-                <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />
+                {total > 0
+                  ? <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />
+                  : <Lock className="h-4 w-4 text-muted-foreground shrink-0" />}
               </div>
             </Card>
           );

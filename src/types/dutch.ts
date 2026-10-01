@@ -25,24 +25,8 @@ export interface DutchWord {
 
 export type Level = 'A0' | 'A1' | 'A2' | 'B1' | 'B2';
 
-export type Module =
-  | 'daily-survival'
-  | 'social-life'
-  | 'shopping-food'
-  | 'transport-city'
-  | 'work-study'
-  | 'everyday-conversations'
-  | 'a2-independence'
-  | 'a2-social'
-  | 'a2-living'
-  | 'a2-work'
-  | 'a2-adventures'
-  | 'b1-sleep-habits'
-  | 'b1-city-change'
-  | 'b1-food-health'
-  | 'b1-tech-attention'
-  | 'b1-art-creativity'
-  | 'b1-nature-landscape';
+/** Module ID, e.g. 'a1-flatmates' (see content/CURRICULUM.md). */
+export type Module = string;
 
 export interface ReadingText {
   id: string;

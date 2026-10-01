@@ -67,7 +67,7 @@ function StepModulePick() {
 
   return (
     <div className="w-full space-y-2">
-      {['Module 1 — Daily Survival', 'Module 2 — Social Life'].map((label, i) => (
+      {['Module 1 — New Flatmates', 'Module 2 — The Café Shift'].map((label, i) => (
         <div
           key={label}
           className={`relative flex items-center gap-3 rounded-xl border px-4 py-3 transition-all duration-500 ${

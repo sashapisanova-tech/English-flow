@@ -11,6 +11,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 ## A1 — first steps (40 texts)
 
 ### A1-1 · New Flatmates
+- **Module ID:** `a1-flatmates` (texts `a1m1-1` … `-8`)
 - **Story:** Lena (24, from Kazan, junior designer) moves into a shared flat in
   Manchester with Tom (27, chef, messy) and Priya (22, student, very organised).
   Rooms, objects, house rules, and a mystery: who keeps eating Lena's yoghurt?
@@ -22,6 +23,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 1 articles, 4 uncountables (*furniture*), 10 *people are*.
 
 ### A1-2 · The Café Shift
+- **Module ID:** `a1-cafe` (texts `a1m2-1` … `-8`)
 - **Story:** Max (19, from Berlin) gets his first job at a tiny café in
   Brighton run by Rosa (45, strict but kind). Orders go wrong, a regular
   customer is a mystery, and a food critic might be coming.
@@ -31,6 +33,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 3 questions with *do/does*, 1 articles.
 
 ### A1-3 · Lost in London
+- **Module ID:** `a1-london` (texts `a1m3-1` … `-8`)
 - **Story:** Two friends, Dasha (21, from Minsk) and Sofia (22, from Lisbon), have
   one weekend in London, one dead phone and a list of places to see.
 - **Topics:** transport, directions, city places, tickets, weather.
@@ -39,6 +42,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 8 prepositions, 3 questions.
 
 ### A1-4 · The Group Chat
+- **Module ID:** `a1-group-chat` (texts `a1m4-1` … `-8`)
 - **Story:** Six friends plan a surprise birthday party for Jamal via a group
   chat (mixed with real-life scenes). Nobody agrees on anything. Jamal is
   starting to suspect.
@@ -48,6 +52,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 5 *agree*, 3 questions.
 
 ### A1-5 · 30-Day Challenge
+- **Module ID:** `a1-challenge` (texts `a1m5-1` … `-8`)
 - **Story:** Ollie (31, office worker) and his gran Margaret (72) both sign up for
   a 30-day fitness challenge. Margaret is winning.
 - **Topics:** body, health, daily routine, sport, food habits.
@@ -60,6 +65,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 ## A2 — real life (48 texts)
 
 ### A2-1 · The Job Interview
+- **Module ID:** `a2-interview` (texts `a2m1-1` … `-8`)
 - **Story:** Kirill (26, from St Petersburg, developer) has a week to prepare for
   his first interview at a London company. His flatmate coaches him; the
   interview goes very differently from the plan.
@@ -69,6 +75,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 7 *make vs do*, 2 (past simple side), 9 false friends (*actual*).
 
 ### A2-2 · Festival Weekend
+- **Module ID:** `a2-festival` (texts `a2m2-1` … `-8`)
 - **Story:** Four friends at a music festival in the rain: a lost tent, a band
   that might be famous, and a phone with 4% battery.
 - **Topics:** music, camping, weather, plans, problems.
@@ -76,6 +83,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 6 no future after *when / if*.
 
 ### A2-3 · Swipe Right
+- **Module ID:** `a2-swipe-right` (texts `a2m3-1` … `-8`)
 - **Story:** Anya (28) tries a dating app for the first time, with very honest
   commentary from her best friend Chloe. Three dates; one is a disaster, one is
   surprising.
@@ -85,6 +93,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 9 false friends (*sympathetic*), 3 questions.
 
 ### A2-4 · Flat Hunting
+- **Module ID:** `a2-flat-hunting` (texts `a2m4-1` … `-8`)
 - **Story:** Jake and Mira (both 25) need a flat in Bristol in two weeks. A
   landlord who never answers, a flat that is too good to be true, and bills.
 - **Topics:** renting, money, bills, problems in the home, neighbours.
@@ -93,6 +102,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 4 uncountables (*advice, information*), 7 *borrow vs lend*.
 
 ### A2-5 · The Influencer Experiment
+- **Module ID:** `a2-influencer` (texts `a2m5-1` … `-8`)
 - **Story:** Nastya (20, student) bets her brother she can get 10,000 followers
   in a month. Fake trends, a viral mistake, and the question of what's real.
 - **Topics:** social media, phones, online shopping, apps, the internet.
@@ -101,6 +111,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 2 present perfect vs past simple.
 
 ### A2-6 · Road Trip to Scotland
+- **Module ID:** `a2-road-trip` (texts `a2m6-1` … `-8`)
 - **Story:** Three colleagues drive from London to the Highlands for a work
   event: a tiny car, a wrong turn, sheep on the road, and a secret one of them
   is keeping.
@@ -114,6 +125,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 ## B1 — independence (56 texts)
 
 ### B1-1 · The Startup
+- **Module ID:** `b1-startup` (texts `b1m1-1` … `-8`)
 - **Story:** Three friends quit their jobs to build an app. Investors,
   deadlines, an argument that might end the friendship.
 - **Topics:** work, meetings, emails, money, teamwork.
@@ -122,6 +134,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 2, 7 *say vs tell*, 9 false friends (*decade*).
 
 ### B1-2 · Mystery at the Hostel
+- **Module ID:** `b1-hostel` (texts `b1m2-1` … `-8`)
 - **Story:** At a hostel in Edinburgh, a guest's passport disappears. Ruslan (29,
   traveller from Almaty) decides to find out who took it.
 - **Topics:** travel, people and descriptions, crime vocabulary (light), routines.
@@ -130,6 +143,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 10 *police are*, 1 articles.
 
 ### B1-3 · Burnout
+- **Module ID:** `b1-burnout` (texts `b1m3-1` … `-8`)
 - **Story:** Emma (33, nurse) and Lev (35, accountant) are neighbours who both hit
   a wall at work. They try to change their lives in very different ways.
 - **Topics:** mental health, sleep, stress, habits, work-life balance.
@@ -138,6 +152,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 5 *agree*, 4 *advice*.
 
 ### B1-4 · Podcast Hosts
+- **Module ID:** `b1-podcast` (texts `b1m4-1` … `-8`)
 - **Story:** Two students start a podcast about strange news stories. Their
   episode about a local legend gets them into trouble.
 - **Topics:** media, news, fake news, interviews, opinions.
@@ -146,6 +161,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 7 *say vs tell*, 10 *news is*, 9 *magazine*.
 
 ### B1-5 · The Green Street
+- **Module ID:** `b1-green-street` (texts `b1m5-1` … `-8`)
 - **Story:** Neighbours on one street in Leeds try to make it greener, against a
   developer who wants to build a car park.
 - **Topics:** environment, city change, community, local politics (non-partisan).
@@ -154,6 +170,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 6 *if*, 8 *depend on*.
 
 ### B1-6 · Family Dinner
+- **Module ID:** `b1-family-dinner` (texts `b1m6-1` … `-8`)
 - **Story:** Masha (27) brings her British boyfriend to meet her family, who have
   moved from Moscow to London. Three generations, one table, many opinions.
 - **Topics:** family, relationships, generations, cultural differences, food traditions.
@@ -162,6 +179,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Traps:** 1 articles, 9 false friends (*sympathetic*), 3 questions.
 
 ### B1-7 · One Year Abroad
+- **Module ID:** `b1-year-abroad` (texts `b1m7-1` … `-8`)
 - **Story:** A year in the life of Ilya (30), who moved to the UK: paperwork,
   culture shock, homesickness, small victories, and deciding whether to stay.
 - **Topics:** bureaucracy, banks and doctors, culture, identity, the future.
