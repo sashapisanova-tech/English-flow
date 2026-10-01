@@ -1,0 +1,4214 @@
+[
+  {
+    "word": "deadline",
+    "pos": "noun",
+    "ru": "крайний срок / дедлайн",
+    "topic": "work"
+  },
+  {
+    "word": "investor",
+    "pos": "noun",
+    "ru": "инвестор",
+    "topic": "work"
+  },
+  {
+    "word": "invest",
+    "pos": "verb",
+    "ru": "вкладывать / инвестировать",
+    "topic": "money"
+  },
+  {
+    "word": "investment",
+    "pos": "noun",
+    "ru": "вложение / инвестиция",
+    "topic": "money"
+  },
+  {
+    "word": "profit",
+    "pos": "noun",
+    "ru": "прибыль",
+    "topic": "money"
+  },
+  {
+    "word": "loss",
+    "pos": "noun",
+    "ru": "потеря / убыток",
+    "topic": "money"
+  },
+  {
+    "word": "income",
+    "pos": "noun",
+    "ru": "доход",
+    "topic": "money"
+  },
+  {
+    "word": "wage",
+    "pos": "noun",
+    "ru": "зарплата (почасовая, недельная)",
+    "topic": "work"
+  },
+  {
+    "word": "employer",
+    "pos": "noun",
+    "ru": "работодатель",
+    "topic": "work"
+  },
+  {
+    "word": "employ",
+    "pos": "verb",
+    "ru": "нанимать / брать на работу",
+    "topic": "work"
+  },
+  {
+    "word": "client",
+    "pos": "noun",
+    "ru": "клиент",
+    "topic": "work"
+  },
+  {
+    "word": "agreement",
+    "pos": "noun",
+    "ru": "соглашение / договорённость",
+    "topic": "work"
+  },
+  {
+    "word": "agenda",
+    "pos": "noun",
+    "ru": "повестка дня",
+    "topic": "work"
+  },
+  {
+    "word": "presentation",
+    "pos": "noun",
+    "ru": "презентация",
+    "topic": "work"
+  },
+  {
+    "word": "target",
+    "pos": "noun",
+    "ru": "цель / план (показатель)",
+    "topic": "work"
+  },
+  {
+    "word": "aim",
+    "pos": "noun",
+    "ru": "цель",
+    "topic": "general"
+  },
+  {
+    "word": "achieve",
+    "pos": "verb",
+    "ru": "достигать",
+    "topic": "work"
+  },
+  {
+    "word": "achievement",
+    "pos": "noun",
+    "ru": "достижение",
+    "topic": "work"
+  },
+  {
+    "word": "succeed",
+    "pos": "verb",
+    "ru": "добиться успеха / преуспеть",
+    "topic": "work",
+    "note": "succeed in doing sth"
+  },
+  {
+    "word": "failure",
+    "pos": "noun",
+    "ru": "неудача / провал",
+    "topic": "work"
+  },
+  {
+    "word": "experienced",
+    "pos": "adjective",
+    "ru": "опытный",
+    "topic": "work"
+  },
+  {
+    "word": "qualification",
+    "pos": "noun",
+    "ru": "квалификация / диплом",
+    "topic": "work"
+  },
+  {
+    "word": "qualified",
+    "pos": "adjective",
+    "ru": "квалифицированный / имеющий диплом",
+    "topic": "work"
+  },
+  {
+    "word": "application",
+    "pos": "noun",
+    "ru": "заявление / заявка; приложение",
+    "topic": "work"
+  },
+  {
+    "word": "candidate",
+    "pos": "noun",
+    "ru": "кандидат",
+    "topic": "work"
+  },
+  {
+    "word": "recruit",
+    "pos": "verb",
+    "ru": "нанимать / набирать (персонал)",
+    "topic": "work"
+  },
+  {
+    "word": "resign",
+    "pos": "verb",
+    "ru": "уволиться (по собственному желанию)",
+    "topic": "work"
+  },
+  {
+    "word": "quit",
+    "pos": "verb",
+    "ru": "бросать / уходить (с работы)",
+    "topic": "work",
+    "past": "quit",
+    "pp": "quit"
+  },
+  {
+    "word": "sack",
+    "pos": "verb",
+    "ru": "увольнять",
+    "topic": "work",
+    "note": "Британское разговорное: get the sack = быть уволенным"
+  },
+  {
+    "word": "promote",
+    "pos": "verb",
+    "ru": "повышать (в должности); продвигать",
+    "topic": "work"
+  },
+  {
+    "word": "promotion",
+    "pos": "noun",
+    "ru": "повышение; продвижение / акция",
+    "topic": "work"
+  },
+  {
+    "word": "retire",
+    "pos": "verb",
+    "ru": "уходить на пенсию",
+    "topic": "work"
+  },
+  {
+    "word": "pension",
+    "pos": "noun",
+    "ru": "пенсия",
+    "topic": "money"
+  },
+  {
+    "word": "position",
+    "pos": "noun",
+    "ru": "должность; положение",
+    "topic": "work"
+  },
+  {
+    "word": "role",
+    "pos": "noun",
+    "ru": "роль",
+    "topic": "work"
+  },
+  {
+    "word": "responsibility",
+    "pos": "noun",
+    "ru": "ответственность / обязанность",
+    "topic": "work"
+  },
+  {
+    "word": "department",
+    "pos": "noun",
+    "ru": "отдел",
+    "topic": "work"
+  },
+  {
+    "word": "startup",
+    "pos": "noun",
+    "ru": "стартап",
+    "topic": "work"
+  },
+  {
+    "word": "founder",
+    "pos": "noun",
+    "ru": "основатель",
+    "topic": "work"
+  },
+  {
+    "word": "found",
+    "pos": "verb",
+    "ru": "основывать",
+    "topic": "work",
+    "note": "Правильный глагол: found – founded; не путать с find – found"
+  },
+  {
+    "word": "launch",
+    "pos": "verb",
+    "ru": "запускать / выпускать (продукт)",
+    "topic": "work"
+  },
+  {
+    "word": "advertise",
+    "pos": "verb",
+    "ru": "рекламировать",
+    "topic": "media"
+  },
+  {
+    "word": "advertisement",
+    "pos": "noun",
+    "ru": "реклама / объявление",
+    "topic": "media",
+    "note": "Сокращённо ad или (брит.) advert"
+  },
+  {
+    "word": "competition",
+    "pos": "noun",
+    "ru": "конкуренция; соревнование / конкурс",
+    "topic": "work"
+  },
+  {
+    "word": "compete",
+    "pos": "verb",
+    "ru": "конкурировать / соревноваться",
+    "topic": "work"
+  },
+  {
+    "word": "industry",
+    "pos": "noun",
+    "ru": "промышленность / отрасль",
+    "topic": "work"
+  },
+  {
+    "word": "organisation",
+    "pos": "noun",
+    "ru": "организация",
+    "topic": "work"
+  },
+  {
+    "word": "lead",
+    "pos": "verb",
+    "ru": "вести / руководить",
+    "topic": "work",
+    "past": "led",
+    "pp": "led"
+  },
+  {
+    "word": "teamwork",
+    "pos": "noun",
+    "ru": "командная работа",
+    "topic": "work",
+    "uncountable": true
+  },
+  {
+    "word": "effort",
+    "pos": "noun",
+    "ru": "усилие",
+    "topic": "work"
+  },
+  {
+    "word": "efficient",
+    "pos": "adjective",
+    "ru": "эффективный / продуктивный",
+    "topic": "work"
+  },
+  {
+    "word": "effective",
+    "pos": "adjective",
+    "ru": "действенный / эффективный",
+    "topic": "work"
+  },
+  {
+    "word": "productive",
+    "pos": "adjective",
+    "ru": "продуктивный",
+    "topic": "work"
+  },
+  {
+    "word": "progress",
+    "pos": "noun",
+    "ru": "прогресс / продвижение",
+    "topic": "work",
+    "uncountable": true
+  },
+  {
+    "word": "improvement",
+    "pos": "noun",
+    "ru": "улучшение",
+    "topic": "general"
+  },
+  {
+    "word": "develop",
+    "pos": "verb",
+    "ru": "развивать / разрабатывать",
+    "topic": "work"
+  },
+  {
+    "word": "development",
+    "pos": "noun",
+    "ru": "развитие / разработка",
+    "topic": "work"
+  },
+  {
+    "word": "deal",
+    "pos": "noun",
+    "ru": "сделка",
+    "topic": "work"
+  },
+  {
+    "word": "negotiate",
+    "pos": "verb",
+    "ru": "вести переговоры",
+    "topic": "work"
+  },
+  {
+    "word": "discussion",
+    "pos": "noun",
+    "ru": "обсуждение",
+    "topic": "work"
+  },
+  {
+    "word": "debate",
+    "pos": "noun",
+    "ru": "дебаты / спор",
+    "topic": "society"
+  },
+  {
+    "word": "suggestion",
+    "pos": "noun",
+    "ru": "предложение (идея)",
+    "topic": "communication"
+  },
+  {
+    "word": "proposal",
+    "pos": "noun",
+    "ru": "предложение (официальное)",
+    "topic": "work"
+  },
+  {
+    "word": "request",
+    "pos": "noun",
+    "ru": "просьба / запрос",
+    "topic": "communication"
+  },
+  {
+    "word": "reply",
+    "pos": "verb",
+    "ru": "отвечать",
+    "topic": "communication"
+  },
+  {
+    "word": "respond",
+    "pos": "verb",
+    "ru": "отвечать / реагировать",
+    "topic": "communication"
+  },
+  {
+    "word": "response",
+    "pos": "noun",
+    "ru": "ответ / реакция",
+    "topic": "communication"
+  },
+  {
+    "word": "attach",
+    "pos": "verb",
+    "ru": "прикреплять / прилагать",
+    "topic": "work"
+  },
+  {
+    "word": "attachment",
+    "pos": "noun",
+    "ru": "вложение (в письме)",
+    "topic": "work"
+  },
+  {
+    "word": "schedule",
+    "pos": "noun",
+    "ru": "расписание / график",
+    "topic": "work"
+  },
+  {
+    "word": "postpone",
+    "pos": "verb",
+    "ru": "откладывать / переносить",
+    "topic": "work"
+  },
+  {
+    "word": "confirm",
+    "pos": "verb",
+    "ru": "подтверждать",
+    "topic": "work"
+  },
+  {
+    "word": "reminder",
+    "pos": "noun",
+    "ru": "напоминание",
+    "topic": "general"
+  },
+  {
+    "word": "urgent",
+    "pos": "adjective",
+    "ru": "срочный",
+    "topic": "work"
+  },
+  {
+    "word": "priority",
+    "pos": "noun",
+    "ru": "приоритет",
+    "topic": "work"
+  },
+  {
+    "word": "report",
+    "pos": "noun",
+    "ru": "отчёт; репортаж",
+    "topic": "work"
+  },
+  {
+    "word": "summary",
+    "pos": "noun",
+    "ru": "краткое изложение / резюме",
+    "topic": "work"
+  },
+  {
+    "word": "document",
+    "pos": "noun",
+    "ru": "документ",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "data",
+    "pos": "noun",
+    "ru": "данные",
+    "topic": "technology",
+    "uncountable": true,
+    "note": "Обычно с глаголом в ед. ч.: the data is"
+  },
+  {
+    "word": "device",
+    "pos": "noun",
+    "ru": "устройство",
+    "topic": "technology"
+  },
+  {
+    "word": "feedback",
+    "pos": "noun",
+    "ru": "отзыв / обратная связь",
+    "topic": "work",
+    "uncountable": true
+  },
+  {
+    "word": "announce",
+    "pos": "verb",
+    "ru": "объявлять",
+    "topic": "communication"
+  },
+  {
+    "word": "announcement",
+    "pos": "noun",
+    "ru": "объявление",
+    "topic": "communication"
+  },
+  {
+    "word": "inform",
+    "pos": "verb",
+    "ru": "сообщать / информировать",
+    "topic": "communication"
+  },
+  {
+    "word": "explanation",
+    "pos": "noun",
+    "ru": "объяснение",
+    "topic": "communication"
+  },
+  {
+    "word": "admit",
+    "pos": "verb",
+    "ru": "признавать",
+    "topic": "communication"
+  },
+  {
+    "word": "deny",
+    "pos": "verb",
+    "ru": "отрицать",
+    "topic": "communication"
+  },
+  {
+    "word": "claim",
+    "pos": "verb",
+    "ru": "утверждать; требовать",
+    "topic": "communication"
+  },
+  {
+    "word": "warn",
+    "pos": "verb",
+    "ru": "предупреждать",
+    "topic": "communication"
+  },
+  {
+    "word": "warning",
+    "pos": "noun",
+    "ru": "предупреждение",
+    "topic": "communication"
+  },
+  {
+    "word": "persuade",
+    "pos": "verb",
+    "ru": "убеждать / уговаривать",
+    "topic": "communication"
+  },
+  {
+    "word": "convince",
+    "pos": "verb",
+    "ru": "убеждать",
+    "topic": "communication"
+  },
+  {
+    "word": "encourage",
+    "pos": "verb",
+    "ru": "поощрять / подбадривать",
+    "topic": "communication"
+  },
+  {
+    "word": "insist",
+    "pos": "verb",
+    "ru": "настаивать",
+    "topic": "communication",
+    "note": "insist on doing"
+  },
+  {
+    "word": "apologise",
+    "pos": "verb",
+    "ru": "извиняться",
+    "topic": "communication",
+    "note": "apologise for sth"
+  },
+  {
+    "word": "apology",
+    "pos": "noun",
+    "ru": "извинение",
+    "topic": "communication"
+  },
+  {
+    "word": "criticise",
+    "pos": "verb",
+    "ru": "критиковать",
+    "topic": "communication"
+  },
+  {
+    "word": "blame",
+    "pos": "verb",
+    "ru": "винить",
+    "topic": "communication",
+    "note": "blame sb for sth"
+  },
+  {
+    "word": "praise",
+    "pos": "verb",
+    "ru": "хвалить",
+    "topic": "communication"
+  },
+  {
+    "word": "interrupt",
+    "pos": "verb",
+    "ru": "перебивать / прерывать",
+    "topic": "communication"
+  },
+  {
+    "word": "communicate",
+    "pos": "verb",
+    "ru": "общаться",
+    "topic": "communication"
+  },
+  {
+    "word": "express",
+    "pos": "verb",
+    "ru": "выражать",
+    "topic": "communication"
+  },
+  {
+    "word": "fluent",
+    "pos": "adjective",
+    "ru": "беглый (о языке)",
+    "topic": "communication"
+  },
+  {
+    "word": "accent",
+    "pos": "noun",
+    "ru": "акцент",
+    "topic": "communication"
+  },
+  {
+    "word": "affordable",
+    "pos": "adjective",
+    "ru": "доступный (по цене)",
+    "topic": "money"
+  },
+  {
+    "word": "expense",
+    "pos": "noun",
+    "ru": "расход / трата",
+    "topic": "money"
+  },
+  {
+    "word": "loan",
+    "pos": "noun",
+    "ru": "заём / кредит",
+    "topic": "money"
+  },
+  {
+    "word": "savings",
+    "pos": "noun",
+    "ru": "сбережения",
+    "topic": "money"
+  },
+  {
+    "word": "currency",
+    "pos": "noun",
+    "ru": "валюта",
+    "topic": "money"
+  },
+  {
+    "word": "exchange",
+    "pos": "verb",
+    "ru": "обменивать",
+    "topic": "money"
+  },
+  {
+    "word": "tax",
+    "pos": "noun",
+    "ru": "налог",
+    "topic": "money"
+  },
+  {
+    "word": "fee",
+    "pos": "noun",
+    "ru": "плата / взнос",
+    "topic": "money"
+  },
+  {
+    "word": "bargain",
+    "pos": "noun",
+    "ru": "выгодная покупка",
+    "topic": "money"
+  },
+  {
+    "word": "value",
+    "pos": "noun",
+    "ru": "ценность / стоимость",
+    "topic": "money"
+  },
+  {
+    "word": "mortgage",
+    "pos": "noun",
+    "ru": "ипотека",
+    "topic": "money"
+  },
+  {
+    "word": "current account",
+    "pos": "noun",
+    "ru": "текущий счёт",
+    "topic": "money",
+    "note": "Британский термин (в США checking account)"
+  },
+  {
+    "word": "cashpoint",
+    "pos": "noun",
+    "ru": "банкомат",
+    "topic": "money",
+    "note": "Британское; также cash machine, ATM"
+  },
+  {
+    "word": "transfer",
+    "pos": "verb",
+    "ru": "переводить (деньги)",
+    "topic": "money"
+  },
+  {
+    "word": "withdraw",
+    "pos": "verb",
+    "ru": "снимать (деньги со счёта)",
+    "topic": "money",
+    "past": "withdrew",
+    "pp": "withdrawn"
+  },
+  {
+    "word": "balance",
+    "pos": "noun",
+    "ru": "баланс / остаток; равновесие",
+    "topic": "money"
+  },
+  {
+    "word": "statement",
+    "pos": "noun",
+    "ru": "выписка (банковская); заявление",
+    "topic": "money"
+  },
+  {
+    "word": "financial",
+    "pos": "adjective",
+    "ru": "финансовый",
+    "topic": "money"
+  },
+  {
+    "word": "economy",
+    "pos": "noun",
+    "ru": "экономика",
+    "topic": "money"
+  },
+  {
+    "word": "wealthy",
+    "pos": "adjective",
+    "ru": "богатый / состоятельный",
+    "topic": "money"
+  },
+  {
+    "word": "poverty",
+    "pos": "noun",
+    "ru": "бедность",
+    "topic": "society",
+    "uncountable": true
+  },
+  {
+    "word": "destination",
+    "pos": "noun",
+    "ru": "пункт назначения",
+    "topic": "travel"
+  },
+  {
+    "word": "reservation",
+    "pos": "noun",
+    "ru": "бронь / бронирование",
+    "topic": "travel"
+  },
+  {
+    "word": "visa",
+    "pos": "noun",
+    "ru": "виза",
+    "topic": "travel"
+  },
+  {
+    "word": "border",
+    "pos": "noun",
+    "ru": "граница",
+    "topic": "travel"
+  },
+  {
+    "word": "customs",
+    "pos": "noun",
+    "ru": "таможня",
+    "topic": "travel"
+  },
+  {
+    "word": "departure",
+    "pos": "noun",
+    "ru": "отправление / вылет",
+    "topic": "travel"
+  },
+  {
+    "word": "arrival",
+    "pos": "noun",
+    "ru": "прибытие",
+    "topic": "travel"
+  },
+  {
+    "word": "route",
+    "pos": "noun",
+    "ru": "маршрут",
+    "topic": "travel"
+  },
+  {
+    "word": "landscape",
+    "pos": "noun",
+    "ru": "пейзаж / ландшафт",
+    "topic": "nature"
+  },
+  {
+    "word": "explore",
+    "pos": "verb",
+    "ru": "исследовать / изучать (место)",
+    "topic": "travel"
+  },
+  {
+    "word": "foreigner",
+    "pos": "noun",
+    "ru": "иностранец",
+    "topic": "travel"
+  },
+  {
+    "word": "transport",
+    "pos": "noun",
+    "ru": "транспорт",
+    "topic": "travel",
+    "uncountable": true,
+    "note": "Британское; в США transportation"
+  },
+  {
+    "word": "vehicle",
+    "pos": "noun",
+    "ru": "транспортное средство",
+    "topic": "travel"
+  },
+  {
+    "word": "pedestrian",
+    "pos": "noun",
+    "ru": "пешеход",
+    "topic": "city"
+  },
+  {
+    "word": "locker",
+    "pos": "noun",
+    "ru": "шкафчик (с замком)",
+    "topic": "travel"
+  },
+  {
+    "word": "rob",
+    "pos": "verb",
+    "ru": "грабить",
+    "topic": "crime"
+  },
+  {
+    "word": "robbery",
+    "pos": "noun",
+    "ru": "ограбление",
+    "topic": "crime"
+  },
+  {
+    "word": "theft",
+    "pos": "noun",
+    "ru": "кража",
+    "topic": "crime"
+  },
+  {
+    "word": "burglar",
+    "pos": "noun",
+    "ru": "грабитель (домушник)",
+    "topic": "crime"
+  },
+  {
+    "word": "burglary",
+    "pos": "noun",
+    "ru": "кража со взломом",
+    "topic": "crime"
+  },
+  {
+    "word": "criminal",
+    "pos": "noun",
+    "ru": "преступник",
+    "topic": "crime"
+  },
+  {
+    "word": "suspect",
+    "pos": "noun",
+    "ru": "подозреваемый",
+    "topic": "crime",
+    "note": "Ударение: SUSpect (сущ.), susPECT (глаг.)"
+  },
+  {
+    "word": "suspicious",
+    "pos": "adjective",
+    "ru": "подозрительный",
+    "topic": "crime"
+  },
+  {
+    "word": "evidence",
+    "pos": "noun",
+    "ru": "улики / доказательства",
+    "topic": "crime",
+    "uncountable": true,
+    "note": "Неисчисляемое: a piece of evidence"
+  },
+  {
+    "word": "witness",
+    "pos": "noun",
+    "ru": "свидетель",
+    "topic": "crime"
+  },
+  {
+    "word": "clue",
+    "pos": "noun",
+    "ru": "улика / подсказка",
+    "topic": "crime"
+  },
+  {
+    "word": "investigate",
+    "pos": "verb",
+    "ru": "расследовать",
+    "topic": "crime"
+  },
+  {
+    "word": "investigation",
+    "pos": "noun",
+    "ru": "расследование",
+    "topic": "crime"
+  },
+  {
+    "word": "detective",
+    "pos": "noun",
+    "ru": "детектив / сыщик",
+    "topic": "crime"
+  },
+  {
+    "word": "arrest",
+    "pos": "verb",
+    "ru": "арестовывать",
+    "topic": "crime"
+  },
+  {
+    "word": "prison",
+    "pos": "noun",
+    "ru": "тюрьма",
+    "topic": "crime"
+  },
+  {
+    "word": "guilty",
+    "pos": "adjective",
+    "ru": "виновный",
+    "topic": "crime"
+  },
+  {
+    "word": "innocent",
+    "pos": "adjective",
+    "ru": "невиновный",
+    "topic": "crime"
+  },
+  {
+    "word": "accuse",
+    "pos": "verb",
+    "ru": "обвинять",
+    "topic": "crime",
+    "note": "accuse sb of sth"
+  },
+  {
+    "word": "victim",
+    "pos": "noun",
+    "ru": "жертва / пострадавший",
+    "topic": "crime"
+  },
+  {
+    "word": "missing",
+    "pos": "adjective",
+    "ru": "пропавший",
+    "topic": "crime"
+  },
+  {
+    "word": "security",
+    "pos": "noun",
+    "ru": "охрана / безопасность",
+    "topic": "crime",
+    "uncountable": true
+  },
+  {
+    "word": "CCTV",
+    "pos": "noun",
+    "ru": "камеры видеонаблюдения",
+    "topic": "crime",
+    "uncountable": true,
+    "note": "Британское, очень частое: CCTV footage"
+  },
+  {
+    "word": "law",
+    "pos": "noun",
+    "ru": "закон",
+    "topic": "society"
+  },
+  {
+    "word": "illegal",
+    "pos": "adjective",
+    "ru": "незаконный",
+    "topic": "society"
+  },
+  {
+    "word": "legal",
+    "pos": "adjective",
+    "ru": "законный; юридический",
+    "topic": "society"
+  },
+  {
+    "word": "court",
+    "pos": "noun",
+    "ru": "суд",
+    "topic": "crime"
+  },
+  {
+    "word": "judge",
+    "pos": "noun",
+    "ru": "судья",
+    "topic": "crime"
+  },
+  {
+    "word": "punish",
+    "pos": "verb",
+    "ru": "наказывать",
+    "topic": "crime"
+  },
+  {
+    "word": "break into",
+    "pos": "phrase",
+    "ru": "вломиться / проникнуть со взломом",
+    "topic": "crime"
+  },
+  {
+    "word": "get away with",
+    "pos": "phrase",
+    "ru": "остаться безнаказанным",
+    "topic": "crime"
+  },
+  {
+    "word": "description",
+    "pos": "noun",
+    "ru": "описание",
+    "topic": "people"
+  },
+  {
+    "word": "overweight",
+    "pos": "adjective",
+    "ru": "с лишним весом",
+    "topic": "people"
+  },
+  {
+    "word": "bald",
+    "pos": "adjective",
+    "ru": "лысый",
+    "topic": "people"
+  },
+  {
+    "word": "attractive",
+    "pos": "adjective",
+    "ru": "привлекательный",
+    "topic": "people"
+  },
+  {
+    "word": "elderly",
+    "pos": "adjective",
+    "ru": "пожилой",
+    "topic": "people"
+  },
+  {
+    "word": "middle-aged",
+    "pos": "adjective",
+    "ru": "средних лет",
+    "topic": "people"
+  },
+  {
+    "word": "tattoo",
+    "pos": "noun",
+    "ru": "татуировка",
+    "topic": "people"
+  },
+  {
+    "word": "take after",
+    "pos": "phrase",
+    "ru": "быть похожим на (родственника)",
+    "topic": "family"
+  },
+  {
+    "word": "impatient",
+    "pos": "adjective",
+    "ru": "нетерпеливый",
+    "topic": "people"
+  },
+  {
+    "word": "reliable",
+    "pos": "adjective",
+    "ru": "надёжный",
+    "topic": "people"
+  },
+  {
+    "word": "ambitious",
+    "pos": "adjective",
+    "ru": "амбициозный / целеустремлённый",
+    "topic": "people"
+  },
+  {
+    "word": "sensible",
+    "pos": "adjective",
+    "ru": "разумный / благоразумный",
+    "topic": "people",
+    "note": "Ложный друг: не «чувствительный» (это sensitive)"
+  },
+  {
+    "word": "sensitive",
+    "pos": "adjective",
+    "ru": "чувствительный / ранимый",
+    "topic": "people"
+  },
+  {
+    "word": "intelligent",
+    "pos": "adjective",
+    "ru": "умный",
+    "topic": "people",
+    "note": "Не «интеллигентный» (это cultured, educated)"
+  },
+  {
+    "word": "easy-going",
+    "pos": "adjective",
+    "ru": "лёгкий в общении / покладистый",
+    "topic": "people"
+  },
+  {
+    "word": "outgoing",
+    "pos": "adjective",
+    "ru": "общительный",
+    "topic": "people"
+  },
+  {
+    "word": "talkative",
+    "pos": "adjective",
+    "ru": "разговорчивый",
+    "topic": "people"
+  },
+  {
+    "word": "stubborn",
+    "pos": "adjective",
+    "ru": "упрямый",
+    "topic": "people"
+  },
+  {
+    "word": "moody",
+    "pos": "adjective",
+    "ru": "капризный / с перепадами настроения",
+    "topic": "people"
+  },
+  {
+    "word": "cruel",
+    "pos": "adjective",
+    "ru": "жестокий",
+    "topic": "people"
+  },
+  {
+    "word": "behave",
+    "pos": "verb",
+    "ru": "вести себя",
+    "topic": "people"
+  },
+  {
+    "word": "behaviour",
+    "pos": "noun",
+    "ru": "поведение",
+    "topic": "people",
+    "uncountable": true
+  },
+  {
+    "word": "attitude",
+    "pos": "noun",
+    "ru": "отношение / позиция",
+    "topic": "people"
+  },
+  {
+    "word": "mental health",
+    "pos": "noun",
+    "ru": "психическое здоровье",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "burnout",
+    "pos": "noun",
+    "ru": "выгорание",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "stressful",
+    "pos": "adjective",
+    "ru": "напряжённый / стрессовый",
+    "topic": "health"
+  },
+  {
+    "word": "anxiety",
+    "pos": "noun",
+    "ru": "тревога / тревожность",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "anxious",
+    "pos": "adjective",
+    "ru": "тревожный / обеспокоенный",
+    "topic": "feelings"
+  },
+  {
+    "word": "depression",
+    "pos": "noun",
+    "ru": "депрессия",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "depressed",
+    "pos": "adjective",
+    "ru": "подавленный / в депрессии",
+    "topic": "feelings"
+  },
+  {
+    "word": "exhausted",
+    "pos": "adjective",
+    "ru": "измученный / очень уставший",
+    "topic": "health"
+  },
+  {
+    "word": "pressure",
+    "pos": "noun",
+    "ru": "давление",
+    "topic": "health"
+  },
+  {
+    "word": "workload",
+    "pos": "noun",
+    "ru": "рабочая нагрузка",
+    "topic": "work"
+  },
+  {
+    "word": "work-life balance",
+    "pos": "noun",
+    "ru": "баланс между работой и личной жизнью",
+    "topic": "work",
+    "uncountable": true
+  },
+  {
+    "word": "overtime",
+    "pos": "noun",
+    "ru": "сверхурочная работа",
+    "topic": "work",
+    "uncountable": true
+  },
+  {
+    "word": "shift",
+    "pos": "noun",
+    "ru": "смена",
+    "topic": "work"
+  },
+  {
+    "word": "asleep",
+    "pos": "adjective",
+    "ru": "спящий",
+    "topic": "health",
+    "note": "Только после глагола: be asleep, fall asleep"
+  },
+  {
+    "word": "fall asleep",
+    "pos": "phrase",
+    "ru": "засыпать",
+    "topic": "health"
+  },
+  {
+    "word": "oversleep",
+    "pos": "verb",
+    "ru": "проспать",
+    "topic": "health",
+    "past": "overslept",
+    "pp": "overslept"
+  },
+  {
+    "word": "nap",
+    "pos": "noun",
+    "ru": "короткий сон (днём)",
+    "topic": "health"
+  },
+  {
+    "word": "insomnia",
+    "pos": "noun",
+    "ru": "бессонница",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "nightmare",
+    "pos": "noun",
+    "ru": "кошмар",
+    "topic": "health"
+  },
+  {
+    "word": "awake",
+    "pos": "adjective",
+    "ru": "бодрствующий / не спящий",
+    "topic": "health"
+  },
+  {
+    "word": "lifestyle",
+    "pos": "noun",
+    "ru": "образ жизни",
+    "topic": "health"
+  },
+  {
+    "word": "meditation",
+    "pos": "noun",
+    "ru": "медитация",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "therapy",
+    "pos": "noun",
+    "ru": "терапия",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "therapist",
+    "pos": "noun",
+    "ru": "психотерапевт / терапевт",
+    "topic": "health"
+  },
+  {
+    "word": "emotional",
+    "pos": "adjective",
+    "ru": "эмоциональный",
+    "topic": "feelings"
+  },
+  {
+    "word": "cope",
+    "pos": "verb",
+    "ru": "справляться",
+    "topic": "health",
+    "note": "cope with sth"
+  },
+  {
+    "word": "treatment",
+    "pos": "noun",
+    "ru": "лечение",
+    "topic": "health"
+  },
+  {
+    "word": "treat",
+    "pos": "verb",
+    "ru": "лечить; обращаться (с кем-то)",
+    "topic": "health"
+  },
+  {
+    "word": "symptom",
+    "pos": "noun",
+    "ru": "симптом",
+    "topic": "health"
+  },
+  {
+    "word": "disease",
+    "pos": "noun",
+    "ru": "болезнь (заболевание)",
+    "topic": "health"
+  },
+  {
+    "word": "sick note",
+    "pos": "noun",
+    "ru": "больничный (справка)",
+    "topic": "health",
+    "note": "Британское; официально fit note"
+  },
+  {
+    "word": "sick leave",
+    "pos": "noun",
+    "ru": "больничный (отпуск)",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "surgery",
+    "pos": "noun",
+    "ru": "кабинет врача (брит.); операция",
+    "topic": "health",
+    "note": "Брит.: doctor's surgery = приёмная врача"
+  },
+  {
+    "word": "prescription",
+    "pos": "noun",
+    "ru": "рецепт (на лекарство)",
+    "topic": "health"
+  },
+  {
+    "word": "pharmacy",
+    "pos": "noun",
+    "ru": "аптека",
+    "topic": "health",
+    "note": "Брит. также chemist's"
+  },
+  {
+    "word": "NHS",
+    "pos": "noun",
+    "ru": "Национальная служба здравоохранения",
+    "topic": "health",
+    "note": "Британское: National Health Service"
+  },
+  {
+    "word": "check-up",
+    "pos": "noun",
+    "ru": "медосмотр",
+    "topic": "health"
+  },
+  {
+    "word": "frustrated",
+    "pos": "adjective",
+    "ru": "раздражённый / неудовлетворённый",
+    "topic": "feelings"
+  },
+  {
+    "word": "ashamed",
+    "pos": "adjective",
+    "ru": "стыдящийся",
+    "topic": "feelings"
+  },
+  {
+    "word": "grateful",
+    "pos": "adjective",
+    "ru": "благодарный",
+    "topic": "feelings"
+  },
+  {
+    "word": "relieved",
+    "pos": "adjective",
+    "ru": "почувствовавший облегчение",
+    "topic": "feelings"
+  },
+  {
+    "word": "relief",
+    "pos": "noun",
+    "ru": "облегчение",
+    "topic": "feelings",
+    "uncountable": true
+  },
+  {
+    "word": "satisfied",
+    "pos": "adjective",
+    "ru": "удовлетворённый / довольный",
+    "topic": "feelings"
+  },
+  {
+    "word": "confused",
+    "pos": "adjective",
+    "ru": "сбитый с толку / растерянный",
+    "topic": "feelings"
+  },
+  {
+    "word": "confusing",
+    "pos": "adjective",
+    "ru": "запутанный",
+    "topic": "feelings"
+  },
+  {
+    "word": "shocked",
+    "pos": "adjective",
+    "ru": "потрясённый",
+    "topic": "feelings"
+  },
+  {
+    "word": "loneliness",
+    "pos": "noun",
+    "ru": "одиночество",
+    "topic": "feelings",
+    "uncountable": true
+  },
+  {
+    "word": "homesick",
+    "pos": "adjective",
+    "ru": "тоскующий по дому",
+    "topic": "feelings"
+  },
+  {
+    "word": "miserable",
+    "pos": "adjective",
+    "ru": "несчастный / жалкий",
+    "topic": "feelings"
+  },
+  {
+    "word": "fed up",
+    "pos": "adjective",
+    "ru": "сытый по горло",
+    "topic": "feelings",
+    "note": "fed up with sth"
+  },
+  {
+    "word": "enthusiastic",
+    "pos": "adjective",
+    "ru": "полный энтузиазма",
+    "topic": "feelings"
+  },
+  {
+    "word": "anger",
+    "pos": "noun",
+    "ru": "гнев / злость",
+    "topic": "feelings",
+    "uncountable": true
+  },
+  {
+    "word": "delighted",
+    "pos": "adjective",
+    "ru": "очень довольный / в восторге",
+    "topic": "feelings"
+  },
+  {
+    "word": "furious",
+    "pos": "adjective",
+    "ru": "разъярённый",
+    "topic": "feelings"
+  },
+  {
+    "word": "cheer up",
+    "pos": "phrase",
+    "ru": "взбодриться / подбодрить",
+    "topic": "feelings"
+  },
+  {
+    "word": "let off steam",
+    "pos": "phrase",
+    "ru": "выпустить пар",
+    "topic": "feelings"
+  },
+  {
+    "word": "media",
+    "pos": "noun",
+    "ru": "СМИ / медиа",
+    "topic": "media"
+  },
+  {
+    "word": "headline",
+    "pos": "noun",
+    "ru": "заголовок",
+    "topic": "media"
+  },
+  {
+    "word": "article",
+    "pos": "noun",
+    "ru": "статья",
+    "topic": "media"
+  },
+  {
+    "word": "reporter",
+    "pos": "noun",
+    "ru": "репортёр",
+    "topic": "media"
+  },
+  {
+    "word": "editor",
+    "pos": "noun",
+    "ru": "редактор",
+    "topic": "media"
+  },
+  {
+    "word": "magazine",
+    "pos": "noun",
+    "ru": "журнал",
+    "topic": "media",
+    "note": "Ложный друг: не «магазин» (это shop)"
+  },
+  {
+    "word": "broadcast",
+    "pos": "verb",
+    "ru": "транслировать / вести передачу",
+    "topic": "media",
+    "past": "broadcast",
+    "pp": "broadcast"
+  },
+  {
+    "word": "documentary",
+    "pos": "noun",
+    "ru": "документальный фильм",
+    "topic": "media"
+  },
+  {
+    "word": "podcast",
+    "pos": "noun",
+    "ru": "подкаст",
+    "topic": "media"
+  },
+  {
+    "word": "subscribe",
+    "pos": "verb",
+    "ru": "подписываться",
+    "topic": "media"
+  },
+  {
+    "word": "fake news",
+    "pos": "noun",
+    "ru": "фейковые новости",
+    "topic": "media",
+    "uncountable": true
+  },
+  {
+    "word": "rumour",
+    "pos": "noun",
+    "ru": "слух",
+    "topic": "media"
+  },
+  {
+    "word": "gossip",
+    "pos": "noun",
+    "ru": "сплетни",
+    "topic": "media",
+    "uncountable": true
+  },
+  {
+    "word": "source",
+    "pos": "noun",
+    "ru": "источник",
+    "topic": "media"
+  },
+  {
+    "word": "accurate",
+    "pos": "adjective",
+    "ru": "точный",
+    "topic": "media",
+    "note": "Ложный друг: не «аккуратный» (это neat, tidy, careful)"
+  },
+  {
+    "word": "fact-check",
+    "pos": "verb",
+    "ru": "проверять факты",
+    "topic": "media"
+  },
+  {
+    "word": "mislead",
+    "pos": "verb",
+    "ru": "вводить в заблуждение",
+    "topic": "media",
+    "past": "misled",
+    "pp": "misled"
+  },
+  {
+    "word": "misleading",
+    "pos": "adjective",
+    "ru": "вводящий в заблуждение",
+    "topic": "media"
+  },
+  {
+    "word": "spread",
+    "pos": "verb",
+    "ru": "распространять(ся)",
+    "topic": "media",
+    "past": "spread",
+    "pp": "spread"
+  },
+  {
+    "word": "publish",
+    "pos": "verb",
+    "ru": "публиковать / издавать",
+    "topic": "media"
+  },
+  {
+    "word": "press",
+    "pos": "noun",
+    "ru": "пресса",
+    "topic": "media",
+    "uncountable": true
+  },
+  {
+    "word": "interviewer",
+    "pos": "noun",
+    "ru": "интервьюер",
+    "topic": "media"
+  },
+  {
+    "word": "edit",
+    "pos": "verb",
+    "ru": "редактировать / монтировать",
+    "topic": "media"
+  },
+  {
+    "word": "legend",
+    "pos": "noun",
+    "ru": "легенда",
+    "topic": "media"
+  },
+  {
+    "word": "incident",
+    "pos": "noun",
+    "ru": "происшествие / инцидент",
+    "topic": "media"
+  },
+  {
+    "word": "issue",
+    "pos": "noun",
+    "ru": "вопрос / проблема; выпуск",
+    "topic": "media"
+  },
+  {
+    "word": "point of view",
+    "pos": "phrase",
+    "ru": "точка зрения",
+    "topic": "opinions"
+  },
+  {
+    "word": "belief",
+    "pos": "noun",
+    "ru": "убеждение / вера",
+    "topic": "opinions"
+  },
+  {
+    "word": "point",
+    "pos": "noun",
+    "ru": "смысл / суть; пункт",
+    "topic": "opinions"
+  },
+  {
+    "word": "doubt",
+    "pos": "noun",
+    "ru": "сомнение",
+    "topic": "opinions"
+  },
+  {
+    "word": "certain",
+    "pos": "adjective",
+    "ru": "уверенный; определённый",
+    "topic": "opinions"
+  },
+  {
+    "word": "obvious",
+    "pos": "adjective",
+    "ru": "очевидный",
+    "topic": "opinions"
+  },
+  {
+    "word": "obviously",
+    "pos": "adverb",
+    "ru": "очевидно",
+    "topic": "opinions"
+  },
+  {
+    "word": "apparently",
+    "pos": "adverb",
+    "ru": "по-видимому / говорят, что",
+    "topic": "opinions"
+  },
+  {
+    "word": "honestly",
+    "pos": "adverb",
+    "ru": "честно",
+    "topic": "opinions"
+  },
+  {
+    "word": "personally",
+    "pos": "adverb",
+    "ru": "лично (я)",
+    "topic": "opinions"
+  },
+  {
+    "word": "in my opinion",
+    "pos": "phrase",
+    "ru": "по-моему / на мой взгляд",
+    "topic": "opinions"
+  },
+  {
+    "word": "as far as I know",
+    "pos": "phrase",
+    "ru": "насколько я знаю",
+    "topic": "opinions"
+  },
+  {
+    "word": "on the other hand",
+    "pos": "phrase",
+    "ru": "с другой стороны",
+    "topic": "opinions"
+  },
+  {
+    "word": "to be honest",
+    "pos": "phrase",
+    "ru": "честно говоря",
+    "topic": "opinions"
+  },
+  {
+    "word": "it depends on",
+    "pos": "phrase",
+    "ru": "это зависит от",
+    "topic": "opinions",
+    "note": "depend on, не depend from"
+  },
+  {
+    "word": "that's a good point",
+    "pos": "phrase",
+    "ru": "верно подмечено / хорошая мысль",
+    "topic": "opinions"
+  },
+  {
+    "word": "I see what you mean",
+    "pos": "phrase",
+    "ru": "я понимаю, что ты имеешь в виду",
+    "topic": "opinions"
+  },
+  {
+    "word": "after all",
+    "pos": "phrase",
+    "ru": "в конце концов / всё-таки",
+    "topic": "opinions"
+  },
+  {
+    "word": "such as",
+    "pos": "phrase",
+    "ru": "такой как / например",
+    "topic": "general"
+  },
+  {
+    "word": "as well as",
+    "pos": "phrase",
+    "ru": "а также",
+    "topic": "general"
+  },
+  {
+    "word": "in other words",
+    "pos": "phrase",
+    "ru": "другими словами",
+    "topic": "general"
+  },
+  {
+    "word": "even though",
+    "pos": "conjunction",
+    "ru": "хотя / даже несмотря на то, что",
+    "topic": "general"
+  },
+  {
+    "word": "despite",
+    "pos": "preposition",
+    "ru": "несмотря на",
+    "topic": "general",
+    "note": "despite sth / despite doing (без of)"
+  },
+  {
+    "word": "in spite of",
+    "pos": "preposition",
+    "ru": "несмотря на",
+    "topic": "general"
+  },
+  {
+    "word": "whereas",
+    "pos": "conjunction",
+    "ru": "тогда как / в то время как",
+    "topic": "general"
+  },
+  {
+    "word": "as long as",
+    "pos": "conjunction",
+    "ru": "при условии, что / пока",
+    "topic": "general"
+  },
+  {
+    "word": "otherwise",
+    "pos": "adverb",
+    "ru": "иначе / в противном случае",
+    "topic": "general"
+  },
+  {
+    "word": "therefore",
+    "pos": "adverb",
+    "ru": "поэтому / следовательно",
+    "topic": "general"
+  },
+  {
+    "word": "whether",
+    "pos": "conjunction",
+    "ru": "ли (был ли / будет ли)",
+    "topic": "general"
+  },
+  {
+    "word": "instead of",
+    "pos": "preposition",
+    "ru": "вместо",
+    "topic": "general"
+  },
+  {
+    "word": "according to",
+    "pos": "preposition",
+    "ru": "согласно / по словам",
+    "topic": "media"
+  },
+  {
+    "word": "due to",
+    "pos": "preposition",
+    "ru": "из-за / благодаря",
+    "topic": "general"
+  },
+  {
+    "word": "apart from",
+    "pos": "preposition",
+    "ru": "кроме / помимо",
+    "topic": "general"
+  },
+  {
+    "word": "except",
+    "pos": "preposition",
+    "ru": "кроме / за исключением",
+    "topic": "general"
+  },
+  {
+    "word": "including",
+    "pos": "preposition",
+    "ru": "включая",
+    "topic": "general"
+  },
+  {
+    "word": "environmental",
+    "pos": "adjective",
+    "ru": "экологический",
+    "topic": "nature"
+  },
+  {
+    "word": "climate",
+    "pos": "noun",
+    "ru": "климат",
+    "topic": "nature"
+  },
+  {
+    "word": "climate change",
+    "pos": "noun",
+    "ru": "изменение климата",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "global warming",
+    "pos": "noun",
+    "ru": "глобальное потепление",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "pollution",
+    "pos": "noun",
+    "ru": "загрязнение",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "polluted",
+    "pos": "adjective",
+    "ru": "загрязнённый",
+    "topic": "nature"
+  },
+  {
+    "word": "recycle",
+    "pos": "verb",
+    "ru": "перерабатывать / сдавать во вторичную переработку",
+    "topic": "nature"
+  },
+  {
+    "word": "recycling",
+    "pos": "noun",
+    "ru": "переработка отходов",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "litter",
+    "pos": "noun",
+    "ru": "мусор (на улице)",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "packaging",
+    "pos": "noun",
+    "ru": "упаковка",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "solar",
+    "pos": "adjective",
+    "ru": "солнечный",
+    "topic": "nature"
+  },
+  {
+    "word": "renewable",
+    "pos": "adjective",
+    "ru": "возобновляемый",
+    "topic": "nature"
+  },
+  {
+    "word": "fuel",
+    "pos": "noun",
+    "ru": "топливо",
+    "topic": "nature"
+  },
+  {
+    "word": "emissions",
+    "pos": "noun",
+    "ru": "выбросы",
+    "topic": "nature"
+  },
+  {
+    "word": "carbon footprint",
+    "pos": "noun",
+    "ru": "углеродный след",
+    "topic": "nature"
+  },
+  {
+    "word": "reduce",
+    "pos": "verb",
+    "ru": "сокращать / уменьшать",
+    "topic": "nature"
+  },
+  {
+    "word": "destroy",
+    "pos": "verb",
+    "ru": "разрушать / уничтожать",
+    "topic": "nature"
+  },
+  {
+    "word": "damage",
+    "pos": "noun",
+    "ru": "ущерб / повреждение",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "natural",
+    "pos": "adjective",
+    "ru": "природный / естественный",
+    "topic": "nature"
+  },
+  {
+    "word": "wildlife",
+    "pos": "noun",
+    "ru": "дикая природа",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "species",
+    "pos": "noun",
+    "ru": "вид (биологический)",
+    "topic": "nature",
+    "plural": "species"
+  },
+  {
+    "word": "endangered",
+    "pos": "adjective",
+    "ru": "находящийся под угрозой исчезновения",
+    "topic": "nature"
+  },
+  {
+    "word": "flood",
+    "pos": "noun",
+    "ru": "наводнение",
+    "topic": "nature"
+  },
+  {
+    "word": "drought",
+    "pos": "noun",
+    "ru": "засуха",
+    "topic": "nature"
+  },
+  {
+    "word": "heatwave",
+    "pos": "noun",
+    "ru": "аномальная жара",
+    "topic": "nature"
+  },
+  {
+    "word": "green space",
+    "pos": "noun",
+    "ru": "зелёная зона",
+    "topic": "city"
+  },
+  {
+    "word": "allotment",
+    "pos": "noun",
+    "ru": "огородный участок (арендуемый)",
+    "topic": "city",
+    "note": "Британское"
+  },
+  {
+    "word": "community",
+    "pos": "noun",
+    "ru": "сообщество / местные жители",
+    "topic": "society"
+  },
+  {
+    "word": "community centre",
+    "pos": "noun",
+    "ru": "общественный центр",
+    "topic": "society"
+  },
+  {
+    "word": "resident",
+    "pos": "noun",
+    "ru": "житель",
+    "topic": "city"
+  },
+  {
+    "word": "local council",
+    "pos": "noun",
+    "ru": "местный совет (администрация)",
+    "topic": "society",
+    "note": "Британское: the council"
+  },
+  {
+    "word": "council",
+    "pos": "noun",
+    "ru": "совет (местная власть)",
+    "topic": "society"
+  },
+  {
+    "word": "petition",
+    "pos": "noun",
+    "ru": "петиция",
+    "topic": "society"
+  },
+  {
+    "word": "campaign",
+    "pos": "noun",
+    "ru": "кампания",
+    "topic": "society"
+  },
+  {
+    "word": "protest",
+    "pos": "noun",
+    "ru": "протест",
+    "topic": "society"
+  },
+  {
+    "word": "vote",
+    "pos": "verb",
+    "ru": "голосовать",
+    "topic": "society"
+  },
+  {
+    "word": "election",
+    "pos": "noun",
+    "ru": "выборы",
+    "topic": "society"
+  },
+  {
+    "word": "government",
+    "pos": "noun",
+    "ru": "правительство",
+    "topic": "society"
+  },
+  {
+    "word": "politics",
+    "pos": "noun",
+    "ru": "политика",
+    "topic": "society",
+    "uncountable": true
+  },
+  {
+    "word": "policy",
+    "pos": "noun",
+    "ru": "политика (курс) / правила",
+    "topic": "society"
+  },
+  {
+    "word": "citizen",
+    "pos": "noun",
+    "ru": "гражданин",
+    "topic": "society"
+  },
+  {
+    "word": "volunteer",
+    "pos": "noun",
+    "ru": "волонтёр",
+    "topic": "society"
+  },
+  {
+    "word": "charity",
+    "pos": "noun",
+    "ru": "благотворительность / благотворительная организация",
+    "topic": "society"
+  },
+  {
+    "word": "donate",
+    "pos": "verb",
+    "ru": "жертвовать",
+    "topic": "society"
+  },
+  {
+    "word": "raise money",
+    "pos": "phrase",
+    "ru": "собирать деньги",
+    "topic": "society"
+  },
+  {
+    "word": "construction",
+    "pos": "noun",
+    "ru": "строительство",
+    "topic": "city",
+    "uncountable": true
+  },
+  {
+    "word": "cycle lane",
+    "pos": "noun",
+    "ru": "велодорожка",
+    "topic": "city"
+  },
+  {
+    "word": "housing",
+    "pos": "noun",
+    "ru": "жильё",
+    "topic": "city",
+    "uncountable": true
+  },
+  {
+    "word": "block of flats",
+    "pos": "noun",
+    "ru": "многоквартирный дом",
+    "topic": "city",
+    "note": "Британское"
+  },
+  {
+    "word": "suburb",
+    "pos": "noun",
+    "ru": "пригород",
+    "topic": "city"
+  },
+  {
+    "word": "outskirts",
+    "pos": "noun",
+    "ru": "окраина",
+    "topic": "city"
+  },
+  {
+    "word": "population",
+    "pos": "noun",
+    "ru": "население",
+    "topic": "city"
+  },
+  {
+    "word": "rural",
+    "pos": "adjective",
+    "ru": "сельский",
+    "topic": "city"
+  },
+  {
+    "word": "urban",
+    "pos": "adjective",
+    "ru": "городской",
+    "topic": "city"
+  },
+  {
+    "word": "replace",
+    "pos": "verb",
+    "ru": "заменять",
+    "topic": "general"
+  },
+  {
+    "word": "remove",
+    "pos": "verb",
+    "ru": "убирать / удалять",
+    "topic": "general"
+  },
+  {
+    "word": "planning permission",
+    "pos": "noun",
+    "ru": "разрешение на строительство",
+    "topic": "city",
+    "uncountable": true,
+    "note": "Британское"
+  },
+  {
+    "word": "oppose",
+    "pos": "verb",
+    "ru": "выступать против",
+    "topic": "society"
+  },
+  {
+    "word": "in favour of",
+    "pos": "phrase",
+    "ru": "в пользу / за",
+    "topic": "society"
+  },
+  {
+    "word": "solution",
+    "pos": "noun",
+    "ru": "решение (проблемы)",
+    "topic": "general"
+  },
+  {
+    "word": "solve",
+    "pos": "verb",
+    "ru": "решать (проблему)",
+    "topic": "general"
+  },
+  {
+    "word": "make a difference",
+    "pos": "phrase",
+    "ru": "изменить ситуацию к лучшему",
+    "topic": "society"
+  },
+  {
+    "word": "get involved",
+    "pos": "phrase",
+    "ru": "принять участие / включиться",
+    "topic": "society"
+  },
+  {
+    "word": "relative",
+    "pos": "noun",
+    "ru": "родственник",
+    "topic": "family"
+  },
+  {
+    "word": "generation",
+    "pos": "noun",
+    "ru": "поколение",
+    "topic": "family"
+  },
+  {
+    "word": "in-laws",
+    "pos": "noun",
+    "ru": "родственники мужа / жены",
+    "topic": "family"
+  },
+  {
+    "word": "mother-in-law",
+    "pos": "noun",
+    "ru": "свекровь / тёща",
+    "topic": "family"
+  },
+  {
+    "word": "father-in-law",
+    "pos": "noun",
+    "ru": "свёкор / тесть",
+    "topic": "family"
+  },
+  {
+    "word": "stepmother",
+    "pos": "noun",
+    "ru": "мачеха",
+    "topic": "family"
+  },
+  {
+    "word": "stepfather",
+    "pos": "noun",
+    "ru": "отчим",
+    "topic": "family"
+  },
+  {
+    "word": "only child",
+    "pos": "noun",
+    "ru": "единственный ребёнок",
+    "topic": "family"
+  },
+  {
+    "word": "marriage",
+    "pos": "noun",
+    "ru": "брак",
+    "topic": "family"
+  },
+  {
+    "word": "engaged",
+    "pos": "adjective",
+    "ru": "помолвленный",
+    "topic": "family"
+  },
+  {
+    "word": "divorce",
+    "pos": "noun",
+    "ru": "развод",
+    "topic": "family"
+  },
+  {
+    "word": "split up",
+    "pos": "phrase",
+    "ru": "расстаться",
+    "topic": "family"
+  },
+  {
+    "word": "get on well with",
+    "pos": "phrase",
+    "ru": "хорошо ладить с",
+    "topic": "family"
+  },
+  {
+    "word": "bring up",
+    "pos": "phrase",
+    "ru": "воспитывать; поднимать (тему)",
+    "topic": "family"
+  },
+  {
+    "word": "childhood",
+    "pos": "noun",
+    "ru": "детство",
+    "topic": "family"
+  },
+  {
+    "word": "upbringing",
+    "pos": "noun",
+    "ru": "воспитание",
+    "topic": "family",
+    "uncountable": true
+  },
+  {
+    "word": "raise",
+    "pos": "verb",
+    "ru": "растить / воспитывать; поднимать",
+    "topic": "family"
+  },
+  {
+    "word": "youth",
+    "pos": "noun",
+    "ru": "юность; молодёжь",
+    "topic": "family",
+    "uncountable": true
+  },
+  {
+    "word": "respect",
+    "pos": "noun",
+    "ru": "уважение",
+    "topic": "family",
+    "uncountable": true
+  },
+  {
+    "word": "caring",
+    "pos": "adjective",
+    "ru": "заботливый",
+    "topic": "family"
+  },
+  {
+    "word": "bond",
+    "pos": "noun",
+    "ru": "связь / узы",
+    "topic": "family"
+  },
+  {
+    "word": "rely on",
+    "pos": "phrase",
+    "ru": "полагаться на",
+    "topic": "family"
+  },
+  {
+    "word": "depend on",
+    "pos": "phrase",
+    "ru": "зависеть от; полагаться на",
+    "topic": "family",
+    "note": "depend on (не from)"
+  },
+  {
+    "word": "row",
+    "pos": "noun",
+    "ru": "ссора (брит.)",
+    "topic": "family",
+    "note": "Британское; произносится как «рау»"
+  },
+  {
+    "word": "forgive",
+    "pos": "verb",
+    "ru": "прощать",
+    "topic": "family",
+    "past": "forgave",
+    "pp": "forgiven"
+  },
+  {
+    "word": "misunderstanding",
+    "pos": "noun",
+    "ru": "недоразумение",
+    "topic": "family"
+  },
+  {
+    "word": "make up",
+    "pos": "phrase",
+    "ru": "помириться; выдумывать",
+    "topic": "family"
+  },
+  {
+    "word": "custom",
+    "pos": "noun",
+    "ru": "обычай",
+    "topic": "culture"
+  },
+  {
+    "word": "anniversary",
+    "pos": "noun",
+    "ru": "годовщина",
+    "topic": "culture"
+  },
+  {
+    "word": "occasion",
+    "pos": "noun",
+    "ru": "случай / повод",
+    "topic": "culture",
+    "note": "special occasion = особый повод"
+  },
+  {
+    "word": "ceremony",
+    "pos": "noun",
+    "ru": "церемония",
+    "topic": "culture"
+  },
+  {
+    "word": "cultural",
+    "pos": "adjective",
+    "ru": "культурный (относящийся к культуре)",
+    "topic": "culture",
+    "note": "cultural = относящийся к культуре; культурный человек = polite, well-mannered"
+  },
+  {
+    "word": "cultural difference",
+    "pos": "noun",
+    "ru": "культурное различие",
+    "topic": "culture"
+  },
+  {
+    "word": "culture shock",
+    "pos": "noun",
+    "ru": "культурный шок",
+    "topic": "culture",
+    "uncountable": true
+  },
+  {
+    "word": "manners",
+    "pos": "noun",
+    "ru": "манеры",
+    "topic": "culture"
+  },
+  {
+    "word": "table manners",
+    "pos": "noun",
+    "ru": "манеры за столом",
+    "topic": "culture"
+  },
+  {
+    "word": "expectation",
+    "pos": "noun",
+    "ru": "ожидание",
+    "topic": "culture"
+  },
+  {
+    "word": "home-made",
+    "pos": "adjective",
+    "ru": "домашний (самодельный)",
+    "topic": "food"
+  },
+  {
+    "word": "flavour",
+    "pos": "noun",
+    "ru": "вкус / аромат",
+    "topic": "food",
+    "note": "Британское написание"
+  },
+  {
+    "word": "raw",
+    "pos": "adjective",
+    "ru": "сырой",
+    "topic": "food"
+  },
+  {
+    "word": "identity",
+    "pos": "noun",
+    "ru": "личность / идентичность",
+    "topic": "culture"
+  },
+  {
+    "word": "nationality",
+    "pos": "noun",
+    "ru": "гражданство / национальность",
+    "topic": "culture"
+  },
+  {
+    "word": "background",
+    "pos": "noun",
+    "ru": "происхождение / биография; фон",
+    "topic": "culture"
+  },
+  {
+    "word": "origin",
+    "pos": "noun",
+    "ru": "происхождение",
+    "topic": "culture"
+  },
+  {
+    "word": "native",
+    "pos": "adjective",
+    "ru": "родной",
+    "topic": "culture"
+  },
+  {
+    "word": "native speaker",
+    "pos": "noun",
+    "ru": "носитель языка",
+    "topic": "culture"
+  },
+  {
+    "word": "mother tongue",
+    "pos": "noun",
+    "ru": "родной язык",
+    "topic": "culture"
+  },
+  {
+    "word": "bilingual",
+    "pos": "adjective",
+    "ru": "двуязычный",
+    "topic": "culture"
+  },
+  {
+    "word": "belong",
+    "pos": "verb",
+    "ru": "принадлежать",
+    "topic": "culture",
+    "note": "belong to sth/sb"
+  },
+  {
+    "word": "fit in",
+    "pos": "phrase",
+    "ru": "вписаться / прижиться",
+    "topic": "culture"
+  },
+  {
+    "word": "adapt",
+    "pos": "verb",
+    "ru": "адаптироваться / приспосабливаться",
+    "topic": "culture"
+  },
+  {
+    "word": "get used to",
+    "pos": "phrase",
+    "ru": "привыкать к",
+    "topic": "culture",
+    "note": "get used to + -ing / сущ."
+  },
+  {
+    "word": "stereotype",
+    "pos": "noun",
+    "ru": "стереотип",
+    "topic": "culture"
+  },
+  {
+    "word": "prejudice",
+    "pos": "noun",
+    "ru": "предрассудок / предубеждение",
+    "topic": "culture"
+  },
+  {
+    "word": "immigrant",
+    "pos": "noun",
+    "ru": "иммигрант",
+    "topic": "society"
+  },
+  {
+    "word": "emigrate",
+    "pos": "verb",
+    "ru": "эмигрировать",
+    "topic": "society"
+  },
+  {
+    "word": "settle",
+    "pos": "verb",
+    "ru": "поселиться / обосноваться",
+    "topic": "society"
+  },
+  {
+    "word": "settle in",
+    "pos": "phrase",
+    "ru": "освоиться (на новом месте)",
+    "topic": "society"
+  },
+  {
+    "word": "bureaucracy",
+    "pos": "noun",
+    "ru": "бюрократия",
+    "topic": "bureaucracy",
+    "uncountable": true
+  },
+  {
+    "word": "paperwork",
+    "pos": "noun",
+    "ru": "бумажная волокита / документы",
+    "topic": "bureaucracy",
+    "uncountable": true
+  },
+  {
+    "word": "signature",
+    "pos": "noun",
+    "ru": "подпись",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "register",
+    "pos": "verb",
+    "ru": "регистрироваться",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "registration",
+    "pos": "noun",
+    "ru": "регистрация",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "permit",
+    "pos": "noun",
+    "ru": "разрешение (документ)",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "residence permit",
+    "pos": "noun",
+    "ru": "вид на жительство",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "licence",
+    "pos": "noun",
+    "ru": "лицензия / права",
+    "topic": "bureaucracy",
+    "note": "Брит.: licence (сущ.), license (глаг.); driving licence"
+  },
+  {
+    "word": "proof of address",
+    "pos": "noun",
+    "ru": "подтверждение адреса",
+    "topic": "bureaucracy",
+    "uncountable": true
+  },
+  {
+    "word": "official",
+    "pos": "adjective",
+    "ru": "официальный",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "require",
+    "pos": "verb",
+    "ru": "требовать / нуждаться",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "requirement",
+    "pos": "noun",
+    "ru": "требование",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "valid",
+    "pos": "adjective",
+    "ru": "действительный (о документе)",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "expire",
+    "pos": "verb",
+    "ru": "истекать (о сроке)",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "renew",
+    "pos": "verb",
+    "ru": "продлевать / обновлять",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "process",
+    "pos": "noun",
+    "ru": "процесс",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "procedure",
+    "pos": "noun",
+    "ru": "процедура",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "approve",
+    "pos": "verb",
+    "ru": "одобрять",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "reject",
+    "pos": "verb",
+    "ru": "отклонять",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "permission",
+    "pos": "noun",
+    "ru": "разрешение",
+    "topic": "bureaucracy",
+    "uncountable": true
+  },
+  {
+    "word": "system",
+    "pos": "noun",
+    "ru": "система",
+    "topic": "bureaucracy"
+  },
+  {
+    "word": "insurance",
+    "pos": "noun",
+    "ru": "страховка",
+    "topic": "bureaucracy",
+    "uncountable": true
+  },
+  {
+    "word": "National Insurance number",
+    "pos": "noun",
+    "ru": "номер социального страхования",
+    "topic": "bureaucracy",
+    "note": "Британское"
+  },
+  {
+    "word": "postcode",
+    "pos": "noun",
+    "ru": "почтовый индекс",
+    "topic": "bureaucracy",
+    "note": "Британское; в США zip code"
+  },
+  {
+    "word": "citizenship",
+    "pos": "noun",
+    "ru": "гражданство",
+    "topic": "bureaucracy",
+    "uncountable": true
+  },
+  {
+    "word": "challenge",
+    "pos": "noun",
+    "ru": "трудная задача / вызов",
+    "topic": "general"
+  },
+  {
+    "word": "challenging",
+    "pos": "adjective",
+    "ru": "трудный / требующий усилий",
+    "topic": "general"
+  },
+  {
+    "word": "opportunity",
+    "pos": "noun",
+    "ru": "возможность",
+    "topic": "general"
+  },
+  {
+    "word": "advantage",
+    "pos": "noun",
+    "ru": "преимущество",
+    "topic": "general"
+  },
+  {
+    "word": "disadvantage",
+    "pos": "noun",
+    "ru": "недостаток",
+    "topic": "general"
+  },
+  {
+    "word": "benefit",
+    "pos": "noun",
+    "ru": "польза / выгода; пособие",
+    "topic": "general"
+  },
+  {
+    "word": "consequence",
+    "pos": "noun",
+    "ru": "последствие",
+    "topic": "general"
+  },
+  {
+    "word": "effect",
+    "pos": "noun",
+    "ru": "эффект / влияние",
+    "topic": "general"
+  },
+  {
+    "word": "affect",
+    "pos": "verb",
+    "ru": "влиять на",
+    "topic": "general",
+    "note": "affect sth (без on); сущ. — effect"
+  },
+  {
+    "word": "influence",
+    "pos": "noun",
+    "ru": "влияние",
+    "topic": "general"
+  },
+  {
+    "word": "cause",
+    "pos": "noun",
+    "ru": "причина",
+    "topic": "general"
+  },
+  {
+    "word": "condition",
+    "pos": "noun",
+    "ru": "условие; состояние",
+    "topic": "general"
+  },
+  {
+    "word": "circumstance",
+    "pos": "noun",
+    "ru": "обстоятельство",
+    "topic": "general"
+  },
+  {
+    "word": "reality",
+    "pos": "noun",
+    "ru": "реальность",
+    "topic": "general"
+  },
+  {
+    "word": "current",
+    "pos": "adjective",
+    "ru": "текущий / нынешний",
+    "topic": "general"
+  },
+  {
+    "word": "recent",
+    "pos": "adjective",
+    "ru": "недавний",
+    "topic": "general"
+  },
+  {
+    "word": "lately",
+    "pos": "adverb",
+    "ru": "в последнее время",
+    "topic": "general"
+  },
+  {
+    "word": "eventually",
+    "pos": "adverb",
+    "ru": "в конце концов / со временем",
+    "topic": "general",
+    "note": "Ложный друг: не «эвентуально / возможно»"
+  },
+  {
+    "word": "gradually",
+    "pos": "adverb",
+    "ru": "постепенно",
+    "topic": "general"
+  },
+  {
+    "word": "rarely",
+    "pos": "adverb",
+    "ru": "редко",
+    "topic": "general"
+  },
+  {
+    "word": "regularly",
+    "pos": "adverb",
+    "ru": "регулярно",
+    "topic": "general"
+  },
+  {
+    "word": "constantly",
+    "pos": "adverb",
+    "ru": "постоянно",
+    "topic": "general"
+  },
+  {
+    "word": "mainly",
+    "pos": "adverb",
+    "ru": "главным образом",
+    "topic": "general"
+  },
+  {
+    "word": "completely",
+    "pos": "adverb",
+    "ru": "полностью",
+    "topic": "general"
+  },
+  {
+    "word": "extremely",
+    "pos": "adverb",
+    "ru": "чрезвычайно / крайне",
+    "topic": "general"
+  },
+  {
+    "word": "fairly",
+    "pos": "adverb",
+    "ru": "довольно",
+    "topic": "general"
+  },
+  {
+    "word": "slightly",
+    "pos": "adverb",
+    "ru": "слегка / немного",
+    "topic": "general"
+  },
+  {
+    "word": "properly",
+    "pos": "adverb",
+    "ru": "как следует / правильно",
+    "topic": "general"
+  },
+  {
+    "word": "fortunately",
+    "pos": "adverb",
+    "ru": "к счастью",
+    "topic": "general"
+  },
+  {
+    "word": "nowhere",
+    "pos": "adverb",
+    "ru": "нигде / никуда",
+    "topic": "general"
+  },
+  {
+    "word": "ahead",
+    "pos": "adverb",
+    "ru": "впереди / вперёд",
+    "topic": "general"
+  },
+  {
+    "word": "somehow",
+    "pos": "adverb",
+    "ru": "как-то / каким-то образом",
+    "topic": "general"
+  },
+  {
+    "word": "whatever",
+    "pos": "pronoun",
+    "ru": "что угодно / всё, что",
+    "topic": "general"
+  },
+  {
+    "word": "whoever",
+    "pos": "pronoun",
+    "ru": "кто бы ни / тот, кто",
+    "topic": "general"
+  },
+  {
+    "word": "whenever",
+    "pos": "conjunction",
+    "ru": "всякий раз, когда / когда угодно",
+    "topic": "general"
+  },
+  {
+    "word": "wherever",
+    "pos": "conjunction",
+    "ru": "где бы ни / куда угодно",
+    "topic": "general"
+  },
+  {
+    "word": "each other",
+    "pos": "pronoun",
+    "ru": "друг друга",
+    "topic": "general"
+  },
+  {
+    "word": "none",
+    "pos": "pronoun",
+    "ru": "ни один / никто",
+    "topic": "general"
+  },
+  {
+    "word": "neither",
+    "pos": "determiner",
+    "ru": "ни один (из двух)",
+    "topic": "general"
+  },
+  {
+    "word": "plenty of",
+    "pos": "determiner",
+    "ru": "много / полно",
+    "topic": "general"
+  },
+  {
+    "word": "put off",
+    "pos": "phrase",
+    "ru": "откладывать",
+    "topic": "work"
+  },
+  {
+    "word": "come up with",
+    "pos": "phrase",
+    "ru": "придумать / предложить (идею)",
+    "topic": "work"
+  },
+  {
+    "word": "make progress",
+    "pos": "phrase",
+    "ru": "продвигаться / делать успехи",
+    "topic": "work"
+  },
+  {
+    "word": "make an effort",
+    "pos": "phrase",
+    "ru": "прилагать усилия",
+    "topic": "work"
+  },
+  {
+    "word": "make sense",
+    "pos": "phrase",
+    "ru": "иметь смысл",
+    "topic": "general"
+  },
+  {
+    "word": "make a complaint",
+    "pos": "phrase",
+    "ru": "подать жалобу",
+    "topic": "communication"
+  },
+  {
+    "word": "make up your mind",
+    "pos": "phrase",
+    "ru": "решиться / определиться",
+    "topic": "general"
+  },
+  {
+    "word": "do a favour",
+    "pos": "phrase",
+    "ru": "оказать услугу",
+    "topic": "people",
+    "note": "do sb a favour"
+  },
+  {
+    "word": "take a break",
+    "pos": "phrase",
+    "ru": "сделать перерыв",
+    "topic": "work"
+  },
+  {
+    "word": "take care of",
+    "pos": "phrase",
+    "ru": "заботиться о",
+    "topic": "people"
+  },
+  {
+    "word": "take place",
+    "pos": "phrase",
+    "ru": "происходить / проходить (о событии)",
+    "topic": "general"
+  },
+  {
+    "word": "take responsibility for",
+    "pos": "phrase",
+    "ru": "брать ответственность за",
+    "topic": "work"
+  },
+  {
+    "word": "take into account",
+    "pos": "phrase",
+    "ru": "принимать во внимание",
+    "topic": "general"
+  },
+  {
+    "word": "take advantage of",
+    "pos": "phrase",
+    "ru": "воспользоваться",
+    "topic": "general"
+  },
+  {
+    "word": "take up",
+    "pos": "phrase",
+    "ru": "начать заниматься (хобби); занимать (место, время)",
+    "topic": "general"
+  },
+  {
+    "word": "take over",
+    "pos": "phrase",
+    "ru": "взять на себя / перенять управление",
+    "topic": "work"
+  },
+  {
+    "word": "figure out",
+    "pos": "phrase",
+    "ru": "разобраться / понять",
+    "topic": "general"
+  },
+  {
+    "word": "point out",
+    "pos": "phrase",
+    "ru": "указывать / обращать внимание",
+    "topic": "communication"
+  },
+  {
+    "word": "keep up with",
+    "pos": "phrase",
+    "ru": "успевать за / не отставать от",
+    "topic": "general"
+  },
+  {
+    "word": "catch up",
+    "pos": "phrase",
+    "ru": "догнать / наверстать",
+    "topic": "general"
+  },
+  {
+    "word": "look into",
+    "pos": "phrase",
+    "ru": "изучать / разбираться в",
+    "topic": "work"
+  },
+  {
+    "word": "set up",
+    "pos": "phrase",
+    "ru": "основывать / создавать; настраивать",
+    "topic": "work"
+  },
+  {
+    "word": "fall behind",
+    "pos": "phrase",
+    "ru": "отставать",
+    "topic": "work"
+  },
+  {
+    "word": "hand in",
+    "pos": "phrase",
+    "ru": "сдавать (работу)",
+    "topic": "work"
+  },
+  {
+    "word": "call off",
+    "pos": "phrase",
+    "ru": "отменить",
+    "topic": "work"
+  },
+  {
+    "word": "get back to",
+    "pos": "phrase",
+    "ru": "вернуться к; ответить позже",
+    "topic": "communication"
+  },
+  {
+    "word": "get rid of",
+    "pos": "phrase",
+    "ru": "избавиться от",
+    "topic": "general"
+  },
+  {
+    "word": "get over",
+    "pos": "phrase",
+    "ru": "оправиться от / пережить",
+    "topic": "feelings"
+  },
+  {
+    "word": "go through",
+    "pos": "phrase",
+    "ru": "пережить; просматривать",
+    "topic": "general"
+  },
+  {
+    "word": "come across",
+    "pos": "phrase",
+    "ru": "наткнуться на / встретить случайно",
+    "topic": "general"
+  },
+  {
+    "word": "end up",
+    "pos": "phrase",
+    "ru": "оказаться (в итоге)",
+    "topic": "general"
+  },
+  {
+    "word": "let down",
+    "pos": "phrase",
+    "ru": "подвести (кого-то)",
+    "topic": "people"
+  },
+  {
+    "word": "stand out",
+    "pos": "phrase",
+    "ru": "выделяться",
+    "topic": "people"
+  },
+  {
+    "word": "cut down on",
+    "pos": "phrase",
+    "ru": "сократить (потребление)",
+    "topic": "health"
+  },
+  {
+    "word": "stay up",
+    "pos": "phrase",
+    "ru": "не ложиться спать",
+    "topic": "health"
+  },
+  {
+    "word": "switch off",
+    "pos": "phrase",
+    "ru": "выключать; отключиться (отдохнуть)",
+    "topic": "health"
+  },
+  {
+    "word": "burn out",
+    "pos": "phrase",
+    "ru": "выгореть",
+    "topic": "health"
+  },
+  {
+    "word": "be in charge of",
+    "pos": "phrase",
+    "ru": "отвечать за / руководить",
+    "topic": "work"
+  },
+  {
+    "word": "be responsible for",
+    "pos": "phrase",
+    "ru": "отвечать за / нести ответственность за",
+    "topic": "work"
+  },
+  {
+    "word": "be supposed to",
+    "pos": "phrase",
+    "ru": "должен (по плану / ожиданиям)",
+    "topic": "general"
+  },
+  {
+    "word": "by accident",
+    "pos": "phrase",
+    "ru": "случайно",
+    "topic": "general"
+  },
+  {
+    "word": "in advance",
+    "pos": "phrase",
+    "ru": "заранее",
+    "topic": "general"
+  },
+  {
+    "word": "from time to time",
+    "pos": "phrase",
+    "ru": "время от времени",
+    "topic": "general"
+  },
+  {
+    "word": "sooner or later",
+    "pos": "phrase",
+    "ru": "рано или поздно",
+    "topic": "general"
+  },
+  {
+    "word": "first of all",
+    "pos": "phrase",
+    "ru": "прежде всего",
+    "topic": "general"
+  },
+  {
+    "word": "as a result",
+    "pos": "phrase",
+    "ru": "в результате",
+    "topic": "general"
+  },
+  {
+    "word": "on average",
+    "pos": "phrase",
+    "ru": "в среднем",
+    "topic": "general"
+  },
+  {
+    "word": "in general",
+    "pos": "phrase",
+    "ru": "в целом",
+    "topic": "general"
+  },
+  {
+    "word": "out of order",
+    "pos": "phrase",
+    "ru": "не работает (неисправен)",
+    "topic": "general",
+    "note": "Британское: The machine is out of order"
+  },
+  {
+    "word": "out of date",
+    "pos": "phrase",
+    "ru": "устаревший; просроченный",
+    "topic": "general"
+  },
+  {
+    "word": "up to date",
+    "pos": "phrase",
+    "ru": "современный / актуальный",
+    "topic": "general"
+  },
+  {
+    "word": "no wonder",
+    "pos": "phrase",
+    "ru": "неудивительно",
+    "topic": "general"
+  },
+  {
+    "word": "I'm afraid",
+    "pos": "phrase",
+    "ru": "боюсь, что / к сожалению",
+    "topic": "communication",
+    "note": "Вежливое смягчение плохой новости: I'm afraid we're closed"
+  },
+  {
+    "word": "keep in touch",
+    "pos": "phrase",
+    "ru": "поддерживать связь",
+    "topic": "communication"
+  },
+  {
+    "word": "get in touch",
+    "pos": "phrase",
+    "ru": "связаться",
+    "topic": "communication"
+  },
+  {
+    "word": "pay attention to",
+    "pos": "phrase",
+    "ru": "обращать внимание на",
+    "topic": "general"
+  },
+  {
+    "word": "change your mind",
+    "pos": "phrase",
+    "ru": "передумать",
+    "topic": "general"
+  },
+  {
+    "word": "keep an eye on",
+    "pos": "phrase",
+    "ru": "присматривать за",
+    "topic": "general"
+  },
+  {
+    "word": "under pressure",
+    "pos": "phrase",
+    "ru": "под давлением",
+    "topic": "work"
+  },
+  {
+    "word": "meet a deadline",
+    "pos": "phrase",
+    "ru": "уложиться в срок",
+    "topic": "work"
+  },
+  {
+    "word": "miss a deadline",
+    "pos": "phrase",
+    "ru": "сорвать срок",
+    "topic": "work"
+  },
+  {
+    "word": "can't stand",
+    "pos": "phrase",
+    "ru": "терпеть не могу",
+    "topic": "feelings"
+  },
+  {
+    "word": "consider",
+    "pos": "verb",
+    "ru": "рассматривать / считать",
+    "topic": "general",
+    "note": "consider + -ing"
+  },
+  {
+    "word": "involve",
+    "pos": "verb",
+    "ru": "вовлекать / включать в себя",
+    "topic": "general"
+  },
+  {
+    "word": "prevent",
+    "pos": "verb",
+    "ru": "предотвращать",
+    "topic": "general"
+  },
+  {
+    "word": "pretend",
+    "pos": "verb",
+    "ru": "притворяться",
+    "topic": "general",
+    "note": "Ложный друг: не «претендовать» (это claim)"
+  },
+  {
+    "word": "attend",
+    "pos": "verb",
+    "ru": "посещать / присутствовать",
+    "topic": "general",
+    "note": "Ложный друг: attend a meeting = присутствовать (не «следить»)"
+  },
+  {
+    "word": "appreciate",
+    "pos": "verb",
+    "ru": "ценить / быть признательным",
+    "topic": "general"
+  },
+  {
+    "word": "assume",
+    "pos": "verb",
+    "ru": "предполагать",
+    "topic": "general"
+  },
+  {
+    "word": "intend",
+    "pos": "verb",
+    "ru": "намереваться",
+    "topic": "general"
+  },
+  {
+    "word": "appear",
+    "pos": "verb",
+    "ru": "появляться; казаться",
+    "topic": "general"
+  },
+  {
+    "word": "occur",
+    "pos": "verb",
+    "ru": "происходить; приходить в голову",
+    "topic": "general"
+  },
+  {
+    "word": "exist",
+    "pos": "verb",
+    "ru": "существовать",
+    "topic": "general"
+  },
+  {
+    "word": "increase",
+    "pos": "verb",
+    "ru": "увеличивать(ся) / расти",
+    "topic": "general"
+  },
+  {
+    "word": "decrease",
+    "pos": "verb",
+    "ru": "уменьшать(ся)",
+    "topic": "general"
+  },
+  {
+    "word": "rise",
+    "pos": "verb",
+    "ru": "подниматься / расти",
+    "topic": "general",
+    "past": "rose",
+    "pp": "risen"
+  },
+  {
+    "word": "compare",
+    "pos": "verb",
+    "ru": "сравнивать",
+    "topic": "general",
+    "note": "compare with / to"
+  },
+  {
+    "word": "comparison",
+    "pos": "noun",
+    "ru": "сравнение",
+    "topic": "general"
+  },
+  {
+    "word": "contain",
+    "pos": "verb",
+    "ru": "содержать",
+    "topic": "general"
+  },
+  {
+    "word": "deserve",
+    "pos": "verb",
+    "ru": "заслуживать",
+    "topic": "general"
+  },
+  {
+    "word": "ensure",
+    "pos": "verb",
+    "ru": "обеспечивать / гарантировать",
+    "topic": "general"
+  },
+  {
+    "word": "estimate",
+    "pos": "verb",
+    "ru": "оценивать (примерно)",
+    "topic": "general"
+  },
+  {
+    "word": "focus",
+    "pos": "verb",
+    "ru": "сосредотачиваться",
+    "topic": "work",
+    "note": "focus on sth"
+  },
+  {
+    "word": "concentrate",
+    "pos": "verb",
+    "ru": "сосредотачиваться",
+    "topic": "work",
+    "note": "concentrate on sth"
+  },
+  {
+    "word": "handle",
+    "pos": "verb",
+    "ru": "справляться с / обращаться с",
+    "topic": "work"
+  },
+  {
+    "word": "hesitate",
+    "pos": "verb",
+    "ru": "колебаться / сомневаться",
+    "topic": "general"
+  },
+  {
+    "word": "ignore",
+    "pos": "verb",
+    "ru": "игнорировать",
+    "topic": "general"
+  },
+  {
+    "word": "measure",
+    "pos": "verb",
+    "ru": "измерять",
+    "topic": "general"
+  },
+  {
+    "word": "predict",
+    "pos": "verb",
+    "ru": "предсказывать",
+    "topic": "general"
+  },
+  {
+    "word": "provide",
+    "pos": "verb",
+    "ru": "предоставлять / обеспечивать",
+    "topic": "general"
+  },
+  {
+    "word": "prove",
+    "pos": "verb",
+    "ru": "доказывать",
+    "topic": "crime"
+  },
+  {
+    "word": "react",
+    "pos": "verb",
+    "ru": "реагировать",
+    "topic": "general"
+  },
+  {
+    "word": "reaction",
+    "pos": "noun",
+    "ru": "реакция",
+    "topic": "general"
+  },
+  {
+    "word": "regret",
+    "pos": "verb",
+    "ru": "сожалеть",
+    "topic": "feelings"
+  },
+  {
+    "word": "remain",
+    "pos": "verb",
+    "ru": "оставаться",
+    "topic": "general"
+  },
+  {
+    "word": "reveal",
+    "pos": "verb",
+    "ru": "раскрывать / обнаруживать",
+    "topic": "media"
+  },
+  {
+    "word": "separate",
+    "pos": "verb",
+    "ru": "разделять / расставаться",
+    "topic": "general"
+  },
+  {
+    "word": "struggle",
+    "pos": "verb",
+    "ru": "бороться / с трудом справляться",
+    "topic": "general"
+  },
+  {
+    "word": "suffer",
+    "pos": "verb",
+    "ru": "страдать",
+    "topic": "health",
+    "note": "suffer from sth"
+  },
+  {
+    "word": "surround",
+    "pos": "verb",
+    "ru": "окружать",
+    "topic": "general"
+  },
+  {
+    "word": "survive",
+    "pos": "verb",
+    "ru": "выживать",
+    "topic": "general"
+  },
+  {
+    "word": "tend",
+    "pos": "verb",
+    "ru": "иметь склонность",
+    "topic": "general",
+    "note": "tend to do sth = обычно делать"
+  },
+  {
+    "word": "threaten",
+    "pos": "verb",
+    "ru": "угрожать",
+    "topic": "general"
+  },
+  {
+    "word": "admire",
+    "pos": "verb",
+    "ru": "восхищаться",
+    "topic": "feelings"
+  },
+  {
+    "word": "annoy",
+    "pos": "verb",
+    "ru": "раздражать",
+    "topic": "feelings"
+  },
+  {
+    "word": "bother",
+    "pos": "verb",
+    "ru": "беспокоить / утруждать себя",
+    "topic": "feelings"
+  },
+  {
+    "word": "disturb",
+    "pos": "verb",
+    "ru": "мешать / беспокоить",
+    "topic": "general"
+  },
+  {
+    "word": "frighten",
+    "pos": "verb",
+    "ru": "пугать",
+    "topic": "feelings"
+  },
+  {
+    "word": "gather",
+    "pos": "verb",
+    "ru": "собирать(ся)",
+    "topic": "general"
+  },
+  {
+    "word": "shake",
+    "pos": "verb",
+    "ru": "трясти / пожимать (руку)",
+    "topic": "general",
+    "past": "shook",
+    "pp": "shaken"
+  },
+  {
+    "word": "hang",
+    "pos": "verb",
+    "ru": "висеть / вешать",
+    "topic": "general",
+    "past": "hung",
+    "pp": "hung"
+  },
+  {
+    "word": "freeze",
+    "pos": "verb",
+    "ru": "замерзать / замораживать",
+    "topic": "general",
+    "past": "froze",
+    "pp": "frozen"
+  },
+  {
+    "word": "shoot",
+    "pos": "verb",
+    "ru": "стрелять; снимать (фильм)",
+    "topic": "general",
+    "past": "shot",
+    "pp": "shot"
+  },
+  {
+    "word": "stick",
+    "pos": "verb",
+    "ru": "приклеивать / застревать",
+    "topic": "general",
+    "past": "stuck",
+    "pp": "stuck"
+  },
+  {
+    "word": "strike",
+    "pos": "verb",
+    "ru": "бить; бастовать",
+    "topic": "general",
+    "past": "struck",
+    "pp": "struck"
+  },
+  {
+    "word": "swear",
+    "pos": "verb",
+    "ru": "клясться; ругаться",
+    "topic": "general",
+    "past": "swore",
+    "pp": "sworn"
+  },
+  {
+    "word": "tear",
+    "pos": "verb",
+    "ru": "рвать",
+    "topic": "general",
+    "past": "tore",
+    "pp": "torn"
+  },
+  {
+    "word": "aware",
+    "pos": "adjective",
+    "ru": "осведомлённый / знающий",
+    "topic": "general",
+    "note": "be aware of sth"
+  },
+  {
+    "word": "basic",
+    "pos": "adjective",
+    "ru": "основной / базовый",
+    "topic": "general"
+  },
+  {
+    "word": "complicated",
+    "pos": "adjective",
+    "ru": "сложный / запутанный",
+    "topic": "general"
+  },
+  {
+    "word": "essential",
+    "pos": "adjective",
+    "ru": "необходимый / существенный",
+    "topic": "general"
+  },
+  {
+    "word": "familiar",
+    "pos": "adjective",
+    "ru": "знакомый",
+    "topic": "general",
+    "note": "familiar with sth = знаком с чем-то"
+  },
+  {
+    "word": "enormous",
+    "pos": "adjective",
+    "ru": "огромный",
+    "topic": "general"
+  },
+  {
+    "word": "impressive",
+    "pos": "adjective",
+    "ru": "впечатляющий",
+    "topic": "general"
+  },
+  {
+    "word": "incredible",
+    "pos": "adjective",
+    "ru": "невероятный",
+    "topic": "general"
+  },
+  {
+    "word": "independent",
+    "pos": "adjective",
+    "ru": "независимый / самостоятельный",
+    "topic": "general"
+  },
+  {
+    "word": "original",
+    "pos": "adjective",
+    "ru": "оригинальный / первоначальный",
+    "topic": "general"
+  },
+  {
+    "word": "particular",
+    "pos": "adjective",
+    "ru": "определённый / конкретный",
+    "topic": "general"
+  },
+  {
+    "word": "permanent",
+    "pos": "adjective",
+    "ru": "постоянный",
+    "topic": "general"
+  },
+  {
+    "word": "temporary",
+    "pos": "adjective",
+    "ru": "временный",
+    "topic": "general"
+  },
+  {
+    "word": "practical",
+    "pos": "adjective",
+    "ru": "практичный",
+    "topic": "general"
+  },
+  {
+    "word": "previous",
+    "pos": "adjective",
+    "ru": "предыдущий",
+    "topic": "general"
+  },
+  {
+    "word": "professional",
+    "pos": "adjective",
+    "ru": "профессиональный",
+    "topic": "work"
+  },
+  {
+    "word": "proper",
+    "pos": "adjective",
+    "ru": "настоящий / как следует",
+    "topic": "general"
+  },
+  {
+    "word": "rare",
+    "pos": "adjective",
+    "ru": "редкий",
+    "topic": "general"
+  },
+  {
+    "word": "reasonable",
+    "pos": "adjective",
+    "ru": "разумный / приемлемый",
+    "topic": "general"
+  },
+  {
+    "word": "relevant",
+    "pos": "adjective",
+    "ru": "актуальный / относящийся к делу",
+    "topic": "general",
+    "note": "Так переводится «актуальный» (не actual)"
+  },
+  {
+    "word": "serious",
+    "pos": "adjective",
+    "ru": "серьёзный",
+    "topic": "general"
+  },
+  {
+    "word": "specific",
+    "pos": "adjective",
+    "ru": "конкретный / определённый",
+    "topic": "general"
+  },
+  {
+    "word": "sudden",
+    "pos": "adjective",
+    "ru": "внезапный",
+    "topic": "general"
+  },
+  {
+    "word": "suitable",
+    "pos": "adjective",
+    "ru": "подходящий",
+    "topic": "general"
+  },
+  {
+    "word": "typical",
+    "pos": "adjective",
+    "ru": "типичный",
+    "topic": "general"
+  },
+  {
+    "word": "useless",
+    "pos": "adjective",
+    "ru": "бесполезный",
+    "topic": "general"
+  },
+  {
+    "word": "various",
+    "pos": "adjective",
+    "ru": "различный / разнообразный",
+    "topic": "general"
+  },
+  {
+    "word": "gorgeous",
+    "pos": "adjective",
+    "ru": "великолепный / красивый",
+    "topic": "general"
+  },
+  {
+    "word": "massive",
+    "pos": "adjective",
+    "ru": "огромный",
+    "topic": "general"
+  },
+  {
+    "word": "pleasant",
+    "pos": "adjective",
+    "ru": "приятный",
+    "topic": "general"
+  },
+  {
+    "word": "unpleasant",
+    "pos": "adjective",
+    "ru": "неприятный",
+    "topic": "general"
+  },
+  {
+    "word": "ancient",
+    "pos": "adjective",
+    "ru": "древний",
+    "topic": "general"
+  },
+  {
+    "word": "valuable",
+    "pos": "adjective",
+    "ru": "ценный",
+    "topic": "money"
+  },
+  {
+    "word": "equal",
+    "pos": "adjective",
+    "ru": "равный",
+    "topic": "society"
+  },
+  {
+    "word": "well-known",
+    "pos": "adjective",
+    "ru": "известный",
+    "topic": "general"
+  },
+  {
+    "word": "likely",
+    "pos": "adjective",
+    "ru": "вероятный",
+    "topic": "general",
+    "note": "be likely to do sth"
+  },
+  {
+    "word": "unlikely",
+    "pos": "adjective",
+    "ru": "маловероятный",
+    "topic": "general"
+  },
+  {
+    "word": "positive",
+    "pos": "adjective",
+    "ru": "положительный; уверенный",
+    "topic": "general"
+  },
+  {
+    "word": "helpful",
+    "pos": "adjective",
+    "ru": "полезный / готовый помочь",
+    "topic": "general"
+  },
+  {
+    "word": "harmful",
+    "pos": "adjective",
+    "ru": "вредный",
+    "topic": "health"
+  },
+  {
+    "word": "fabric",
+    "pos": "noun",
+    "ru": "ткань",
+    "topic": "general",
+    "note": "Ложный друг: не «фабрика» (это factory)"
+  },
+  {
+    "word": "decade",
+    "pos": "noun",
+    "ru": "десятилетие",
+    "topic": "general",
+    "note": "Ложный друг: не «декада» (10 дней); decade = 10 лет"
+  },
+  {
+    "word": "novel",
+    "pos": "noun",
+    "ru": "роман",
+    "topic": "media",
+    "note": "Ложный друг: не «новелла»; novel = роман"
+  },
+  {
+    "word": "exhibition",
+    "pos": "noun",
+    "ru": "выставка",
+    "topic": "culture"
+  },
+  {
+    "word": "period",
+    "pos": "noun",
+    "ru": "период",
+    "topic": "general"
+  },
+  {
+    "word": "occasionally",
+    "pos": "adverb",
+    "ru": "изредка / время от времени",
+    "topic": "general"
+  },
+  {
+    "word": "amount",
+    "pos": "noun",
+    "ru": "количество (неисч.)",
+    "topic": "general",
+    "note": "amount of + неисч.; number of + исч."
+  },
+  {
+    "word": "quality",
+    "pos": "noun",
+    "ru": "качество",
+    "topic": "general"
+  },
+  {
+    "word": "range",
+    "pos": "noun",
+    "ru": "диапазон / ассортимент",
+    "topic": "general"
+  },
+  {
+    "word": "average",
+    "pos": "adjective",
+    "ru": "средний",
+    "topic": "general"
+  },
+  {
+    "word": "majority",
+    "pos": "noun",
+    "ru": "большинство",
+    "topic": "general"
+  },
+  {
+    "word": "minority",
+    "pos": "noun",
+    "ru": "меньшинство",
+    "topic": "society"
+  },
+  {
+    "word": "feature",
+    "pos": "noun",
+    "ru": "черта / особенность",
+    "topic": "general"
+  },
+  {
+    "word": "aspect",
+    "pos": "noun",
+    "ru": "аспект",
+    "topic": "general"
+  },
+  {
+    "word": "factor",
+    "pos": "noun",
+    "ru": "фактор",
+    "topic": "general"
+  },
+  {
+    "word": "method",
+    "pos": "noun",
+    "ru": "метод / способ",
+    "topic": "general"
+  },
+  {
+    "word": "material",
+    "pos": "noun",
+    "ru": "материал",
+    "topic": "general"
+  },
+  {
+    "word": "equipment",
+    "pos": "noun",
+    "ru": "оборудование / снаряжение",
+    "topic": "general",
+    "uncountable": true
+  },
+  {
+    "word": "knowledge",
+    "pos": "noun",
+    "ru": "знание / знания",
+    "topic": "general",
+    "uncountable": true
+  },
+  {
+    "word": "research",
+    "pos": "noun",
+    "ru": "исследование",
+    "topic": "general",
+    "uncountable": true
+  },
+  {
+    "word": "lecture",
+    "pos": "noun",
+    "ru": "лекция",
+    "topic": "general"
+  },
+  {
+    "word": "graduate",
+    "pos": "verb",
+    "ru": "окончить (вуз)",
+    "topic": "general"
+  },
+  {
+    "word": "mark",
+    "pos": "noun",
+    "ru": "оценка",
+    "topic": "general",
+    "note": "Британское: оценка = mark (в США grade)"
+  }
+]

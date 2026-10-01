@@ -1,0 +1,3814 @@
+[
+  {
+    "word": "go",
+    "pos": "verb",
+    "ru": "идти / ехать",
+    "topic": "general",
+    "past": "went",
+    "pp": "gone"
+  },
+  {
+    "word": "come",
+    "pos": "verb",
+    "ru": "приходить / приезжать",
+    "topic": "general",
+    "past": "came",
+    "pp": "come"
+  },
+  {
+    "word": "get",
+    "pos": "verb",
+    "ru": "получать / доставать; добираться",
+    "topic": "general",
+    "past": "got",
+    "pp": "got",
+    "note": "очень частый глагол: get a ticket, get home, get tired"
+  },
+  {
+    "word": "make",
+    "pos": "verb",
+    "ru": "делать / готовить (создавать)",
+    "topic": "general",
+    "past": "made",
+    "pp": "made",
+    "note": "make = создавать (make a cake, make tea); do = выполнять (do homework)"
+  },
+  {
+    "word": "take",
+    "pos": "verb",
+    "ru": "брать; занимать (время)",
+    "topic": "general",
+    "past": "took",
+    "pp": "taken"
+  },
+  {
+    "word": "give",
+    "pos": "verb",
+    "ru": "давать / дарить",
+    "topic": "general",
+    "past": "gave",
+    "pp": "given"
+  },
+  {
+    "word": "know",
+    "pos": "verb",
+    "ru": "знать",
+    "topic": "general",
+    "past": "knew",
+    "pp": "known"
+  },
+  {
+    "word": "think",
+    "pos": "verb",
+    "ru": "думать / считать",
+    "topic": "general",
+    "past": "thought",
+    "pp": "thought"
+  },
+  {
+    "word": "see",
+    "pos": "verb",
+    "ru": "видеть",
+    "topic": "general",
+    "past": "saw",
+    "pp": "seen"
+  },
+  {
+    "word": "look",
+    "pos": "verb",
+    "ru": "смотреть / выглядеть",
+    "topic": "general",
+    "note": "look at = смотреть на; You look tired = Ты выглядишь усталым"
+  },
+  {
+    "word": "watch",
+    "pos": "verb",
+    "ru": "смотреть (ТВ, фильм); наручные часы",
+    "topic": "general",
+    "note": "watch TV, watch a film"
+  },
+  {
+    "word": "listen",
+    "pos": "verb",
+    "ru": "слушать",
+    "topic": "general",
+    "note": "всегда listen to: listen to music, не listen music"
+  },
+  {
+    "word": "hear",
+    "pos": "verb",
+    "ru": "слышать",
+    "topic": "general",
+    "past": "heard",
+    "pp": "heard"
+  },
+  {
+    "word": "say",
+    "pos": "verb",
+    "ru": "сказать / говорить",
+    "topic": "general",
+    "past": "said",
+    "pp": "said",
+    "note": "say something, но tell someone: He told me…"
+  },
+  {
+    "word": "tell",
+    "pos": "verb",
+    "ru": "рассказывать / сказать (кому-то)",
+    "topic": "general",
+    "past": "told",
+    "pp": "told",
+    "note": "tell + человек: tell me, tell Tom"
+  },
+  {
+    "word": "speak",
+    "pos": "verb",
+    "ru": "говорить (на языке)",
+    "topic": "general",
+    "past": "spoke",
+    "pp": "spoken",
+    "note": "speak English, не speak in English"
+  },
+  {
+    "word": "talk",
+    "pos": "verb",
+    "ru": "разговаривать",
+    "topic": "general",
+    "note": "talk to someone, talk about something"
+  },
+  {
+    "word": "ask",
+    "pos": "verb",
+    "ru": "спрашивать / просить",
+    "topic": "general"
+  },
+  {
+    "word": "answer",
+    "pos": "verb",
+    "ru": "отвечать; ответ",
+    "topic": "general"
+  },
+  {
+    "word": "want",
+    "pos": "verb",
+    "ru": "хотеть",
+    "topic": "general"
+  },
+  {
+    "word": "need",
+    "pos": "verb",
+    "ru": "нуждаться / быть нужным",
+    "topic": "general",
+    "note": "I need help = Мне нужна помощь"
+  },
+  {
+    "word": "like",
+    "pos": "verb",
+    "ru": "нравиться / любить",
+    "topic": "general",
+    "note": "I like tea = Мне нравится чай (подлежащее — I)"
+  },
+  {
+    "word": "love",
+    "pos": "verb",
+    "ru": "любить / обожать",
+    "topic": "feelings"
+  },
+  {
+    "word": "hate",
+    "pos": "verb",
+    "ru": "ненавидеть",
+    "topic": "feelings"
+  },
+  {
+    "word": "live",
+    "pos": "verb",
+    "ru": "жить",
+    "topic": "general"
+  },
+  {
+    "word": "work",
+    "pos": "verb",
+    "ru": "работать; работа",
+    "topic": "work",
+    "note": "работа как место/занятие: at work, go to work (без артикля)"
+  },
+  {
+    "word": "study",
+    "pos": "verb",
+    "ru": "учиться / изучать",
+    "topic": "general"
+  },
+  {
+    "word": "learn",
+    "pos": "verb",
+    "ru": "учить / узнавать",
+    "topic": "general"
+  },
+  {
+    "word": "read",
+    "pos": "verb",
+    "ru": "читать",
+    "topic": "general",
+    "past": "read",
+    "pp": "read",
+    "note": "прошедшее пишется так же, но звучит [red]"
+  },
+  {
+    "word": "write",
+    "pos": "verb",
+    "ru": "писать",
+    "topic": "general",
+    "past": "wrote",
+    "pp": "written"
+  },
+  {
+    "word": "open",
+    "pos": "verb",
+    "ru": "открывать; открытый",
+    "topic": "general"
+  },
+  {
+    "word": "close",
+    "pos": "verb",
+    "ru": "закрывать",
+    "topic": "general"
+  },
+  {
+    "word": "start",
+    "pos": "verb",
+    "ru": "начинать(ся)",
+    "topic": "general"
+  },
+  {
+    "word": "finish",
+    "pos": "verb",
+    "ru": "заканчивать",
+    "topic": "general"
+  },
+  {
+    "word": "stop",
+    "pos": "verb",
+    "ru": "останавливать(ся) / прекращать",
+    "topic": "general"
+  },
+  {
+    "word": "help",
+    "pos": "verb",
+    "ru": "помогать; помощь",
+    "topic": "general"
+  },
+  {
+    "word": "play",
+    "pos": "verb",
+    "ru": "играть",
+    "topic": "hobbies",
+    "note": "play football (без артикля), но play the guitar"
+  },
+  {
+    "word": "buy",
+    "pos": "verb",
+    "ru": "покупать",
+    "topic": "money",
+    "past": "bought",
+    "pp": "bought"
+  },
+  {
+    "word": "pay",
+    "pos": "verb",
+    "ru": "платить",
+    "topic": "money",
+    "past": "paid",
+    "pp": "paid",
+    "note": "pay for something: pay for the coffee"
+  },
+  {
+    "word": "sell",
+    "pos": "verb",
+    "ru": "продавать",
+    "topic": "money",
+    "past": "sold",
+    "pp": "sold"
+  },
+  {
+    "word": "cost",
+    "pos": "verb",
+    "ru": "стоить",
+    "topic": "money",
+    "past": "cost",
+    "pp": "cost"
+  },
+  {
+    "word": "eat",
+    "pos": "verb",
+    "ru": "есть / кушать",
+    "topic": "food",
+    "past": "ate",
+    "pp": "eaten"
+  },
+  {
+    "word": "drink",
+    "pos": "verb",
+    "ru": "пить; напиток",
+    "topic": "food",
+    "past": "drank",
+    "pp": "drunk"
+  },
+  {
+    "word": "cook",
+    "pos": "verb",
+    "ru": "готовить (еду); повар",
+    "topic": "food"
+  },
+  {
+    "word": "sleep",
+    "pos": "verb",
+    "ru": "спать",
+    "topic": "daily routine",
+    "past": "slept",
+    "pp": "slept"
+  },
+  {
+    "word": "walk",
+    "pos": "verb",
+    "ru": "идти пешком / гулять",
+    "topic": "transport"
+  },
+  {
+    "word": "run",
+    "pos": "verb",
+    "ru": "бегать / бежать",
+    "topic": "sport",
+    "past": "ran",
+    "pp": "run"
+  },
+  {
+    "word": "swim",
+    "pos": "verb",
+    "ru": "плавать",
+    "topic": "sport",
+    "past": "swam",
+    "pp": "swum"
+  },
+  {
+    "word": "sit",
+    "pos": "verb",
+    "ru": "сидеть",
+    "topic": "general",
+    "past": "sat",
+    "pp": "sat"
+  },
+  {
+    "word": "stand",
+    "pos": "verb",
+    "ru": "стоять",
+    "topic": "general",
+    "past": "stood",
+    "pp": "stood"
+  },
+  {
+    "word": "wait",
+    "pos": "verb",
+    "ru": "ждать",
+    "topic": "general",
+    "note": "wait for: wait for the bus, не wait the bus"
+  },
+  {
+    "word": "call",
+    "pos": "verb",
+    "ru": "звонить; звать / называть",
+    "topic": "general"
+  },
+  {
+    "word": "meet",
+    "pos": "verb",
+    "ru": "встречать(ся) / знакомиться",
+    "topic": "people",
+    "past": "met",
+    "pp": "met"
+  },
+  {
+    "word": "visit",
+    "pos": "verb",
+    "ru": "посещать / навещать",
+    "topic": "travel"
+  },
+  {
+    "word": "use",
+    "pos": "verb",
+    "ru": "использовать / пользоваться",
+    "topic": "general"
+  },
+  {
+    "word": "try",
+    "pos": "verb",
+    "ru": "пытаться / пробовать",
+    "topic": "general"
+  },
+  {
+    "word": "put",
+    "pos": "verb",
+    "ru": "класть / ставить",
+    "topic": "general",
+    "past": "put",
+    "pp": "put"
+  },
+  {
+    "word": "find",
+    "pos": "verb",
+    "ru": "находить",
+    "topic": "general",
+    "past": "found",
+    "pp": "found"
+  },
+  {
+    "word": "lose",
+    "pos": "verb",
+    "ru": "терять; проигрывать",
+    "topic": "general",
+    "past": "lost",
+    "pp": "lost"
+  },
+  {
+    "word": "forget",
+    "pos": "verb",
+    "ru": "забывать",
+    "topic": "general",
+    "past": "forgot",
+    "pp": "forgotten"
+  },
+  {
+    "word": "remember",
+    "pos": "verb",
+    "ru": "помнить / вспоминать",
+    "topic": "general"
+  },
+  {
+    "word": "understand",
+    "pos": "verb",
+    "ru": "понимать",
+    "topic": "general",
+    "past": "understood",
+    "pp": "understood"
+  },
+  {
+    "word": "feel",
+    "pos": "verb",
+    "ru": "чувствовать (себя)",
+    "topic": "feelings",
+    "past": "felt",
+    "pp": "felt",
+    "note": "I feel tired = Я чувствую себя усталым (без myself)"
+  },
+  {
+    "word": "leave",
+    "pos": "verb",
+    "ru": "уходить / уезжать; оставлять",
+    "topic": "general",
+    "past": "left",
+    "pp": "left"
+  },
+  {
+    "word": "bring",
+    "pos": "verb",
+    "ru": "приносить / привозить",
+    "topic": "general",
+    "past": "brought",
+    "pp": "brought"
+  },
+  {
+    "word": "carry",
+    "pos": "verb",
+    "ru": "нести / носить (в руках)",
+    "topic": "general"
+  },
+  {
+    "word": "show",
+    "pos": "verb",
+    "ru": "показывать",
+    "topic": "general"
+  },
+  {
+    "word": "wear",
+    "pos": "verb",
+    "ru": "носить (одежду) / быть одетым в",
+    "topic": "clothes",
+    "past": "wore",
+    "pp": "worn"
+  },
+  {
+    "word": "wash",
+    "pos": "verb",
+    "ru": "мыть / стирать",
+    "topic": "home"
+  },
+  {
+    "word": "clean",
+    "pos": "verb",
+    "ru": "убирать / чистить; чистый",
+    "topic": "home"
+  },
+  {
+    "word": "drive",
+    "pos": "verb",
+    "ru": "водить (машину) / ехать на машине",
+    "topic": "transport",
+    "past": "drove",
+    "pp": "driven"
+  },
+  {
+    "word": "ride",
+    "pos": "verb",
+    "ru": "ехать (верхом, на велосипеде)",
+    "topic": "transport",
+    "past": "rode",
+    "pp": "ridden",
+    "note": "ride a bike, но drive a car"
+  },
+  {
+    "word": "fly",
+    "pos": "verb",
+    "ru": "летать / лететь",
+    "topic": "transport",
+    "past": "flew",
+    "pp": "flown"
+  },
+  {
+    "word": "travel",
+    "pos": "verb",
+    "ru": "путешествовать / ездить",
+    "topic": "travel"
+  },
+  {
+    "word": "arrive",
+    "pos": "verb",
+    "ru": "прибывать / приезжать",
+    "topic": "travel",
+    "note": "arrive in (город, страна) / arrive at (здание, станция); не arrive to"
+  },
+  {
+    "word": "stay",
+    "pos": "verb",
+    "ru": "оставаться / останавливаться (в отеле)",
+    "topic": "travel"
+  },
+  {
+    "word": "move",
+    "pos": "verb",
+    "ru": "двигать(ся); переезжать",
+    "topic": "home"
+  },
+  {
+    "word": "change",
+    "pos": "verb",
+    "ru": "менять(ся); сдача",
+    "topic": "money",
+    "note": "сдача — тоже change: Here's your change"
+  },
+  {
+    "word": "choose",
+    "pos": "verb",
+    "ru": "выбирать",
+    "topic": "general",
+    "past": "chose",
+    "pp": "chosen"
+  },
+  {
+    "word": "begin",
+    "pos": "verb",
+    "ru": "начинать(ся)",
+    "topic": "general",
+    "past": "began",
+    "pp": "begun"
+  },
+  {
+    "word": "send",
+    "pos": "verb",
+    "ru": "отправлять / посылать",
+    "topic": "general",
+    "past": "sent",
+    "pp": "sent"
+  },
+  {
+    "word": "check",
+    "pos": "verb",
+    "ru": "проверять",
+    "topic": "general"
+  },
+  {
+    "word": "enjoy",
+    "pos": "verb",
+    "ru": "наслаждаться / получать удовольствие",
+    "topic": "feelings",
+    "note": "enjoy + -ing: I enjoy cooking"
+  },
+  {
+    "word": "agree",
+    "pos": "verb",
+    "ru": "соглашаться",
+    "topic": "feelings",
+    "note": "глагол: I agree, не I am agree"
+  },
+  {
+    "word": "can",
+    "pos": "verb",
+    "ru": "мочь / уметь",
+    "topic": "general",
+    "past": "could",
+    "note": "модальный: I can swim, he can (без -s); can't = не могу"
+  },
+  {
+    "word": "sing",
+    "pos": "verb",
+    "ru": "петь",
+    "topic": "hobbies",
+    "past": "sang",
+    "pp": "sung"
+  },
+  {
+    "word": "dance",
+    "pos": "verb",
+    "ru": "танцевать",
+    "topic": "hobbies"
+  },
+  {
+    "word": "draw",
+    "pos": "verb",
+    "ru": "рисовать (карандашом)",
+    "topic": "hobbies",
+    "past": "drew",
+    "pp": "drawn"
+  },
+  {
+    "word": "paint",
+    "pos": "verb",
+    "ru": "рисовать (красками) / красить",
+    "topic": "hobbies"
+  },
+  {
+    "word": "smile",
+    "pos": "verb",
+    "ru": "улыбаться; улыбка",
+    "topic": "feelings"
+  },
+  {
+    "word": "laugh",
+    "pos": "verb",
+    "ru": "смеяться",
+    "topic": "feelings"
+  },
+  {
+    "word": "turn",
+    "pos": "verb",
+    "ru": "поворачивать",
+    "topic": "directions"
+  },
+  {
+    "word": "cross",
+    "pos": "verb",
+    "ru": "переходить (улицу)",
+    "topic": "directions"
+  },
+  {
+    "word": "spell",
+    "pos": "verb",
+    "ru": "произносить по буквам",
+    "topic": "general",
+    "note": "How do you spell it? = Как это пишется?"
+  },
+  {
+    "word": "mean",
+    "pos": "verb",
+    "ru": "значить / иметь в виду",
+    "topic": "general",
+    "past": "meant",
+    "pp": "meant",
+    "note": "также = жадный / злой (о человеке): Don't be mean!"
+  },
+  {
+    "word": "order",
+    "pos": "verb",
+    "ru": "заказывать; заказ",
+    "topic": "food"
+  },
+  {
+    "word": "book",
+    "pos": "noun",
+    "ru": "книга; бронировать",
+    "topic": "hobbies",
+    "note": "как глагол: book a table / a ticket = забронировать"
+  },
+  {
+    "word": "hurt",
+    "pos": "verb",
+    "ru": "болеть / причинять боль",
+    "topic": "health",
+    "past": "hurt",
+    "pp": "hurt",
+    "note": "My leg hurts = У меня болит нога"
+  },
+  {
+    "word": "miss",
+    "pos": "verb",
+    "ru": "опаздывать (на транспорт); скучать по",
+    "topic": "transport",
+    "note": "miss the bus = опоздать на автобус; I miss you = Я скучаю по тебе"
+  },
+  {
+    "word": "hope",
+    "pos": "verb",
+    "ru": "надеяться",
+    "topic": "feelings"
+  },
+  {
+    "word": "man",
+    "pos": "noun",
+    "ru": "мужчина / человек",
+    "topic": "people",
+    "plural": "men"
+  },
+  {
+    "word": "woman",
+    "pos": "noun",
+    "ru": "женщина",
+    "topic": "people",
+    "plural": "women"
+  },
+  {
+    "word": "child",
+    "pos": "noun",
+    "ru": "ребёнок",
+    "topic": "people",
+    "plural": "children"
+  },
+  {
+    "word": "boy",
+    "pos": "noun",
+    "ru": "мальчик / парень",
+    "topic": "people"
+  },
+  {
+    "word": "girl",
+    "pos": "noun",
+    "ru": "девочка / девушка",
+    "topic": "people"
+  },
+  {
+    "word": "baby",
+    "pos": "noun",
+    "ru": "младенец / малыш",
+    "topic": "people"
+  },
+  {
+    "word": "people",
+    "pos": "noun",
+    "ru": "люди",
+    "topic": "people",
+    "note": "мн. ч.: People are nice, не People is"
+  },
+  {
+    "word": "person",
+    "pos": "noun",
+    "ru": "человек",
+    "topic": "people",
+    "plural": "people"
+  },
+  {
+    "word": "friend",
+    "pos": "noun",
+    "ru": "друг / подруга",
+    "topic": "people"
+  },
+  {
+    "word": "name",
+    "pos": "noun",
+    "ru": "имя / название",
+    "topic": "people",
+    "note": "My name is… = Меня зовут…"
+  },
+  {
+    "word": "family",
+    "pos": "noun",
+    "ru": "семья",
+    "topic": "family"
+  },
+  {
+    "word": "mother",
+    "pos": "noun",
+    "ru": "мать",
+    "topic": "family"
+  },
+  {
+    "word": "father",
+    "pos": "noun",
+    "ru": "отец",
+    "topic": "family"
+  },
+  {
+    "word": "mum",
+    "pos": "noun",
+    "ru": "мама",
+    "topic": "family",
+    "note": "британское; американское mom"
+  },
+  {
+    "word": "dad",
+    "pos": "noun",
+    "ru": "папа",
+    "topic": "family"
+  },
+  {
+    "word": "parents",
+    "pos": "noun",
+    "ru": "родители",
+    "topic": "family"
+  },
+  {
+    "word": "brother",
+    "pos": "noun",
+    "ru": "брат",
+    "topic": "family"
+  },
+  {
+    "word": "sister",
+    "pos": "noun",
+    "ru": "сестра",
+    "topic": "family"
+  },
+  {
+    "word": "son",
+    "pos": "noun",
+    "ru": "сын",
+    "topic": "family"
+  },
+  {
+    "word": "daughter",
+    "pos": "noun",
+    "ru": "дочь",
+    "topic": "family"
+  },
+  {
+    "word": "husband",
+    "pos": "noun",
+    "ru": "муж",
+    "topic": "family"
+  },
+  {
+    "word": "wife",
+    "pos": "noun",
+    "ru": "жена",
+    "topic": "family",
+    "plural": "wives"
+  },
+  {
+    "word": "grandmother",
+    "pos": "noun",
+    "ru": "бабушка",
+    "topic": "family"
+  },
+  {
+    "word": "grandfather",
+    "pos": "noun",
+    "ru": "дедушка",
+    "topic": "family"
+  },
+  {
+    "word": "grandparents",
+    "pos": "noun",
+    "ru": "бабушка и дедушка",
+    "topic": "family"
+  },
+  {
+    "word": "gran",
+    "pos": "noun",
+    "ru": "бабуля",
+    "topic": "family",
+    "note": "британское разговорное (также granny, grandma)"
+  },
+  {
+    "word": "aunt",
+    "pos": "noun",
+    "ru": "тётя",
+    "topic": "family"
+  },
+  {
+    "word": "uncle",
+    "pos": "noun",
+    "ru": "дядя",
+    "topic": "family"
+  },
+  {
+    "word": "cousin",
+    "pos": "noun",
+    "ru": "двоюродный брат / двоюродная сестра",
+    "topic": "family"
+  },
+  {
+    "word": "boyfriend",
+    "pos": "noun",
+    "ru": "парень (молодой человек)",
+    "topic": "people"
+  },
+  {
+    "word": "girlfriend",
+    "pos": "noun",
+    "ru": "девушка (подруга в отношениях)",
+    "topic": "people",
+    "note": "для просто подруги говорят friend"
+  },
+  {
+    "word": "married",
+    "pos": "adjective",
+    "ru": "женатый / замужем",
+    "topic": "family",
+    "note": "I'm married; married to someone (не with)"
+  },
+  {
+    "word": "neighbour",
+    "pos": "noun",
+    "ru": "сосед",
+    "topic": "home",
+    "note": "британское написание; сосед по квартире — flatmate"
+  },
+  {
+    "word": "flatmate",
+    "pos": "noun",
+    "ru": "сосед по квартире",
+    "topic": "home",
+    "note": "британское; американское roommate"
+  },
+  {
+    "word": "Mr",
+    "pos": "noun",
+    "ru": "мистер / господин",
+    "topic": "people"
+  },
+  {
+    "word": "Mrs",
+    "pos": "noun",
+    "ru": "миссис / госпожа (замужняя)",
+    "topic": "people"
+  },
+  {
+    "word": "Ms",
+    "pos": "noun",
+    "ru": "госпожа (нейтрально)",
+    "topic": "people"
+  },
+  {
+    "word": "job",
+    "pos": "noun",
+    "ru": "работа / должность",
+    "topic": "work",
+    "note": "a job (исчисляемое), но work (неисчисляемое)"
+  },
+  {
+    "word": "teacher",
+    "pos": "noun",
+    "ru": "учитель / преподаватель",
+    "topic": "work"
+  },
+  {
+    "word": "chef",
+    "pos": "noun",
+    "ru": "повар / шеф-повар",
+    "topic": "work",
+    "note": "произносится [шеф]"
+  },
+  {
+    "word": "waiter",
+    "pos": "noun",
+    "ru": "официант",
+    "topic": "work"
+  },
+  {
+    "word": "driver",
+    "pos": "noun",
+    "ru": "водитель",
+    "topic": "work"
+  },
+  {
+    "word": "nurse",
+    "pos": "noun",
+    "ru": "медсестра / медбрат",
+    "topic": "health"
+  },
+  {
+    "word": "customer",
+    "pos": "noun",
+    "ru": "клиент / покупатель",
+    "topic": "work"
+  },
+  {
+    "word": "boss",
+    "pos": "noun",
+    "ru": "начальник",
+    "topic": "work"
+  },
+  {
+    "word": "actor",
+    "pos": "noun",
+    "ru": "актёр",
+    "topic": "work"
+  },
+  {
+    "word": "singer",
+    "pos": "noun",
+    "ru": "певец / певица",
+    "topic": "work"
+  },
+  {
+    "word": "artist",
+    "pos": "noun",
+    "ru": "художник",
+    "topic": "work",
+    "note": "ложный друг: artist — чаще «художник», а не «артист»"
+  },
+  {
+    "word": "shop assistant",
+    "pos": "noun",
+    "ru": "продавец (в магазине)",
+    "topic": "work"
+  },
+  {
+    "word": "police officer",
+    "pos": "noun",
+    "ru": "полицейский",
+    "topic": "work"
+  },
+  {
+    "word": "dentist",
+    "pos": "noun",
+    "ru": "стоматолог",
+    "topic": "health"
+  },
+  {
+    "word": "home",
+    "pos": "noun",
+    "ru": "дом (родной) / дома",
+    "topic": "home",
+    "note": "at home = дома, go home = идти домой (без to)"
+  },
+  {
+    "word": "house",
+    "pos": "noun",
+    "ru": "дом (здание)",
+    "topic": "home"
+  },
+  {
+    "word": "flat",
+    "pos": "noun",
+    "ru": "квартира",
+    "topic": "home",
+    "note": "британское; американское apartment"
+  },
+  {
+    "word": "room",
+    "pos": "noun",
+    "ru": "комната",
+    "topic": "home"
+  },
+  {
+    "word": "bedroom",
+    "pos": "noun",
+    "ru": "спальня",
+    "topic": "home"
+  },
+  {
+    "word": "bathroom",
+    "pos": "noun",
+    "ru": "ванная",
+    "topic": "home"
+  },
+  {
+    "word": "kitchen",
+    "pos": "noun",
+    "ru": "кухня",
+    "topic": "home"
+  },
+  {
+    "word": "living room",
+    "pos": "noun",
+    "ru": "гостиная",
+    "topic": "home"
+  },
+  {
+    "word": "garden",
+    "pos": "noun",
+    "ru": "сад / садик у дома",
+    "topic": "home",
+    "note": "в Британии garden — любой двор с травой у дома"
+  },
+  {
+    "word": "door",
+    "pos": "noun",
+    "ru": "дверь",
+    "topic": "home"
+  },
+  {
+    "word": "window",
+    "pos": "noun",
+    "ru": "окно",
+    "topic": "home"
+  },
+  {
+    "word": "wall",
+    "pos": "noun",
+    "ru": "стена",
+    "topic": "home"
+  },
+  {
+    "word": "floor",
+    "pos": "noun",
+    "ru": "пол; этаж",
+    "topic": "home",
+    "note": "on the first floor — в Британии это второй этаж (первый = ground floor)"
+  },
+  {
+    "word": "stairs",
+    "pos": "noun",
+    "ru": "лестница",
+    "topic": "home"
+  },
+  {
+    "word": "table",
+    "pos": "noun",
+    "ru": "стол",
+    "topic": "home"
+  },
+  {
+    "word": "chair",
+    "pos": "noun",
+    "ru": "стул",
+    "topic": "home"
+  },
+  {
+    "word": "bed",
+    "pos": "noun",
+    "ru": "кровать",
+    "topic": "home",
+    "note": "go to bed = ложиться спать (без артикля)"
+  },
+  {
+    "word": "sofa",
+    "pos": "noun",
+    "ru": "диван",
+    "topic": "home"
+  },
+  {
+    "word": "desk",
+    "pos": "noun",
+    "ru": "письменный стол / парта",
+    "topic": "home"
+  },
+  {
+    "word": "fridge",
+    "pos": "noun",
+    "ru": "холодильник",
+    "topic": "home"
+  },
+  {
+    "word": "shower",
+    "pos": "noun",
+    "ru": "душ",
+    "topic": "home"
+  },
+  {
+    "word": "bath",
+    "pos": "noun",
+    "ru": "ванна",
+    "topic": "home"
+  },
+  {
+    "word": "toilet",
+    "pos": "noun",
+    "ru": "туалет",
+    "topic": "home",
+    "note": "в Британии также loo (разг.)"
+  },
+  {
+    "word": "light",
+    "pos": "noun",
+    "ru": "свет / лампа",
+    "topic": "home"
+  },
+  {
+    "word": "key",
+    "pos": "noun",
+    "ru": "ключ",
+    "topic": "home"
+  },
+  {
+    "word": "box",
+    "pos": "noun",
+    "ru": "коробка",
+    "topic": "home"
+  },
+  {
+    "word": "bag",
+    "pos": "noun",
+    "ru": "сумка / пакет",
+    "topic": "home"
+  },
+  {
+    "word": "cup",
+    "pos": "noun",
+    "ru": "чашка",
+    "topic": "food"
+  },
+  {
+    "word": "glass",
+    "pos": "noun",
+    "ru": "стакан; стекло",
+    "topic": "food"
+  },
+  {
+    "word": "plate",
+    "pos": "noun",
+    "ru": "тарелка",
+    "topic": "food"
+  },
+  {
+    "word": "knife",
+    "pos": "noun",
+    "ru": "нож",
+    "topic": "food",
+    "plural": "knives"
+  },
+  {
+    "word": "fork",
+    "pos": "noun",
+    "ru": "вилка",
+    "topic": "food"
+  },
+  {
+    "word": "spoon",
+    "pos": "noun",
+    "ru": "ложка",
+    "topic": "food"
+  },
+  {
+    "word": "bottle",
+    "pos": "noun",
+    "ru": "бутылка",
+    "topic": "food"
+  },
+  {
+    "word": "picture",
+    "pos": "noun",
+    "ru": "картина / картинка / фото",
+    "topic": "home"
+  },
+  {
+    "word": "clock",
+    "pos": "noun",
+    "ru": "часы (настенные)",
+    "topic": "home"
+  },
+  {
+    "word": "towel",
+    "pos": "noun",
+    "ru": "полотенце",
+    "topic": "home"
+  },
+  {
+    "word": "furniture",
+    "pos": "noun",
+    "ru": "мебель",
+    "topic": "home",
+    "uncountable": true,
+    "note": "неисчисляемое: some furniture, не furnitures / a furniture"
+  },
+  {
+    "word": "thing",
+    "pos": "noun",
+    "ru": "вещь / штука",
+    "topic": "general"
+  },
+  {
+    "word": "country",
+    "pos": "noun",
+    "ru": "страна",
+    "topic": "countries"
+  },
+  {
+    "word": "language",
+    "pos": "noun",
+    "ru": "язык",
+    "topic": "countries"
+  },
+  {
+    "word": "England",
+    "pos": "noun",
+    "ru": "Англия",
+    "topic": "countries"
+  },
+  {
+    "word": "English",
+    "pos": "adjective",
+    "ru": "английский; английский язык",
+    "topic": "countries"
+  },
+  {
+    "word": "Britain",
+    "pos": "noun",
+    "ru": "Великобритания",
+    "topic": "countries"
+  },
+  {
+    "word": "British",
+    "pos": "adjective",
+    "ru": "британский",
+    "topic": "countries"
+  },
+  {
+    "word": "the UK",
+    "pos": "noun",
+    "ru": "Соединённое Королевство (Великобритания)",
+    "topic": "countries"
+  },
+  {
+    "word": "Scotland",
+    "pos": "noun",
+    "ru": "Шотландия",
+    "topic": "countries"
+  },
+  {
+    "word": "Scottish",
+    "pos": "adjective",
+    "ru": "шотландский",
+    "topic": "countries",
+    "note": "не English: шотландцы — Scottish"
+  },
+  {
+    "word": "Russia",
+    "pos": "noun",
+    "ru": "Россия",
+    "topic": "countries"
+  },
+  {
+    "word": "Russian",
+    "pos": "adjective",
+    "ru": "русский / российский; русский язык",
+    "topic": "countries"
+  },
+  {
+    "word": "Germany",
+    "pos": "noun",
+    "ru": "Германия",
+    "topic": "countries"
+  },
+  {
+    "word": "German",
+    "pos": "adjective",
+    "ru": "немецкий; немецкий язык",
+    "topic": "countries"
+  },
+  {
+    "word": "France",
+    "pos": "noun",
+    "ru": "Франция",
+    "topic": "countries"
+  },
+  {
+    "word": "French",
+    "pos": "adjective",
+    "ru": "французский; французский язык",
+    "topic": "countries"
+  },
+  {
+    "word": "Spain",
+    "pos": "noun",
+    "ru": "Испания",
+    "topic": "countries"
+  },
+  {
+    "word": "Spanish",
+    "pos": "adjective",
+    "ru": "испанский; испанский язык",
+    "topic": "countries"
+  },
+  {
+    "word": "Italy",
+    "pos": "noun",
+    "ru": "Италия",
+    "topic": "countries"
+  },
+  {
+    "word": "Italian",
+    "pos": "adjective",
+    "ru": "итальянский; итальянский язык",
+    "topic": "countries"
+  },
+  {
+    "word": "Portugal",
+    "pos": "noun",
+    "ru": "Португалия",
+    "topic": "countries"
+  },
+  {
+    "word": "Portuguese",
+    "pos": "adjective",
+    "ru": "португальский; португальский язык",
+    "topic": "countries"
+  },
+  {
+    "word": "China",
+    "pos": "noun",
+    "ru": "Китай",
+    "topic": "countries"
+  },
+  {
+    "word": "Chinese",
+    "pos": "adjective",
+    "ru": "китайский; китайский язык",
+    "topic": "countries"
+  },
+  {
+    "word": "Japan",
+    "pos": "noun",
+    "ru": "Япония",
+    "topic": "countries"
+  },
+  {
+    "word": "Japanese",
+    "pos": "adjective",
+    "ru": "японский; японский язык",
+    "topic": "countries"
+  },
+  {
+    "word": "India",
+    "pos": "noun",
+    "ru": "Индия",
+    "topic": "countries"
+  },
+  {
+    "word": "Indian",
+    "pos": "adjective",
+    "ru": "индийский",
+    "topic": "countries"
+  },
+  {
+    "word": "the USA",
+    "pos": "noun",
+    "ru": "США",
+    "topic": "countries"
+  },
+  {
+    "word": "American",
+    "pos": "adjective",
+    "ru": "американский",
+    "topic": "countries"
+  },
+  {
+    "word": "food",
+    "pos": "noun",
+    "ru": "еда",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "breakfast",
+    "pos": "noun",
+    "ru": "завтрак",
+    "topic": "food",
+    "note": "have breakfast (без артикля и без eat)"
+  },
+  {
+    "word": "lunch",
+    "pos": "noun",
+    "ru": "обед (днём)",
+    "topic": "food"
+  },
+  {
+    "word": "dinner",
+    "pos": "noun",
+    "ru": "ужин",
+    "topic": "food",
+    "note": "dinner — вечерняя еда; в некоторых регионах Британии вечернюю еду называют tea"
+  },
+  {
+    "word": "meal",
+    "pos": "noun",
+    "ru": "приём пищи / еда",
+    "topic": "food"
+  },
+  {
+    "word": "bread",
+    "pos": "noun",
+    "ru": "хлеб",
+    "topic": "food",
+    "uncountable": true,
+    "note": "a piece / a loaf of bread, не a bread"
+  },
+  {
+    "word": "butter",
+    "pos": "noun",
+    "ru": "сливочное масло",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "cheese",
+    "pos": "noun",
+    "ru": "сыр",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "egg",
+    "pos": "noun",
+    "ru": "яйцо",
+    "topic": "food"
+  },
+  {
+    "word": "milk",
+    "pos": "noun",
+    "ru": "молоко",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "water",
+    "pos": "noun",
+    "ru": "вода",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "juice",
+    "pos": "noun",
+    "ru": "сок",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "sugar",
+    "pos": "noun",
+    "ru": "сахар",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "salt",
+    "pos": "noun",
+    "ru": "соль",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "rice",
+    "pos": "noun",
+    "ru": "рис",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "meat",
+    "pos": "noun",
+    "ru": "мясо",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "chicken",
+    "pos": "noun",
+    "ru": "курица",
+    "topic": "food"
+  },
+  {
+    "word": "fish",
+    "pos": "noun",
+    "ru": "рыба",
+    "topic": "food",
+    "plural": "fish"
+  },
+  {
+    "word": "soup",
+    "pos": "noun",
+    "ru": "суп",
+    "topic": "food"
+  },
+  {
+    "word": "cake",
+    "pos": "noun",
+    "ru": "торт / пирожное",
+    "topic": "food"
+  },
+  {
+    "word": "biscuit",
+    "pos": "noun",
+    "ru": "печенье",
+    "topic": "food",
+    "note": "британское; американское cookie"
+  },
+  {
+    "word": "chips",
+    "pos": "noun",
+    "ru": "картофель фри",
+    "topic": "food",
+    "note": "британское; американское fries. Чипсы — crisps"
+  },
+  {
+    "word": "crisps",
+    "pos": "noun",
+    "ru": "чипсы",
+    "topic": "food",
+    "note": "британское; американское chips"
+  },
+  {
+    "word": "apple",
+    "pos": "noun",
+    "ru": "яблоко",
+    "topic": "food"
+  },
+  {
+    "word": "fruit",
+    "pos": "noun",
+    "ru": "фрукты / фрукт",
+    "topic": "food",
+    "uncountable": true,
+    "note": "обычно неисчисляемое: some fruit"
+  },
+  {
+    "word": "vegetable",
+    "pos": "noun",
+    "ru": "овощ",
+    "topic": "food",
+    "note": "обычно мн. ч.: vegetables"
+  },
+  {
+    "word": "potato",
+    "pos": "noun",
+    "ru": "картофель / картошка",
+    "topic": "food",
+    "note": "мн. ч. potatoes"
+  },
+  {
+    "word": "carrot",
+    "pos": "noun",
+    "ru": "морковь",
+    "topic": "food"
+  },
+  {
+    "word": "ice cream",
+    "pos": "noun",
+    "ru": "мороженое",
+    "topic": "food"
+  },
+  {
+    "word": "yoghurt",
+    "pos": "noun",
+    "ru": "йогурт",
+    "topic": "food",
+    "note": "британское написание (также yogurt)"
+  },
+  {
+    "word": "sweets",
+    "pos": "noun",
+    "ru": "конфеты / сладости",
+    "topic": "food",
+    "note": "британское; американское candy"
+  },
+  {
+    "word": "toast",
+    "pos": "noun",
+    "ru": "тост / поджаренный хлеб",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "pasta",
+    "pos": "noun",
+    "ru": "паста / макароны",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "burger",
+    "pos": "noun",
+    "ru": "бургер",
+    "topic": "food"
+  },
+  {
+    "word": "hungry",
+    "pos": "adjective",
+    "ru": "голодный",
+    "topic": "food",
+    "note": "I'm hungry = Я голоден (с be)"
+  },
+  {
+    "word": "thirsty",
+    "pos": "adjective",
+    "ru": "испытывающий жажду",
+    "topic": "food",
+    "note": "I'm thirsty = Я хочу пить"
+  },
+  {
+    "word": "delicious",
+    "pos": "adjective",
+    "ru": "очень вкусный",
+    "topic": "food"
+  },
+  {
+    "word": "bill",
+    "pos": "noun",
+    "ru": "счёт (в кафе)",
+    "topic": "food",
+    "note": "британское: Can I have the bill, please? (американское check)"
+  },
+  {
+    "word": "money",
+    "pos": "noun",
+    "ru": "деньги",
+    "topic": "money",
+    "uncountable": true,
+    "note": "ед. ч.: The money is here, не are"
+  },
+  {
+    "word": "pound",
+    "pos": "noun",
+    "ru": "фунт (стерлингов)",
+    "topic": "money",
+    "note": "£5 = five pounds"
+  },
+  {
+    "word": "penny",
+    "pos": "noun",
+    "ru": "пенни",
+    "topic": "money",
+    "plural": "pence",
+    "note": "£4.50 читается four pounds fifty (или four fifty)"
+  },
+  {
+    "word": "euro",
+    "pos": "noun",
+    "ru": "евро",
+    "topic": "money"
+  },
+  {
+    "word": "dollar",
+    "pos": "noun",
+    "ru": "доллар",
+    "topic": "money"
+  },
+  {
+    "word": "price",
+    "pos": "noun",
+    "ru": "цена",
+    "topic": "money"
+  },
+  {
+    "word": "cheap",
+    "pos": "adjective",
+    "ru": "дешёвый",
+    "topic": "money"
+  },
+  {
+    "word": "expensive",
+    "pos": "adjective",
+    "ru": "дорогой (по цене)",
+    "topic": "money",
+    "note": "дорогой человек — dear, не expensive"
+  },
+  {
+    "word": "card",
+    "pos": "noun",
+    "ru": "карта; открытка",
+    "topic": "money"
+  },
+  {
+    "word": "cash",
+    "pos": "noun",
+    "ru": "наличные",
+    "topic": "money",
+    "uncountable": true
+  },
+  {
+    "word": "shop",
+    "pos": "noun",
+    "ru": "магазин",
+    "topic": "city",
+    "note": "британское; американское store"
+  },
+  {
+    "word": "free",
+    "pos": "adjective",
+    "ru": "бесплатный; свободный",
+    "topic": "money"
+  },
+  {
+    "word": "time",
+    "pos": "noun",
+    "ru": "время; раз",
+    "topic": "time",
+    "note": "What time is it? = Который час?"
+  },
+  {
+    "word": "hour",
+    "pos": "noun",
+    "ru": "час",
+    "topic": "time",
+    "note": "an hour (h не читается)"
+  },
+  {
+    "word": "day",
+    "pos": "noun",
+    "ru": "день",
+    "topic": "time"
+  },
+  {
+    "word": "week",
+    "pos": "noun",
+    "ru": "неделя",
+    "topic": "time"
+  },
+  {
+    "word": "month",
+    "pos": "noun",
+    "ru": "месяц",
+    "topic": "time"
+  },
+  {
+    "word": "year",
+    "pos": "noun",
+    "ru": "год",
+    "topic": "time"
+  },
+  {
+    "word": "weekend",
+    "pos": "noun",
+    "ru": "выходные",
+    "topic": "time",
+    "note": "британское: at the weekend (американское on the weekend)"
+  },
+  {
+    "word": "morning",
+    "pos": "noun",
+    "ru": "утро",
+    "topic": "time"
+  },
+  {
+    "word": "afternoon",
+    "pos": "noun",
+    "ru": "время после полудня / день",
+    "topic": "time"
+  },
+  {
+    "word": "evening",
+    "pos": "noun",
+    "ru": "вечер",
+    "topic": "time"
+  },
+  {
+    "word": "night",
+    "pos": "noun",
+    "ru": "ночь",
+    "topic": "time"
+  },
+  {
+    "word": "today",
+    "pos": "adverb",
+    "ru": "сегодня",
+    "topic": "time"
+  },
+  {
+    "word": "tomorrow",
+    "pos": "adverb",
+    "ru": "завтра",
+    "topic": "time"
+  },
+  {
+    "word": "yesterday",
+    "pos": "adverb",
+    "ru": "вчера",
+    "topic": "time"
+  },
+  {
+    "word": "tonight",
+    "pos": "adverb",
+    "ru": "сегодня вечером / ночью",
+    "topic": "time"
+  },
+  {
+    "word": "o'clock",
+    "pos": "adverb",
+    "ru": "ровно (о времени, в часах)",
+    "topic": "time",
+    "note": "six o'clock = шесть часов (только для целых часов)"
+  },
+  {
+    "word": "half",
+    "pos": "noun",
+    "ru": "половина",
+    "topic": "time",
+    "note": "half past six = половина седьмого (6:30)"
+  },
+  {
+    "word": "quarter",
+    "pos": "noun",
+    "ru": "четверть",
+    "topic": "time",
+    "note": "quarter past six = 6:15; quarter to six = 5:45"
+  },
+  {
+    "word": "past",
+    "pos": "preposition",
+    "ru": "после (о времени)",
+    "topic": "time",
+    "note": "ten past five = десять минут шестого"
+  },
+  {
+    "word": "early",
+    "pos": "adjective",
+    "ru": "ранний; рано",
+    "topic": "time"
+  },
+  {
+    "word": "late",
+    "pos": "adjective",
+    "ru": "поздний; поздно / опоздавший",
+    "topic": "time",
+    "note": "I'm late = Я опаздываю"
+  },
+  {
+    "word": "always",
+    "pos": "adverb",
+    "ru": "всегда",
+    "topic": "time"
+  },
+  {
+    "word": "usually",
+    "pos": "adverb",
+    "ru": "обычно",
+    "topic": "time"
+  },
+  {
+    "word": "often",
+    "pos": "adverb",
+    "ru": "часто",
+    "topic": "time"
+  },
+  {
+    "word": "sometimes",
+    "pos": "adverb",
+    "ru": "иногда",
+    "topic": "time"
+  },
+  {
+    "word": "never",
+    "pos": "adverb",
+    "ru": "никогда",
+    "topic": "time",
+    "note": "без второго отрицания: I never eat meat, не I don't never"
+  },
+  {
+    "word": "then",
+    "pos": "adverb",
+    "ru": "потом / тогда",
+    "topic": "time"
+  },
+  {
+    "word": "again",
+    "pos": "adverb",
+    "ru": "снова / ещё раз",
+    "topic": "time"
+  },
+  {
+    "word": "soon",
+    "pos": "adverb",
+    "ru": "скоро",
+    "topic": "time"
+  },
+  {
+    "word": "later",
+    "pos": "adverb",
+    "ru": "позже / потом",
+    "topic": "time"
+  },
+  {
+    "word": "birthday",
+    "pos": "noun",
+    "ru": "день рождения",
+    "topic": "time"
+  },
+  {
+    "word": "date",
+    "pos": "noun",
+    "ru": "дата; свидание",
+    "topic": "time"
+  },
+  {
+    "word": "spring",
+    "pos": "noun",
+    "ru": "весна",
+    "topic": "time"
+  },
+  {
+    "word": "summer",
+    "pos": "noun",
+    "ru": "лето",
+    "topic": "time"
+  },
+  {
+    "word": "autumn",
+    "pos": "noun",
+    "ru": "осень",
+    "topic": "time",
+    "note": "британское; американское fall"
+  },
+  {
+    "word": "winter",
+    "pos": "noun",
+    "ru": "зима",
+    "topic": "time"
+  },
+  {
+    "word": "first",
+    "pos": "number",
+    "ru": "первый",
+    "topic": "numbers"
+  },
+  {
+    "word": "second",
+    "pos": "number",
+    "ru": "второй; секунда",
+    "topic": "numbers"
+  },
+  {
+    "word": "third",
+    "pos": "number",
+    "ru": "третий",
+    "topic": "numbers"
+  },
+  {
+    "word": "fourth",
+    "pos": "number",
+    "ru": "четвёртый",
+    "topic": "numbers"
+  },
+  {
+    "word": "fifth",
+    "pos": "number",
+    "ru": "пятый",
+    "topic": "numbers"
+  },
+  {
+    "word": "sixth",
+    "pos": "number",
+    "ru": "шестой",
+    "topic": "numbers"
+  },
+  {
+    "word": "seventh",
+    "pos": "number",
+    "ru": "седьмой",
+    "topic": "numbers"
+  },
+  {
+    "word": "eighth",
+    "pos": "number",
+    "ru": "восьмой",
+    "topic": "numbers"
+  },
+  {
+    "word": "ninth",
+    "pos": "number",
+    "ru": "девятый",
+    "topic": "numbers"
+  },
+  {
+    "word": "tenth",
+    "pos": "number",
+    "ru": "десятый",
+    "topic": "numbers"
+  },
+  {
+    "word": "number",
+    "pos": "noun",
+    "ru": "число / номер",
+    "topic": "numbers"
+  },
+  {
+    "word": "car",
+    "pos": "noun",
+    "ru": "машина / автомобиль",
+    "topic": "transport"
+  },
+  {
+    "word": "train",
+    "pos": "noun",
+    "ru": "поезд",
+    "topic": "transport"
+  },
+  {
+    "word": "plane",
+    "pos": "noun",
+    "ru": "самолёт",
+    "topic": "transport"
+  },
+  {
+    "word": "bike",
+    "pos": "noun",
+    "ru": "велосипед",
+    "topic": "transport"
+  },
+  {
+    "word": "boat",
+    "pos": "noun",
+    "ru": "лодка / корабль",
+    "topic": "transport"
+  },
+  {
+    "word": "ticket",
+    "pos": "noun",
+    "ru": "билет",
+    "topic": "transport"
+  },
+  {
+    "word": "station",
+    "pos": "noun",
+    "ru": "станция / вокзал",
+    "topic": "transport"
+  },
+  {
+    "word": "airport",
+    "pos": "noun",
+    "ru": "аэропорт",
+    "topic": "transport"
+  },
+  {
+    "word": "bus stop",
+    "pos": "noun",
+    "ru": "автобусная остановка",
+    "topic": "transport"
+  },
+  {
+    "word": "the Tube",
+    "pos": "noun",
+    "ru": "лондонское метро",
+    "topic": "transport",
+    "note": "британское (официально the Underground); американское subway"
+  },
+  {
+    "word": "road",
+    "pos": "noun",
+    "ru": "дорога",
+    "topic": "transport"
+  },
+  {
+    "word": "street",
+    "pos": "noun",
+    "ru": "улица",
+    "topic": "city"
+  },
+  {
+    "word": "map",
+    "pos": "noun",
+    "ru": "карта (местности)",
+    "topic": "transport"
+  },
+  {
+    "word": "trip",
+    "pos": "noun",
+    "ru": "поездка",
+    "topic": "travel"
+  },
+  {
+    "word": "holiday",
+    "pos": "noun",
+    "ru": "отпуск / каникулы; праздник",
+    "topic": "travel",
+    "note": "британское: on holiday = в отпуске (американское vacation)"
+  },
+  {
+    "word": "suitcase",
+    "pos": "noun",
+    "ru": "чемодан",
+    "topic": "travel"
+  },
+  {
+    "word": "left",
+    "pos": "noun",
+    "ru": "лево / налево; левый",
+    "topic": "directions",
+    "note": "turn left = повернуть налево"
+  },
+  {
+    "word": "right",
+    "pos": "adjective",
+    "ru": "правый / направо; правильный",
+    "topic": "directions",
+    "note": "turn right = повернуть направо; That's right = Верно"
+  },
+  {
+    "word": "straight on",
+    "pos": "adverb",
+    "ru": "прямо",
+    "topic": "directions",
+    "note": "британское: go straight on = идите прямо"
+  },
+  {
+    "word": "corner",
+    "pos": "noun",
+    "ru": "угол",
+    "topic": "directions",
+    "note": "on the corner = на углу (улицы)"
+  },
+  {
+    "word": "next to",
+    "pos": "preposition",
+    "ru": "рядом с",
+    "topic": "directions"
+  },
+  {
+    "word": "opposite",
+    "pos": "preposition",
+    "ru": "напротив",
+    "topic": "directions"
+  },
+  {
+    "word": "behind",
+    "pos": "preposition",
+    "ru": "за / позади",
+    "topic": "directions"
+  },
+  {
+    "word": "in front of",
+    "pos": "preposition",
+    "ru": "перед",
+    "topic": "directions"
+  },
+  {
+    "word": "between",
+    "pos": "preposition",
+    "ru": "между",
+    "topic": "directions"
+  },
+  {
+    "word": "near",
+    "pos": "preposition",
+    "ru": "рядом с / около",
+    "topic": "directions",
+    "note": "near the station (без to)"
+  },
+  {
+    "word": "far",
+    "pos": "adverb",
+    "ru": "далеко",
+    "topic": "directions",
+    "note": "обычно в вопросах и отрицаниях: Is it far?; It's not far"
+  },
+  {
+    "word": "way",
+    "pos": "noun",
+    "ru": "путь / дорога; способ",
+    "topic": "directions"
+  },
+  {
+    "word": "city",
+    "pos": "noun",
+    "ru": "город (большой)",
+    "topic": "city"
+  },
+  {
+    "word": "town",
+    "pos": "noun",
+    "ru": "город (небольшой)",
+    "topic": "city",
+    "note": "go into town = поехать в центр"
+  },
+  {
+    "word": "village",
+    "pos": "noun",
+    "ru": "деревня",
+    "topic": "city"
+  },
+  {
+    "word": "bridge",
+    "pos": "noun",
+    "ru": "мост",
+    "topic": "city"
+  },
+  {
+    "word": "river",
+    "pos": "noun",
+    "ru": "река",
+    "topic": "city"
+  },
+  {
+    "word": "market",
+    "pos": "noun",
+    "ru": "рынок",
+    "topic": "city"
+  },
+  {
+    "word": "post office",
+    "pos": "noun",
+    "ru": "почта (отделение)",
+    "topic": "city"
+  },
+  {
+    "word": "hospital",
+    "pos": "noun",
+    "ru": "больница",
+    "topic": "health",
+    "note": "in hospital = в больнице (британское, без артикля)"
+  },
+  {
+    "word": "school",
+    "pos": "noun",
+    "ru": "школа",
+    "topic": "city",
+    "note": "go to school, at school (без артикля)"
+  },
+  {
+    "word": "university",
+    "pos": "noun",
+    "ru": "университет",
+    "topic": "city",
+    "note": "a university (читается [ju:])"
+  },
+  {
+    "word": "library",
+    "pos": "noun",
+    "ru": "библиотека",
+    "topic": "city"
+  },
+  {
+    "word": "bookshop",
+    "pos": "noun",
+    "ru": "книжный магазин",
+    "topic": "city",
+    "note": "британское; американское bookstore"
+  },
+  {
+    "word": "cinema",
+    "pos": "noun",
+    "ru": "кинотеатр",
+    "topic": "city",
+    "note": "британское: go to the cinema (американское movie theater)"
+  },
+  {
+    "word": "building",
+    "pos": "noun",
+    "ru": "здание",
+    "topic": "city"
+  },
+  {
+    "word": "chemist's",
+    "pos": "noun",
+    "ru": "аптека",
+    "topic": "city",
+    "note": "британское (также pharmacy); американское drugstore"
+  },
+  {
+    "word": "beach",
+    "pos": "noun",
+    "ru": "пляж",
+    "topic": "travel"
+  },
+  {
+    "word": "sea",
+    "pos": "noun",
+    "ru": "море",
+    "topic": "travel"
+  },
+  {
+    "word": "mountain",
+    "pos": "noun",
+    "ru": "гора",
+    "topic": "travel"
+  },
+  {
+    "word": "tree",
+    "pos": "noun",
+    "ru": "дерево",
+    "topic": "nature"
+  },
+  {
+    "word": "flower",
+    "pos": "noun",
+    "ru": "цветок",
+    "topic": "nature"
+  },
+  {
+    "word": "place",
+    "pos": "noun",
+    "ru": "место",
+    "topic": "city"
+  },
+  {
+    "word": "world",
+    "pos": "noun",
+    "ru": "мир",
+    "topic": "general"
+  },
+  {
+    "word": "weather",
+    "pos": "noun",
+    "ru": "погода",
+    "topic": "weather",
+    "uncountable": true,
+    "note": "What's the weather like? Никогда не a weather"
+  },
+  {
+    "word": "sun",
+    "pos": "noun",
+    "ru": "солнце",
+    "topic": "weather"
+  },
+  {
+    "word": "sunny",
+    "pos": "adjective",
+    "ru": "солнечный",
+    "topic": "weather"
+  },
+  {
+    "word": "rain",
+    "pos": "noun",
+    "ru": "дождь; идти (о дожде)",
+    "topic": "weather",
+    "note": "It's raining = Идёт дождь"
+  },
+  {
+    "word": "rainy",
+    "pos": "adjective",
+    "ru": "дождливый",
+    "topic": "weather"
+  },
+  {
+    "word": "cloudy",
+    "pos": "adjective",
+    "ru": "облачный",
+    "topic": "weather"
+  },
+  {
+    "word": "windy",
+    "pos": "adjective",
+    "ru": "ветреный",
+    "topic": "weather"
+  },
+  {
+    "word": "snow",
+    "pos": "noun",
+    "ru": "снег; идти (о снеге)",
+    "topic": "weather"
+  },
+  {
+    "word": "cold",
+    "pos": "adjective",
+    "ru": "холодный; простуда",
+    "topic": "weather",
+    "note": "I'm cold = Мне холодно; have a cold = быть простуженным"
+  },
+  {
+    "word": "hot",
+    "pos": "adjective",
+    "ru": "жаркий / горячий",
+    "topic": "weather",
+    "note": "It's hot = Жарко; I'm hot = Мне жарко"
+  },
+  {
+    "word": "warm",
+    "pos": "adjective",
+    "ru": "тёплый",
+    "topic": "weather"
+  },
+  {
+    "word": "wet",
+    "pos": "adjective",
+    "ru": "мокрый / сырой",
+    "topic": "weather"
+  },
+  {
+    "word": "dry",
+    "pos": "adjective",
+    "ru": "сухой",
+    "topic": "weather"
+  },
+  {
+    "word": "umbrella",
+    "pos": "noun",
+    "ru": "зонт",
+    "topic": "weather"
+  },
+  {
+    "word": "sky",
+    "pos": "noun",
+    "ru": "небо",
+    "topic": "weather"
+  },
+  {
+    "word": "hobby",
+    "pos": "noun",
+    "ru": "хобби / увлечение",
+    "topic": "hobbies"
+  },
+  {
+    "word": "game",
+    "pos": "noun",
+    "ru": "игра",
+    "topic": "hobbies"
+  },
+  {
+    "word": "song",
+    "pos": "noun",
+    "ru": "песня",
+    "topic": "hobbies"
+  },
+  {
+    "word": "party",
+    "pos": "noun",
+    "ru": "вечеринка / праздник",
+    "topic": "hobbies"
+  },
+  {
+    "word": "present",
+    "pos": "noun",
+    "ru": "подарок",
+    "topic": "hobbies"
+  },
+  {
+    "word": "concert",
+    "pos": "noun",
+    "ru": "концерт",
+    "topic": "hobbies"
+  },
+  {
+    "word": "camera",
+    "pos": "noun",
+    "ru": "фотоаппарат / камера",
+    "topic": "hobbies"
+  },
+  {
+    "word": "animal",
+    "pos": "noun",
+    "ru": "животное",
+    "topic": "nature"
+  },
+  {
+    "word": "dog",
+    "pos": "noun",
+    "ru": "собака",
+    "topic": "nature"
+  },
+  {
+    "word": "cat",
+    "pos": "noun",
+    "ru": "кошка / кот",
+    "topic": "nature"
+  },
+  {
+    "word": "colour",
+    "pos": "noun",
+    "ru": "цвет",
+    "topic": "colours",
+    "note": "британское написание; американское color"
+  },
+  {
+    "word": "clothes",
+    "pos": "noun",
+    "ru": "одежда",
+    "topic": "clothes",
+    "note": "только мн. ч.: my clothes are…, нет формы a clothe"
+  },
+  {
+    "word": "shirt",
+    "pos": "noun",
+    "ru": "рубашка",
+    "topic": "clothes"
+  },
+  {
+    "word": "T-shirt",
+    "pos": "noun",
+    "ru": "футболка",
+    "topic": "clothes"
+  },
+  {
+    "word": "dress",
+    "pos": "noun",
+    "ru": "платье",
+    "topic": "clothes"
+  },
+  {
+    "word": "skirt",
+    "pos": "noun",
+    "ru": "юбка",
+    "topic": "clothes"
+  },
+  {
+    "word": "trousers",
+    "pos": "noun",
+    "ru": "брюки",
+    "topic": "clothes",
+    "note": "британское, всегда мн. ч.; американское pants (в Британии pants = трусы)"
+  },
+  {
+    "word": "jumper",
+    "pos": "noun",
+    "ru": "свитер / джемпер",
+    "topic": "clothes",
+    "note": "британское; американское sweater"
+  },
+  {
+    "word": "coat",
+    "pos": "noun",
+    "ru": "пальто",
+    "topic": "clothes"
+  },
+  {
+    "word": "jacket",
+    "pos": "noun",
+    "ru": "куртка / пиджак",
+    "topic": "clothes"
+  },
+  {
+    "word": "shoes",
+    "pos": "noun",
+    "ru": "туфли / обувь",
+    "topic": "clothes"
+  },
+  {
+    "word": "trainers",
+    "pos": "noun",
+    "ru": "кроссовки",
+    "topic": "clothes",
+    "note": "британское; американское sneakers"
+  },
+  {
+    "word": "hat",
+    "pos": "noun",
+    "ru": "шапка / шляпа",
+    "topic": "clothes"
+  },
+  {
+    "word": "socks",
+    "pos": "noun",
+    "ru": "носки",
+    "topic": "clothes"
+  },
+  {
+    "word": "glasses",
+    "pos": "noun",
+    "ru": "очки",
+    "topic": "clothes",
+    "note": "мн. ч.: my glasses are…"
+  },
+  {
+    "word": "body",
+    "pos": "noun",
+    "ru": "тело",
+    "topic": "body"
+  },
+  {
+    "word": "head",
+    "pos": "noun",
+    "ru": "голова",
+    "topic": "body"
+  },
+  {
+    "word": "face",
+    "pos": "noun",
+    "ru": "лицо",
+    "topic": "body"
+  },
+  {
+    "word": "eye",
+    "pos": "noun",
+    "ru": "глаз",
+    "topic": "body"
+  },
+  {
+    "word": "ear",
+    "pos": "noun",
+    "ru": "ухо",
+    "topic": "body"
+  },
+  {
+    "word": "nose",
+    "pos": "noun",
+    "ru": "нос",
+    "topic": "body"
+  },
+  {
+    "word": "mouth",
+    "pos": "noun",
+    "ru": "рот",
+    "topic": "body"
+  },
+  {
+    "word": "tooth",
+    "pos": "noun",
+    "ru": "зуб",
+    "topic": "body",
+    "plural": "teeth"
+  },
+  {
+    "word": "hair",
+    "pos": "noun",
+    "ru": "волосы",
+    "topic": "body",
+    "uncountable": true,
+    "note": "неисчисляемое: Her hair is long, не hairs are"
+  },
+  {
+    "word": "hand",
+    "pos": "noun",
+    "ru": "рука (кисть)",
+    "topic": "body"
+  },
+  {
+    "word": "arm",
+    "pos": "noun",
+    "ru": "рука (от плеча)",
+    "topic": "body"
+  },
+  {
+    "word": "leg",
+    "pos": "noun",
+    "ru": "нога",
+    "topic": "body"
+  },
+  {
+    "word": "foot",
+    "pos": "noun",
+    "ru": "ступня / нога",
+    "topic": "body",
+    "plural": "feet",
+    "note": "on foot = пешком"
+  },
+  {
+    "word": "back",
+    "pos": "noun",
+    "ru": "спина",
+    "topic": "body"
+  },
+  {
+    "word": "stomach",
+    "pos": "noun",
+    "ru": "живот / желудок",
+    "topic": "body"
+  },
+  {
+    "word": "ill",
+    "pos": "adjective",
+    "ru": "больной",
+    "topic": "health",
+    "note": "британское: I'm ill (американское чаще sick)"
+  },
+  {
+    "word": "sick",
+    "pos": "adjective",
+    "ru": "больной; тошнит",
+    "topic": "health",
+    "note": "в Британии feel sick = тошнит"
+  },
+  {
+    "word": "well",
+    "pos": "adverb",
+    "ru": "хорошо; здоровый",
+    "topic": "health",
+    "note": "I'm well = Я здоров; good — прилагательное, well — наречие"
+  },
+  {
+    "word": "tired",
+    "pos": "adjective",
+    "ru": "уставший",
+    "topic": "health"
+  },
+  {
+    "word": "headache",
+    "pos": "noun",
+    "ru": "головная боль",
+    "topic": "health",
+    "note": "I've got a headache = У меня болит голова"
+  },
+  {
+    "word": "medicine",
+    "pos": "noun",
+    "ru": "лекарство",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "fit",
+    "pos": "adjective",
+    "ru": "в хорошей форме",
+    "topic": "sport"
+  },
+  {
+    "word": "shopping",
+    "pos": "noun",
+    "ru": "покупки / шопинг",
+    "topic": "daily routine",
+    "uncountable": true,
+    "note": "go shopping, do the shopping (без a)"
+  },
+  {
+    "word": "homework",
+    "pos": "noun",
+    "ru": "домашнее задание",
+    "topic": "daily routine",
+    "uncountable": true,
+    "note": "неисчисляемое: do homework, не make homeworks"
+  },
+  {
+    "word": "team",
+    "pos": "noun",
+    "ru": "команда",
+    "topic": "sport"
+  },
+  {
+    "word": "match",
+    "pos": "noun",
+    "ru": "матч",
+    "topic": "sport",
+    "note": "британское для футбольной игры (американское game)"
+  },
+  {
+    "word": "win",
+    "pos": "verb",
+    "ru": "выигрывать / побеждать",
+    "topic": "sport",
+    "past": "won",
+    "pp": "won",
+    "note": "win a game / a prize; деньги за работу — earn, не win"
+  },
+  {
+    "word": "player",
+    "pos": "noun",
+    "ru": "игрок",
+    "topic": "sport"
+  },
+  {
+    "word": "ball",
+    "pos": "noun",
+    "ru": "мяч",
+    "topic": "sport"
+  },
+  {
+    "word": "swimming pool",
+    "pos": "noun",
+    "ru": "бассейн",
+    "topic": "sport"
+  },
+  {
+    "word": "gym",
+    "pos": "noun",
+    "ru": "спортзал",
+    "topic": "sport"
+  },
+  {
+    "word": "exercise",
+    "pos": "noun",
+    "ru": "упражнение; физические упражнения",
+    "topic": "sport",
+    "note": "do exercise = заниматься спортом"
+  },
+  {
+    "word": "race",
+    "pos": "noun",
+    "ru": "забег / гонка",
+    "topic": "sport"
+  },
+  {
+    "word": "question",
+    "pos": "noun",
+    "ru": "вопрос",
+    "topic": "general"
+  },
+  {
+    "word": "word",
+    "pos": "noun",
+    "ru": "слово",
+    "topic": "general"
+  },
+  {
+    "word": "lesson",
+    "pos": "noun",
+    "ru": "урок",
+    "topic": "general"
+  },
+  {
+    "word": "class",
+    "pos": "noun",
+    "ru": "класс / занятие",
+    "topic": "general"
+  },
+  {
+    "word": "page",
+    "pos": "noun",
+    "ru": "страница",
+    "topic": "general"
+  },
+  {
+    "word": "pen",
+    "pos": "noun",
+    "ru": "ручка",
+    "topic": "general"
+  },
+  {
+    "word": "pencil",
+    "pos": "noun",
+    "ru": "карандаш",
+    "topic": "general"
+  },
+  {
+    "word": "paper",
+    "pos": "noun",
+    "ru": "бумага",
+    "topic": "general",
+    "uncountable": true,
+    "note": "a piece of paper; a paper = газета"
+  },
+  {
+    "word": "letter",
+    "pos": "noun",
+    "ru": "письмо; буква",
+    "topic": "general"
+  },
+  {
+    "word": "address",
+    "pos": "noun",
+    "ru": "адрес",
+    "topic": "general",
+    "note": "пишется с dd и ss"
+  },
+  {
+    "word": "age",
+    "pos": "noun",
+    "ru": "возраст",
+    "topic": "people"
+  },
+  {
+    "word": "information",
+    "pos": "noun",
+    "ru": "информация",
+    "topic": "general",
+    "uncountable": true,
+    "note": "неисчисляемое: some information, не informations"
+  },
+  {
+    "word": "news",
+    "pos": "noun",
+    "ru": "новости / новость",
+    "topic": "general",
+    "note": "ед. ч.: The news is good, не are"
+  },
+  {
+    "word": "message",
+    "pos": "noun",
+    "ru": "сообщение",
+    "topic": "technology"
+  },
+  {
+    "word": "text",
+    "pos": "noun",
+    "ru": "сообщение (SMS); текст",
+    "topic": "technology",
+    "note": "text me = напиши мне (сообщение)"
+  },
+  {
+    "word": "laptop",
+    "pos": "noun",
+    "ru": "ноутбук",
+    "topic": "technology"
+  },
+  {
+    "word": "website",
+    "pos": "noun",
+    "ru": "сайт",
+    "topic": "technology"
+  },
+  {
+    "word": "tourist",
+    "pos": "noun",
+    "ru": "турист",
+    "topic": "travel"
+  },
+  {
+    "word": "life",
+    "pos": "noun",
+    "ru": "жизнь",
+    "topic": "general",
+    "plural": "lives"
+  },
+  {
+    "word": "friendship",
+    "pos": "noun",
+    "ru": "дружба",
+    "topic": "people"
+  },
+  {
+    "word": "good",
+    "pos": "adjective",
+    "ru": "хороший",
+    "topic": "general",
+    "note": "прилагательное; наречие — well: She sings well"
+  },
+  {
+    "word": "bad",
+    "pos": "adjective",
+    "ru": "плохой",
+    "topic": "general"
+  },
+  {
+    "word": "big",
+    "pos": "adjective",
+    "ru": "большой",
+    "topic": "general"
+  },
+  {
+    "word": "small",
+    "pos": "adjective",
+    "ru": "маленький",
+    "topic": "general"
+  },
+  {
+    "word": "little",
+    "pos": "adjective",
+    "ru": "маленький; немного",
+    "topic": "general",
+    "note": "a little = немного (a little milk)"
+  },
+  {
+    "word": "long",
+    "pos": "adjective",
+    "ru": "длинный / долгий",
+    "topic": "general"
+  },
+  {
+    "word": "short",
+    "pos": "adjective",
+    "ru": "короткий; невысокий",
+    "topic": "general"
+  },
+  {
+    "word": "tall",
+    "pos": "adjective",
+    "ru": "высокий (о человеке, здании)",
+    "topic": "people"
+  },
+  {
+    "word": "new",
+    "pos": "adjective",
+    "ru": "новый",
+    "topic": "general"
+  },
+  {
+    "word": "old",
+    "pos": "adjective",
+    "ru": "старый; пожилой",
+    "topic": "general",
+    "note": "How old are you? = Сколько тебе лет?"
+  },
+  {
+    "word": "young",
+    "pos": "adjective",
+    "ru": "молодой",
+    "topic": "people"
+  },
+  {
+    "word": "nice",
+    "pos": "adjective",
+    "ru": "приятный / милый / хороший",
+    "topic": "general"
+  },
+  {
+    "word": "happy",
+    "pos": "adjective",
+    "ru": "счастливый / довольный",
+    "topic": "feelings"
+  },
+  {
+    "word": "sad",
+    "pos": "adjective",
+    "ru": "грустный",
+    "topic": "feelings"
+  },
+  {
+    "word": "beautiful",
+    "pos": "adjective",
+    "ru": "красивый",
+    "topic": "general"
+  },
+  {
+    "word": "great",
+    "pos": "adjective",
+    "ru": "отличный / замечательный",
+    "topic": "general"
+  },
+  {
+    "word": "fine",
+    "pos": "adjective",
+    "ru": "хороший / в порядке",
+    "topic": "general",
+    "note": "I'm fine, thanks = Нормально, спасибо"
+  },
+  {
+    "word": "easy",
+    "pos": "adjective",
+    "ru": "лёгкий / простой",
+    "topic": "general"
+  },
+  {
+    "word": "difficult",
+    "pos": "adjective",
+    "ru": "трудный",
+    "topic": "general"
+  },
+  {
+    "word": "hard",
+    "pos": "adjective",
+    "ru": "трудный; твёрдый; усердно",
+    "topic": "general",
+    "note": "work hard = усердно работать"
+  },
+  {
+    "word": "fast",
+    "pos": "adjective",
+    "ru": "быстрый; быстро",
+    "topic": "general"
+  },
+  {
+    "word": "slow",
+    "pos": "adjective",
+    "ru": "медленный",
+    "topic": "general"
+  },
+  {
+    "word": "busy",
+    "pos": "adjective",
+    "ru": "занятой; оживлённый",
+    "topic": "general"
+  },
+  {
+    "word": "full",
+    "pos": "adjective",
+    "ru": "полный; сытый",
+    "topic": "general"
+  },
+  {
+    "word": "empty",
+    "pos": "adjective",
+    "ru": "пустой",
+    "topic": "general"
+  },
+  {
+    "word": "dirty",
+    "pos": "adjective",
+    "ru": "грязный",
+    "topic": "home"
+  },
+  {
+    "word": "wrong",
+    "pos": "adjective",
+    "ru": "неправильный / не тот",
+    "topic": "general",
+    "note": "the wrong door = не та дверь"
+  },
+  {
+    "word": "favourite",
+    "pos": "adjective",
+    "ru": "любимый",
+    "topic": "feelings",
+    "note": "британское написание; американское favorite"
+  },
+  {
+    "word": "different",
+    "pos": "adjective",
+    "ru": "разный / другой",
+    "topic": "general",
+    "note": "different from = отличный от"
+  },
+  {
+    "word": "same",
+    "pos": "adjective",
+    "ru": "тот же самый / одинаковый",
+    "topic": "general",
+    "note": "всегда the same"
+  },
+  {
+    "word": "interesting",
+    "pos": "adjective",
+    "ru": "интересный",
+    "topic": "feelings"
+  },
+  {
+    "word": "boring",
+    "pos": "adjective",
+    "ru": "скучный",
+    "topic": "feelings"
+  },
+  {
+    "word": "funny",
+    "pos": "adjective",
+    "ru": "смешной / забавный",
+    "topic": "feelings"
+  },
+  {
+    "word": "friendly",
+    "pos": "adjective",
+    "ru": "дружелюбный",
+    "topic": "people"
+  },
+  {
+    "word": "kind",
+    "pos": "adjective",
+    "ru": "добрый",
+    "topic": "people"
+  },
+  {
+    "word": "angry",
+    "pos": "adjective",
+    "ru": "сердитый / злой",
+    "topic": "feelings",
+    "note": "angry with someone"
+  },
+  {
+    "word": "ready",
+    "pos": "adjective",
+    "ru": "готовый",
+    "topic": "general"
+  },
+  {
+    "word": "sure",
+    "pos": "adjective",
+    "ru": "уверенный",
+    "topic": "general"
+  },
+  {
+    "word": "quiet",
+    "pos": "adjective",
+    "ru": "тихий",
+    "topic": "general"
+  },
+  {
+    "word": "noisy",
+    "pos": "adjective",
+    "ru": "шумный",
+    "topic": "general"
+  },
+  {
+    "word": "lovely",
+    "pos": "adjective",
+    "ru": "чудесный / прекрасный",
+    "topic": "general",
+    "note": "очень частое британское слово: Lovely!"
+  },
+  {
+    "word": "famous",
+    "pos": "adjective",
+    "ru": "знаменитый",
+    "topic": "general"
+  },
+  {
+    "word": "next",
+    "pos": "adjective",
+    "ru": "следующий; соседний",
+    "topic": "general",
+    "note": "next week = на следующей неделе (без on/in)"
+  },
+  {
+    "word": "last",
+    "pos": "adjective",
+    "ru": "последний; прошлый",
+    "topic": "general",
+    "note": "last week = на прошлой неделе (без on/in)"
+  },
+  {
+    "word": "other",
+    "pos": "determiner",
+    "ru": "другой",
+    "topic": "general"
+  },
+  {
+    "word": "another",
+    "pos": "determiner",
+    "ru": "ещё один / другой",
+    "topic": "general"
+  },
+  {
+    "word": "important",
+    "pos": "adjective",
+    "ru": "важный",
+    "topic": "general"
+  },
+  {
+    "word": "also",
+    "pos": "adverb",
+    "ru": "также / тоже",
+    "topic": "general",
+    "note": "ставится перед глаголом: I also like tea"
+  },
+  {
+    "word": "too",
+    "pos": "adverb",
+    "ru": "тоже; слишком",
+    "topic": "general",
+    "note": "в конце фразы: Me too; I like it too"
+  },
+  {
+    "word": "only",
+    "pos": "adverb",
+    "ru": "только",
+    "topic": "general"
+  },
+  {
+    "word": "really",
+    "pos": "adverb",
+    "ru": "действительно / очень",
+    "topic": "general"
+  },
+  {
+    "word": "quite",
+    "pos": "adverb",
+    "ru": "довольно",
+    "topic": "general",
+    "note": "британское quite часто значит «довольно, но не очень»: quite good"
+  },
+  {
+    "word": "together",
+    "pos": "adverb",
+    "ru": "вместе",
+    "topic": "general"
+  },
+  {
+    "word": "just",
+    "pos": "adverb",
+    "ru": "просто; только что",
+    "topic": "general"
+  },
+  {
+    "word": "still",
+    "pos": "adverb",
+    "ru": "всё ещё",
+    "topic": "general"
+  },
+  {
+    "word": "maybe",
+    "pos": "adverb",
+    "ru": "может быть",
+    "topic": "general"
+  },
+  {
+    "word": "outside",
+    "pos": "adverb",
+    "ru": "снаружи / на улице",
+    "topic": "general"
+  },
+  {
+    "word": "inside",
+    "pos": "adverb",
+    "ru": "внутри",
+    "topic": "general"
+  },
+  {
+    "word": "upstairs",
+    "pos": "adverb",
+    "ru": "наверху / наверх",
+    "topic": "home"
+  },
+  {
+    "word": "downstairs",
+    "pos": "adverb",
+    "ru": "внизу / вниз",
+    "topic": "home"
+  },
+  {
+    "word": "much",
+    "pos": "determiner",
+    "ru": "много (с неисчисляемыми)",
+    "topic": "general",
+    "note": "обычно в вопросах и отрицаниях: not much money"
+  },
+  {
+    "word": "many",
+    "pos": "determiner",
+    "ru": "много (с исчисляемыми)",
+    "topic": "general"
+  },
+  {
+    "word": "more",
+    "pos": "determiner",
+    "ru": "больше / ещё",
+    "topic": "general"
+  },
+  {
+    "word": "both",
+    "pos": "determiner",
+    "ru": "оба",
+    "topic": "general"
+  },
+  {
+    "word": "than",
+    "pos": "conjunction",
+    "ru": "чем",
+    "topic": "general"
+  },
+  {
+    "word": "until",
+    "pos": "preposition",
+    "ru": "до (о времени)",
+    "topic": "time"
+  },
+  {
+    "word": "without",
+    "pos": "preposition",
+    "ru": "без",
+    "topic": "general"
+  },
+  {
+    "word": "something",
+    "pos": "pronoun",
+    "ru": "что-то / что-нибудь",
+    "topic": "general"
+  },
+  {
+    "word": "someone",
+    "pos": "pronoun",
+    "ru": "кто-то",
+    "topic": "general"
+  },
+  {
+    "word": "everyone",
+    "pos": "pronoun",
+    "ru": "все (люди)",
+    "topic": "general",
+    "note": "глагол в ед. ч.: Everyone is here"
+  },
+  {
+    "word": "everything",
+    "pos": "pronoun",
+    "ru": "всё",
+    "topic": "general",
+    "note": "глагол в ед. ч.: Everything is OK"
+  },
+  {
+    "word": "nothing",
+    "pos": "pronoun",
+    "ru": "ничего",
+    "topic": "general",
+    "note": "без второго отрицания: I have nothing / I don't have anything"
+  },
+  {
+    "word": "anything",
+    "pos": "pronoun",
+    "ru": "что-нибудь; ничего (в отрицании)",
+    "topic": "general"
+  },
+  {
+    "word": "get up",
+    "pos": "phrase",
+    "ru": "вставать (с постели)",
+    "topic": "daily routine"
+  },
+  {
+    "word": "wake up",
+    "pos": "phrase",
+    "ru": "просыпаться",
+    "topic": "daily routine"
+  },
+  {
+    "word": "go to bed",
+    "pos": "phrase",
+    "ru": "ложиться спать",
+    "topic": "daily routine"
+  },
+  {
+    "word": "have breakfast",
+    "pos": "phrase",
+    "ru": "завтракать",
+    "topic": "daily routine"
+  },
+  {
+    "word": "have a shower",
+    "pos": "phrase",
+    "ru": "принимать душ",
+    "topic": "daily routine",
+    "note": "британское have a shower (американское чаще take a shower)"
+  },
+  {
+    "word": "get dressed",
+    "pos": "phrase",
+    "ru": "одеваться",
+    "topic": "daily routine"
+  },
+  {
+    "word": "brush your teeth",
+    "pos": "phrase",
+    "ru": "чистить зубы",
+    "topic": "daily routine"
+  },
+  {
+    "word": "go home",
+    "pos": "phrase",
+    "ru": "идти домой",
+    "topic": "daily routine",
+    "note": "без to: go home, не go to home"
+  },
+  {
+    "word": "go to work",
+    "pos": "phrase",
+    "ru": "идти на работу",
+    "topic": "daily routine"
+  },
+  {
+    "word": "go shopping",
+    "pos": "phrase",
+    "ru": "ходить по магазинам",
+    "topic": "daily routine"
+  },
+  {
+    "word": "do the shopping",
+    "pos": "phrase",
+    "ru": "делать покупки (продукты)",
+    "topic": "daily routine"
+  },
+  {
+    "word": "go out",
+    "pos": "phrase",
+    "ru": "выходить / ходить развлекаться",
+    "topic": "hobbies"
+  },
+  {
+    "word": "come back",
+    "pos": "phrase",
+    "ru": "возвращаться",
+    "topic": "general"
+  },
+  {
+    "word": "sit down",
+    "pos": "phrase",
+    "ru": "садиться",
+    "topic": "general"
+  },
+  {
+    "word": "look for",
+    "pos": "phrase",
+    "ru": "искать",
+    "topic": "general"
+  },
+  {
+    "word": "look at",
+    "pos": "phrase",
+    "ru": "смотреть на",
+    "topic": "general"
+  },
+  {
+    "word": "listen to",
+    "pos": "phrase",
+    "ru": "слушать (что-то)",
+    "topic": "general"
+  },
+  {
+    "word": "wait for",
+    "pos": "phrase",
+    "ru": "ждать (кого-то, что-то)",
+    "topic": "general"
+  },
+  {
+    "word": "get on",
+    "pos": "phrase",
+    "ru": "садиться (в автобус, поезд)",
+    "topic": "transport"
+  },
+  {
+    "word": "get off",
+    "pos": "phrase",
+    "ru": "выходить (из автобуса, поезда)",
+    "topic": "transport"
+  },
+  {
+    "word": "on foot",
+    "pos": "phrase",
+    "ru": "пешком",
+    "topic": "transport"
+  },
+  {
+    "word": "by bus",
+    "pos": "phrase",
+    "ru": "на автобусе",
+    "topic": "transport",
+    "note": "by + транспорт без артикля: by train, by car"
+  },
+  {
+    "word": "take a photo",
+    "pos": "phrase",
+    "ru": "фотографировать",
+    "topic": "hobbies"
+  },
+  {
+    "word": "free time",
+    "pos": "phrase",
+    "ru": "свободное время",
+    "topic": "hobbies"
+  },
+  {
+    "word": "at the weekend",
+    "pos": "phrase",
+    "ru": "на выходных",
+    "topic": "time",
+    "note": "британское; американское on the weekend"
+  },
+  {
+    "word": "every day",
+    "pos": "phrase",
+    "ru": "каждый день",
+    "topic": "time"
+  },
+  {
+    "word": "in the morning",
+    "pos": "phrase",
+    "ru": "утром",
+    "topic": "time",
+    "note": "но at night = ночью"
+  },
+  {
+    "word": "at night",
+    "pos": "phrase",
+    "ru": "ночью",
+    "topic": "time"
+  },
+  {
+    "word": "of course",
+    "pos": "phrase",
+    "ru": "конечно",
+    "topic": "general"
+  },
+  {
+    "word": "how much",
+    "pos": "phrase",
+    "ru": "сколько (с неисчисляемыми); сколько стоит",
+    "topic": "money",
+    "note": "How much is it? = Сколько стоит?"
+  },
+  {
+    "word": "how many",
+    "pos": "phrase",
+    "ru": "сколько (с исчисляемыми)",
+    "topic": "general"
+  },
+  {
+    "word": "how old",
+    "pos": "phrase",
+    "ru": "сколько лет",
+    "topic": "people",
+    "note": "How old are you? — с be, не How old do you have"
+  },
+  {
+    "word": "what time",
+    "pos": "phrase",
+    "ru": "во сколько / который час",
+    "topic": "time"
+  },
+  {
+    "word": "I'd like",
+    "pos": "phrase",
+    "ru": "я бы хотел(а)",
+    "topic": "food",
+    "note": "вежливее, чем I want: I'd like a coffee, please"
+  },
+  {
+    "word": "would you like",
+    "pos": "phrase",
+    "ru": "не хотите ли…? / хочешь…?",
+    "topic": "food"
+  },
+  {
+    "word": "can I have",
+    "pos": "phrase",
+    "ru": "можно мне…?",
+    "topic": "food",
+    "note": "Can I have the bill, please?"
+  },
+  {
+    "word": "here you are",
+    "pos": "phrase",
+    "ru": "вот, пожалуйста (когда что-то даёте)",
+    "topic": "general"
+  },
+  {
+    "word": "excuse me",
+    "pos": "phrase",
+    "ru": "извините (чтобы обратиться)",
+    "topic": "general",
+    "note": "excuse me — привлечь внимание; sorry — извиниться"
+  },
+  {
+    "word": "nice to meet you",
+    "pos": "phrase",
+    "ru": "приятно познакомиться",
+    "topic": "people"
+  },
+  {
+    "word": "how are you",
+    "pos": "phrase",
+    "ru": "как дела?",
+    "topic": "people"
+  },
+  {
+    "word": "I'm not sure",
+    "pos": "phrase",
+    "ru": "я не уверен(а)",
+    "topic": "general"
+  },
+  {
+    "word": "I don't know",
+    "pos": "phrase",
+    "ru": "я не знаю",
+    "topic": "general"
+  },
+  {
+    "word": "see you later",
+    "pos": "phrase",
+    "ru": "до встречи / увидимся",
+    "topic": "people"
+  },
+  {
+    "word": "see you tomorrow",
+    "pos": "phrase",
+    "ru": "до завтра",
+    "topic": "people"
+  },
+  {
+    "word": "no problem",
+    "pos": "phrase",
+    "ru": "без проблем / не за что",
+    "topic": "general"
+  },
+  {
+    "word": "a lot of",
+    "pos": "phrase",
+    "ru": "много",
+    "topic": "general",
+    "note": "и с исчисляемыми, и с неисчисляемыми: a lot of people, a lot of money"
+  },
+  {
+    "word": "a bit",
+    "pos": "phrase",
+    "ru": "немного / чуть-чуть",
+    "topic": "general",
+    "note": "очень британское: a bit tired, a bit of cake"
+  },
+  {
+    "word": "have got",
+    "pos": "phrase",
+    "ru": "иметь (у меня есть)",
+    "topic": "general",
+    "note": "британское: I've got a sister = У меня есть сестра"
+  },
+  {
+    "word": "there is",
+    "pos": "phrase",
+    "ru": "есть / имеется (ед. ч.)",
+    "topic": "general",
+    "note": "There is a bed in the room. По-русски часто начинаем с места: «В комнате есть кровать»"
+  },
+  {
+    "word": "there are",
+    "pos": "phrase",
+    "ru": "есть / имеются (мн. ч.)",
+    "topic": "general"
+  },
+  {
+    "word": "let's",
+    "pos": "phrase",
+    "ru": "давай(те)",
+    "topic": "general",
+    "note": "Let's go! = Пойдём!"
+  },
+  {
+    "word": "have a cold",
+    "pos": "phrase",
+    "ru": "быть простуженным",
+    "topic": "health"
+  },
+  {
+    "word": "have a good time",
+    "pos": "phrase",
+    "ru": "хорошо провести время",
+    "topic": "hobbies"
+  },
+  {
+    "word": "welcome",
+    "pos": "interjection",
+    "ru": "добро пожаловать",
+    "topic": "general",
+    "note": "You're welcome = Пожалуйста (в ответ на спасибо)"
+  },
+  {
+    "word": "bored",
+    "pos": "adjective",
+    "ru": "скучающий (мне скучно)",
+    "topic": "feelings",
+    "note": "I'm bored = мне скучно; I'm boring = я скучный человек"
+  },
+  {
+    "word": "app",
+    "pos": "noun",
+    "ru": "приложение",
+    "topic": "technology"
+  }
+]

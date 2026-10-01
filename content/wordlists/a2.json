@@ -1,0 +1,3833 @@
+[
+  {
+    "word": "interview",
+    "pos": "noun",
+    "ru": "собеседование / интервью",
+    "topic": "work"
+  },
+  {
+    "word": "apply",
+    "pos": "verb",
+    "ru": "подавать заявление / претендовать",
+    "topic": "work",
+    "note": "apply for a job — подавать на вакансию"
+  },
+  {
+    "word": "CV",
+    "pos": "noun",
+    "ru": "резюме",
+    "topic": "work",
+    "note": "British; American English says résumé"
+  },
+  {
+    "word": "experience",
+    "pos": "noun",
+    "ru": "опыт",
+    "topic": "work",
+    "note": "uncountable for \"опыт работы\": work experience; countable for \"случай, впечатление\""
+  },
+  {
+    "word": "skill",
+    "pos": "noun",
+    "ru": "навык / умение",
+    "topic": "work"
+  },
+  {
+    "word": "career",
+    "pos": "noun",
+    "ru": "карьера",
+    "topic": "work"
+  },
+  {
+    "word": "colleague",
+    "pos": "noun",
+    "ru": "коллега",
+    "topic": "work"
+  },
+  {
+    "word": "employee",
+    "pos": "noun",
+    "ru": "сотрудник / работник",
+    "topic": "work"
+  },
+  {
+    "word": "salary",
+    "pos": "noun",
+    "ru": "зарплата / оклад",
+    "topic": "work"
+  },
+  {
+    "word": "earn",
+    "pos": "verb",
+    "ru": "зарабатывать",
+    "topic": "work"
+  },
+  {
+    "word": "staff",
+    "pos": "noun",
+    "ru": "персонал / сотрудники",
+    "topic": "work",
+    "uncountable": true,
+    "note": "takes plural verb: the staff are friendly"
+  },
+  {
+    "word": "meeting",
+    "pos": "noun",
+    "ru": "встреча / совещание",
+    "topic": "work"
+  },
+  {
+    "word": "task",
+    "pos": "noun",
+    "ru": "задача / задание",
+    "topic": "work"
+  },
+  {
+    "word": "full-time",
+    "pos": "adjective",
+    "ru": "на полный рабочий день",
+    "topic": "work"
+  },
+  {
+    "word": "part-time",
+    "pos": "adjective",
+    "ru": "на неполный рабочий день / с частичной занятостью",
+    "topic": "work"
+  },
+  {
+    "word": "unemployed",
+    "pos": "adjective",
+    "ru": "безработный",
+    "topic": "work"
+  },
+  {
+    "word": "hire",
+    "pos": "verb",
+    "ru": "нанимать / брать напрокат",
+    "topic": "work",
+    "note": "British: hire a car = взять машину напрокат"
+  },
+  {
+    "word": "degree",
+    "pos": "noun",
+    "ru": "степень / диплом (о высшем образовании)",
+    "topic": "education"
+  },
+  {
+    "word": "training",
+    "pos": "noun",
+    "ru": "обучение / подготовка",
+    "topic": "work",
+    "uncountable": true
+  },
+  {
+    "word": "course",
+    "pos": "noun",
+    "ru": "курс",
+    "topic": "education"
+  },
+  {
+    "word": "nervous",
+    "pos": "adjective",
+    "ru": "нервный / взволнованный",
+    "topic": "feelings"
+  },
+  {
+    "word": "confident",
+    "pos": "adjective",
+    "ru": "уверенный (в себе)",
+    "topic": "feelings"
+  },
+  {
+    "word": "prepare",
+    "pos": "verb",
+    "ru": "готовить(ся)",
+    "topic": "general"
+  },
+  {
+    "word": "practise",
+    "pos": "verb",
+    "ru": "практиковаться / тренироваться",
+    "topic": "general",
+    "note": "British spelling: practise (verb), practice (noun)"
+  },
+  {
+    "word": "practice",
+    "pos": "noun",
+    "ru": "практика / тренировка",
+    "topic": "general",
+    "uncountable": true
+  },
+  {
+    "word": "developer",
+    "pos": "noun",
+    "ru": "разработчик",
+    "topic": "work"
+  },
+  {
+    "word": "engineer",
+    "pos": "noun",
+    "ru": "инженер",
+    "topic": "work"
+  },
+  {
+    "word": "designer",
+    "pos": "noun",
+    "ru": "дизайнер",
+    "topic": "work"
+  },
+  {
+    "word": "lawyer",
+    "pos": "noun",
+    "ru": "юрист / адвокат",
+    "topic": "work"
+  },
+  {
+    "word": "mechanic",
+    "pos": "noun",
+    "ru": "механик / автомеханик",
+    "topic": "work"
+  },
+  {
+    "word": "plumber",
+    "pos": "noun",
+    "ru": "сантехник",
+    "topic": "home"
+  },
+  {
+    "word": "journalist",
+    "pos": "noun",
+    "ru": "журналист",
+    "topic": "work"
+  },
+  {
+    "word": "musician",
+    "pos": "noun",
+    "ru": "музыкант",
+    "topic": "music"
+  },
+  {
+    "word": "businessman",
+    "pos": "noun",
+    "ru": "бизнесмен / предприниматель",
+    "topic": "work",
+    "plural": "businessmen"
+  },
+  {
+    "word": "factory",
+    "pos": "noun",
+    "ru": "завод / фабрика",
+    "topic": "work"
+  },
+  {
+    "word": "lazy",
+    "pos": "adjective",
+    "ru": "ленивый",
+    "topic": "people"
+  },
+  {
+    "word": "hard-working",
+    "pos": "adjective",
+    "ru": "трудолюбивый",
+    "topic": "people"
+  },
+  {
+    "word": "successful",
+    "pos": "adjective",
+    "ru": "успешный",
+    "topic": "work"
+  },
+  {
+    "word": "success",
+    "pos": "noun",
+    "ru": "успех",
+    "topic": "work"
+  },
+  {
+    "word": "fail",
+    "pos": "verb",
+    "ru": "провалить / не справиться",
+    "topic": "general"
+  },
+  {
+    "word": "improve",
+    "pos": "verb",
+    "ru": "улучшать / совершенствовать",
+    "topic": "general"
+  },
+  {
+    "word": "responsible",
+    "pos": "adjective",
+    "ru": "ответственный",
+    "topic": "people"
+  },
+  {
+    "word": "organise",
+    "pos": "verb",
+    "ru": "организовывать",
+    "topic": "general",
+    "note": "British spelling -ise"
+  },
+  {
+    "word": "advert",
+    "pos": "noun",
+    "ru": "объявление / реклама",
+    "topic": "media",
+    "note": "British; also ad. American: advertisement/ad"
+  },
+  {
+    "word": "actual",
+    "pos": "adjective",
+    "ru": "фактический / настоящий",
+    "topic": "general",
+    "note": "false friend: actual ≠ актуальный (= relevant, current)"
+  },
+  {
+    "word": "actually",
+    "pos": "adverb",
+    "ru": "на самом деле / вообще-то",
+    "topic": "general",
+    "note": "false friend: ≠ актуально"
+  },
+  {
+    "word": "festival",
+    "pos": "noun",
+    "ru": "фестиваль",
+    "topic": "music"
+  },
+  {
+    "word": "gig",
+    "pos": "noun",
+    "ru": "концерт / выступление",
+    "topic": "music",
+    "note": "informal"
+  },
+  {
+    "word": "stage",
+    "pos": "noun",
+    "ru": "сцена / этап",
+    "topic": "music"
+  },
+  {
+    "word": "album",
+    "pos": "noun",
+    "ru": "альбом",
+    "topic": "music"
+  },
+  {
+    "word": "crowd",
+    "pos": "noun",
+    "ru": "толпа",
+    "topic": "people"
+  },
+  {
+    "word": "perform",
+    "pos": "verb",
+    "ru": "выступать / исполнять",
+    "topic": "music"
+  },
+  {
+    "word": "performance",
+    "pos": "noun",
+    "ru": "выступление / исполнение",
+    "topic": "music"
+  },
+  {
+    "word": "audience",
+    "pos": "noun",
+    "ru": "зрители / публика",
+    "topic": "music"
+  },
+  {
+    "word": "headphones",
+    "pos": "noun",
+    "ru": "наушники",
+    "topic": "media"
+  },
+  {
+    "word": "loud",
+    "pos": "adjective",
+    "ru": "громкий",
+    "topic": "general"
+  },
+  {
+    "word": "noise",
+    "pos": "noun",
+    "ru": "шум",
+    "topic": "general"
+  },
+  {
+    "word": "celebrate",
+    "pos": "verb",
+    "ru": "праздновать / отмечать",
+    "topic": "general"
+  },
+  {
+    "word": "event",
+    "pos": "noun",
+    "ru": "событие / мероприятие",
+    "topic": "general"
+  },
+  {
+    "word": "entrance",
+    "pos": "noun",
+    "ru": "вход",
+    "topic": "places"
+  },
+  {
+    "word": "exit",
+    "pos": "noun",
+    "ru": "выход",
+    "topic": "places"
+  },
+  {
+    "word": "queue",
+    "pos": "noun",
+    "ru": "очередь",
+    "topic": "general",
+    "note": "British; American: line"
+  },
+  {
+    "word": "camping",
+    "pos": "noun",
+    "ru": "кемпинг / отдых в палатках",
+    "topic": "travel",
+    "uncountable": true
+  },
+  {
+    "word": "campsite",
+    "pos": "noun",
+    "ru": "кемпинг (место) / палаточный лагерь",
+    "topic": "travel"
+  },
+  {
+    "word": "tent",
+    "pos": "noun",
+    "ru": "палатка",
+    "topic": "travel"
+  },
+  {
+    "word": "sleeping bag",
+    "pos": "noun",
+    "ru": "спальный мешок",
+    "topic": "travel"
+  },
+  {
+    "word": "torch",
+    "pos": "noun",
+    "ru": "фонарик",
+    "topic": "travel",
+    "note": "British; American: flashlight. Not «факел» in everyday use"
+  },
+  {
+    "word": "battery",
+    "pos": "noun",
+    "ru": "батарея / аккумулятор",
+    "topic": "media"
+  },
+  {
+    "word": "charge",
+    "pos": "verb",
+    "ru": "заряжать / брать плату",
+    "topic": "media"
+  },
+  {
+    "word": "mud",
+    "pos": "noun",
+    "ru": "грязь",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "muddy",
+    "pos": "adjective",
+    "ru": "грязный (в грязи)",
+    "topic": "nature"
+  },
+  {
+    "word": "forecast",
+    "pos": "noun",
+    "ru": "прогноз",
+    "topic": "weather"
+  },
+  {
+    "word": "temperature",
+    "pos": "noun",
+    "ru": "температура",
+    "topic": "weather"
+  },
+  {
+    "word": "fog",
+    "pos": "noun",
+    "ru": "туман",
+    "topic": "weather",
+    "uncountable": true
+  },
+  {
+    "word": "storm",
+    "pos": "noun",
+    "ru": "шторм / гроза",
+    "topic": "weather"
+  },
+  {
+    "word": "freezing",
+    "pos": "adjective",
+    "ru": "ледяной / очень холодный",
+    "topic": "weather"
+  },
+  {
+    "word": "boiling",
+    "pos": "adjective",
+    "ru": "очень жаркий / кипящий",
+    "topic": "weather",
+    "note": "informal: It's boiling! = Жарища!"
+  },
+  {
+    "word": "wellies",
+    "pos": "noun",
+    "ru": "резиновые сапоги",
+    "topic": "clothes",
+    "note": "British informal, short for wellington boots"
+  },
+  {
+    "word": "season",
+    "pos": "noun",
+    "ru": "время года / сезон",
+    "topic": "weather"
+  },
+  {
+    "word": "nature",
+    "pos": "noun",
+    "ru": "природа",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "countryside",
+    "pos": "noun",
+    "ru": "сельская местность / природа за городом",
+    "topic": "nature",
+    "uncountable": true
+  },
+  {
+    "word": "hill",
+    "pos": "noun",
+    "ru": "холм",
+    "topic": "nature"
+  },
+  {
+    "word": "coast",
+    "pos": "noun",
+    "ru": "побережье",
+    "topic": "nature"
+  },
+  {
+    "word": "plant",
+    "pos": "noun",
+    "ru": "растение",
+    "topic": "nature"
+  },
+  {
+    "word": "view",
+    "pos": "noun",
+    "ru": "вид / мнение",
+    "topic": "nature"
+  },
+  {
+    "word": "wild",
+    "pos": "adjective",
+    "ru": "дикий",
+    "topic": "nature"
+  },
+  {
+    "word": "sheep",
+    "pos": "noun",
+    "ru": "овца",
+    "topic": "nature",
+    "plural": "sheep"
+  },
+  {
+    "word": "path",
+    "pos": "noun",
+    "ru": "тропинка / дорожка",
+    "topic": "nature"
+  },
+  {
+    "word": "environment",
+    "pos": "noun",
+    "ru": "окружающая среда",
+    "topic": "nature"
+  },
+  {
+    "word": "rubbish",
+    "pos": "noun",
+    "ru": "мусор / ерунда",
+    "topic": "home",
+    "uncountable": true,
+    "note": "British; American: trash, garbage. Informal: That's rubbish! = Ерунда!"
+  },
+  {
+    "word": "bin",
+    "pos": "noun",
+    "ru": "мусорное ведро / контейнер",
+    "topic": "home",
+    "note": "British; American: trash can"
+  },
+  {
+    "word": "arrange",
+    "pos": "verb",
+    "ru": "договариваться / устраивать",
+    "topic": "general"
+  },
+  {
+    "word": "invitation",
+    "pos": "noun",
+    "ru": "приглашение",
+    "topic": "people"
+  },
+  {
+    "word": "decision",
+    "pos": "noun",
+    "ru": "решение",
+    "topic": "general"
+  },
+  {
+    "word": "expect",
+    "pos": "verb",
+    "ru": "ожидать",
+    "topic": "general"
+  },
+  {
+    "word": "promise",
+    "pos": "verb",
+    "ru": "обещать",
+    "topic": "general"
+  },
+  {
+    "word": "probably",
+    "pos": "adverb",
+    "ru": "вероятно / наверное",
+    "topic": "general"
+  },
+  {
+    "word": "definitely",
+    "pos": "adverb",
+    "ru": "определённо / точно",
+    "topic": "general"
+  },
+  {
+    "word": "perhaps",
+    "pos": "adverb",
+    "ru": "может быть / возможно",
+    "topic": "general"
+  },
+  {
+    "word": "already",
+    "pos": "adverb",
+    "ru": "уже",
+    "topic": "time"
+  },
+  {
+    "word": "yet",
+    "pos": "adverb",
+    "ru": "ещё (не) / уже (в вопросах)",
+    "topic": "time"
+  },
+  {
+    "word": "ever",
+    "pos": "adverb",
+    "ru": "когда-либо",
+    "topic": "time"
+  },
+  {
+    "word": "recently",
+    "pos": "adverb",
+    "ru": "недавно",
+    "topic": "time"
+  },
+  {
+    "word": "since",
+    "pos": "preposition",
+    "ru": "с (какого-то времени)",
+    "topic": "time"
+  },
+  {
+    "word": "during",
+    "pos": "preposition",
+    "ru": "во время / в течение",
+    "topic": "time"
+  },
+  {
+    "word": "while",
+    "pos": "conjunction",
+    "ru": "пока / в то время как",
+    "topic": "time"
+  },
+  {
+    "word": "fortnight",
+    "pos": "noun",
+    "ru": "две недели",
+    "topic": "time",
+    "note": "British"
+  },
+  {
+    "word": "appointment",
+    "pos": "noun",
+    "ru": "запись (к врачу) / назначенная встреча",
+    "topic": "general"
+  },
+  {
+    "word": "cancel",
+    "pos": "verb",
+    "ru": "отменять",
+    "topic": "general"
+  },
+  {
+    "word": "remind",
+    "pos": "verb",
+    "ru": "напоминать",
+    "topic": "general"
+  },
+  {
+    "word": "appearance",
+    "pos": "noun",
+    "ru": "внешность",
+    "topic": "people"
+  },
+  {
+    "word": "slim",
+    "pos": "adjective",
+    "ru": "стройный",
+    "topic": "people"
+  },
+  {
+    "word": "beard",
+    "pos": "noun",
+    "ru": "борода",
+    "topic": "people"
+  },
+  {
+    "word": "moustache",
+    "pos": "noun",
+    "ru": "усы",
+    "topic": "people",
+    "note": "British spelling"
+  },
+  {
+    "word": "curly",
+    "pos": "adjective",
+    "ru": "кудрявый / вьющийся",
+    "topic": "people"
+  },
+  {
+    "word": "straight",
+    "pos": "adjective",
+    "ru": "прямой",
+    "topic": "people"
+  },
+  {
+    "word": "blonde",
+    "pos": "adjective",
+    "ru": "светловолосый / блондин(ка)",
+    "topic": "people"
+  },
+  {
+    "word": "good-looking",
+    "pos": "adjective",
+    "ru": "симпатичный / привлекательный",
+    "topic": "people"
+  },
+  {
+    "word": "handsome",
+    "pos": "adjective",
+    "ru": "красивый (о мужчине)",
+    "topic": "people"
+  },
+  {
+    "word": "pretty",
+    "pos": "adjective",
+    "ru": "симпатичный / хорошенький",
+    "topic": "people"
+  },
+  {
+    "word": "look like",
+    "pos": "phrase",
+    "ru": "быть похожим на / выглядеть как",
+    "topic": "people"
+  },
+  {
+    "word": "personality",
+    "pos": "noun",
+    "ru": "характер / личность",
+    "topic": "people"
+  },
+  {
+    "word": "character",
+    "pos": "noun",
+    "ru": "характер / персонаж",
+    "topic": "people"
+  },
+  {
+    "word": "polite",
+    "pos": "adjective",
+    "ru": "вежливый",
+    "topic": "people"
+  },
+  {
+    "word": "rude",
+    "pos": "adjective",
+    "ru": "грубый / невежливый",
+    "topic": "people"
+  },
+  {
+    "word": "honest",
+    "pos": "adjective",
+    "ru": "честный",
+    "topic": "people"
+  },
+  {
+    "word": "shy",
+    "pos": "adjective",
+    "ru": "застенчивый / стеснительный",
+    "topic": "people"
+  },
+  {
+    "word": "clever",
+    "pos": "adjective",
+    "ru": "умный / сообразительный",
+    "topic": "people",
+    "note": "British; American prefers smart"
+  },
+  {
+    "word": "smart",
+    "pos": "adjective",
+    "ru": "умный / нарядный",
+    "topic": "people",
+    "note": "British: smart also = нарядный (smart clothes)"
+  },
+  {
+    "word": "silly",
+    "pos": "adjective",
+    "ru": "глупый / дурацкий",
+    "topic": "people"
+  },
+  {
+    "word": "generous",
+    "pos": "adjective",
+    "ru": "щедрый",
+    "topic": "people"
+  },
+  {
+    "word": "selfish",
+    "pos": "adjective",
+    "ru": "эгоистичный",
+    "topic": "people"
+  },
+  {
+    "word": "patient",
+    "pos": "adjective",
+    "ru": "терпеливый",
+    "topic": "people"
+  },
+  {
+    "word": "calm",
+    "pos": "adjective",
+    "ru": "спокойный",
+    "topic": "people"
+  },
+  {
+    "word": "relaxed",
+    "pos": "adjective",
+    "ru": "расслабленный / спокойный",
+    "topic": "feelings"
+  },
+  {
+    "word": "strict",
+    "pos": "adjective",
+    "ru": "строгий",
+    "topic": "people"
+  },
+  {
+    "word": "brave",
+    "pos": "adjective",
+    "ru": "смелый / храбрый",
+    "topic": "people"
+  },
+  {
+    "word": "creative",
+    "pos": "adjective",
+    "ru": "творческий / креативный",
+    "topic": "people"
+  },
+  {
+    "word": "sympathetic",
+    "pos": "adjective",
+    "ru": "сочувствующий / отзывчивый",
+    "topic": "people",
+    "note": "false friend: ≠ симпатичный (= nice-looking, likeable)"
+  },
+  {
+    "word": "tiring",
+    "pos": "adjective",
+    "ru": "утомительный",
+    "topic": "feelings"
+  },
+  {
+    "word": "surprised",
+    "pos": "adjective",
+    "ru": "удивлённый",
+    "topic": "feelings"
+  },
+  {
+    "word": "surprise",
+    "pos": "noun",
+    "ru": "сюрприз / удивление",
+    "topic": "feelings"
+  },
+  {
+    "word": "worried",
+    "pos": "adjective",
+    "ru": "обеспокоенный",
+    "topic": "feelings"
+  },
+  {
+    "word": "worry",
+    "pos": "verb",
+    "ru": "волноваться / беспокоиться",
+    "topic": "feelings"
+  },
+  {
+    "word": "embarrassed",
+    "pos": "adjective",
+    "ru": "смущённый",
+    "topic": "feelings"
+  },
+  {
+    "word": "embarrassing",
+    "pos": "adjective",
+    "ru": "неловкий / постыдный",
+    "topic": "feelings"
+  },
+  {
+    "word": "annoyed",
+    "pos": "adjective",
+    "ru": "раздражённый",
+    "topic": "feelings"
+  },
+  {
+    "word": "annoying",
+    "pos": "adjective",
+    "ru": "раздражающий / надоедливый",
+    "topic": "feelings"
+  },
+  {
+    "word": "disappointed",
+    "pos": "adjective",
+    "ru": "разочарованный",
+    "topic": "feelings"
+  },
+  {
+    "word": "scared",
+    "pos": "adjective",
+    "ru": "испуганный",
+    "topic": "feelings",
+    "note": "scared of = бояться"
+  },
+  {
+    "word": "afraid",
+    "pos": "adjective",
+    "ru": "боящийся / испуганный",
+    "topic": "feelings",
+    "note": "I'm afraid of = я боюсь; I'm afraid (that) = к сожалению"
+  },
+  {
+    "word": "upset",
+    "pos": "adjective",
+    "ru": "расстроенный",
+    "topic": "feelings"
+  },
+  {
+    "word": "lonely",
+    "pos": "adjective",
+    "ru": "одинокий",
+    "topic": "feelings"
+  },
+  {
+    "word": "proud",
+    "pos": "adjective",
+    "ru": "гордый",
+    "topic": "feelings",
+    "note": "proud of = гордиться"
+  },
+  {
+    "word": "jealous",
+    "pos": "adjective",
+    "ru": "ревнивый / завистливый",
+    "topic": "feelings"
+  },
+  {
+    "word": "stressed",
+    "pos": "adjective",
+    "ru": "в стрессе / напряжённый",
+    "topic": "feelings"
+  },
+  {
+    "word": "stress",
+    "pos": "noun",
+    "ru": "стресс",
+    "topic": "feelings",
+    "uncountable": true
+  },
+  {
+    "word": "mood",
+    "pos": "noun",
+    "ru": "настроение",
+    "topic": "feelings"
+  },
+  {
+    "word": "glad",
+    "pos": "adjective",
+    "ru": "рад",
+    "topic": "feelings"
+  },
+  {
+    "word": "pleased",
+    "pos": "adjective",
+    "ru": "довольный",
+    "topic": "feelings"
+  },
+  {
+    "word": "awful",
+    "pos": "adjective",
+    "ru": "ужасный",
+    "topic": "feelings"
+  },
+  {
+    "word": "brilliant",
+    "pos": "adjective",
+    "ru": "блестящий / отличный",
+    "topic": "feelings",
+    "note": "British informal: Brilliant! = Отлично!"
+  },
+  {
+    "word": "relationship",
+    "pos": "noun",
+    "ru": "отношения",
+    "topic": "people"
+  },
+  {
+    "word": "partner",
+    "pos": "noun",
+    "ru": "партнёр / спутник жизни",
+    "topic": "people"
+  },
+  {
+    "word": "couple",
+    "pos": "noun",
+    "ru": "пара",
+    "topic": "people"
+  },
+  {
+    "word": "single",
+    "pos": "adjective",
+    "ru": "холостой / незамужняя",
+    "topic": "people"
+  },
+  {
+    "word": "marry",
+    "pos": "verb",
+    "ru": "жениться / выходить замуж",
+    "topic": "people",
+    "note": "marry someone (no preposition); get married"
+  },
+  {
+    "word": "wedding",
+    "pos": "noun",
+    "ru": "свадьба",
+    "topic": "people"
+  },
+  {
+    "word": "divorced",
+    "pos": "adjective",
+    "ru": "разведённый",
+    "topic": "people"
+  },
+  {
+    "word": "fall in love",
+    "pos": "phrase",
+    "ru": "влюбиться",
+    "topic": "people"
+  },
+  {
+    "word": "go out with",
+    "pos": "phrase",
+    "ru": "встречаться с (кем-то)",
+    "topic": "people"
+  },
+  {
+    "word": "ask out",
+    "pos": "phrase",
+    "ru": "пригласить на свидание",
+    "topic": "people"
+  },
+  {
+    "word": "break up",
+    "pos": "phrase",
+    "ru": "расстаться",
+    "topic": "people"
+  },
+  {
+    "word": "profile",
+    "pos": "noun",
+    "ru": "профиль / анкета",
+    "topic": "media"
+  },
+  {
+    "word": "hug",
+    "pos": "noun",
+    "ru": "объятие",
+    "topic": "people"
+  },
+  {
+    "word": "trust",
+    "pos": "verb",
+    "ru": "доверять",
+    "topic": "people"
+  },
+  {
+    "word": "lie",
+    "pos": "verb",
+    "ru": "лгать / врать",
+    "topic": "people",
+    "note": "lie (врать) is regular: lied; lie (лежать): lay, lain"
+  },
+  {
+    "word": "stranger",
+    "pos": "noun",
+    "ru": "незнакомец",
+    "topic": "people"
+  },
+  {
+    "word": "guest",
+    "pos": "noun",
+    "ru": "гость",
+    "topic": "people"
+  },
+  {
+    "word": "mate",
+    "pos": "noun",
+    "ru": "приятель / друг",
+    "topic": "people",
+    "note": "British informal; also flatmate, classmate"
+  },
+  {
+    "word": "starter",
+    "pos": "noun",
+    "ru": "закуска (первое блюдо)",
+    "topic": "food",
+    "note": "British; American: appetizer"
+  },
+  {
+    "word": "main course",
+    "pos": "noun",
+    "ru": "основное блюдо",
+    "topic": "food"
+  },
+  {
+    "word": "dessert",
+    "pos": "noun",
+    "ru": "десерт",
+    "topic": "food"
+  },
+  {
+    "word": "tip",
+    "pos": "noun",
+    "ru": "чаевые / совет",
+    "topic": "money"
+  },
+  {
+    "word": "booking",
+    "pos": "noun",
+    "ru": "бронирование",
+    "topic": "travel"
+  },
+  {
+    "word": "dish",
+    "pos": "noun",
+    "ru": "блюдо / тарелка",
+    "topic": "food"
+  },
+  {
+    "word": "taste",
+    "pos": "verb",
+    "ru": "быть на вкус / пробовать",
+    "topic": "food"
+  },
+  {
+    "word": "tasty",
+    "pos": "adjective",
+    "ru": "вкусный",
+    "topic": "food"
+  },
+  {
+    "word": "spicy",
+    "pos": "adjective",
+    "ru": "острый (о еде)",
+    "topic": "food"
+  },
+  {
+    "word": "salty",
+    "pos": "adjective",
+    "ru": "солёный",
+    "topic": "food"
+  },
+  {
+    "word": "fried",
+    "pos": "adjective",
+    "ru": "жареный",
+    "topic": "food"
+  },
+  {
+    "word": "roast",
+    "pos": "adjective",
+    "ru": "запечённый / жареный (в духовке)",
+    "topic": "food",
+    "note": "British Sunday roast — традиционный воскресный обед"
+  },
+  {
+    "word": "vegetarian",
+    "pos": "adjective",
+    "ru": "вегетарианский",
+    "topic": "food"
+  },
+  {
+    "word": "vegan",
+    "pos": "adjective",
+    "ru": "веганский",
+    "topic": "food"
+  },
+  {
+    "word": "recipe",
+    "pos": "noun",
+    "ru": "рецепт (блюда)",
+    "topic": "food",
+    "note": "рецепт врача = prescription"
+  },
+  {
+    "word": "ingredient",
+    "pos": "noun",
+    "ru": "ингредиент",
+    "topic": "food"
+  },
+  {
+    "word": "bake",
+    "pos": "verb",
+    "ru": "печь",
+    "topic": "food"
+  },
+  {
+    "word": "boil",
+    "pos": "verb",
+    "ru": "кипятить / варить",
+    "topic": "food"
+  },
+  {
+    "word": "fry",
+    "pos": "verb",
+    "ru": "жарить",
+    "topic": "food"
+  },
+  {
+    "word": "burn",
+    "pos": "verb",
+    "ru": "сжигать / обжигать",
+    "topic": "food",
+    "past": "burnt/burned",
+    "pp": "burnt/burned"
+  },
+  {
+    "word": "tin",
+    "pos": "noun",
+    "ru": "консервная банка",
+    "topic": "food",
+    "note": "British; American: can"
+  },
+  {
+    "word": "packet",
+    "pos": "noun",
+    "ru": "пачка / пакет",
+    "topic": "food",
+    "note": "British: a packet of crisps"
+  },
+  {
+    "word": "bowl",
+    "pos": "noun",
+    "ru": "миска / тарелка (глубокая)",
+    "topic": "food"
+  },
+  {
+    "word": "snack",
+    "pos": "noun",
+    "ru": "перекус / закуска",
+    "topic": "food"
+  },
+  {
+    "word": "takeaway",
+    "pos": "noun",
+    "ru": "еда навынос",
+    "topic": "food",
+    "note": "British; American: takeout"
+  },
+  {
+    "word": "pub",
+    "pos": "noun",
+    "ru": "паб",
+    "topic": "food",
+    "note": "British"
+  },
+  {
+    "word": "pint",
+    "pos": "noun",
+    "ru": "пинта (около 0,57 л) / кружка пива",
+    "topic": "food",
+    "note": "British: a pint = кружка пива"
+  },
+  {
+    "word": "beef",
+    "pos": "noun",
+    "ru": "говядина",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "lamb",
+    "pos": "noun",
+    "ru": "баранина / ягнёнок",
+    "topic": "food"
+  },
+  {
+    "word": "steak",
+    "pos": "noun",
+    "ru": "стейк",
+    "topic": "food"
+  },
+  {
+    "word": "rent",
+    "pos": "noun",
+    "ru": "арендная плата",
+    "topic": "home"
+  },
+  {
+    "word": "landlord",
+    "pos": "noun",
+    "ru": "арендодатель / хозяин квартиры",
+    "topic": "home"
+  },
+  {
+    "word": "tenant",
+    "pos": "noun",
+    "ru": "жилец / арендатор",
+    "topic": "home"
+  },
+  {
+    "word": "deposit",
+    "pos": "noun",
+    "ru": "залог / депозит",
+    "topic": "money"
+  },
+  {
+    "word": "contract",
+    "pos": "noun",
+    "ru": "договор / контракт",
+    "topic": "general"
+  },
+  {
+    "word": "estate agent",
+    "pos": "noun",
+    "ru": "агент по недвижимости",
+    "topic": "home",
+    "note": "British; American: realtor"
+  },
+  {
+    "word": "furnished",
+    "pos": "adjective",
+    "ru": "меблированный",
+    "topic": "home"
+  },
+  {
+    "word": "move in",
+    "pos": "phrase",
+    "ru": "въехать",
+    "topic": "home"
+  },
+  {
+    "word": "move out",
+    "pos": "phrase",
+    "ru": "съехать",
+    "topic": "home"
+  },
+  {
+    "word": "area",
+    "pos": "noun",
+    "ru": "район / область",
+    "topic": "places"
+  },
+  {
+    "word": "neighbourhood",
+    "pos": "noun",
+    "ru": "район / окрестности",
+    "topic": "home",
+    "note": "British spelling"
+  },
+  {
+    "word": "local",
+    "pos": "adjective",
+    "ru": "местный",
+    "topic": "places"
+  },
+  {
+    "word": "available",
+    "pos": "adjective",
+    "ru": "доступный / свободный",
+    "topic": "general"
+  },
+  {
+    "word": "share",
+    "pos": "verb",
+    "ru": "делить / делиться",
+    "topic": "general"
+  },
+  {
+    "word": "own",
+    "pos": "adjective",
+    "ru": "собственный",
+    "topic": "general"
+  },
+  {
+    "word": "lock",
+    "pos": "noun",
+    "ru": "замок",
+    "topic": "home"
+  },
+  {
+    "word": "ground floor",
+    "pos": "noun",
+    "ru": "первый этаж",
+    "topic": "home",
+    "note": "British: first floor = второй этаж"
+  },
+  {
+    "word": "lift",
+    "pos": "noun",
+    "ru": "лифт",
+    "topic": "home",
+    "note": "British; American: elevator"
+  },
+  {
+    "word": "balcony",
+    "pos": "noun",
+    "ru": "балкон",
+    "topic": "home"
+  },
+  {
+    "word": "roof",
+    "pos": "noun",
+    "ru": "крыша",
+    "topic": "home"
+  },
+  {
+    "word": "heating",
+    "pos": "noun",
+    "ru": "отопление",
+    "topic": "home",
+    "uncountable": true
+  },
+  {
+    "word": "boiler",
+    "pos": "noun",
+    "ru": "бойлер / котёл",
+    "topic": "home"
+  },
+  {
+    "word": "tap",
+    "pos": "noun",
+    "ru": "кран",
+    "topic": "home",
+    "note": "British; American: faucet"
+  },
+  {
+    "word": "sink",
+    "pos": "noun",
+    "ru": "раковина",
+    "topic": "home"
+  },
+  {
+    "word": "loo",
+    "pos": "noun",
+    "ru": "туалет",
+    "topic": "home",
+    "note": "British informal"
+  },
+  {
+    "word": "cupboard",
+    "pos": "noun",
+    "ru": "шкаф / буфет",
+    "topic": "home"
+  },
+  {
+    "word": "wardrobe",
+    "pos": "noun",
+    "ru": "платяной шкаф",
+    "topic": "home"
+  },
+  {
+    "word": "shelf",
+    "pos": "noun",
+    "ru": "полка",
+    "topic": "home",
+    "plural": "shelves"
+  },
+  {
+    "word": "carpet",
+    "pos": "noun",
+    "ru": "ковёр / ковровое покрытие",
+    "topic": "home"
+  },
+  {
+    "word": "curtain",
+    "pos": "noun",
+    "ru": "штора / занавеска",
+    "topic": "home"
+  },
+  {
+    "word": "mirror",
+    "pos": "noun",
+    "ru": "зеркало",
+    "topic": "home"
+  },
+  {
+    "word": "cooker",
+    "pos": "noun",
+    "ru": "плита",
+    "topic": "home",
+    "note": "British; cook = повар"
+  },
+  {
+    "word": "washing machine",
+    "pos": "noun",
+    "ru": "стиральная машина",
+    "topic": "home"
+  },
+  {
+    "word": "kettle",
+    "pos": "noun",
+    "ru": "чайник (электрический)",
+    "topic": "home"
+  },
+  {
+    "word": "socket",
+    "pos": "noun",
+    "ru": "розетка",
+    "topic": "home"
+  },
+  {
+    "word": "plug",
+    "pos": "noun",
+    "ru": "вилка (электрическая) / пробка",
+    "topic": "home"
+  },
+  {
+    "word": "mess",
+    "pos": "noun",
+    "ru": "беспорядок",
+    "topic": "home"
+  },
+  {
+    "word": "messy",
+    "pos": "adjective",
+    "ru": "неубранный / грязный",
+    "topic": "home"
+  },
+  {
+    "word": "tidy",
+    "pos": "adjective",
+    "ru": "опрятный / аккуратный",
+    "topic": "home"
+  },
+  {
+    "word": "housework",
+    "pos": "noun",
+    "ru": "работа по дому",
+    "topic": "home",
+    "uncountable": true
+  },
+  {
+    "word": "damp",
+    "pos": "adjective",
+    "ru": "сырой / влажный",
+    "topic": "home"
+  },
+  {
+    "word": "mould",
+    "pos": "noun",
+    "ru": "плесень",
+    "topic": "home",
+    "uncountable": true,
+    "note": "British spelling"
+  },
+  {
+    "word": "leak",
+    "pos": "noun",
+    "ru": "протечка / утечка",
+    "topic": "home"
+  },
+  {
+    "word": "repair",
+    "pos": "verb",
+    "ru": "ремонтировать / чинить",
+    "topic": "home"
+  },
+  {
+    "word": "fix",
+    "pos": "verb",
+    "ru": "чинить / исправлять",
+    "topic": "home"
+  },
+  {
+    "word": "complain",
+    "pos": "verb",
+    "ru": "жаловаться",
+    "topic": "general"
+  },
+  {
+    "word": "complaint",
+    "pos": "noun",
+    "ru": "жалоба",
+    "topic": "general"
+  },
+  {
+    "word": "smell",
+    "pos": "verb",
+    "ru": "пахнуть / нюхать",
+    "topic": "home",
+    "past": "smelt/smelled",
+    "pp": "smelt/smelled"
+  },
+  {
+    "word": "safe",
+    "pos": "adjective",
+    "ru": "безопасный",
+    "topic": "general"
+  },
+  {
+    "word": "cosy",
+    "pos": "adjective",
+    "ru": "уютный",
+    "topic": "home",
+    "note": "British spelling; American: cozy"
+  },
+  {
+    "word": "convenient",
+    "pos": "adjective",
+    "ru": "удобный (по времени/расположению)",
+    "topic": "general"
+  },
+  {
+    "word": "afford",
+    "pos": "verb",
+    "ru": "позволить себе (по деньгам)",
+    "topic": "money",
+    "note": "can't afford = не могу себе позволить"
+  },
+  {
+    "word": "save",
+    "pos": "verb",
+    "ru": "копить / экономить",
+    "topic": "money",
+    "note": "also = спасать; сохранять (файл)"
+  },
+  {
+    "word": "waste",
+    "pos": "verb",
+    "ru": "тратить впустую",
+    "topic": "money"
+  },
+  {
+    "word": "borrow",
+    "pos": "verb",
+    "ru": "брать взаймы / одалживать (у кого-то)",
+    "topic": "money",
+    "note": "trap: borrow FROM = взять; lend TO = дать"
+  },
+  {
+    "word": "lend",
+    "pos": "verb",
+    "ru": "давать взаймы / одалживать (кому-то)",
+    "topic": "money",
+    "past": "lent",
+    "pp": "lent",
+    "note": "trap: lend = дать, borrow = взять"
+  },
+  {
+    "word": "owe",
+    "pos": "verb",
+    "ru": "быть должным",
+    "topic": "money"
+  },
+  {
+    "word": "debt",
+    "pos": "noun",
+    "ru": "долг",
+    "topic": "money"
+  },
+  {
+    "word": "coin",
+    "pos": "noun",
+    "ru": "монета",
+    "topic": "money"
+  },
+  {
+    "word": "note",
+    "pos": "noun",
+    "ru": "банкнота / записка",
+    "topic": "money",
+    "note": "British: a ten-pound note; American: bill"
+  },
+  {
+    "word": "credit card",
+    "pos": "noun",
+    "ru": "кредитная карта",
+    "topic": "money"
+  },
+  {
+    "word": "bank account",
+    "pos": "noun",
+    "ru": "банковский счёт",
+    "topic": "money"
+  },
+  {
+    "word": "quid",
+    "pos": "noun",
+    "ru": "фунт (стерлингов)",
+    "topic": "money",
+    "note": "British informal; plural is quid: ten quid"
+  },
+  {
+    "word": "budget",
+    "pos": "noun",
+    "ru": "бюджет",
+    "topic": "money"
+  },
+  {
+    "word": "electricity",
+    "pos": "noun",
+    "ru": "электричество",
+    "topic": "home",
+    "uncountable": true
+  },
+  {
+    "word": "gas",
+    "pos": "noun",
+    "ru": "газ",
+    "topic": "home",
+    "uncountable": true,
+    "note": "British: gas = газ; American gas = бензин (British petrol)"
+  },
+  {
+    "word": "council tax",
+    "pos": "noun",
+    "ru": "муниципальный налог",
+    "topic": "money",
+    "note": "British: local tax paid by residents"
+  },
+  {
+    "word": "receipt",
+    "pos": "noun",
+    "ru": "чек (квитанция)",
+    "topic": "money",
+    "note": "false friend: ≠ рецепт"
+  },
+  {
+    "word": "discount",
+    "pos": "noun",
+    "ru": "скидка",
+    "topic": "money"
+  },
+  {
+    "word": "sale",
+    "pos": "noun",
+    "ru": "распродажа / продажа",
+    "topic": "money",
+    "note": "on sale / in the sale"
+  },
+  {
+    "word": "refund",
+    "pos": "noun",
+    "ru": "возврат денег",
+    "topic": "money"
+  },
+  {
+    "word": "wallet",
+    "pos": "noun",
+    "ru": "кошелёк / бумажник",
+    "topic": "money"
+  },
+  {
+    "word": "purse",
+    "pos": "noun",
+    "ru": "кошелёк (женский)",
+    "topic": "money",
+    "note": "British: purse = кошелёк; American: purse = сумочка"
+  },
+  {
+    "word": "worth",
+    "pos": "adjective",
+    "ru": "стоящий / стоимостью",
+    "topic": "money",
+    "note": "It's worth it = оно того стоит"
+  },
+  {
+    "word": "social media",
+    "pos": "noun",
+    "ru": "соцсети",
+    "topic": "media",
+    "uncountable": true
+  },
+  {
+    "word": "post",
+    "pos": "verb",
+    "ru": "публиковать / отправлять по почте",
+    "topic": "media",
+    "note": "British: post a letter = отправить письмо (American: mail)"
+  },
+  {
+    "word": "follower",
+    "pos": "noun",
+    "ru": "подписчик",
+    "topic": "media"
+  },
+  {
+    "word": "follow",
+    "pos": "verb",
+    "ru": "следовать / подписываться",
+    "topic": "media"
+  },
+  {
+    "word": "comment",
+    "pos": "noun",
+    "ru": "комментарий",
+    "topic": "media"
+  },
+  {
+    "word": "viral",
+    "pos": "adjective",
+    "ru": "вирусный",
+    "topic": "media",
+    "note": "go viral = стать вирусным"
+  },
+  {
+    "word": "trend",
+    "pos": "noun",
+    "ru": "тренд / тенденция",
+    "topic": "media"
+  },
+  {
+    "word": "fake",
+    "pos": "adjective",
+    "ru": "фальшивый / поддельный",
+    "topic": "media"
+  },
+  {
+    "word": "influencer",
+    "pos": "noun",
+    "ru": "инфлюенсер / блогер",
+    "topic": "media"
+  },
+  {
+    "word": "channel",
+    "pos": "noun",
+    "ru": "канал",
+    "topic": "media"
+  },
+  {
+    "word": "screen",
+    "pos": "noun",
+    "ru": "экран",
+    "topic": "media"
+  },
+  {
+    "word": "download",
+    "pos": "verb",
+    "ru": "скачивать",
+    "topic": "media"
+  },
+  {
+    "word": "upload",
+    "pos": "verb",
+    "ru": "загружать (в сеть)",
+    "topic": "media"
+  },
+  {
+    "word": "install",
+    "pos": "verb",
+    "ru": "устанавливать",
+    "topic": "media"
+  },
+  {
+    "word": "update",
+    "pos": "noun",
+    "ru": "обновление",
+    "topic": "media"
+  },
+  {
+    "word": "account",
+    "pos": "noun",
+    "ru": "аккаунт / счёт",
+    "topic": "media"
+  },
+  {
+    "word": "password",
+    "pos": "noun",
+    "ru": "пароль",
+    "topic": "media"
+  },
+  {
+    "word": "log in",
+    "pos": "phrase",
+    "ru": "войти (в аккаунт)",
+    "topic": "media"
+  },
+  {
+    "word": "log out",
+    "pos": "phrase",
+    "ru": "выйти (из аккаунта)",
+    "topic": "media"
+  },
+  {
+    "word": "sign up",
+    "pos": "phrase",
+    "ru": "зарегистрироваться",
+    "topic": "media"
+  },
+  {
+    "word": "click",
+    "pos": "verb",
+    "ru": "нажимать / кликать",
+    "topic": "media"
+  },
+  {
+    "word": "scroll",
+    "pos": "verb",
+    "ru": "прокручивать / листать",
+    "topic": "media"
+  },
+  {
+    "word": "search",
+    "pos": "verb",
+    "ru": "искать",
+    "topic": "media"
+  },
+  {
+    "word": "signal",
+    "pos": "noun",
+    "ru": "сигнал / связь",
+    "topic": "media"
+  },
+  {
+    "word": "notification",
+    "pos": "noun",
+    "ru": "уведомление",
+    "topic": "media"
+  },
+  {
+    "word": "link",
+    "pos": "noun",
+    "ru": "ссылка",
+    "topic": "media"
+  },
+  {
+    "word": "delete",
+    "pos": "verb",
+    "ru": "удалять",
+    "topic": "media"
+  },
+  {
+    "word": "receive",
+    "pos": "verb",
+    "ru": "получать",
+    "topic": "media"
+  },
+  {
+    "word": "ring",
+    "pos": "verb",
+    "ru": "звонить (по телефону)",
+    "topic": "media",
+    "past": "rang",
+    "pp": "rung",
+    "note": "British: I'll ring you"
+  },
+  {
+    "word": "contact",
+    "pos": "verb",
+    "ru": "связываться",
+    "topic": "media"
+  },
+  {
+    "word": "content",
+    "pos": "noun",
+    "ru": "контент / содержание",
+    "topic": "media",
+    "uncountable": true
+  },
+  {
+    "word": "programme",
+    "pos": "noun",
+    "ru": "программа / передача",
+    "topic": "media",
+    "note": "British spelling; computer program"
+  },
+  {
+    "word": "series",
+    "pos": "noun",
+    "ru": "сериал / серия",
+    "topic": "media",
+    "plural": "series"
+  },
+  {
+    "word": "online shopping",
+    "pos": "noun",
+    "ru": "онлайн-покупки",
+    "topic": "shopping",
+    "uncountable": true
+  },
+  {
+    "word": "deliver",
+    "pos": "verb",
+    "ru": "доставлять",
+    "topic": "shopping"
+  },
+  {
+    "word": "delivery",
+    "pos": "noun",
+    "ru": "доставка",
+    "topic": "shopping"
+  },
+  {
+    "word": "parcel",
+    "pos": "noun",
+    "ru": "посылка",
+    "topic": "shopping",
+    "note": "British; American: package"
+  },
+  {
+    "word": "try on",
+    "pos": "phrase",
+    "ru": "примерять",
+    "topic": "shopping"
+  },
+  {
+    "word": "suit",
+    "pos": "verb",
+    "ru": "идти (о одежде) / подходить",
+    "topic": "shopping"
+  },
+  {
+    "word": "return",
+    "pos": "verb",
+    "ru": "возвращать",
+    "topic": "shopping"
+  },
+  {
+    "word": "brand",
+    "pos": "noun",
+    "ru": "бренд / марка",
+    "topic": "shopping"
+  },
+  {
+    "word": "product",
+    "pos": "noun",
+    "ru": "продукт / товар",
+    "topic": "shopping"
+  },
+  {
+    "word": "shopping centre",
+    "pos": "noun",
+    "ru": "торговый центр",
+    "topic": "shopping",
+    "note": "British spelling; American: mall"
+  },
+  {
+    "word": "review",
+    "pos": "noun",
+    "ru": "отзыв / обзор",
+    "topic": "shopping"
+  },
+  {
+    "word": "scarf",
+    "pos": "noun",
+    "ru": "шарф",
+    "topic": "clothes",
+    "plural": "scarves"
+  },
+  {
+    "word": "gloves",
+    "pos": "noun",
+    "ru": "перчатки",
+    "topic": "clothes"
+  },
+  {
+    "word": "pocket",
+    "pos": "noun",
+    "ru": "карман",
+    "topic": "clothes"
+  },
+  {
+    "word": "fashion",
+    "pos": "noun",
+    "ru": "мода",
+    "topic": "clothes",
+    "uncountable": true
+  },
+  {
+    "word": "put on",
+    "pos": "phrase",
+    "ru": "надевать",
+    "topic": "clothes"
+  },
+  {
+    "word": "take off",
+    "pos": "phrase",
+    "ru": "снимать (одежду) / взлетать",
+    "topic": "clothes"
+  },
+  {
+    "word": "journey",
+    "pos": "noun",
+    "ru": "поездка / путешествие (из пункта А в Б)",
+    "topic": "travel"
+  },
+  {
+    "word": "road trip",
+    "pos": "noun",
+    "ru": "поездка на машине",
+    "topic": "travel"
+  },
+  {
+    "word": "abroad",
+    "pos": "adverb",
+    "ru": "за границей / за границу",
+    "topic": "travel"
+  },
+  {
+    "word": "luggage",
+    "pos": "noun",
+    "ru": "багаж",
+    "topic": "travel",
+    "uncountable": true,
+    "note": "uncountable: a piece of luggage"
+  },
+  {
+    "word": "backpack",
+    "pos": "noun",
+    "ru": "рюкзак",
+    "topic": "travel"
+  },
+  {
+    "word": "pack",
+    "pos": "verb",
+    "ru": "собирать вещи / упаковывать",
+    "topic": "travel"
+  },
+  {
+    "word": "sightseeing",
+    "pos": "noun",
+    "ru": "осмотр достопримечательностей",
+    "topic": "travel",
+    "uncountable": true
+  },
+  {
+    "word": "souvenir",
+    "pos": "noun",
+    "ru": "сувенир",
+    "topic": "travel"
+  },
+  {
+    "word": "platform",
+    "pos": "noun",
+    "ru": "платформа",
+    "topic": "travel"
+  },
+  {
+    "word": "timetable",
+    "pos": "noun",
+    "ru": "расписание",
+    "topic": "travel",
+    "note": "British; American: schedule"
+  },
+  {
+    "word": "delay",
+    "pos": "noun",
+    "ru": "задержка",
+    "topic": "travel"
+  },
+  {
+    "word": "delayed",
+    "pos": "adjective",
+    "ru": "задержанный (о рейсе, поезде)",
+    "topic": "travel"
+  },
+  {
+    "word": "land",
+    "pos": "verb",
+    "ru": "приземляться",
+    "topic": "travel"
+  },
+  {
+    "word": "check in",
+    "pos": "phrase",
+    "ru": "регистрироваться / заселяться",
+    "topic": "travel"
+  },
+  {
+    "word": "check out",
+    "pos": "phrase",
+    "ru": "выписываться / выселяться (из отеля)",
+    "topic": "travel"
+  },
+  {
+    "word": "passenger",
+    "pos": "noun",
+    "ru": "пассажир",
+    "topic": "travel"
+  },
+  {
+    "word": "driving licence",
+    "pos": "noun",
+    "ru": "водительские права",
+    "topic": "travel",
+    "note": "British spelling; American: driver's license"
+  },
+  {
+    "word": "motorway",
+    "pos": "noun",
+    "ru": "автомагистраль / шоссе",
+    "topic": "travel",
+    "note": "British; American: highway/freeway"
+  },
+  {
+    "word": "petrol",
+    "pos": "noun",
+    "ru": "бензин",
+    "topic": "travel",
+    "uncountable": true,
+    "note": "British; American: gas"
+  },
+  {
+    "word": "traffic",
+    "pos": "noun",
+    "ru": "движение (транспорта) / пробки",
+    "topic": "travel",
+    "uncountable": true
+  },
+  {
+    "word": "traffic jam",
+    "pos": "noun",
+    "ru": "пробка",
+    "topic": "travel"
+  },
+  {
+    "word": "roundabout",
+    "pos": "noun",
+    "ru": "кольцевая развязка",
+    "topic": "travel",
+    "note": "very common in the UK"
+  },
+  {
+    "word": "lorry",
+    "pos": "noun",
+    "ru": "грузовик",
+    "topic": "travel",
+    "note": "British; American: truck"
+  },
+  {
+    "word": "underground",
+    "pos": "noun",
+    "ru": "метро",
+    "topic": "travel",
+    "note": "British; London: the Tube"
+  },
+  {
+    "word": "tube",
+    "pos": "noun",
+    "ru": "метро (в Лондоне) / тюбик",
+    "topic": "travel",
+    "note": "British: the Tube = лондонское метро"
+  },
+  {
+    "word": "coach",
+    "pos": "noun",
+    "ru": "междугородний автобус / тренер",
+    "topic": "travel",
+    "note": "British: coach = междугородний автобус"
+  },
+  {
+    "word": "ferry",
+    "pos": "noun",
+    "ru": "паром",
+    "topic": "travel"
+  },
+  {
+    "word": "car park",
+    "pos": "noun",
+    "ru": "автостоянка / парковка",
+    "topic": "travel",
+    "note": "British; American: parking lot"
+  },
+  {
+    "word": "speed",
+    "pos": "noun",
+    "ru": "скорость",
+    "topic": "travel"
+  },
+  {
+    "word": "slow down",
+    "pos": "phrase",
+    "ru": "сбавить скорость / замедлиться",
+    "topic": "travel"
+  },
+  {
+    "word": "direction",
+    "pos": "noun",
+    "ru": "направление",
+    "topic": "travel"
+  },
+  {
+    "word": "distance",
+    "pos": "noun",
+    "ru": "расстояние",
+    "topic": "travel"
+  },
+  {
+    "word": "nearby",
+    "pos": "adverb",
+    "ru": "поблизости",
+    "topic": "travel"
+  },
+  {
+    "word": "get lost",
+    "pos": "phrase",
+    "ru": "заблудиться",
+    "topic": "travel"
+  },
+  {
+    "word": "sat nav",
+    "pos": "noun",
+    "ru": "навигатор",
+    "topic": "travel",
+    "note": "British informal; GPS"
+  },
+  {
+    "word": "accommodation",
+    "pos": "noun",
+    "ru": "жильё / размещение",
+    "topic": "travel",
+    "uncountable": true,
+    "note": "British: uncountable"
+  },
+  {
+    "word": "hostel",
+    "pos": "noun",
+    "ru": "хостел",
+    "topic": "travel"
+  },
+  {
+    "word": "B&B",
+    "pos": "noun",
+    "ru": "гостевой дом / мини-гостиница (с завтраком)",
+    "topic": "travel",
+    "note": "British: bed and breakfast"
+  },
+  {
+    "word": "reception",
+    "pos": "noun",
+    "ru": "ресепшен / стойка регистрации",
+    "topic": "travel"
+  },
+  {
+    "word": "single room",
+    "pos": "noun",
+    "ru": "одноместный номер",
+    "topic": "travel"
+  },
+  {
+    "word": "double room",
+    "pos": "noun",
+    "ru": "двухместный номер (с одной кроватью)",
+    "topic": "travel"
+  },
+  {
+    "word": "cottage",
+    "pos": "noun",
+    "ru": "коттедж / деревенский дом",
+    "topic": "travel"
+  },
+  {
+    "word": "accident",
+    "pos": "noun",
+    "ru": "несчастный случай / авария",
+    "topic": "health"
+  },
+  {
+    "word": "crash",
+    "pos": "noun",
+    "ru": "авария / столкновение",
+    "topic": "health"
+  },
+  {
+    "word": "hit",
+    "pos": "verb",
+    "ru": "ударять / сбить",
+    "topic": "health",
+    "past": "hit",
+    "pp": "hit"
+  },
+  {
+    "word": "fall",
+    "pos": "verb",
+    "ru": "падать",
+    "topic": "health",
+    "past": "fell",
+    "pp": "fallen"
+  },
+  {
+    "word": "fall over",
+    "pos": "phrase",
+    "ru": "упасть (споткнувшись)",
+    "topic": "health"
+  },
+  {
+    "word": "injury",
+    "pos": "noun",
+    "ru": "травма",
+    "topic": "health"
+  },
+  {
+    "word": "blood",
+    "pos": "noun",
+    "ru": "кровь",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "pain",
+    "pos": "noun",
+    "ru": "боль",
+    "topic": "health"
+  },
+  {
+    "word": "illness",
+    "pos": "noun",
+    "ru": "болезнь",
+    "topic": "health"
+  },
+  {
+    "word": "flu",
+    "pos": "noun",
+    "ru": "грипп",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "cough",
+    "pos": "noun",
+    "ru": "кашель",
+    "topic": "health"
+  },
+  {
+    "word": "stomach ache",
+    "pos": "noun",
+    "ru": "боль в животе",
+    "topic": "health"
+  },
+  {
+    "word": "sore throat",
+    "pos": "noun",
+    "ru": "боль в горле",
+    "topic": "health"
+  },
+  {
+    "word": "pill",
+    "pos": "noun",
+    "ru": "таблетка",
+    "topic": "health"
+  },
+  {
+    "word": "ambulance",
+    "pos": "noun",
+    "ru": "скорая помощь",
+    "topic": "health"
+  },
+  {
+    "word": "emergency",
+    "pos": "noun",
+    "ru": "чрезвычайная ситуация / экстренный случай",
+    "topic": "health"
+  },
+  {
+    "word": "A&E",
+    "pos": "noun",
+    "ru": "травмпункт / приёмный покой",
+    "topic": "health",
+    "note": "British: Accident and Emergency; American: ER"
+  },
+  {
+    "word": "GP",
+    "pos": "noun",
+    "ru": "терапевт / семейный врач",
+    "topic": "health",
+    "note": "British: general practitioner"
+  },
+  {
+    "word": "rest",
+    "pos": "noun",
+    "ru": "отдых",
+    "topic": "health"
+  },
+  {
+    "word": "recover",
+    "pos": "verb",
+    "ru": "выздоравливать / восстанавливаться",
+    "topic": "health"
+  },
+  {
+    "word": "unhealthy",
+    "pos": "adjective",
+    "ru": "нездоровый / вредный",
+    "topic": "health"
+  },
+  {
+    "word": "diet",
+    "pos": "noun",
+    "ru": "диета / рацион",
+    "topic": "health"
+  },
+  {
+    "word": "lose weight",
+    "pos": "phrase",
+    "ru": "похудеть",
+    "topic": "health"
+  },
+  {
+    "word": "put on weight",
+    "pos": "phrase",
+    "ru": "набрать вес",
+    "topic": "health"
+  },
+  {
+    "word": "dead",
+    "pos": "adjective",
+    "ru": "мёртвый",
+    "topic": "health"
+  },
+  {
+    "word": "die",
+    "pos": "verb",
+    "ru": "умирать",
+    "topic": "health"
+  },
+  {
+    "word": "careful",
+    "pos": "adjective",
+    "ru": "осторожный",
+    "topic": "general"
+  },
+  {
+    "word": "carefully",
+    "pos": "adverb",
+    "ru": "осторожно / внимательно",
+    "topic": "general"
+  },
+  {
+    "word": "steal",
+    "pos": "verb",
+    "ru": "красть / воровать",
+    "topic": "general",
+    "past": "stole",
+    "pp": "stolen"
+  },
+  {
+    "word": "thief",
+    "pos": "noun",
+    "ru": "вор",
+    "topic": "general",
+    "plural": "thieves"
+  },
+  {
+    "word": "lucky",
+    "pos": "adjective",
+    "ru": "везучий / удачный",
+    "topic": "general"
+  },
+  {
+    "word": "luck",
+    "pos": "noun",
+    "ru": "удача",
+    "topic": "general",
+    "uncountable": true
+  },
+  {
+    "word": "accept",
+    "pos": "verb",
+    "ru": "принимать / соглашаться",
+    "topic": "general"
+  },
+  {
+    "word": "disagree",
+    "pos": "verb",
+    "ru": "не соглашаться",
+    "topic": "general"
+  },
+  {
+    "word": "allow",
+    "pos": "verb",
+    "ru": "позволять / разрешать",
+    "topic": "general"
+  },
+  {
+    "word": "argue",
+    "pos": "verb",
+    "ru": "спорить / ссориться",
+    "topic": "general"
+  },
+  {
+    "word": "argument",
+    "pos": "noun",
+    "ru": "спор / ссора",
+    "topic": "general",
+    "note": "false friend-ish: often = ссора, not аргумент"
+  },
+  {
+    "word": "avoid",
+    "pos": "verb",
+    "ru": "избегать",
+    "topic": "general"
+  },
+  {
+    "word": "believe",
+    "pos": "verb",
+    "ru": "верить / полагать",
+    "topic": "general"
+  },
+  {
+    "word": "catch",
+    "pos": "verb",
+    "ru": "ловить / успевать (на транспорт)",
+    "topic": "general",
+    "past": "caught",
+    "pp": "caught"
+  },
+  {
+    "word": "choice",
+    "pos": "noun",
+    "ru": "выбор",
+    "topic": "general"
+  },
+  {
+    "word": "continue",
+    "pos": "verb",
+    "ru": "продолжать",
+    "topic": "general"
+  },
+  {
+    "word": "disappear",
+    "pos": "verb",
+    "ru": "исчезать",
+    "topic": "general"
+  },
+  {
+    "word": "discover",
+    "pos": "verb",
+    "ru": "открывать / обнаруживать",
+    "topic": "general"
+  },
+  {
+    "word": "discuss",
+    "pos": "verb",
+    "ru": "обсуждать",
+    "topic": "general",
+    "note": "discuss something (no about)"
+  },
+  {
+    "word": "fight",
+    "pos": "verb",
+    "ru": "драться / бороться",
+    "topic": "general",
+    "past": "fought",
+    "pp": "fought"
+  },
+  {
+    "word": "hide",
+    "pos": "verb",
+    "ru": "прятать(ся)",
+    "topic": "general",
+    "past": "hid",
+    "pp": "hidden"
+  },
+  {
+    "word": "hold",
+    "pos": "verb",
+    "ru": "держать",
+    "topic": "general",
+    "past": "held",
+    "pp": "held"
+  },
+  {
+    "word": "imagine",
+    "pos": "verb",
+    "ru": "представлять / воображать",
+    "topic": "general"
+  },
+  {
+    "word": "include",
+    "pos": "verb",
+    "ru": "включать",
+    "topic": "general"
+  },
+  {
+    "word": "introduce",
+    "pos": "verb",
+    "ru": "представлять (знакомить)",
+    "topic": "people"
+  },
+  {
+    "word": "join",
+    "pos": "verb",
+    "ru": "присоединиться / вступить",
+    "topic": "general"
+  },
+  {
+    "word": "keep",
+    "pos": "verb",
+    "ru": "хранить / продолжать",
+    "topic": "general",
+    "past": "kept",
+    "pp": "kept",
+    "note": "keep doing = продолжать делать"
+  },
+  {
+    "word": "let",
+    "pos": "verb",
+    "ru": "позволять / разрешать",
+    "topic": "general",
+    "past": "let",
+    "pp": "let"
+  },
+  {
+    "word": "manage",
+    "pos": "verb",
+    "ru": "справляться / руководить",
+    "topic": "general"
+  },
+  {
+    "word": "mention",
+    "pos": "verb",
+    "ru": "упоминать",
+    "topic": "general"
+  },
+  {
+    "word": "mind",
+    "pos": "verb",
+    "ru": "возражать / быть против",
+    "topic": "general",
+    "note": "Do you mind if...? / I don't mind = мне всё равно"
+  },
+  {
+    "word": "notice",
+    "pos": "verb",
+    "ru": "замечать",
+    "topic": "general"
+  },
+  {
+    "word": "offer",
+    "pos": "verb",
+    "ru": "предлагать",
+    "topic": "general"
+  },
+  {
+    "word": "pass",
+    "pos": "verb",
+    "ru": "сдать (экзамен) / передать",
+    "topic": "general"
+  },
+  {
+    "word": "pick",
+    "pos": "verb",
+    "ru": "выбирать / собирать",
+    "topic": "general"
+  },
+  {
+    "word": "prefer",
+    "pos": "verb",
+    "ru": "предпочитать",
+    "topic": "general"
+  },
+  {
+    "word": "protect",
+    "pos": "verb",
+    "ru": "защищать",
+    "topic": "general"
+  },
+  {
+    "word": "pull",
+    "pos": "verb",
+    "ru": "тянуть",
+    "topic": "general"
+  },
+  {
+    "word": "push",
+    "pos": "verb",
+    "ru": "толкать",
+    "topic": "general"
+  },
+  {
+    "word": "realise",
+    "pos": "verb",
+    "ru": "осознавать / понимать",
+    "topic": "general",
+    "note": "British spelling -ise"
+  },
+  {
+    "word": "recognise",
+    "pos": "verb",
+    "ru": "узнавать",
+    "topic": "general",
+    "note": "British spelling -ise"
+  },
+  {
+    "word": "recommend",
+    "pos": "verb",
+    "ru": "рекомендовать / советовать",
+    "topic": "general"
+  },
+  {
+    "word": "refuse",
+    "pos": "verb",
+    "ru": "отказываться",
+    "topic": "general"
+  },
+  {
+    "word": "reach",
+    "pos": "verb",
+    "ru": "достигать / дотягиваться",
+    "topic": "general"
+  },
+  {
+    "word": "seem",
+    "pos": "verb",
+    "ru": "казаться",
+    "topic": "general"
+  },
+  {
+    "word": "shout",
+    "pos": "verb",
+    "ru": "кричать",
+    "topic": "general"
+  },
+  {
+    "word": "suggest",
+    "pos": "verb",
+    "ru": "предлагать (идею)",
+    "topic": "general",
+    "note": "suggest doing / suggest that (not suggest me to)"
+  },
+  {
+    "word": "support",
+    "pos": "verb",
+    "ru": "поддерживать",
+    "topic": "general"
+  },
+  {
+    "word": "suppose",
+    "pos": "verb",
+    "ru": "полагать / предполагать",
+    "topic": "general"
+  },
+  {
+    "word": "throw",
+    "pos": "verb",
+    "ru": "бросать",
+    "topic": "general",
+    "past": "threw",
+    "pp": "thrown"
+  },
+  {
+    "word": "touch",
+    "pos": "verb",
+    "ru": "трогать / касаться",
+    "topic": "general"
+  },
+  {
+    "word": "wonder",
+    "pos": "verb",
+    "ru": "интересоваться / задаваться вопросом",
+    "topic": "general",
+    "note": "I wonder if... = интересно, ..."
+  },
+  {
+    "word": "deal with",
+    "pos": "phrase",
+    "ru": "справляться с / иметь дело с",
+    "topic": "general"
+  },
+  {
+    "word": "collect",
+    "pos": "verb",
+    "ru": "собирать / забирать",
+    "topic": "general"
+  },
+  {
+    "word": "grow",
+    "pos": "verb",
+    "ru": "расти / выращивать",
+    "topic": "general",
+    "past": "grew",
+    "pp": "grown"
+  },
+  {
+    "word": "advice",
+    "pos": "noun",
+    "ru": "совет",
+    "topic": "general",
+    "uncountable": true,
+    "note": "uncountable: some advice / a piece of advice (not an advice)"
+  },
+  {
+    "word": "situation",
+    "pos": "noun",
+    "ru": "ситуация",
+    "topic": "general"
+  },
+  {
+    "word": "chance",
+    "pos": "noun",
+    "ru": "шанс / возможность",
+    "topic": "general"
+  },
+  {
+    "word": "difference",
+    "pos": "noun",
+    "ru": "разница / отличие",
+    "topic": "general"
+  },
+  {
+    "word": "fact",
+    "pos": "noun",
+    "ru": "факт",
+    "topic": "general"
+  },
+  {
+    "word": "truth",
+    "pos": "noun",
+    "ru": "правда",
+    "topic": "general"
+  },
+  {
+    "word": "rule",
+    "pos": "noun",
+    "ru": "правило",
+    "topic": "general"
+  },
+  {
+    "word": "secret",
+    "pos": "noun",
+    "ru": "секрет / тайна",
+    "topic": "general"
+  },
+  {
+    "word": "habit",
+    "pos": "noun",
+    "ru": "привычка",
+    "topic": "general"
+  },
+  {
+    "word": "memory",
+    "pos": "noun",
+    "ru": "память / воспоминание",
+    "topic": "general"
+  },
+  {
+    "word": "risk",
+    "pos": "noun",
+    "ru": "риск",
+    "topic": "general"
+  },
+  {
+    "word": "health",
+    "pos": "noun",
+    "ru": "здоровье",
+    "topic": "health",
+    "uncountable": true
+  },
+  {
+    "word": "traditional",
+    "pos": "adjective",
+    "ru": "традиционный",
+    "topic": "general"
+  },
+  {
+    "word": "high street",
+    "pos": "noun",
+    "ru": "главная улица (с магазинами)",
+    "topic": "places",
+    "note": "British"
+  },
+  {
+    "word": "pavement",
+    "pos": "noun",
+    "ru": "тротуар",
+    "topic": "places",
+    "note": "British; American: sidewalk"
+  },
+  {
+    "word": "impossible",
+    "pos": "adjective",
+    "ru": "невозможный",
+    "topic": "general"
+  },
+  {
+    "word": "necessary",
+    "pos": "adjective",
+    "ru": "необходимый",
+    "topic": "general"
+  },
+  {
+    "word": "usual",
+    "pos": "adjective",
+    "ru": "обычный",
+    "topic": "general"
+  },
+  {
+    "word": "strange",
+    "pos": "adjective",
+    "ru": "странный",
+    "topic": "general"
+  },
+  {
+    "word": "weird",
+    "pos": "adjective",
+    "ru": "странный / чудной",
+    "topic": "general",
+    "note": "informal"
+  },
+  {
+    "word": "similar",
+    "pos": "adjective",
+    "ru": "похожий",
+    "topic": "general"
+  },
+  {
+    "word": "whole",
+    "pos": "adjective",
+    "ru": "весь / целый",
+    "topic": "general"
+  },
+  {
+    "word": "main",
+    "pos": "adjective",
+    "ru": "главный / основной",
+    "topic": "general"
+  },
+  {
+    "word": "simple",
+    "pos": "adjective",
+    "ru": "простой",
+    "topic": "general"
+  },
+  {
+    "word": "clear",
+    "pos": "adjective",
+    "ru": "ясный / понятный",
+    "topic": "general"
+  },
+  {
+    "word": "heavy",
+    "pos": "adjective",
+    "ru": "тяжёлый",
+    "topic": "general"
+  },
+  {
+    "word": "huge",
+    "pos": "adjective",
+    "ru": "огромный",
+    "topic": "general"
+  },
+  {
+    "word": "tiny",
+    "pos": "adjective",
+    "ru": "крошечный",
+    "topic": "general"
+  },
+  {
+    "word": "deep",
+    "pos": "adjective",
+    "ru": "глубокий",
+    "topic": "general"
+  },
+  {
+    "word": "crowded",
+    "pos": "adjective",
+    "ru": "переполненный / многолюдный",
+    "topic": "places"
+  },
+  {
+    "word": "ordinary",
+    "pos": "adjective",
+    "ru": "обыкновенный",
+    "topic": "general"
+  },
+  {
+    "word": "unusual",
+    "pos": "adjective",
+    "ru": "необычный",
+    "topic": "general"
+  },
+  {
+    "word": "fair",
+    "pos": "adjective",
+    "ru": "справедливый",
+    "topic": "general"
+  },
+  {
+    "word": "unfair",
+    "pos": "adjective",
+    "ru": "несправедливый",
+    "topic": "general"
+  },
+  {
+    "word": "private",
+    "pos": "adjective",
+    "ru": "частный / личный",
+    "topic": "general"
+  },
+  {
+    "word": "public",
+    "pos": "adjective",
+    "ru": "общественный / публичный",
+    "topic": "general"
+  },
+  {
+    "word": "almost",
+    "pos": "adverb",
+    "ru": "почти",
+    "topic": "general"
+  },
+  {
+    "word": "nearly",
+    "pos": "adverb",
+    "ru": "почти",
+    "topic": "general"
+  },
+  {
+    "word": "rather",
+    "pos": "adverb",
+    "ru": "довольно / скорее",
+    "topic": "general"
+  },
+  {
+    "word": "especially",
+    "pos": "adverb",
+    "ru": "особенно",
+    "topic": "general"
+  },
+  {
+    "word": "enough",
+    "pos": "adverb",
+    "ru": "достаточно",
+    "topic": "general",
+    "note": "after adjectives: old enough"
+  },
+  {
+    "word": "either",
+    "pos": "adverb",
+    "ru": "тоже (в отрицании)",
+    "topic": "general",
+    "note": "I don't either = я тоже нет"
+  },
+  {
+    "word": "instead",
+    "pos": "adverb",
+    "ru": "вместо этого",
+    "topic": "general"
+  },
+  {
+    "word": "anyway",
+    "pos": "adverb",
+    "ru": "в любом случае / так или иначе",
+    "topic": "general"
+  },
+  {
+    "word": "finally",
+    "pos": "adverb",
+    "ru": "наконец",
+    "topic": "general"
+  },
+  {
+    "word": "suddenly",
+    "pos": "adverb",
+    "ru": "вдруг / внезапно",
+    "topic": "general"
+  },
+  {
+    "word": "immediately",
+    "pos": "adverb",
+    "ru": "немедленно / сразу",
+    "topic": "general"
+  },
+  {
+    "word": "hardly",
+    "pos": "adverb",
+    "ru": "едва / почти не",
+    "topic": "general",
+    "note": "trap: hardly ≠ усердно"
+  },
+  {
+    "word": "luckily",
+    "pos": "adverb",
+    "ru": "к счастью",
+    "topic": "general"
+  },
+  {
+    "word": "unfortunately",
+    "pos": "adverb",
+    "ru": "к сожалению",
+    "topic": "general"
+  },
+  {
+    "word": "alone",
+    "pos": "adverb",
+    "ru": "один / в одиночестве",
+    "topic": "general"
+  },
+  {
+    "word": "everywhere",
+    "pos": "adverb",
+    "ru": "везде",
+    "topic": "general"
+  },
+  {
+    "word": "somewhere",
+    "pos": "adverb",
+    "ru": "где-то / куда-то",
+    "topic": "general"
+  },
+  {
+    "word": "anywhere",
+    "pos": "adverb",
+    "ru": "где-нибудь / куда-нибудь",
+    "topic": "general"
+  },
+  {
+    "word": "once",
+    "pos": "adverb",
+    "ru": "однажды / один раз",
+    "topic": "general"
+  },
+  {
+    "word": "though",
+    "pos": "adverb",
+    "ru": "однако / хотя",
+    "topic": "general",
+    "note": "at end of sentence: It was good, though."
+  },
+  {
+    "word": "although",
+    "pos": "conjunction",
+    "ru": "хотя",
+    "topic": "general"
+  },
+  {
+    "word": "however",
+    "pos": "adverb",
+    "ru": "однако",
+    "topic": "general"
+  },
+  {
+    "word": "unless",
+    "pos": "conjunction",
+    "ru": "если не",
+    "topic": "general"
+  },
+  {
+    "word": "against",
+    "pos": "preposition",
+    "ru": "против",
+    "topic": "general"
+  },
+  {
+    "word": "across",
+    "pos": "preposition",
+    "ru": "через / поперёк",
+    "topic": "general"
+  },
+  {
+    "word": "through",
+    "pos": "preposition",
+    "ru": "через / сквозь",
+    "topic": "general"
+  },
+  {
+    "word": "towards",
+    "pos": "preposition",
+    "ru": "к / по направлению к",
+    "topic": "general",
+    "note": "British: towards; American: toward"
+  },
+  {
+    "word": "several",
+    "pos": "determiner",
+    "ru": "несколько",
+    "topic": "general"
+  },
+  {
+    "word": "plenty",
+    "pos": "pronoun",
+    "ru": "множество / полно",
+    "topic": "general",
+    "note": "plenty of"
+  },
+  {
+    "word": "turn on",
+    "pos": "phrase",
+    "ru": "включать",
+    "topic": "home"
+  },
+  {
+    "word": "turn off",
+    "pos": "phrase",
+    "ru": "выключать",
+    "topic": "home"
+  },
+  {
+    "word": "turn up",
+    "pos": "phrase",
+    "ru": "прибавить (громкость) / появиться",
+    "topic": "general"
+  },
+  {
+    "word": "turn down",
+    "pos": "phrase",
+    "ru": "убавить / отказать",
+    "topic": "general"
+  },
+  {
+    "word": "find out",
+    "pos": "phrase",
+    "ru": "узнать / выяснить",
+    "topic": "general"
+  },
+  {
+    "word": "give up",
+    "pos": "phrase",
+    "ru": "бросить (привычку) / сдаться",
+    "topic": "general"
+  },
+  {
+    "word": "look after",
+    "pos": "phrase",
+    "ru": "присматривать / заботиться о",
+    "topic": "people"
+  },
+  {
+    "word": "look forward to",
+    "pos": "phrase",
+    "ru": "с нетерпением ждать",
+    "topic": "general",
+    "note": "followed by -ing: I'm looking forward to seeing you"
+  },
+  {
+    "word": "look up",
+    "pos": "phrase",
+    "ru": "найти (в словаре, в сети)",
+    "topic": "general"
+  },
+  {
+    "word": "pick up",
+    "pos": "phrase",
+    "ru": "поднять / забрать (кого-то)",
+    "topic": "general"
+  },
+  {
+    "word": "get on with",
+    "pos": "phrase",
+    "ru": "ладить с",
+    "topic": "people"
+  },
+  {
+    "word": "get out",
+    "pos": "phrase",
+    "ru": "выйти / выбраться",
+    "topic": "general"
+  },
+  {
+    "word": "set off",
+    "pos": "phrase",
+    "ru": "отправиться в путь",
+    "topic": "travel"
+  },
+  {
+    "word": "run out of",
+    "pos": "phrase",
+    "ru": "закончиться (о запасе)",
+    "topic": "general",
+    "note": "We've run out of milk = у нас закончилось молоко"
+  },
+  {
+    "word": "fill in",
+    "pos": "phrase",
+    "ru": "заполнить (анкету)",
+    "topic": "work",
+    "note": "British; American: fill out"
+  },
+  {
+    "word": "hurry up",
+    "pos": "phrase",
+    "ru": "поторопиться",
+    "topic": "general"
+  },
+  {
+    "word": "calm down",
+    "pos": "phrase",
+    "ru": "успокоиться",
+    "topic": "general"
+  },
+  {
+    "word": "go on",
+    "pos": "phrase",
+    "ru": "продолжать / происходить",
+    "topic": "general",
+    "note": "What's going on? = Что происходит?"
+  },
+  {
+    "word": "carry on",
+    "pos": "phrase",
+    "ru": "продолжать",
+    "topic": "general",
+    "note": "British"
+  },
+  {
+    "word": "work out",
+    "pos": "phrase",
+    "ru": "понять / решить",
+    "topic": "general",
+    "note": "also = тренироваться (в спортзале)"
+  },
+  {
+    "word": "sort out",
+    "pos": "phrase",
+    "ru": "разобраться / уладить",
+    "topic": "general",
+    "note": "British informal"
+  },
+  {
+    "word": "throw away",
+    "pos": "phrase",
+    "ru": "выбросить",
+    "topic": "general"
+  },
+  {
+    "word": "put away",
+    "pos": "phrase",
+    "ru": "убрать (на место)",
+    "topic": "general"
+  },
+  {
+    "word": "grow up",
+    "pos": "phrase",
+    "ru": "вырасти",
+    "topic": "general"
+  },
+  {
+    "word": "eat out",
+    "pos": "phrase",
+    "ru": "поесть вне дома (в кафе, ресторане)",
+    "topic": "food"
+  },
+  {
+    "word": "hang out",
+    "pos": "phrase",
+    "ru": "тусоваться / проводить время",
+    "topic": "people",
+    "note": "informal"
+  },
+  {
+    "word": "show off",
+    "pos": "phrase",
+    "ru": "хвастаться / выпендриваться",
+    "topic": "people"
+  },
+  {
+    "word": "take part in",
+    "pos": "phrase",
+    "ru": "участвовать в",
+    "topic": "general"
+  },
+  {
+    "word": "make a mistake",
+    "pos": "phrase",
+    "ru": "ошибиться / сделать ошибку",
+    "topic": "general",
+    "note": "trap: make a mistake (not do)"
+  },
+  {
+    "word": "make a decision",
+    "pos": "phrase",
+    "ru": "принять решение",
+    "topic": "general",
+    "note": "make (not take/do) in British English"
+  },
+  {
+    "word": "make friends",
+    "pos": "phrase",
+    "ru": "подружиться / заводить друзей",
+    "topic": "people"
+  },
+  {
+    "word": "make sure",
+    "pos": "phrase",
+    "ru": "убедиться / проследить",
+    "topic": "general"
+  },
+  {
+    "word": "do the washing-up",
+    "pos": "phrase",
+    "ru": "мыть посуду",
+    "topic": "home",
+    "note": "British; trap: do (not make)"
+  },
+  {
+    "word": "do your best",
+    "pos": "phrase",
+    "ru": "стараться изо всех сил",
+    "topic": "general"
+  },
+  {
+    "word": "have a go",
+    "pos": "phrase",
+    "ru": "попробовать",
+    "topic": "general",
+    "note": "British informal"
+  },
+  {
+    "word": "it's up to you",
+    "pos": "phrase",
+    "ru": "решай сам / как хочешь",
+    "topic": "general"
+  },
+  {
+    "word": "on time",
+    "pos": "phrase",
+    "ru": "вовремя",
+    "topic": "time",
+    "note": "on time = точно по расписанию; in time = успеть"
+  },
+  {
+    "word": "in time",
+    "pos": "phrase",
+    "ru": "вовремя (успеть)",
+    "topic": "time"
+  },
+  {
+    "word": "by the way",
+    "pos": "phrase",
+    "ru": "кстати",
+    "topic": "general"
+  },
+  {
+    "word": "in the end",
+    "pos": "phrase",
+    "ru": "в конце концов",
+    "topic": "time"
+  },
+  {
+    "word": "at least",
+    "pos": "phrase",
+    "ru": "по крайней мере",
+    "topic": "general"
+  },
+  {
+    "word": "at first",
+    "pos": "phrase",
+    "ru": "сначала",
+    "topic": "time"
+  },
+  {
+    "word": "at the moment",
+    "pos": "phrase",
+    "ru": "в данный момент / сейчас",
+    "topic": "time"
+  },
+  {
+    "word": "for ages",
+    "pos": "phrase",
+    "ru": "целую вечность / очень долго",
+    "topic": "time",
+    "note": "informal"
+  },
+  {
+    "word": "no way",
+    "pos": "phrase",
+    "ru": "ни за что / не может быть",
+    "topic": "general",
+    "note": "informal"
+  },
+  {
+    "word": "never mind",
+    "pos": "phrase",
+    "ru": "ничего страшного / не важно",
+    "topic": "general"
+  },
+  {
+    "word": "it doesn't matter",
+    "pos": "phrase",
+    "ru": "не важно / неважно",
+    "topic": "general"
+  },
+  {
+    "word": "what's wrong",
+    "pos": "phrase",
+    "ru": "что случилось? / что не так?",
+    "topic": "general"
+  },
+  {
+    "word": "what a shame",
+    "pos": "phrase",
+    "ru": "как жаль",
+    "topic": "general"
+  },
+  {
+    "word": "how about",
+    "pos": "phrase",
+    "ru": "как насчёт",
+    "topic": "general",
+    "note": "How about going to the cinema?"
+  },
+  {
+    "word": "why don't we",
+    "pos": "phrase",
+    "ru": "почему бы нам не",
+    "topic": "general"
+  },
+  {
+    "word": "in a hurry",
+    "pos": "phrase",
+    "ru": "в спешке",
+    "topic": "general"
+  },
+  {
+    "word": "on purpose",
+    "pos": "phrase",
+    "ru": "нарочно / специально",
+    "topic": "general"
+  },
+  {
+    "word": "by mistake",
+    "pos": "phrase",
+    "ru": "по ошибке",
+    "topic": "general"
+  },
+  {
+    "word": "on the way",
+    "pos": "phrase",
+    "ru": "по дороге",
+    "topic": "general"
+  },
+  {
+    "word": "as soon as possible",
+    "pos": "phrase",
+    "ru": "как можно скорее",
+    "topic": "general"
+  },
+  {
+    "word": "as well",
+    "pos": "phrase",
+    "ru": "также / тоже",
+    "topic": "general",
+    "note": "at the end of a sentence"
+  },
+  {
+    "word": "in fact",
+    "pos": "phrase",
+    "ru": "на самом деле / фактически",
+    "topic": "general"
+  },
+  {
+    "word": "I've no idea",
+    "pos": "phrase",
+    "ru": "понятия не имею",
+    "topic": "general"
+  },
+  {
+    "word": "I can't stand",
+    "pos": "phrase",
+    "ru": "терпеть не могу",
+    "topic": "general",
+    "note": "followed by noun or -ing"
+  },
+  {
+    "word": "be good at",
+    "pos": "phrase",
+    "ru": "хорошо уметь / хорошо разбираться в",
+    "topic": "general"
+  },
+  {
+    "word": "be keen on",
+    "pos": "phrase",
+    "ru": "увлекаться / очень любить",
+    "topic": "general",
+    "note": "British"
+  },
+  {
+    "word": "be used to",
+    "pos": "phrase",
+    "ru": "привыкнуть к",
+    "topic": "general",
+    "note": "followed by noun or -ing"
+  },
+  {
+    "word": "used to",
+    "pos": "phrase",
+    "ru": "раньше (делал(а))",
+    "topic": "general",
+    "note": "I used to live in Moscow = раньше я жил(а) в Москве"
+  },
+  {
+    "word": "had better",
+    "pos": "phrase",
+    "ru": "лучше бы (следует)",
+    "topic": "general",
+    "note": "You'd better go"
+  },
+  {
+    "word": "I'd rather",
+    "pos": "phrase",
+    "ru": "я бы предпочёл / лучше я",
+    "topic": "general"
+  },
+  {
+    "word": "take your time",
+    "pos": "phrase",
+    "ru": "не торопись",
+    "topic": "general"
+  },
+  {
+    "word": "fair enough",
+    "pos": "phrase",
+    "ru": "справедливо / ладно, понятно",
+    "topic": "general",
+    "note": "British informal"
+  },
+  {
+    "word": "cheers",
+    "pos": "interjection",
+    "ru": "спасибо / будем здоровы!",
+    "topic": "general",
+    "note": "British informal: = thanks; also a toast"
+  },
+  {
+    "word": "fancy",
+    "pos": "verb",
+    "ru": "хотеть / нравиться",
+    "topic": "general",
+    "note": "British informal: Fancy a coffee? = Хочешь кофе? I fancy him = он мне нравится"
+  },
+  {
+    "word": "sorted",
+    "pos": "adjective",
+    "ru": "улажено / решено",
+    "topic": "general",
+    "note": "British informal: It's sorted = всё улажено"
+  },
+  {
+    "word": "knackered",
+    "pos": "adjective",
+    "ru": "вымотанный / без сил",
+    "topic": "feelings",
+    "note": "British informal"
+  },
+  {
+    "word": "gutted",
+    "pos": "adjective",
+    "ru": "очень расстроенный",
+    "topic": "feelings",
+    "note": "British informal: I'm gutted"
+  },
+  {
+    "word": "cuppa",
+    "pos": "noun",
+    "ru": "чашка чая",
+    "topic": "food",
+    "note": "British informal"
+  },
+  {
+    "word": "posh",
+    "pos": "adjective",
+    "ru": "шикарный / пафосный",
+    "topic": "general",
+    "note": "British informal"
+  },
+  {
+    "word": "dodgy",
+    "pos": "adjective",
+    "ru": "сомнительный / подозрительный",
+    "topic": "general",
+    "note": "British informal"
+  },
+  {
+    "word": "skint",
+    "pos": "adjective",
+    "ru": "на мели / без денег",
+    "topic": "money",
+    "note": "British informal"
+  },
+  {
+    "word": "chuffed",
+    "pos": "adjective",
+    "ru": "очень довольный",
+    "topic": "feelings",
+    "note": "British informal"
+  },
+  {
+    "word": "loads",
+    "pos": "pronoun",
+    "ru": "куча / полно",
+    "topic": "general",
+    "note": "informal: loads of time"
+  },
+  {
+    "word": "reckon",
+    "pos": "verb",
+    "ru": "думать / считать",
+    "topic": "general",
+    "note": "British informal: I reckon it'll rain"
+  },
+  {
+    "word": "lad",
+    "pos": "noun",
+    "ru": "парень",
+    "topic": "people",
+    "note": "British informal"
+  },
+  {
+    "word": "flight",
+    "pos": "noun",
+    "ru": "рейс / перелёт",
+    "topic": "travel"
+  },
+  {
+    "word": "exam",
+    "pos": "noun",
+    "ru": "экзамен",
+    "topic": "education",
+    "note": "take / sit an exam = сдавать; pass an exam = сдать"
+  }
+]

@@ -1,0 +1,1237 @@
+[
+  {
+    "word": "a",
+    "pos": "determiner",
+    "ru": "(неопределённый артикль)",
+    "topic": "general",
+    "note": "перед согласным звуком: a book, a university"
+  },
+  {
+    "word": "an",
+    "pos": "determiner",
+    "ru": "(неопределённый артикль)",
+    "topic": "general",
+    "note": "перед гласным звуком: an apple, an hour"
+  },
+  {
+    "word": "the",
+    "pos": "determiner",
+    "ru": "(определённый артикль)",
+    "topic": "general",
+    "note": "тот самый / уже известный предмет"
+  },
+  {
+    "word": "this",
+    "pos": "determiner",
+    "ru": "этот / это",
+    "topic": "general"
+  },
+  {
+    "word": "that",
+    "pos": "determiner",
+    "ru": "тот / то; что (союз)",
+    "topic": "general"
+  },
+  {
+    "word": "these",
+    "pos": "determiner",
+    "ru": "эти",
+    "topic": "general"
+  },
+  {
+    "word": "those",
+    "pos": "determiner",
+    "ru": "те",
+    "topic": "general"
+  },
+  {
+    "word": "my",
+    "pos": "determiner",
+    "ru": "мой",
+    "topic": "general"
+  },
+  {
+    "word": "your",
+    "pos": "determiner",
+    "ru": "твой / ваш",
+    "topic": "general"
+  },
+  {
+    "word": "his",
+    "pos": "determiner",
+    "ru": "его",
+    "topic": "general"
+  },
+  {
+    "word": "her",
+    "pos": "pronoun",
+    "ru": "её / ей",
+    "topic": "general",
+    "note": "и «её» (her bag), и «ей/её» (I see her)"
+  },
+  {
+    "word": "its",
+    "pos": "determiner",
+    "ru": "его / её (о предмете, животном)",
+    "topic": "general",
+    "note": "its = чей; it's = it is"
+  },
+  {
+    "word": "our",
+    "pos": "determiner",
+    "ru": "наш",
+    "topic": "general"
+  },
+  {
+    "word": "their",
+    "pos": "determiner",
+    "ru": "их",
+    "topic": "general"
+  },
+  {
+    "word": "some",
+    "pos": "determiner",
+    "ru": "несколько / немного",
+    "topic": "general"
+  },
+  {
+    "word": "any",
+    "pos": "determiner",
+    "ru": "какой-нибудь / любой",
+    "topic": "general",
+    "note": "в вопросах и отрицаниях: Have you got any milk?"
+  },
+  {
+    "word": "no",
+    "pos": "determiner",
+    "ru": "нет / никакой",
+    "topic": "general",
+    "note": "No, thanks. / There's no milk."
+  },
+  {
+    "word": "every",
+    "pos": "determiner",
+    "ru": "каждый",
+    "topic": "general"
+  },
+  {
+    "word": "all",
+    "pos": "determiner",
+    "ru": "все / весь",
+    "topic": "general"
+  },
+  {
+    "word": "I",
+    "pos": "pronoun",
+    "ru": "я",
+    "topic": "general",
+    "note": "всегда с большой буквы"
+  },
+  {
+    "word": "me",
+    "pos": "pronoun",
+    "ru": "меня / мне",
+    "topic": "general"
+  },
+  {
+    "word": "you",
+    "pos": "pronoun",
+    "ru": "ты / вы; тебя / вас",
+    "topic": "general"
+  },
+  {
+    "word": "he",
+    "pos": "pronoun",
+    "ru": "он",
+    "topic": "general"
+  },
+  {
+    "word": "him",
+    "pos": "pronoun",
+    "ru": "его / ему",
+    "topic": "general"
+  },
+  {
+    "word": "she",
+    "pos": "pronoun",
+    "ru": "она",
+    "topic": "general"
+  },
+  {
+    "word": "it",
+    "pos": "pronoun",
+    "ru": "оно / он / она (о предмете); это",
+    "topic": "general"
+  },
+  {
+    "word": "we",
+    "pos": "pronoun",
+    "ru": "мы",
+    "topic": "general"
+  },
+  {
+    "word": "us",
+    "pos": "pronoun",
+    "ru": "нас / нам",
+    "topic": "general"
+  },
+  {
+    "word": "they",
+    "pos": "pronoun",
+    "ru": "они",
+    "topic": "general"
+  },
+  {
+    "word": "them",
+    "pos": "pronoun",
+    "ru": "их / им",
+    "topic": "general"
+  },
+  {
+    "word": "mine",
+    "pos": "pronoun",
+    "ru": "мой (без существительного)",
+    "topic": "general"
+  },
+  {
+    "word": "yours",
+    "pos": "pronoun",
+    "ru": "твой / ваш (без существительного)",
+    "topic": "general"
+  },
+  {
+    "word": "hers",
+    "pos": "pronoun",
+    "ru": "её (без существительного)",
+    "topic": "general"
+  },
+  {
+    "word": "ours",
+    "pos": "pronoun",
+    "ru": "наш (без существительного)",
+    "topic": "general"
+  },
+  {
+    "word": "theirs",
+    "pos": "pronoun",
+    "ru": "их (без существительного)",
+    "topic": "general"
+  },
+  {
+    "word": "myself",
+    "pos": "pronoun",
+    "ru": "себя / сам (о себе)",
+    "topic": "general"
+  },
+  {
+    "word": "yourself",
+    "pos": "pronoun",
+    "ru": "себя / сам (о тебе)",
+    "topic": "general"
+  },
+  {
+    "word": "himself",
+    "pos": "pronoun",
+    "ru": "себя / сам (о нём)",
+    "topic": "general"
+  },
+  {
+    "word": "herself",
+    "pos": "pronoun",
+    "ru": "себя / сама (о ней)",
+    "topic": "general"
+  },
+  {
+    "word": "ourselves",
+    "pos": "pronoun",
+    "ru": "себя / сами (о нас)",
+    "topic": "general"
+  },
+  {
+    "word": "themselves",
+    "pos": "pronoun",
+    "ru": "себя / сами (о них)",
+    "topic": "general"
+  },
+  {
+    "word": "be",
+    "pos": "verb",
+    "ru": "быть",
+    "topic": "general",
+    "past": "was / were",
+    "pp": "been",
+    "note": "в настоящем времени не опускается: I am a student, не I student"
+  },
+  {
+    "word": "am",
+    "pos": "verb",
+    "ru": "есть (I am)",
+    "topic": "general"
+  },
+  {
+    "word": "is",
+    "pos": "verb",
+    "ru": "есть (he/she/it is)",
+    "topic": "general"
+  },
+  {
+    "word": "are",
+    "pos": "verb",
+    "ru": "есть (you/we/they are)",
+    "topic": "general"
+  },
+  {
+    "word": "was",
+    "pos": "verb",
+    "ru": "был / была / было (I/he/she/it)",
+    "topic": "general"
+  },
+  {
+    "word": "were",
+    "pos": "verb",
+    "ru": "были / был (you/we/they)",
+    "topic": "general"
+  },
+  {
+    "word": "have",
+    "pos": "verb",
+    "ru": "иметь",
+    "topic": "general",
+    "past": "had",
+    "pp": "had",
+    "note": "I have a car = у меня есть машина"
+  },
+  {
+    "word": "has",
+    "pos": "verb",
+    "ru": "имеет (he/she/it has)",
+    "topic": "general"
+  },
+  {
+    "word": "do",
+    "pos": "verb",
+    "ru": "делать; вспомогательный глагол",
+    "topic": "general",
+    "past": "did",
+    "pp": "done",
+    "note": "нужен в вопросах: Do you like tea?, не You like tea?"
+  },
+  {
+    "word": "does",
+    "pos": "verb",
+    "ru": "делает; вспомогательный (he/she/it)",
+    "topic": "general"
+  },
+  {
+    "word": "not",
+    "pos": "adverb",
+    "ru": "не",
+    "topic": "general"
+  },
+  {
+    "word": "in",
+    "pos": "preposition",
+    "ru": "в",
+    "topic": "general"
+  },
+  {
+    "word": "on",
+    "pos": "preposition",
+    "ru": "на",
+    "topic": "general"
+  },
+  {
+    "word": "at",
+    "pos": "preposition",
+    "ru": "в / у / на (место, время)",
+    "topic": "general",
+    "note": "at home, at six o'clock, at the weekend"
+  },
+  {
+    "word": "to",
+    "pos": "preposition",
+    "ru": "к / в (направление)",
+    "topic": "general"
+  },
+  {
+    "word": "from",
+    "pos": "preposition",
+    "ru": "из / от",
+    "topic": "general"
+  },
+  {
+    "word": "with",
+    "pos": "preposition",
+    "ru": "с",
+    "topic": "general"
+  },
+  {
+    "word": "for",
+    "pos": "preposition",
+    "ru": "для / на (время)",
+    "topic": "general"
+  },
+  {
+    "word": "of",
+    "pos": "preposition",
+    "ru": "(родительный падеж) / из",
+    "topic": "general"
+  },
+  {
+    "word": "by",
+    "pos": "preposition",
+    "ru": "у / около; на (транспорт)",
+    "topic": "general",
+    "note": "by bus = на автобусе"
+  },
+  {
+    "word": "about",
+    "pos": "preposition",
+    "ru": "о / про; примерно",
+    "topic": "general"
+  },
+  {
+    "word": "under",
+    "pos": "preposition",
+    "ru": "под",
+    "topic": "general"
+  },
+  {
+    "word": "after",
+    "pos": "preposition",
+    "ru": "после",
+    "topic": "general"
+  },
+  {
+    "word": "before",
+    "pos": "preposition",
+    "ru": "до / перед",
+    "topic": "general"
+  },
+  {
+    "word": "up",
+    "pos": "preposition",
+    "ru": "вверх",
+    "topic": "general"
+  },
+  {
+    "word": "down",
+    "pos": "preposition",
+    "ru": "вниз",
+    "topic": "general"
+  },
+  {
+    "word": "out",
+    "pos": "preposition",
+    "ru": "наружу / вне",
+    "topic": "general"
+  },
+  {
+    "word": "and",
+    "pos": "conjunction",
+    "ru": "и / а",
+    "topic": "general"
+  },
+  {
+    "word": "but",
+    "pos": "conjunction",
+    "ru": "но",
+    "topic": "general"
+  },
+  {
+    "word": "or",
+    "pos": "conjunction",
+    "ru": "или",
+    "topic": "general"
+  },
+  {
+    "word": "because",
+    "pos": "conjunction",
+    "ru": "потому что",
+    "topic": "general"
+  },
+  {
+    "word": "so",
+    "pos": "conjunction",
+    "ru": "поэтому / так",
+    "topic": "general"
+  },
+  {
+    "word": "if",
+    "pos": "conjunction",
+    "ru": "если",
+    "topic": "general"
+  },
+  {
+    "word": "what",
+    "pos": "pronoun",
+    "ru": "что / какой",
+    "topic": "general"
+  },
+  {
+    "word": "who",
+    "pos": "pronoun",
+    "ru": "кто",
+    "topic": "general"
+  },
+  {
+    "word": "where",
+    "pos": "adverb",
+    "ru": "где / куда",
+    "topic": "general"
+  },
+  {
+    "word": "when",
+    "pos": "adverb",
+    "ru": "когда",
+    "topic": "general"
+  },
+  {
+    "word": "why",
+    "pos": "adverb",
+    "ru": "почему / зачем",
+    "topic": "general"
+  },
+  {
+    "word": "how",
+    "pos": "adverb",
+    "ru": "как",
+    "topic": "general"
+  },
+  {
+    "word": "which",
+    "pos": "pronoun",
+    "ru": "который / какой (из)",
+    "topic": "general"
+  },
+  {
+    "word": "whose",
+    "pos": "pronoun",
+    "ru": "чей",
+    "topic": "general"
+  },
+  {
+    "word": "here",
+    "pos": "adverb",
+    "ru": "здесь / сюда",
+    "topic": "general"
+  },
+  {
+    "word": "there",
+    "pos": "adverb",
+    "ru": "там / туда",
+    "topic": "general"
+  },
+  {
+    "word": "now",
+    "pos": "adverb",
+    "ru": "сейчас",
+    "topic": "time"
+  },
+  {
+    "word": "very",
+    "pos": "adverb",
+    "ru": "очень",
+    "topic": "general"
+  },
+  {
+    "word": "zero",
+    "pos": "number",
+    "ru": "ноль",
+    "topic": "numbers",
+    "note": "в номерах телефонов часто говорят «oh»"
+  },
+  {
+    "word": "one",
+    "pos": "number",
+    "ru": "один",
+    "topic": "numbers"
+  },
+  {
+    "word": "two",
+    "pos": "number",
+    "ru": "два",
+    "topic": "numbers"
+  },
+  {
+    "word": "three",
+    "pos": "number",
+    "ru": "три",
+    "topic": "numbers"
+  },
+  {
+    "word": "four",
+    "pos": "number",
+    "ru": "четыре",
+    "topic": "numbers"
+  },
+  {
+    "word": "five",
+    "pos": "number",
+    "ru": "пять",
+    "topic": "numbers"
+  },
+  {
+    "word": "six",
+    "pos": "number",
+    "ru": "шесть",
+    "topic": "numbers"
+  },
+  {
+    "word": "seven",
+    "pos": "number",
+    "ru": "семь",
+    "topic": "numbers"
+  },
+  {
+    "word": "eight",
+    "pos": "number",
+    "ru": "восемь",
+    "topic": "numbers"
+  },
+  {
+    "word": "nine",
+    "pos": "number",
+    "ru": "девять",
+    "topic": "numbers"
+  },
+  {
+    "word": "ten",
+    "pos": "number",
+    "ru": "десять",
+    "topic": "numbers"
+  },
+  {
+    "word": "eleven",
+    "pos": "number",
+    "ru": "одиннадцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "twelve",
+    "pos": "number",
+    "ru": "двенадцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "thirteen",
+    "pos": "number",
+    "ru": "тринадцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "fourteen",
+    "pos": "number",
+    "ru": "четырнадцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "fifteen",
+    "pos": "number",
+    "ru": "пятнадцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "sixteen",
+    "pos": "number",
+    "ru": "шестнадцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "seventeen",
+    "pos": "number",
+    "ru": "семнадцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "eighteen",
+    "pos": "number",
+    "ru": "восемнадцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "nineteen",
+    "pos": "number",
+    "ru": "девятнадцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "twenty",
+    "pos": "number",
+    "ru": "двадцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "thirty",
+    "pos": "number",
+    "ru": "тридцать",
+    "topic": "numbers"
+  },
+  {
+    "word": "forty",
+    "pos": "number",
+    "ru": "сорок",
+    "topic": "numbers",
+    "note": "пишется без u: forty, но four, fourteen"
+  },
+  {
+    "word": "fifty",
+    "pos": "number",
+    "ru": "пятьдесят",
+    "topic": "numbers"
+  },
+  {
+    "word": "sixty",
+    "pos": "number",
+    "ru": "шестьдесят",
+    "topic": "numbers"
+  },
+  {
+    "word": "seventy",
+    "pos": "number",
+    "ru": "семьдесят",
+    "topic": "numbers"
+  },
+  {
+    "word": "eighty",
+    "pos": "number",
+    "ru": "восемьдесят",
+    "topic": "numbers"
+  },
+  {
+    "word": "ninety",
+    "pos": "number",
+    "ru": "девяносто",
+    "topic": "numbers"
+  },
+  {
+    "word": "hundred",
+    "pos": "number",
+    "ru": "сто",
+    "topic": "numbers",
+    "note": "a hundred / one hundred; 250 = two hundred and fifty (в британском с and)"
+  },
+  {
+    "word": "thousand",
+    "pos": "number",
+    "ru": "тысяча",
+    "topic": "numbers"
+  },
+  {
+    "word": "Monday",
+    "pos": "noun",
+    "ru": "понедельник",
+    "topic": "time",
+    "note": "с большой буквы; on Monday = в понедельник"
+  },
+  {
+    "word": "Tuesday",
+    "pos": "noun",
+    "ru": "вторник",
+    "topic": "time"
+  },
+  {
+    "word": "Wednesday",
+    "pos": "noun",
+    "ru": "среда",
+    "topic": "time"
+  },
+  {
+    "word": "Thursday",
+    "pos": "noun",
+    "ru": "четверг",
+    "topic": "time"
+  },
+  {
+    "word": "Friday",
+    "pos": "noun",
+    "ru": "пятница",
+    "topic": "time"
+  },
+  {
+    "word": "Saturday",
+    "pos": "noun",
+    "ru": "суббота",
+    "topic": "time"
+  },
+  {
+    "word": "Sunday",
+    "pos": "noun",
+    "ru": "воскресенье",
+    "topic": "time"
+  },
+  {
+    "word": "January",
+    "pos": "noun",
+    "ru": "январь",
+    "topic": "time",
+    "note": "с большой буквы; in January = в январе"
+  },
+  {
+    "word": "February",
+    "pos": "noun",
+    "ru": "февраль",
+    "topic": "time"
+  },
+  {
+    "word": "March",
+    "pos": "noun",
+    "ru": "март",
+    "topic": "time"
+  },
+  {
+    "word": "April",
+    "pos": "noun",
+    "ru": "апрель",
+    "topic": "time"
+  },
+  {
+    "word": "May",
+    "pos": "noun",
+    "ru": "май",
+    "topic": "time"
+  },
+  {
+    "word": "June",
+    "pos": "noun",
+    "ru": "июнь",
+    "topic": "time"
+  },
+  {
+    "word": "July",
+    "pos": "noun",
+    "ru": "июль",
+    "topic": "time"
+  },
+  {
+    "word": "August",
+    "pos": "noun",
+    "ru": "август",
+    "topic": "time"
+  },
+  {
+    "word": "September",
+    "pos": "noun",
+    "ru": "сентябрь",
+    "topic": "time"
+  },
+  {
+    "word": "October",
+    "pos": "noun",
+    "ru": "октябрь",
+    "topic": "time"
+  },
+  {
+    "word": "November",
+    "pos": "noun",
+    "ru": "ноябрь",
+    "topic": "time"
+  },
+  {
+    "word": "December",
+    "pos": "noun",
+    "ru": "декабрь",
+    "topic": "time"
+  },
+  {
+    "word": "red",
+    "pos": "adjective",
+    "ru": "красный",
+    "topic": "colours"
+  },
+  {
+    "word": "blue",
+    "pos": "adjective",
+    "ru": "синий / голубой",
+    "topic": "colours"
+  },
+  {
+    "word": "green",
+    "pos": "adjective",
+    "ru": "зелёный",
+    "topic": "colours"
+  },
+  {
+    "word": "yellow",
+    "pos": "adjective",
+    "ru": "жёлтый",
+    "topic": "colours"
+  },
+  {
+    "word": "black",
+    "pos": "adjective",
+    "ru": "чёрный",
+    "topic": "colours"
+  },
+  {
+    "word": "white",
+    "pos": "adjective",
+    "ru": "белый",
+    "topic": "colours"
+  },
+  {
+    "word": "brown",
+    "pos": "adjective",
+    "ru": "коричневый",
+    "topic": "colours"
+  },
+  {
+    "word": "grey",
+    "pos": "adjective",
+    "ru": "серый",
+    "topic": "colours",
+    "note": "британское написание: grey (американское gray)"
+  },
+  {
+    "word": "orange",
+    "pos": "adjective",
+    "ru": "оранжевый; апельсин",
+    "topic": "colours"
+  },
+  {
+    "word": "pink",
+    "pos": "adjective",
+    "ru": "розовый",
+    "topic": "colours"
+  },
+  {
+    "word": "purple",
+    "pos": "adjective",
+    "ru": "фиолетовый",
+    "topic": "colours"
+  },
+  {
+    "word": "yes",
+    "pos": "interjection",
+    "ru": "да",
+    "topic": "general"
+  },
+  {
+    "word": "please",
+    "pos": "interjection",
+    "ru": "пожалуйста (при просьбе)",
+    "topic": "general",
+    "note": "в ответ на «спасибо» не please, а You're welcome / No problem"
+  },
+  {
+    "word": "thank you",
+    "pos": "phrase",
+    "ru": "спасибо",
+    "topic": "general"
+  },
+  {
+    "word": "thanks",
+    "pos": "interjection",
+    "ru": "спасибо (разг.)",
+    "topic": "general"
+  },
+  {
+    "word": "hello",
+    "pos": "interjection",
+    "ru": "здравствуйте / привет",
+    "topic": "general"
+  },
+  {
+    "word": "hi",
+    "pos": "interjection",
+    "ru": "привет",
+    "topic": "general"
+  },
+  {
+    "word": "bye",
+    "pos": "interjection",
+    "ru": "пока",
+    "topic": "general"
+  },
+  {
+    "word": "goodbye",
+    "pos": "interjection",
+    "ru": "до свидания",
+    "topic": "general"
+  },
+  {
+    "word": "sorry",
+    "pos": "interjection",
+    "ru": "извините / простите",
+    "topic": "general",
+    "note": "Sorry? = Простите, что вы сказали?"
+  },
+  {
+    "word": "OK",
+    "pos": "interjection",
+    "ru": "хорошо / ладно",
+    "topic": "general"
+  },
+  {
+    "word": "taxi",
+    "pos": "noun",
+    "ru": "такси",
+    "topic": "transport"
+  },
+  {
+    "word": "pizza",
+    "pos": "noun",
+    "ru": "пицца",
+    "topic": "food"
+  },
+  {
+    "word": "internet",
+    "pos": "noun",
+    "ru": "интернет",
+    "topic": "technology",
+    "uncountable": true
+  },
+  {
+    "word": "hotel",
+    "pos": "noun",
+    "ru": "отель / гостиница",
+    "topic": "travel"
+  },
+  {
+    "word": "café",
+    "pos": "noun",
+    "ru": "кафе",
+    "topic": "food",
+    "note": "также пишут cafe"
+  },
+  {
+    "word": "coffee",
+    "pos": "noun",
+    "ru": "кофе",
+    "topic": "food",
+    "note": "обычно неисчисляемое, но a coffee = чашка кофе",
+    "uncountable": true
+  },
+  {
+    "word": "phone",
+    "pos": "noun",
+    "ru": "телефон",
+    "topic": "technology"
+  },
+  {
+    "word": "bus",
+    "pos": "noun",
+    "ru": "автобус",
+    "topic": "transport"
+  },
+  {
+    "word": "sport",
+    "pos": "noun",
+    "ru": "спорт",
+    "topic": "sport"
+  },
+  {
+    "word": "music",
+    "pos": "noun",
+    "ru": "музыка",
+    "topic": "hobbies",
+    "uncountable": true
+  },
+  {
+    "word": "film",
+    "pos": "noun",
+    "ru": "фильм",
+    "topic": "hobbies",
+    "note": "британское слово; американское movie"
+  },
+  {
+    "word": "video",
+    "pos": "noun",
+    "ru": "видео",
+    "topic": "technology"
+  },
+  {
+    "word": "computer",
+    "pos": "noun",
+    "ru": "компьютер",
+    "topic": "technology"
+  },
+  {
+    "word": "email",
+    "pos": "noun",
+    "ru": "электронное письмо / имейл",
+    "topic": "technology"
+  },
+  {
+    "word": "park",
+    "pos": "noun",
+    "ru": "парк",
+    "topic": "city"
+  },
+  {
+    "word": "doctor",
+    "pos": "noun",
+    "ru": "врач / доктор",
+    "topic": "health"
+  },
+  {
+    "word": "banana",
+    "pos": "noun",
+    "ru": "банан",
+    "topic": "food"
+  },
+  {
+    "word": "chocolate",
+    "pos": "noun",
+    "ru": "шоколад",
+    "topic": "food",
+    "uncountable": true
+  },
+  {
+    "word": "tea",
+    "pos": "noun",
+    "ru": "чай",
+    "topic": "food",
+    "note": "обычно неисчисляемое, но a tea = чашка чая",
+    "uncountable": true
+  },
+  {
+    "word": "football",
+    "pos": "noun",
+    "ru": "футбол",
+    "topic": "sport"
+  },
+  {
+    "word": "tennis",
+    "pos": "noun",
+    "ru": "теннис",
+    "topic": "sport"
+  },
+  {
+    "word": "guitar",
+    "pos": "noun",
+    "ru": "гитара",
+    "topic": "hobbies"
+  },
+  {
+    "word": "piano",
+    "pos": "noun",
+    "ru": "пианино",
+    "topic": "hobbies"
+  },
+  {
+    "word": "TV",
+    "pos": "noun",
+    "ru": "телевизор / ТВ",
+    "topic": "home"
+  },
+  {
+    "word": "photo",
+    "pos": "noun",
+    "ru": "фото",
+    "topic": "hobbies"
+  },
+  {
+    "word": "menu",
+    "pos": "noun",
+    "ru": "меню",
+    "topic": "food"
+  },
+  {
+    "word": "sandwich",
+    "pos": "noun",
+    "ru": "сэндвич / бутерброд",
+    "topic": "food"
+  },
+  {
+    "word": "salad",
+    "pos": "noun",
+    "ru": "салат",
+    "topic": "food"
+  },
+  {
+    "word": "tomato",
+    "pos": "noun",
+    "ru": "помидор",
+    "topic": "food",
+    "note": "мн. ч. tomatoes"
+  },
+  {
+    "word": "lemon",
+    "pos": "noun",
+    "ru": "лимон",
+    "topic": "food"
+  },
+  {
+    "word": "restaurant",
+    "pos": "noun",
+    "ru": "ресторан",
+    "topic": "city"
+  },
+  {
+    "word": "theatre",
+    "pos": "noun",
+    "ru": "театр",
+    "topic": "city",
+    "note": "британское написание (американское theater)"
+  },
+  {
+    "word": "museum",
+    "pos": "noun",
+    "ru": "музей",
+    "topic": "city"
+  },
+  {
+    "word": "office",
+    "pos": "noun",
+    "ru": "офис",
+    "topic": "work"
+  },
+  {
+    "word": "bank",
+    "pos": "noun",
+    "ru": "банк",
+    "topic": "city"
+  },
+  {
+    "word": "centre",
+    "pos": "noun",
+    "ru": "центр",
+    "topic": "city",
+    "note": "британское написание (американское center)"
+  },
+  {
+    "word": "problem",
+    "pos": "noun",
+    "ru": "проблема",
+    "topic": "general"
+  },
+  {
+    "word": "idea",
+    "pos": "noun",
+    "ru": "идея",
+    "topic": "general"
+  },
+  {
+    "word": "student",
+    "pos": "noun",
+    "ru": "студент",
+    "topic": "people"
+  },
+  {
+    "word": "police",
+    "pos": "noun",
+    "ru": "полиция",
+    "topic": "city",
+    "note": "всегда мн. ч.: The police are here"
+  },
+  {
+    "word": "passport",
+    "pos": "noun",
+    "ru": "паспорт",
+    "topic": "travel"
+  },
+  {
+    "word": "jeans",
+    "pos": "noun",
+    "ru": "джинсы",
+    "topic": "clothes",
+    "note": "всегда мн. ч.: my jeans are…"
+  },
+  {
+    "word": "supermarket",
+    "pos": "noun",
+    "ru": "супермаркет",
+    "topic": "city"
+  }
+]
