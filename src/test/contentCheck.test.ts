@@ -86,6 +86,11 @@ describe('checkCourse', () => {
     expect(coverage['a1m1-1'].unknown).not.toContain('lena');
   });
 
+  it("treats a name's possessive form as a name", () => {
+    const q = { question: "Is it Lena's?", questionTranslation: 'Это Ленино?', options: ['Yes', 'No', 'Here'], correctIndex: 0 };
+    expect(messages(text({ content: 'Lena is my flatmate.\n\nLena is in the kitchen.', comprehensionQuestions: [q] }))).not.toMatch(/lena's/);
+  });
+
   it('flags a correct answer copied from the text', () => {
     const q = { question: 'Where is he?', questionTranslation: 'Где он?', options: ['In the room', 'in the kitchen', 'Here'], correctIndex: 1 };
     expect(messages(text({ comprehensionQuestions: [q] }))).toMatch(/copied from the text/);

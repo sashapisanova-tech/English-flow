@@ -206,6 +206,11 @@ export function checkCourse(modules: ReadingText[][], lists: WordLists): CheckRe
       if (/^[A-Z]/.test(tok)) capSeen.add(tok.toLowerCase()); else lowerSeen.add(tok.toLowerCase());
     })));
     const names = new Set([...capSeen].filter(w => !lowerSeen.has(w) && !lemmas(w).some(c => allListWords.has(c))));
+    // Possessive forms of names count as names too (Dasha's)
+    const isName = (tok: string) => {
+      const w = normaliseApostrophes(tok.toLowerCase());
+      return names.has(w) || (w.endsWith("'s") && names.has(w.slice(0, -2)));
+    };
 
     texts.forEach((t, ei) => {
       const id = t.id;
@@ -288,7 +293,7 @@ export function checkCourse(modules: ReadingText[][], lists: WordLists): CheckRe
       const unknown: string[] = [];
       const glossed = new Set<string>();
       for (const tok of tokens) {
-        if (names.has(tok.toLowerCase())) continue;
+        if (isName(tok)) continue;
         counted++;
         const forms = lemmas(tok);
         if (isKnown(tok)) nKnown++;
@@ -333,7 +338,7 @@ export function checkCourse(modules: ReadingText[][], lists: WordLists): CheckRe
         if (parsed.level === 'a1' && !CYRILLIC.test(q.questionTranslation ?? '')) err(id, `question ${qi + 1} needs a Russian questionTranslation (A1)`);
         // Questions may only use words the learner knows by now, plus this text's key items
         const qUnknown = [q.question, ...q.options].flatMap(part => tokensOf(normaliseApostrophes(part)))
-          .filter(tok => !/^\d/.test(tok) && !names.has(tok.toLowerCase()) && !isKnown(tok) && !lemmas(tok).some(c => keyParts.has(c)))
+          .filter(tok => !/^\d/.test(tok) && !isName(tok) && !isKnown(tok) && !lemmas(tok).some(c => keyParts.has(c)))
           .map(tok => tok.toLowerCase());
         if (qUnknown.length) err(id, `question ${qi + 1} uses words not taught yet: ${[...new Set(qUnknown)].join(', ')}`);
       });
