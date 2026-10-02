@@ -31,8 +31,8 @@ type Screen = 'config' | 'translate' | 'feedback';
 type Rating = 'easy' | 'hard';
 
 interface GeneratedText {
-  english: string;
-  hintWords: { english: string; dutch: string }[];  // new/unknown words with translations
+  english: string;  // source text to translate (in Russian)
+  hintWords: { english: string; dutch: string }[];  // english = Russian word from the text, dutch = English translation
 }
 
 interface Correction {
@@ -54,32 +54,32 @@ interface TranslationFeedback {
 const SUGGESTIONS: Record<Level, string[]> = {
   A1: ['at the bakery', 'my family', 'the weather today', 'at school', 'introducing myself', 'my morning routine', 'shopping for food'],
   A2: ['ordering at a café', 'a trip to the market', 'planning a weekend', 'a day at work', 'at the doctor', 'making plans with a friend', 'a short diary entry'],
-  B1: ['a work meeting', 'discussing a news story', 'writing a formal email', 'defending an opinion', 'a job interview', 'life in the Netherlands', 'a neighbourhood dispute'],
+  B1: ['a work meeting', 'discussing a news story', 'writing a formal email', 'defending an opinion', 'a job interview', 'life in the UK', 'a neighbourhood dispute'],
 };
 
 // ─── API: generate English text ───────────────────────────────────────────────
 
 const LEVEL_GUIDE: Record<Level, string> = {
-  A1: `You are writing a very short, simple English text (3–5 sentences) that an absolute beginner will translate into Dutch.
+  A1: `You are writing a very short, simple Russian text (3–5 sentences) that an absolute beginner, a native Russian speaker, will translate into British English.
 Rules:
 - Only simple present tense situations
 - Very common vocabulary: everyday objects, basic actions, familiar places
 - Short sentences (max 6 words each)
 - NO past tense, NO complex grammar, NO subordinate clauses
 - It should feel like a mini story or description a child could understand
-- Good: "My name is Sara. I live in Amsterdam. I have a cat. The cat is black and white. We drink coffee every morning."`,
-  A2: `You are writing a short English text (5–8 sentences) for an elementary Dutch learner to translate.
+- Good: "Меня зовут Сара. Я живу в Лондоне. У меня есть кошка. Кошка чёрная и белая. Мы пьём чай каждое утро."`,
+  A2: `You are writing a short Russian text (5–8 sentences) for an elementary learner of British English (a native Russian speaker) to translate into English.
 Rules:
 - Mix of present and simple past tense
 - Everyday situations with natural dialogue or narration
 - Moderate sentence length (6–12 words)
-- Can include separable verb contexts, basic comparisons, times & days
+- Can include common phrasal verbs, basic comparisons, times & days
 - Should feel like a short diary entry, conversation recap, or simple story`,
-  B1: `You are writing an English text (8–12 sentences) for an intermediate Dutch learner to translate.
+  B1: `You are writing a Russian text (8–12 sentences) for an intermediate learner of British English (a native Russian speaker) to translate into English.
 Rules:
 - Natural flowing prose — like a short article excerpt, email, or story
-- Include "because", "when", "although", "while" type structures
-- Can include: perfect tense contexts, modal verb situations, relative clauses
+- Include "потому что", "когда", "хотя", "пока" type structures
+- Can include: present perfect contexts, modal verb situations, relative clauses
 - Should feel genuinely useful and interesting to translate`,
 };
 
@@ -96,7 +96,7 @@ async function generateText(
     contextLines.push(`Topic/theme requested by the user: "${userPrompt.trim()}"`);
   }
   if (flashcardWords.length > 0) {
-    contextLines.push(`Incorporate situations where these Dutch concepts naturally appear (write their English meanings into the story): ${flashcardWords.slice(0, 20).join(', ')}`);
+    contextLines.push(`Incorporate situations where these English words are needed in the translation (write their Russian meanings into the text): ${flashcardWords.slice(0, 20).join(', ')}`);
   }
   if (readingContext) {
     contextLines.push(`The learner is currently studying: "${readingContext}". Use related vocabulary and themes if no topic was specified.`);
@@ -105,19 +105,19 @@ async function generateText(
     contextLines.push(`Choose any engaging, everyday topic appropriate for ${level} level.`);
   }
   if (vocabContext) {
-    contextLines.push(`Dutch words the learner already knows (do NOT include these in hintWords): ${vocabContext}`);
+    contextLines.push(`English words the learner already knows (do NOT include these in hintWords): ${vocabContext}`);
   }
 
   const system = `${LEVEL_GUIDE[level]}
 
 Return ONLY valid JSON, no markdown:
 {
-  "english": "the full English text to translate",
+  "english": "the full Russian text to translate",
   "hintWords": [
-    { "english": "word or short phrase from the text", "dutch": "Dutch translation" }
+    { "english": "Russian word or short phrase from the text", "dutch": "its British English translation" }
   ]
 }
-For hintWords: scan your English text and pick 3–8 content words or short phrases whose Dutch translation the learner likely does NOT know yet (i.e. not in their known vocabulary). These are shown as vocabulary scaffolding. Skip extremely basic words (pronouns, "to be", "to have", numbers 1–10, days of the week if already known). If the learner's vocabulary is empty, include the most useful/challenging content words from the text.`;
+For hintWords: scan your Russian text and pick 3–8 content words or short phrases whose English translation the learner likely does NOT know yet (i.e. not in their known vocabulary). These are shown as vocabulary scaffolding. Skip extremely basic words (pronouns, "быть", "иметь", numbers 1–10, days of the week if already known). If the learner's vocabulary is empty, include the most useful/challenging content words from the text.`;
 
   const raw = await callClaude(system, contextLines.join('\n'), 700);
   return JSON.parse(raw) as GeneratedText;
@@ -136,33 +136,33 @@ async function checkTranslation(
   englishText: string,
   dutchTranslation: string,
 ): Promise<TranslationFeedback> {
-  const system = `You are a Dutch language tutor evaluating a learner's translation. ${FEEDBACK_TONE[level]}
+  const system = `You are a British English tutor evaluating a translation from Russian into English by a native Russian speaker. Write overallComment, tips and strengths in simple Russian; quote English phrases as they are. ${FEEDBACK_TONE[level]}
 
 Return ONLY valid JSON, no markdown:
 {
-  "overallComment": "1–2 warm sentences summarising the translation quality",
+  "overallComment": "1–2 warm sentences in Russian summarising the translation quality",
   "corrections": [
     {
-      "original": "the phrase the learner wrote (in Dutch)",
-      "corrected": "the better Dutch version",
-      "tip": "one short explanation of why"
+      "original": "the phrase the learner wrote (in English)",
+      "corrected": "the better British English version",
+      "tip": "one short explanation of why, in Russian"
     }
   ],
-  "strengths": ["one specific thing they did well", "another if applicable"],
+  "strengths": ["one specific thing they did well (in Russian)", "another if applicable"],
   "rating": "great" | "good" | "needs_work",
   "grammarTargets": ["grammar point 1", "grammar point 2"]
 }
 Notes:
 - corrections: only real errors, not style differences. For A1 max 2, A2 max 4, B1 max 5.
-- grammarTargets: the grammar patterns that had errors (e.g. "word order", "separable verbs"). Used for tracking. Empty array if no errors.
-- If the translation is empty or clearly not Dutch, set rating to "needs_work" and corrections to one entry asking them to try.`;
+- grammarTargets: the grammar patterns that had errors (e.g. "word order", "articles a/the", "present perfect"). Used for tracking. Empty array if no errors.
+- If the translation is empty or clearly not English, set rating to "needs_work" and corrections to one entry asking them to try.`;
 
   const userMsg = `Level: ${level}
 
-Original English text:
+Original Russian text:
 "${englishText}"
 
-Learner's Dutch translation:
+Learner's English translation:
 "${dutchTranslation || '(empty — the learner did not write anything)'}"`;
 
   const raw = await callClaude(system, userMsg, 900);
@@ -196,9 +196,9 @@ function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveW
           <button onClick={onClose} className="text-muted-foreground hover:text-foreground"><X className="h-4 w-4" /></button>
         </div>
         <div className="space-y-2">
-          <input value={dutch} onChange={e => setDutch(e.target.value)} placeholder="Dutch word or phrase…" autoFocus autoComplete="off"
+          <input value={dutch} onChange={e => setDutch(e.target.value)} placeholder="English word or phrase…" autoFocus autoComplete="off"
             className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30" />
-          <input value={english} onChange={e => setEnglish(e.target.value)} placeholder="Translation (optional)" autoComplete="off"
+          <input value={english} onChange={e => setEnglish(e.target.value)} placeholder="Russian translation (optional)" autoComplete="off"
             className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30" />
         </div>
         <div className="space-y-2">
@@ -398,8 +398,8 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
         </button>
 
         <div>
-          <h1 className="text-xl font-semibold text-foreground">Translate to Dutch</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">The AI writes a text for your level — you translate it into Dutch.</p>
+          <h1 className="text-xl font-semibold text-foreground">Translate to English</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">The AI writes a text for your level — you translate it into English.</p>
         </div>
 
         {error && <Card className="border-destructive/30 bg-destructive/5 p-4"><p className="text-sm text-destructive">{error}</p></Card>}
@@ -586,7 +586,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
 
         {error && <Card className="border-destructive/30 bg-destructive/5 p-4"><p className="text-sm text-destructive">{error}</p></Card>}
 
-        {/* English text card */}
+        {/* Source text card */}
         {generating ? (
           <div className="space-y-2">
             <Skeleton className="h-4 w-full" />
@@ -600,7 +600,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
           </div>
         ) : generatedText ? (
           <Card className="p-4 space-y-2">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Translate this into Dutch</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Translate this into English</p>
             <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">{generatedText.english}</p>
             {/* Unknown word hints */}
             {generatedText.hintWords.length > 0 && (
@@ -624,11 +624,11 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
         {!generating && generatedText && (
           <>
             <div className="space-y-1.5">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your Dutch translation</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your English translation</p>
               <textarea
                 value={userTranslation}
                 onChange={e => setUserTranslation(e.target.value)}
-                placeholder="Write your Dutch translation here…"
+                placeholder="Write your English translation here…"
                 autoComplete="new-password"
                 autoCorrect="off"
                 autoCapitalize="none"

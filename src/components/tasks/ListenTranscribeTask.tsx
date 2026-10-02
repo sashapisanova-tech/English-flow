@@ -7,14 +7,14 @@ import { playDutch, stopDutch } from '@/utils/playDutch';
 import { claudeFetch } from '@/lib/ai';
 
 const SENTENCES = [
-  { dutch: 'Ik ga naar de supermarkt.', english: 'I am going to the supermarket.' },
-  { dutch: 'De tram rijdt door de stad.', english: 'The tram rides through the city.' },
-  { dutch: 'Anna maakt koffie in de keuken.', english: 'Anna makes coffee in the kitchen.' },
-  { dutch: 'Tom fietst naar zijn werk.', english: 'Tom cycles to work.' },
-  { dutch: 'Het is warm en zonnig vandaag.', english: 'It is warm and sunny today.' },
-  { dutch: 'Zij koopt brood en melk.', english: 'She buys bread and milk.' },
-  { dutch: 'In het park zijn veel mensen.', english: 'There are many people in the park.' },
-  { dutch: 'Het café is klein maar gezellig.', english: 'The café is small but cozy.' },
+  { dutch: "I'm going to the supermarket.", english: 'Я иду в супермаркет.' },
+  { dutch: 'The bus goes through the city.', english: 'Автобус едет через город.' },
+  { dutch: 'Anna makes tea in the kitchen.', english: 'Анна готовит чай на кухне.' },
+  { dutch: 'Tom cycles to work.', english: 'Том ездит на работу на велосипеде.' },
+  { dutch: "It's warm and sunny today.", english: 'Сегодня тепло и солнечно.' },
+  { dutch: 'She buys bread and milk.', english: 'Она покупает хлеб и молоко.' },
+  { dutch: 'There are lots of people in the park.', english: 'В парке много людей.' },
+  { dutch: 'The café is small but cosy.', english: 'Кафе маленькое, но уютное.' },
 ];
 
 async function generateSentencesForLevel(level: string): Promise<{ dutch: string; english: string }[]> {
@@ -23,8 +23,8 @@ async function generateSentencesForLevel(level: string): Promise<{ dutch: string
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 400,
-      system: `Generate exactly 5 Dutch sentences for a ${level} level student. Return ONLY a JSON array: [{"dutch":"...","english":"..."}]. A1: simple present, 4-8 words. A2: past tense allowed, 6-10 words. B1: complex grammar, 8-14 words.`,
-      messages: [{ role: 'user', content: `Generate 5 varied Dutch sentences for ${level} level.` }],
+      system: `Generate exactly 5 British English sentences (British spelling) for a ${level} level student whose native language is Russian. Return ONLY a JSON array: [{"dutch":"<English sentence>","english":"<natural Russian translation>"}]. A1: simple present, 4-8 words. A2: past tense allowed, 6-10 words. B1: complex grammar, 8-14 words.`,
+      messages: [{ role: 'user', content: `Generate 5 varied English sentences for ${level} level.` }],
     }),
   });
   if (!res.ok) return [...SENTENCES].sort(() => Math.random() - 0.5).slice(0, 5);
@@ -34,7 +34,7 @@ async function generateSentencesForLevel(level: string): Promise<{ dutch: string
 }
 
 function normalize(s: string) {
-  return s.toLowerCase().replace(/[.,!?;:'"]/g, '').trim();
+  return s.toLowerCase().replace(/ё/g, 'е').replace(/[.,!?;:'"’]/g, '').trim();
 }
 
 type RoundPhase = 'listen' | 'transcribe' | 'translate' | 'result';
@@ -131,7 +131,7 @@ export function ListenTranscribeTask({ onBack }: { onBack: () => void }) {
           <span className="text-xs font-semibold text-sky-700 uppercase tracking-wide">Listen & Transcribe</span>
         </div>
         <p className="text-xs text-sky-700 leading-relaxed">
-          Listen to a Dutch sentence · type what you hear · then translate it to English.
+          Listen to an English sentence · type what you hear · then translate it into Russian.
           5 rounds, 2 points each.
         </p>
       </Card>
@@ -214,12 +214,12 @@ export function ListenTranscribeTask({ onBack }: { onBack: () => void }) {
       {/* Step 2: Transcribe */}
       {(roundPhase === 'transcribe' || roundPhase === 'translate' || roundPhase === 'result') && (
         <div className="space-y-2 animate-fade-in">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Step 2 — Type what you heard (Dutch)</p>
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Step 2 — Type what you heard (English)</p>
           <input
             value={transcribeInput}
             onChange={e => roundPhase === 'transcribe' && setTranscribeInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && roundPhase === 'transcribe' && checkTranscribe()}
-            placeholder="Type the Dutch sentence…"
+            placeholder="Type the English sentence…"
             autoComplete="off" autoCorrect="off" spellCheck={false}
             className={`w-full rounded-xl border px-4 py-3 text-sm outline-none transition-colors ${
               roundPhase === 'result'
@@ -242,12 +242,12 @@ export function ListenTranscribeTask({ onBack }: { onBack: () => void }) {
       {/* Step 3: Translate */}
       {(roundPhase === 'translate' || roundPhase === 'result') && (
         <div className="space-y-2 animate-fade-in">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Step 3 — Translate to English</p>
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Step 3 — Translate into Russian</p>
           <input
             value={translateInput}
             onChange={e => roundPhase === 'translate' && setTranslateInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && roundPhase === 'translate' && checkTranslate()}
-            placeholder="English translation…"
+            placeholder="Russian translation…"
             autoComplete="off" spellCheck={false}
             className={`w-full rounded-xl border px-4 py-3 text-sm outline-none transition-colors ${
               roundPhase === 'result'

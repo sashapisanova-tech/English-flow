@@ -80,7 +80,7 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <div className="relative w-full overflow-hidden min-h-[220px] flex flex-col justify-end">
-        <img src={heroImage} alt="Dutch landscape" className="absolute inset-0 w-full h-full object-cover object-center opacity-30" />
+        <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/60 to-background" />
         <div className="relative mx-auto w-full max-w-lg px-5 pt-10 pb-6">
           <div className="flex items-start justify-between gap-2">
@@ -93,7 +93,7 @@ export default function DashboardPage() {
                  activeTab === 'tasks' ? 'Tasks' : 'Me'}
               </h1>
               {activeTab === 'home' && (
-                <p className="mt-1 text-sm text-muted-foreground">Ready for your daily Dutch practice?</p>
+                <p className="mt-1 text-sm text-muted-foreground">Ready for your daily English practice?</p>
               )}
             </div>
             <div className="flex items-center gap-2 mt-1 shrink-0">

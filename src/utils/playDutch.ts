@@ -69,7 +69,8 @@ function resolveEnglishVoice(): SpeechSynthesisVoice | null {
   if (englishVoice !== undefined) return englishVoice;
   const voices = window.speechSynthesis.getVoices();
   englishVoice =
-    voices.find(v => v.lang === 'en-US') ??
+    // British English first: the app teaches British English
+    voices.find(v => v.lang === 'en-GB') ??
     voices.find(v => v.lang.startsWith('en')) ??
     null;
   return englishVoice;
@@ -80,7 +81,7 @@ function playWithBrowser(text: string, options?: PlayDutchOptions): void {
   window.speechSynthesis.cancel();
 
   const utt = new SpeechSynthesisUtterance(text);
-  utt.lang = 'en-US';
+  utt.lang = 'en-GB';
   utt.rate = options?.rate ?? 0.9;
 
   const voice = resolveEnglishVoice();

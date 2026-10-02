@@ -93,7 +93,7 @@ function getLevelConfig(level: Level): LevelConfig {
     };
     case 'A2': return {
       maxOptions: 4, maxQuestions: 5, outlineStages: 3, keyWordRange: '6-8',
-      evalContext: 'The student is at A2 (elementary). Focus ONLY on language: past tense accuracy, connectors (en, maar, want, omdat), and vocabulary. Do NOT mention missing story content.',
+      evalContext: 'The student is at A2 (elementary). Focus ONLY on language: past tense accuracy, connectors (and, but, because, so), and vocabulary. Do NOT mention missing story content.',
     };
     case 'B1': return {
       maxOptions: 4, maxQuestions: 6, outlineStages: 3, keyWordRange: '7-8',
@@ -131,8 +131,8 @@ type ExerciseTab = 'quiz' | 'words' | 'cloze' | 'builder' | 'retell';
 
 interface ClozeSegment {
   type: 'text' | 'blank';
-  content: string;   // Dutch word
-  english: string;   // English translation (shown as hint in the text)
+  content: string;   // English word
+  english: string;   // Russian translation (shown as hint in the text)
   blankIndex: number;
 }
 
@@ -615,7 +615,7 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
     setRetellingPhase('loading');
     try {
       const translation = await callClaude(
-        'You are a helpful translator. Translate the English text naturally and fluently into simple language. Return ONLY the translation, no explanation.',
+        'You are a helpful translator. Translate the English text naturally and fluently into simple Russian. Return ONLY the Russian translation, no explanation.',
         text.content,
         400,
       );
@@ -631,10 +631,11 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
     setRetellingPhase('evaluating');
     try {
       const raw = await callClaude(
-        `You are an English language teacher giving feedback on a student's retelling. ${levelConfig.evalContext}
+        `You are a British English teacher giving feedback on a retelling written in English by a native Russian speaker. ${levelConfig.evalContext}
+Write vocabulary_feedback, grammar_feedback and encouragement in simple Russian; quote the student's English words and corrections in English.
 IMPORTANT: Evaluate ONLY the language quality — vocabulary richness, grammar accuracy, sentence structure, and word choices. Do NOT mention story content, missing plot points, or what the student forgot to include. The goal is language practice, not comprehension testing.
 Return ONLY valid JSON, no markdown:
-{"score":1-5,"covered_points":["specific English phrases or words used well"],"missing_points":[],"vocabulary_feedback":"feedback on word choices only","grammar_feedback":"feedback on grammar and sentence structure only","encouragement":"motivating note about their English language progress"}`,
+{"score":1-5,"covered_points":["specific English phrases or words used well (quoted in English)"],"missing_points":[],"vocabulary_feedback":"feedback on word choices only (in Russian)","grammar_feedback":"feedback on grammar and sentence structure only (in Russian)","encouragement":"motivating note about their English language progress (in Russian)"}`,
         `TEXT LEVEL: ${text.level}\n\nORIGINAL STORY (for language reference):\n${text.content}\n\nSTUDENT'S ENGLISH RETELLING:\n${retellingTranscript.trim()}`,
         600,
       );
@@ -719,11 +720,11 @@ Return ONLY valid JSON, no markdown:
           )}
           <div className="rounded-2xl bg-card border border-border shadow-xl overflow-hidden">
             <div className="px-3 pt-3 pb-1.5">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Dutch</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">English</p>
               <p className="text-sm font-medium text-foreground leading-snug line-clamp-2">{popup.text}</p>
             </div>
             <div className="px-3 pb-3 border-b border-border">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">English</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Russian</p>
               {popup.translating
                 ? <p className="text-sm text-muted-foreground italic animate-pulse">Translating…</p>
                 : <p className="text-sm text-foreground leading-snug">{popup.translation || '—'}</p>
@@ -743,7 +744,7 @@ Return ONLY valid JSON, no markdown:
             <button
               onPointerDown={e => {
                 e.stopPropagation();
-                window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this Dutch phrase for me: "${popup.text}"` } }));
+                window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this English phrase for me: "${popup.text}"` } }));
                 dismissPopup();
               }}
               className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-semibold bg-secondary text-foreground hover:bg-accent transition-all"
@@ -830,7 +831,7 @@ Return ONLY valid JSON, no markdown:
               })()}
               <button
                 onClick={() => {
-                  window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this Dutch expression for me: "${exprPopup.phrase}"` } }));
+                  window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this English expression for me: "${exprPopup.phrase}"` } }));
                   setExprPopup(null);
                 }}
                 className="flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold bg-secondary text-foreground hover:bg-accent transition-all"
@@ -1206,7 +1207,7 @@ Return ONLY valid JSON, no markdown:
                 <h3 className="font-heading text-base font-semibold">Sentence Builder</h3>
                 <span className="text-xs text-muted-foreground">{builderIdx + 1} / {builderSentences.length}</span>
               </div>
-              <p className="text-xs text-muted-foreground -mt-2">Tap words in the correct Dutch order.</p>
+              <p className="text-xs text-muted-foreground -mt-2">Tap the words in the correct order.</p>
 
               {/* Answer area */}
               <div className="min-h-[52px] rounded-xl border-2 border-dashed border-amber-300 bg-amber-50 p-3 flex flex-wrap gap-1.5 items-center">
@@ -1282,10 +1283,10 @@ Return ONLY valid JSON, no markdown:
             {/* Ready — write retelling */}
             {retellingPhase === 'ready' && retellingData && (
               <div className="space-y-4">
-                    {/* English translation */}
+                    {/* Russian translation */}
                 {retellingTranslation && (
                   <div>
-                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">English translation</p>
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Russian translation</p>
                     <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-3">
                       <p className="text-sm text-foreground/80 leading-relaxed">{retellingTranslation}</p>
                     </div>
@@ -1340,9 +1341,9 @@ Return ONLY valid JSON, no markdown:
             {/* Submitted — compare original with retelling */}
             {retellingPhase === 'submitted' && retellingData && (
               <div className="space-y-4 animate-fade-in">
-                {/* Unblurred Dutch original */}
+                {/* Unblurred original */}
                 <div>
-                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Dutch original</p>
+                  <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Original</p>
                   <div className="rounded-xl border border-emerald-200 bg-emerald-50/40 p-3">
                     <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{text.content}</p>
                   </div>
@@ -1419,7 +1420,7 @@ Return ONLY valid JSON, no markdown:
                   </summary>
                   <div className="p-3 space-y-3">
                     <div>
-                      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Dutch original</p>
+                      <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Original</p>
                       <p className="text-xs text-foreground/80 leading-relaxed whitespace-pre-wrap">{text.content}</p>
                     </div>
                     <div>

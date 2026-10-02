@@ -6,10 +6,12 @@ import { claudeFetch } from '@/lib/ai';
 
 
 
-const SYSTEM_PROMPT = `You are Emma, a friendly English language tutor for beginners (A1–B1 level).
-Your student is learning English and may ask you anything about the language: grammar, vocabulary, pronunciation, word order, verb conjugation, tenses, articles, and more.
+const SYSTEM_PROMPT = `You are Emma, a friendly British English tutor for beginners (A1–B1 level).
+Your student is a native Russian speaker learning British English and may ask you anything about the language: grammar, vocabulary, pronunciation, word order, tenses, articles, prepositions, and more.
 
 Rules:
+- Explain in simple Russian. Write English examples in British English (British spelling) and add a Russian translation in brackets.
+- If the student writes in English and clearly wants to practise, you may answer in simple English instead.
 - Keep explanations short and simple. Use plain language.
 - Always give at least one English example sentence.
 - If asked about a word's meaning, give the contextual meaning, not a raw dictionary list.
@@ -60,7 +62,7 @@ export function AIChat() {
     if (open && messages.length === 0) {
       setMessages([{
         role: 'assistant',
-        content: 'Hoi! I\'m Daan, your Dutch tutor. Ask me anything — grammar, vocabulary, pronunciation, or anything else about Dutch!',
+        content: 'Hi! I\'m Emma, your English tutor. Ask me anything — grammar, vocabulary, pronunciation, or anything else about English!',
       }]);
     }
   }, [open]);
@@ -112,7 +114,7 @@ export function AIChat() {
         onClick={() => setOpen(true)}
         className="fixed left-4 z-40 flex items-center justify-center rounded-full bg-primary shadow-lg hover:bg-primary/90 transition-all active:scale-95"
         style={{ bottom: 'calc(env(safe-area-inset-bottom) + 5rem)', width: 52, height: 52 }}
-        aria-label="Open Dutch tutor chat"
+        aria-label="Open English tutor chat"
       >
         <MessageCircle className="h-6 w-6 text-primary-foreground" />
       </button>
@@ -122,8 +124,8 @@ export function AIChat() {
         <div className="flex fixed right-4 top-4 bottom-4 w-96 z-50 flex-col bg-background border border-border shadow-2xl rounded-2xl overflow-hidden">
           <div className="px-4 pt-4 pb-3 border-b border-border shrink-0 flex items-center justify-between">
             <div>
-              <p className="text-base font-bold leading-tight">Daan — Dutch Tutor</p>
-              <p className="text-xs text-muted-foreground">Ask anything about Dutch</p>
+              <p className="text-base font-bold leading-tight">Emma — English Tutor</p>
+              <p className="text-xs text-muted-foreground">Ask anything about English</p>
             </div>
             <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
               <X className="h-5 w-5" />
@@ -154,7 +156,7 @@ export function AIChat() {
           <div className="px-4 py-3 border-t border-border shrink-0">
             <div className="flex gap-2 items-end">
               <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
-                placeholder="Ask about Dutch grammar or vocabulary…" rows={1}
+                placeholder="Ask about English grammar or vocabulary…" rows={1}
                 className="flex-1 resize-none rounded-xl border border-border bg-card px-3 py-2.5 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 max-h-32"
                 style={{ fieldSizing: 'content' } as React.CSSProperties} />
               <Button size="sm" onClick={handleSend} disabled={!input.trim() || loading} className="h-10 w-10 shrink-0 p-0 rounded-xl">
@@ -172,8 +174,8 @@ export function AIChat() {
           <SheetHeader className="px-4 pt-4 pb-3 border-b border-border shrink-0">
             <div className="flex items-center justify-between">
               <div>
-                <SheetTitle className="text-base font-bold leading-tight">Daan — Dutch Tutor</SheetTitle>
-                <p className="text-xs text-muted-foreground">Ask anything about Dutch</p>
+                <SheetTitle className="text-base font-bold leading-tight">Emma — English Tutor</SheetTitle>
+                <p className="text-xs text-muted-foreground">Ask anything about English</p>
               </div>
               <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
                 <X className="h-5 w-5" />
@@ -205,7 +207,7 @@ export function AIChat() {
           <div className="px-4 pt-2 border-t border-border shrink-0" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}>
             <div className="flex gap-2 items-end">
               <textarea ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown}
-                placeholder="Ask about Dutch grammar or vocabulary…" rows={1}
+                placeholder="Ask about English grammar or vocabulary…" rows={1}
                 className="flex-1 resize-none rounded-xl border border-border bg-card px-3 py-2.5 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 max-h-32"
                 style={{ fieldSizing: 'content' } as React.CSSProperties} />
               <Button size="sm" onClick={handleSend} disabled={!input.trim() || loading} className="h-10 w-10 shrink-0 p-0 rounded-xl">

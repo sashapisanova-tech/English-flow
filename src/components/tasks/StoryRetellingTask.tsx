@@ -42,39 +42,40 @@ interface RetellingFeedback {
 // ─── API helpers ─────────────────────────────────────────────────────────────
 
 
-const STORY_PROMPT = `You are a Dutch language story generator for a beginner language learning app.
-Generate a short Dutch story optimised for retelling practice.
+const STORY_PROMPT = `You are a British English story generator for a beginner language learning app. The learners are native Russian speakers.
+Generate a short British English story (British spelling) optimised for retelling practice.
 Return ONLY a valid JSON object — no markdown fences, no extra text.
 
 JSON shape:
 {
-  "title": "Short Dutch title (3–5 words)",
-  "dutch_sentences": ["sentence 1", "sentence 2", ...],
-  "english_sentences": ["English translation of sentence 1", ...],
-  "outline": ["Stage 1 in English", "Stage 2 in English", "Stage 3 in English"],
-  "key_words": [{"dutch": "...", "english": "..."}, ...],
-  "new_words": [{"dutch": "...", "english": "..."}, ...],
+  "title": "Short English title (3–5 words)",
+  "dutch_sentences": ["English sentence 1", "English sentence 2", ...],
+  "english_sentences": ["Russian translation of sentence 1", ...],
+  "outline": ["Stage 1 in Russian", "Stage 2 in Russian", "Stage 3 in Russian"],
+  "key_words": [{"dutch": "English word", "english": "Russian translation"}, ...],
+  "new_words": [{"dutch": "English word", "english": "Russian translation"}, ...],
   "words_used": ["word1", ...]
 }
 
 Rules:
 - Story: 90–130 words total, exactly 3 narrative stages matching outline[0–2].
-- english_sentences: one English sentence per Dutch sentence, natural translation.
+- english_sentences: one Russian sentence per English sentence, natural translation.
 - Use every word from the input list at least once. Introduce at most 3 new words.
-- key_words: 6–8 words/phrases most needed to retell (critical nouns, verbs, fixed phrases, separable verbs).
-- A1: present tense, SVO, 4–8 words/sentence. A2: +simple past, up to 12 words. B1: +future, relative clauses.
-- Correct Dutch V2 word order in main clauses. No passive/subjunctive at A1/A2.`;
+- key_words: 6–8 words/phrases most needed to retell (critical nouns, verbs, fixed phrases, phrasal verbs).
+- A1: present simple, SVO, 4–8 words/sentence. A2: +past simple, up to 12 words. B1: +future, present perfect, relative clauses.
+- No passive at A1/A2.`;
 
-const EVAL_PROMPT = `You are a Dutch language teacher evaluating a beginner's story retelling.
+const EVAL_PROMPT = `You are a British English teacher evaluating a beginner's story retelling, written in English by a native Russian speaker.
+Write all feedback in simple Russian; quote the student's English words and corrections in English.
 Return ONLY a valid JSON object — no markdown fences, no extra text.
 
 {
   "score": <1–5>,
-  "covered_points": ["what the student included correctly"],
-  "missing_points": ["main things that were missed or unclear"],
-  "vocabulary_feedback": "One sentence on their word choices (specific + encouraging).",
-  "grammar_feedback": "One gentle grammar observation appropriate for A1 level.",
-  "encouragement": "One motivating closing sentence."
+  "covered_points": ["what the student included correctly (in Russian)"],
+  "missing_points": ["main things that were missed or unclear (in Russian)"],
+  "vocabulary_feedback": "One sentence in Russian on their word choices (specific + encouraging).",
+  "grammar_feedback": "One gentle grammar observation in Russian, appropriate for A1 level.",
+  "encouragement": "One motivating closing sentence in Russian."
 }
 
 Scoring: 1=very little, 2=some gaps, 3=most points, 4=all main points, 5=complete+fluent. Be encouraging.`;
@@ -281,7 +282,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
             <span className="text-xs font-semibold text-rose-700 uppercase tracking-wide">Story Retelling</span>
           </div>
           <p className="text-xs text-rose-600 leading-relaxed">
-            Read a short Dutch story, then retell it from memory using an English translation and key words as support.
+            Read a short English story, then retell it from memory using a Russian translation and key words as support.
           </p>
         </Card>
 
@@ -346,7 +347,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
               <Textarea
                 value={customWords}
                 onChange={e => setCustomWords(e.target.value)}
-                placeholder="Enter Dutch words, one per line or separated by commas&#10;e.g. fiets, huis, eten, werken, mooi"
+                placeholder="Enter English words, one per line or separated by commas&#10;e.g. bike, house, eat, work, nice"
                 className="text-sm min-h-[100px] font-mono"
               />
               {customWords.trim() && (
@@ -454,7 +455,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
         <Card className="p-4 bg-amber-50 border-amber-200">
           <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide mb-1">Read the story carefully</p>
           <p className="text-xs text-amber-600">
-            Listen and read a few times. When ready, you'll retell it in Dutch — the original will be blurred so you write from memory.
+            Listen and read a few times. When ready, you'll retell it in English — the original will be blurred so you write from memory.
           </p>
         </Card>
 
@@ -473,9 +474,9 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
 
         <h2 className="font-heading text-lg font-bold text-foreground">{story.title}</h2>
 
-        {/* Blurred Dutch text */}
+        {/* Blurred original text */}
         <div className="relative">
-          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Dutch original</p>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Original</p>
           <Card className="p-4 space-y-2 leading-relaxed select-none overflow-hidden">
             {story.dutch_sentences.map((s, i) => (
               <p key={i} className="text-sm text-foreground blur-sm">{s}</p>
@@ -486,9 +487,9 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
           </Card>
         </div>
 
-        {/* English translation */}
+        {/* Russian translation */}
         <div>
-          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">English translation</p>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Russian translation</p>
           <Card className="p-4 space-y-2 leading-relaxed bg-blue-50/50 border-blue-100">
             {(story.english_sentences ?? [story.dutch_sentences.join(' ')]).map((s, i) => (
               <p key={i} className="text-sm text-foreground/80">{s}</p>
@@ -527,11 +528,11 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
 
         {/* Text input */}
         <div>
-          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Your retelling in Dutch</p>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Your retelling in English</p>
           <Textarea
             value={retellText}
             onChange={e => setRetellText(e.target.value)}
-            placeholder="Write the story in your own Dutch words…"
+            placeholder="Write the story in your own English words…"
             className="text-sm min-h-[130px]"
             autoFocus
           />
@@ -548,7 +549,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
     );
   }
 
-  // ── SUBMITTED — compare Dutch original with retelling ──
+  // ── SUBMITTED — compare original with retelling ──
   if (phase === 'submitted' && story) {
     return (
       <div className="animate-fade-in space-y-5">
@@ -556,9 +557,9 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
 
         <h2 className="font-heading text-lg font-bold text-foreground">{story.title}</h2>
 
-        {/* Unblurred Dutch original */}
+        {/* Unblurred original */}
         <div>
-          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Dutch original</p>
+          <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Original</p>
           <Card className="p-4 space-y-2 leading-relaxed border-emerald-200 bg-emerald-50/40">
             {story.dutch_sentences.map((s, i) => (
               <p key={i} className="text-sm text-foreground">{s}</p>
@@ -661,7 +662,7 @@ export function StoryRetellingTask({ onBack }: { onBack: () => void }) {
           </summary>
           <div className="p-4 space-y-3">
             <div>
-              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Dutch original</p>
+              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1">Original</p>
               <p className="text-sm text-foreground/80 leading-relaxed">{story.dutch_sentences.join(' ')}</p>
             </div>
             <div>

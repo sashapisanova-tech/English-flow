@@ -29,7 +29,7 @@ async function generateErrorSentence(
   textTitles: string[],
 ): Promise<ErrorSentence> {
 
-  const system = `You are an English language exercise generator. Generate an English sentence with exactly one grammatical error that a real learner at the given level would plausibly make. Never invent typos or nonsense — only real grammar mistakes.
+  const system = `You are a British English exercise generator. Generate a British English sentence with exactly one grammatical error that a real learner at the given level — a native Russian speaker — would plausibly make. Never invent typos or nonsense — only real grammar mistakes.
 
 Return JSON only, no markdown:
 {
@@ -39,7 +39,7 @@ Return JSON only, no markdown:
   "explanation": "..."
 }
 
-explanation must be one sentence: what was wrong and why. Example: "'ben gegaan' is correct — Dutch uses 'zijn' not 'hebben' for movement verbs like 'gaan'."`;
+explanation must be one sentence in simple Russian: what was wrong and why. Example: "Правильно 'She works' — с he/she/it к глаголу в Present Simple добавляется -s."`;
 
   const userMsg = `Level: ${level}
 Past error types this user has made: ${pastErrorTypes.length > 0 ? pastErrorTypes.slice(-8).join(', ') : 'none yet'}
@@ -47,8 +47,8 @@ Completed text themes for context: ${textTitles.length > 0 ? textTitles.slice(0,
 
 Prioritize the user's past error types. If none, use the most common errors for this level.
 
-A1 error types: wrong verb conjugation (present tense), missing verb, wrong main clause word order (V2 rule)
-A2 error types: wrong auxiliary (ben vs heb), separable verb not split, verb not at end of subordinate clause, wrong past participle form
+A1 error types: missing -s with he/she/it, missing am/is/are, missing article a/an, question without do/does
+A2 error types: wrong past simple form, past simple vs present perfect, missing or wrong article (a/the), wrong preposition (in/on/at), wrong word order in questions
 
 One error per sentence only.`;
 
@@ -76,7 +76,7 @@ async function evaluateCorrection(
   userAnswer: string,
 ): Promise<EvaluationResult> {
 
-  const system = `You are a warm, encouraging English language tutor. Evaluate whether the learner's correction is right, then explain what was wrong in the original sentence. Always show the correct sentence. Keep tone supportive, never clinical. One short paragraph max.
+  const system = `You are a warm, encouraging British English tutor for a native Russian speaker. Evaluate whether the learner's correction is right, then explain what was wrong in the original sentence. Write the feedback in simple Russian; quote English sentences in English. Always show the correct sentence. Keep tone supportive, never clinical. One short paragraph max.
 
 Return JSON only, no markdown:
 {

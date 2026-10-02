@@ -14,16 +14,16 @@ const tasks = [
   {
     id: 'translate' as const,
     icon: ArrowLeftRight,
-    title: 'Translate to Dutch',
+    title: 'Translate to English',
     tag: 'Translation',
-    description: 'Translate English sentences into Dutch at your level — type your answer and get warm, level-aware AI feedback.',
+    description: 'Translate a short Russian text into English at your level — type your answer and get warm, level-aware AI feedback.',
   },
   {
     id: 'dialogue' as const,
     icon: MessageCircle,
     title: 'Chat with AI',
     tag: 'Conversation',
-    description: 'Hold a short Dutch conversation with an AI partner. Save words to flashcards. Grammar review at the end.',
+    description: 'Hold a short English conversation with an AI partner. Save words to flashcards. Grammar review at the end.',
   },
 ];
 
@@ -43,7 +43,7 @@ export function TasksView({ initialTask = null, onTaskLaunched }: TasksViewProps
   return (
     <div className="animate-fade-in space-y-6">
       <div>
-        <p className="text-sm text-muted-foreground mt-0.5">Choose an exercise and practise your Dutch.</p>
+        <p className="text-sm text-muted-foreground mt-0.5">Choose an exercise and practise your English.</p>
       </div>
 
       <div className="space-y-2">

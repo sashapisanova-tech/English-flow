@@ -105,22 +105,22 @@ function StepTapWord() {
   return (
     <div className="w-full space-y-3">
       <div className="relative rounded-xl border border-border bg-card p-4 text-sm leading-[2.2]">
-        <span>Hij gaat elke ochtend </span>
+        <span>Every morning, he </span>
         <span className={`relative inline-block rounded px-1 py-0.5 font-semibold transition-all duration-300 cursor-pointer ${tapped ? 'bg-primary/15 text-primary' : 'text-foreground'}`}>
-          fietsen
+          cycles
           {tapped && (
             <Finger className="-bottom-3 left-1/2 -translate-x-1/2" />
           )}
         </span>
-        <span> naar zijn werk.</span>
+        <span> to work.</span>
       </div>
       <div className={`rounded-xl border border-border bg-secondary/40 px-4 py-3 space-y-1 transition-all duration-500 ${showPopup ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
         <div className="flex items-baseline gap-2">
-          <span className="font-bold text-sm text-foreground">fietsen</span>
+          <span className="font-bold text-sm text-foreground">cycle</span>
           <span className="text-xs text-muted-foreground">verb</span>
         </div>
-        <p className="text-sm text-foreground">to cycle / to bike</p>
-        <p className="text-xs text-muted-foreground italic">Hij fietst elke dag.</p>
+        <p className="text-sm text-foreground">ездить на велосипеде</p>
+        <p className="text-xs text-muted-foreground italic">He cycles every day.</p>
       </div>
     </div>
   );
@@ -231,21 +231,14 @@ function StepColors() {
       dot: 'bg-orange-400',
       label: 'Vocabulary word',
       desc: 'A word from your saved flashcard list — already familiar territory.',
-      word: 'winkel',
-    },
-    {
-      color: 'bg-blue-100 text-blue-700 border-blue-200',
-      dot: 'bg-blue-400',
-      label: 'Separable verb',
-      desc: 'A verb whose prefix splits off in a sentence — easy to miss.',
-      word: 'opbellen',
+      word: 'kitchen',
     },
     {
       color: 'bg-green-100 text-green-700 border-green-200',
       dot: 'bg-green-400',
       label: 'Fixed expression',
       desc: 'A set phrase — the meaning can\'t be guessed word by word.',
-      word: 'het gaat wel',
+      word: 'by the way',
     },
   ];
 
@@ -253,13 +246,10 @@ function StepColors() {
     <div className="w-full space-y-2">
       {/* Example sentence */}
       <div className="rounded-xl border border-border bg-card p-3 text-sm leading-[2.2]">
-        <span>Hij moet de </span>
-        <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-500 ${revealed ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-transparent text-foreground border-transparent'}`}>winkel</span>
-        <span> </span>
-        <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-700 ${revealed ? 'bg-blue-100 text-blue-700 border-blue-200' : 'bg-transparent text-foreground border-transparent'}`}>opbellen</span>
-        <span> — </span>
-        <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-1000 ${revealed ? 'bg-green-100 text-green-700 border-green-200' : 'bg-transparent text-foreground border-transparent'}`}>het gaat wel</span>
-        <span>.</span>
+        <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-1000 ${revealed ? 'bg-green-100 text-green-700 border-green-200' : 'bg-transparent text-foreground border-transparent'}`}>By the way</span>
+        <span>, the </span>
+        <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-500 ${revealed ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-transparent text-foreground border-transparent'}`}>kitchen</span>
+        <span> is very small.</span>
       </div>
 
       {/* Legend */}

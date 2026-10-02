@@ -105,7 +105,7 @@ export function MicroJournalTask({ onBack }: { onBack: () => void }) {
         <div>
           <h2 className="font-heading text-xl font-bold text-foreground">Micro Journal</h2>
           <p className="text-sm text-muted-foreground mt-0.5">
-            An AI-generated Dutch writing prompt. Write 2–4 sentences and get gentle feedback.
+            An AI-generated English writing prompt. Write 2–4 sentences and get gentle feedback.
           </p>
         </div>
 
@@ -163,7 +163,7 @@ export function MicroJournalTask({ onBack }: { onBack: () => void }) {
         <textarea
           value={userText}
           onChange={e => setUserText(e.target.value)}
-          placeholder="Schrijf hier je antwoord in het Nederlands…"
+          placeholder="Write your answer here in English…"
           autoComplete="new-password"
           autoCorrect="off"
           autoCapitalize="none"
@@ -172,7 +172,7 @@ export function MicroJournalTask({ onBack }: { onBack: () => void }) {
           className="w-full rounded-xl border border-border bg-card p-4 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
         />
 
-        <p className="text-xs text-muted-foreground">Spell check is off — focus on producing the Dutch yourself.</p>
+        <p className="text-xs text-muted-foreground">Spell check is off — focus on producing the English yourself.</p>
 
         {error && (
           <Card className="border-red-200 bg-red-50 p-4">
@@ -185,7 +185,7 @@ export function MicroJournalTask({ onBack }: { onBack: () => void }) {
           onClick={handleSubmit}
           disabled={loading || !userText.trim()}
         >
-          {loading ? <span className="animate-pulse">Reading your Dutch…</span> : 'Submit'}
+          {loading ? <span className="animate-pulse">Reading your English…</span> : 'Submit'}
         </Button>
       </div>
     );

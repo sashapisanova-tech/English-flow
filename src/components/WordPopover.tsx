@@ -21,7 +21,7 @@ interface WordPopoverProps {
   separableVerb?: SeparableVerbEntry;
 }
 
-interface WordInfo { translation: string; article?: 'de' | 'het' }
+interface WordInfo { translation: string }
 const wordInfoCache: Record<string, WordInfo> = {};
 
 async function fetchWordInfo(word: string, sentence?: string): Promise<WordInfo> {
@@ -38,7 +38,7 @@ async function fetchWordInfo(word: string, sentence?: string): Promise<WordInfo>
         body: JSON.stringify({
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 40,
-          system: 'You are a Dutch dictionary. Reply with JSON only, no markdown: {"translation":"<1-4 word English translation>","article":"de" or "het" or null}. Use null for article if the word is not a noun.',
+          system: 'You are an English–Russian dictionary for learners of British English. Reply with JSON only, no markdown: {"translation":"<1-4 word Russian translation>"}. If a context sentence is given, translate the word as it is used in that sentence.',
           messages: [{ role: 'user', content: userMsg }],
         }),
       });
@@ -46,11 +46,8 @@ async function fetchWordInfo(word: string, sentence?: string): Promise<WordInfo>
         const data = await res.json() as { content: { text: string }[] };
         const raw = data.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
         try {
-          const parsed = JSON.parse(raw) as { translation: string; article?: string | null };
-          const info: WordInfo = {
-            translation: parsed.translation || '',
-            article: parsed.article === 'de' ? 'de' : parsed.article === 'het' ? 'het' : undefined,
-          };
+          const parsed = JSON.parse(raw) as { translation: string };
+          const info: WordInfo = { translation: parsed.translation || '' };
           wordInfoCache[key] = info;
           return info;
         } catch {
@@ -60,7 +57,7 @@ async function fetchWordInfo(word: string, sentence?: string): Promise<WordInfo>
       }
     }
     // Fallback: MyMemory
-    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=nl|en`);
+    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|ru`);
     const data = await res.json();
     const t = (data?.responseData?.translatedText as string) || '';
     wordInfoCache[key] = { translation: t };
@@ -77,7 +74,6 @@ export function WordPopover({
   const [open, setOpen] = useState(false);
   const { addWord, removeWord, vocabulary } = useLearning();
   const [liveTranslation, setLiveTranslation] = useState(translation);
-  const [liveArticle, setLiveArticle] = useState<'de' | 'het' | undefined>(undefined);
   const [loading, setLoading] = useState(false);
 
   // For separable verbs, check saved state by infinitive
@@ -93,14 +89,10 @@ export function WordPopover({
   useEffect(() => {
     if (!open) return;
     if (separableVerb) return; // no external translation needed
-    // Always fetch word info — even when translation is known, we need the article
-    setLoading(!translation); // only show spinner when we don't have a translation yet
-    if (translation) setLiveTranslation(translation);
+    if (translation) { setLiveTranslation(translation); return; }
+    setLoading(true);
     fetchWordInfo(word, sentence)
-      .then(info => {
-        if (!translation) setLiveTranslation(info.translation || '—');
-        if (info.article) setLiveArticle(info.article);
-      })
+      .then(info => setLiveTranslation(info.translation || '—'))
       .finally(() => setLoading(false));
   }, [open, word, translation, sentence, separableVerb]);
 
@@ -134,7 +126,6 @@ export function WordPopover({
     } else {
       addWord(word, liveTranslation || translation || word, {
         plural, example: effectiveExample, exampleTranslation,
-        ...(liveArticle ? { article: liveArticle } : {}),
         ...(sentence ? { sentenceSource: 'text' as const } : {}),
       });
       toast(`"${word}" saved to learning`, {
@@ -155,11 +146,11 @@ export function WordPopover({
         <div className="space-y-3">
 
           {separableVerb ? (
-            // ── Separable verb layout ──
+            // ── Phrasal verb layout (only when the text provides verb data) ──
             <>
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="rounded bg-blue-100 px-1.5 py-0.5 text-xs font-semibold text-blue-700">separable verb</span>
+                  <span className="rounded bg-blue-100 px-1.5 py-0.5 text-xs font-semibold text-blue-700">phrasal verb</span>
                 </div>
                 <h4 className="font-heading text-lg font-bold text-foreground">{separableVerb.infinitive}</h4>
                 <p className="text-base text-muted-foreground">{separableVerb.english}</p>
@@ -171,7 +162,7 @@ export function WordPopover({
                   <span className="text-muted-foreground"> … </span>
                   <span className="font-bold text-blue-600">{separableVerb.prefix}</span>
                 </p>
-                <p className="text-xs text-muted-foreground">The prefix moves to the end of the clause</p>
+                <p className="text-xs text-muted-foreground">The particle can go after the object</p>
               </div>
               {effectiveExample && (
                 <div className="rounded-md bg-secondary p-3">
@@ -185,11 +176,6 @@ export function WordPopover({
             <>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  {liveArticle && (
-                    <span className={`px-2 py-0.5 rounded-md text-xs font-bold ${
-                      liveArticle === 'de' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
-                    }`}>{liveArticle}</span>
-                  )}
                   <h4 className="font-heading text-lg font-semibold text-foreground">{word}</h4>
                 </div>
                 {status !== 'ignored' && (

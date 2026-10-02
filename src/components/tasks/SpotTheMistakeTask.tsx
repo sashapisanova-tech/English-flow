@@ -25,14 +25,14 @@ async function generateSentences(words: string[], level: string): Promise<Senten
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 800,
-      system: `You are a Dutch language teacher creating a "spot the mistake" exercise.
+      system: `You are a British English teacher creating a "spot the mistake" exercise for a native Russian speaker.
 The student's level is ${level}. Adjust difficulty accordingly: A1 = simple present, basic vocab; A2 = some past tense, common phrases; B1 = more complex grammar, subordinate clauses.
-Generate exactly 5 Dutch sentences using the provided vocabulary words.
-3 sentences must be grammatically correct. 2 must contain ONE deliberate error (wrong verb conjugation, wrong word order, or wrong article).
+Generate exactly 5 British English sentences (British spelling) using the provided vocabulary words.
+3 sentences must be grammatically correct. 2 must contain ONE deliberate error (wrong verb form, wrong word order, a missing or wrong article a/an/the, or a wrong preposition — the kind of mistake Russian speakers really make).
 Return ONLY valid JSON array, no markdown:
 [
-  {"dutch":"correct sentence","has_error":false,"explanation":"why this is correct Dutch"},
-  {"dutch":"sentence with error","has_error":true,"error":"the wrong part","correction":"correct version","explanation":"what is wrong and the correct form"}
+  {"dutch":"correct sentence","has_error":false,"explanation":"why this is correct, in simple Russian"},
+  {"dutch":"sentence with error","has_error":true,"error":"the wrong part","correction":"correct version","explanation":"what is wrong and the correct form, in simple Russian"}
 ]
 Keep sentences short (5–9 words).`,
       messages: [{ role: 'user', content: `Words to use: ${words.slice(0, 15).join(', ')}` }],
@@ -133,7 +133,7 @@ export function SpotTheMistakeTask({ onBack }: { onBack: () => void }) {
         <div className="flex items-center gap-2 mb-1">
           <span className="text-xs font-semibold text-indigo-700 uppercase tracking-wide">Spot the Mistake</span>
         </div>
-        <p className="text-xs text-indigo-700">Claude generates 5 Dutch sentences — some are correct, some have a grammar error. Can you tell the difference?</p>
+        <p className="text-xs text-indigo-700">Claude generates 5 English sentences — some are correct, some have a grammar error. Can you tell the difference?</p>
       </Card>
 
       {error && <Card className="border-red-200 bg-red-50 p-3"><p className="text-sm text-red-700">{error}</p></Card>}

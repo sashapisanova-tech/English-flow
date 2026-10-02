@@ -4,8 +4,8 @@ import { claudeFetch } from '@/lib/ai';
 
 
 export interface JournalPrompt {
-  prompt_nl: string;
-  prompt_en: string;
+  prompt_nl: string;  // prompt in English (target language)
+  prompt_en: string;  // Russian translation of the prompt
   targetWords: string[];
 }
 
@@ -41,7 +41,7 @@ export async function generateJournalPrompt(
     ? `IMPORTANT: Strongly reference a specific scene, character, or pivotal moment from ONE of the completed texts listed above. The prompt must name or clearly evoke that specific element.`
     : `Reference the topic or situation from one of the completed texts (no need to name a specific scene).`;
 
-  const system = `You are a Dutch language teacher creating a personalised journaling prompt.
+  const system = `You are a British English teacher creating a personalised journaling prompt for a native Russian speaker.
 
 Student level: ${level}
 Completed texts:
@@ -53,14 +53,14 @@ ${wordList || 'none yet'}
 ${anchorInstruction}
 
 Create a prompt that:
-1. Asks a personal, open-ended question (max 2–3 sentences in Dutch)
+1. Asks a personal, open-ended question (max 2–3 sentences in simple British English)
 2. Naturally encourages using 2–4 of the vocabulary words listed above
 3. Matches the level: short simple present for A1, can use past tense / subordinate clauses for A2+
 
 Return ONLY this JSON, no markdown:
 {
-  "prompt_nl": "The prompt in Dutch (2–3 sentences)",
-  "prompt_en": "English translation of the prompt",
+  "prompt_nl": "The prompt in English (2–3 sentences)",
+  "prompt_en": "Russian translation of the prompt",
   "targetWords": ["word1", "word2", "word3"]
 }`;
 
@@ -91,12 +91,13 @@ export async function evaluateJournalResponse(
   pastErrors: { type: string }[],
 ): Promise<JournalFeedback> {
 
-  const system = `You are a warm, encouraging Dutch language tutor reviewing a student's journal entry.
+  const system = `You are a warm, encouraging British English tutor reviewing a journal entry written in English by a native Russian speaker.
+Write wellDone, reason, mainWeakness and suggestion in simple Russian; quote English phrases in English.
 
 Rules:
 - Focus only on the 1–2 most important grammar errors. Ignore minor issues.
-- A1: only flag wrong verb conjugation (present tense) and missing main verb. Forgive article errors.
-- A2: flag word order, verb conjugation, tense consistency, and de/het errors.
+- A1: only flag wrong verb forms (present simple, he/she/it -s, am/is/are) and missing main verb. Forgive article errors.
+- A2: flag word order, verb forms, tense consistency, and a/an/the errors.
 - Always rewrite the student's full text correctly.
 - Detect the student's actual writing level (A1 / A2 / B1) from the text quality.
 - Be specific and warm throughout.
@@ -105,11 +106,11 @@ Return ONLY this JSON, no markdown:
 {
   "wellDone": "one sentence about what the student did well",
   "corrections": [
-    { "original": "exact phrase from student", "corrected": "correct version", "reason": "why — max 12 words" }
+    { "original": "exact phrase from student", "corrected": "correct version", "reason": "why, in Russian — max 12 words" }
   ],
-  "rewrittenVersion": "the student's full text rewritten correctly in Dutch",
+  "rewrittenVersion": "the student's full text rewritten correctly in British English",
   "detectedLevel": "A1 or A2 or B1",
-  "mainWeakness": "one short noun phrase e.g. 'verb-final in subordinate clauses'",
+  "mainWeakness": "one short noun phrase in Russian e.g. 'артикли a/the'",
   "suggestion": "one actionable sentence about what to practise next"
 }
 corrections can be [] if there are no significant errors.`;
@@ -121,7 +122,7 @@ corrections can be [] if there are no significant errors.`;
   const userMsg = `Level: ${level}
 Prompt given: ${prompt.prompt_nl}
 Target words: ${prompt.targetWords.join(', ')}
-Student's Dutch response:
+Student's English response:
 ${safeResponse}
 Past error types to keep in mind: ${pastErrorTypes}`;
 

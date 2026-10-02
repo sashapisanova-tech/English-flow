@@ -7,7 +7,7 @@ import {
 } from '@/utils/ttsSettings';
 import { playDutch, stopDutch } from '@/utils/playDutch';
 
-const PREVIEW_TEXT = 'Hoi! Mijn naam is Daan. Ik help je Nederlands leren.';
+const PREVIEW_TEXT = "Hello! I'm your English Flow voice. Let's read together.";
 
 export function VoiceSettings({ visible = false }: { visible?: boolean }) {
   const [open, setOpen] = useState(false);

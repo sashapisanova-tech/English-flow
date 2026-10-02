@@ -139,7 +139,7 @@ export function TutorView({ onLaunchTask, onOpenText, onGoToFlashcards }: TutorV
       hard_grammar: s.hard_grammar_targets,
     }));
 
-    const prompt = `You are an English language coach. Analyze this learner's data and return ONLY valid JSON.
+    const prompt = `You are a British English coach for a native Russian speaker. Analyze this learner's data and return ONLY valid JSON. Write all text values (focusReason, strength, encouragement, title, reason) in simple Russian; grammarFocus stays in English.
 
 PRACTICE SESSIONS (newest first, may be empty if new learner):
 ${sessions.length > 0 ? JSON.stringify(sessionSummary, null, 2) : '(no practice sessions yet)'}
@@ -173,7 +173,7 @@ Rules:
 - activities: exactly 3, in priority order
 - If learner is new (no sessions), suggest: read a text, do flashcards, then a simple translate task
 - For text-review: pick a text read 7+ days ago covering weak grammar (use exact textId from history above)
-- grammarFocus for translate must be one of: "Word order (V2)", "Separable verbs", "de/het articles", "Adjective endings", "Past tense (perfectum)", "Modal verbs", "Plural forms", "Negation", "Pronouns", "Comparative adjectives"
+- grammarFocus for translate must be one of: "Word order", "Articles (a/an/the)", "Present simple", "Present continuous", "Past simple", "Present perfect", "Modal verbs", "Plural forms", "Negation", "Prepositions", "Comparative adjectives", "Phrasal verbs"
 - skillBalance reflects estimated current level (0=very weak, 100=strong)
 - All text must be SHORT`;
 
@@ -290,7 +290,7 @@ Rules:
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">Dutch Coach</p>
+        <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">English Coach</p>
         <button onClick={() => load(true)} className="text-muted-foreground hover:text-foreground transition-colors" title="Refresh — generates a new analysis">
           <RefreshCw className="h-3.5 w-3.5" />
         </button>

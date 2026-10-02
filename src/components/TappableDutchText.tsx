@@ -1,5 +1,5 @@
 /**
- * TappableDutchText — renders Dutch text where each word is tappable.
+ * TappableDutchText — renders English text where each word is tappable.
  * Tapping a word fetches an AI translation and shows a small fixed popup with
  * a "Save to flashcards" button.
  */
@@ -22,7 +22,7 @@ async function translateWord(word: string): Promise<string> {
           model: 'claude-haiku-4-5-20251001',
           max_tokens: 40,
           system:
-            'You are an English dictionary. Return only a simple 1–4 word definition or translation of the English word or short phrase, nothing else.',
+            'You are an English–Russian dictionary. Return only a simple 1–4 word Russian translation of the English word or short phrase, nothing else.',
           messages: [{ role: 'user', content: word }],
         }),
       });
@@ -35,7 +35,7 @@ async function translateWord(word: string): Promise<string> {
     }
     // Fallback to MyMemory
     const res = await fetch(
-      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=nl|en`,
+      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|ru`,
     );
     const data = await res.json();
     const t = (data?.responseData?.translatedText as string) || '';
@@ -175,11 +175,11 @@ export function TappableDutchText({
         >
           <div className="rounded-2xl bg-card border border-border shadow-xl overflow-hidden">
             <div className="px-3 pt-2.5 pb-1">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Dutch</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">English</p>
               <p className="text-sm font-medium text-foreground">{popup.word}</p>
             </div>
             <div className="px-3 pb-2.5 border-b border-border">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">English</p>
+              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Russian</p>
               {popup.loading
                 ? <span className="flex items-center gap-1 text-xs text-muted-foreground italic"><Loader2 className="h-3 w-3 animate-spin" /> Translating…</span>
                 : <p className="text-sm text-foreground">{popup.translation || '—'}</p>

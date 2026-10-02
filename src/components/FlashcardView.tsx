@@ -900,8 +900,8 @@ export function FlashcardView() {
           <div className="space-y-1.5">
             {/* Column headers */}
             <div className="grid grid-cols-[1fr_1fr_auto] gap-2 px-3 pb-1">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Russian</span>
               <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">English</span>
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Dutch</span>
               <span className="w-14" />
             </div>
 
@@ -914,14 +914,14 @@ export function FlashcardView() {
                       <input
                         value={editEnglish}
                         onChange={e => setEditEnglish(e.target.value)}
-                        placeholder="English"
+                        placeholder="Russian"
                         autoComplete="off"
                         className="rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
                       />
                       <input
                         value={editDutch}
                         onChange={e => setEditDutch(e.target.value)}
-                        placeholder="Dutch"
+                        placeholder="English"
                         autoComplete="off"
                         className="rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
                       />
@@ -1016,8 +1016,8 @@ export function FlashcardView() {
         ) : (
           <div className="space-y-1.5">
             <div className="grid grid-cols-[1fr_1fr_auto] gap-2 px-3 pb-1">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Russian</span>
               <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">English</span>
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Dutch</span>
               <span className="w-16" />
             </div>
             {ignoredWords.map(word => (
@@ -1203,7 +1203,8 @@ export function FlashcardView() {
   }
 
   // ===== CARD PRACTICE (shared for both modes) =====
-  const displayWord = mode === 'my-words' ? currentWord : currentSetWord;
+  // Saved words lack the set-only fields (plural, past forms, notes); type both as one shape
+  const displayWord: (DutchWord | FlashcardSetWord) & Partial<FlashcardSetWord> = mode === 'my-words' ? currentWord : currentSetWord;
   if (!displayWord) return null;
 
   const front = direction === 'dutch-to-english' ? displayWord.dutch : displayWord.english;
@@ -1228,7 +1229,7 @@ export function FlashcardView() {
             className="flex items-center gap-1.5 rounded-full border-2 border-primary/40 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary transition-all hover:bg-primary/10"
           >
             <ArrowLeftRight className="h-3.5 w-3.5" />
-            {direction === 'dutch-to-english' ? 'NL → EN' : 'EN → NL'}
+            {direction === 'dutch-to-english' ? 'EN → RU' : 'RU → EN'}
           </button>
         </div>
       </div>
@@ -1273,13 +1274,8 @@ export function FlashcardView() {
             <Card className="flashcard-face bg-card border-2">
               <div className="text-center">
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
-                  {direction === 'dutch-to-english' ? 'Nederlands' : 'English'}
+                  {direction === 'dutch-to-english' ? 'English' : 'Russian'}
                 </p>
-                {direction === 'dutch-to-english' && displayWord.article && (
-                  <span className={`inline-block mb-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                    displayWord.article === 'de' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
-                  }`}>{displayWord.article}</span>
-                )}
                 <p className="font-heading text-3xl font-bold text-foreground">{front}</p>
                 {direction === 'dutch-to-english' && exampleSentence && (
                   <p className="mt-2 text-sm italic text-muted-foreground leading-snug">
@@ -1292,13 +1288,8 @@ export function FlashcardView() {
             <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20">
               <div className="text-center">
                 <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
-                  {direction === 'dutch-to-english' ? 'English' : 'Nederlands'}
+                  {direction === 'dutch-to-english' ? 'Russian' : 'English'}
                 </p>
-                {direction === 'english-to-dutch' && displayWord.article && (
-                  <span className={`inline-block mb-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold ${
-                    displayWord.article === 'de' ? 'bg-blue-100 text-blue-700' : 'bg-pink-100 text-pink-700'
-                  }`}>{displayWord.article}</span>
-                )}
                 <p className="font-heading text-3xl font-bold text-accent-foreground">{back}</p>
                 {direction === 'english-to-dutch' && exampleSentence && (
                   <p className="mt-2 text-sm italic text-muted-foreground leading-snug">
@@ -1344,7 +1335,7 @@ export function FlashcardView() {
         )}
       </div>
 
-      {flipped && displayWord.article && (displayWord.plural || displayWord.exampleTranslation || displayWord.nounTip) && (
+      {flipped && (displayWord.plural || displayWord.exampleTranslation || displayWord.nounTip) && (
         <Card className="animate-fade-in p-3 bg-muted/40 border-border space-y-1.5 text-sm">
           {displayWord.plural && (
             <div className="flex gap-2 items-center">
@@ -1367,25 +1358,18 @@ export function FlashcardView() {
         </Card>
       )}
 
-      {flipped && displayWord.conjugation && (
+      {/* Verb details: English verbs carry type, note and past forms (no conjugation table) */}
+      {flipped && (displayWord.verbType || displayWord.pastTense || displayWord.verbNote) && (
         <Card className="animate-fade-in p-3 bg-muted/40 border-border">
-          <div className="grid grid-cols-2 gap-x-6 gap-y-1 text-xs mb-2">
-            {(['ik', 'jij', 'hij', 'wij', 'jullie', 'zij'] as const).map(pronoun => (
-              <div key={pronoun} className="flex gap-1.5">
-                <span className="text-muted-foreground w-10 shrink-0">{pronoun}</span>
-                <span className="font-medium text-foreground">{displayWord.conjugation![pronoun]}</span>
-              </div>
-            ))}
-          </div>
           {displayWord.verbType && (
-            <div className="flex items-center gap-2 pt-1 border-t border-border">
+            <div className="flex items-center gap-2">
               <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
                 displayWord.verbType === 'reg' ? 'bg-green-100 text-green-700' :
                 displayWord.verbType === 'irr' ? 'bg-red-100 text-red-700' :
                 displayWord.verbType === 'sep' ? 'bg-blue-100 text-blue-700' :
                 'bg-purple-100 text-purple-700'
               }`}>
-                {displayWord.verbType === 'reg' ? 'regular' : displayWord.verbType === 'irr' ? 'irregular' : displayWord.verbType === 'sep' ? 'separable' : 'modal'}
+                {displayWord.verbType === 'reg' ? 'regular' : displayWord.verbType === 'irr' ? 'irregular' : displayWord.verbType === 'sep' ? 'phrasal' : 'modal'}
               </span>
               {displayWord.verbNote && (
                 <span className="text-[11px] text-muted-foreground leading-tight">{displayWord.verbNote}</span>
@@ -1397,13 +1381,13 @@ export function FlashcardView() {
               <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide">Past tense</p>
               {displayWord.pastTense && (
                 <div className="flex gap-2 text-xs">
-                  <span className="text-muted-foreground w-16 shrink-0">imperfect</span>
+                  <span className="text-muted-foreground w-16 shrink-0">past simple</span>
                   <span className="font-medium text-foreground">{displayWord.pastTense}</span>
                 </div>
               )}
               {displayWord.pastParticiple && (
                 <div className="flex gap-2 text-xs">
-                  <span className="text-muted-foreground w-16 shrink-0">participle</span>
+                  <span className="text-muted-foreground w-16 shrink-0">past participle</span>
                   <span className="font-medium text-foreground">{displayWord.pastParticiple}</span>
                 </div>
               )}

@@ -84,15 +84,15 @@ function StepSaveWords() {
   return (
     <div className="w-full space-y-3">
       <div className="rounded-xl border border-border bg-card p-4 text-sm leading-[2.2]">
-        <span>Ze rijdt elke dag op haar </span>
+        <span>She goes to work by </span>
         <span
           className={`rounded px-1 py-0.5 font-semibold transition-all duration-300 cursor-pointer ${
             tapped ? 'bg-orange-100 text-orange-700 border border-orange-200' : 'text-foreground'
           }`}
         >
-          fiets
+          bike
         </span>
-        <span> naar haar werk.</span>
+        <span> every day.</span>
       </div>
       <div
         className={`rounded-xl border border-border bg-secondary/40 px-4 py-3 transition-all duration-500 ${
@@ -101,8 +101,8 @@ function StepSaveWords() {
       >
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-bold text-foreground">fiets</p>
-            <p className="text-sm text-muted-foreground">bicycle</p>
+            <p className="text-sm font-bold text-foreground">bike</p>
+            <p className="text-sm text-muted-foreground">велосипед</p>
           </div>
           <button
             className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all duration-500 ${
@@ -136,15 +136,15 @@ function StepFlashcards() {
             flipped ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
           }`}
         >
-          <p className="text-2xl font-bold text-foreground">fiets</p>
+          <p className="text-2xl font-bold text-foreground">bike</p>
         </div>
         <div
           className={`absolute inset-0 flex flex-col items-center justify-center gap-1 transition-all duration-500 ${
             flipped ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
           }`}
         >
-          <p className="text-xl font-bold text-foreground">bicycle</p>
-          <p className="text-xs text-muted-foreground italic">"Ik ga op de fiets."</p>
+          <p className="text-xl font-bold text-foreground">велосипед</p>
+          <p className="text-xs text-muted-foreground italic">"I go to work by bike."</p>
         </div>
       </div>
 
@@ -248,7 +248,7 @@ function StepCoach() {
 const STEPS = [
   {
     title: 'Welcome to English Flow',
-    body: "You're about to learn Dutch the way linguists recommend — lots of reading first, vocabulary second, and real practice third.",
+    body: "You're about to learn English the way linguists recommend — lots of reading first, vocabulary second, and real practice third.",
     Visual: StepWelcome,
   },
   {
@@ -268,7 +268,7 @@ const STEPS = [
   },
   {
     title: 'Practice with real tasks',
-    body: "The Tasks tab makes you produce Dutch, not just recognise it. Translate sentences and hold Dutch conversations with an AI partner.",
+    body: "The Tasks tab makes you produce English, not just recognise it. Translate texts and hold English conversations with an AI partner.",
     Visual: StepTasks,
   },
   {

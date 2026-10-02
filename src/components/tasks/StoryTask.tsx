@@ -20,32 +20,31 @@ interface StoryResponse {
   words_used: string[];
 }
 
-const SYSTEM_PROMPT = `You are a Dutch language story generator for a beginner language learning app. Your job is to generate short, pedagogically sound Dutch stories based on a list of vocabulary words provided by the user.
+const SYSTEM_PROMPT = `You are a British English story generator for a beginner language learning app. The learners are native Russian speakers. Your job is to generate short, pedagogically sound British English stories (British spelling) based on a list of vocabulary words provided by the user.
 You will always return a JSON object. Nothing else — no preamble, no explanation, no markdown fences.
 
 Input you will receive:
-words: an array of Dutch vocabulary words the learner has saved
+words: an array of English vocabulary words the learner has saved
 level: the learner's CEFR level (A1, A2, or B1)
 theme: optional story theme (e.g. "daily life", "adventure", "mystery", or "any")
-mode: either "read" (Dutch story only) or "translate" (Dutch + aligned English sentences)
+mode: either "read" (English story only) or "translate" (English + aligned Russian sentences)
 
 Story writing rules — follow these strictly:
-- The story must be 120–180 words long in Dutch.
+- The story must be 120–180 words long.
 - Every word in the words array must appear in the story at least once.
 - Introduce at most 2–3 words NOT in the words array. Mark them as new words.
 - Sentence length: A1 = 4–7 words, A2 = 6–12 words, B1 = up to 16 words.
-- Grammar: A1 = present tense only, simple SVO, basic conjunctions (en, maar, want). A2 = present + simple past (was, had, ging), basic subordinate clauses. B1 = present, past, future (gaan + infinitive), relative clauses allowed.
-- Do NOT use subjunctive, passive voice, or complex modal constructions at A1/A2.
-- Dutch word order must be correct: verb-second (V2) in main clauses, verb-final in subordinate clauses.
+- Grammar: A1 = present simple and present continuous only, simple SVO, basic conjunctions (and, but, because). A2 = present + past simple (was, had, went), basic subordinate clauses. B1 = present, past, future (going to / will), present perfect, relative clauses allowed.
+- Do NOT use passive voice, conditionals, or complex modal constructions at A1/A2.
 - The story must feel like a real short narrative with a beginning, middle, and small resolution.
-- Give the story a short Dutch title (3–5 words).
+- Give the story a short English title (3–5 words).
 
 Return this exact JSON shape:
 {
-  "title": "string (3–5 Dutch words)",
-  "dutch_sentences": ["sentence 1", "sentence 2", ...],
-  "english_sentences": ["translation 1", "translation 2", ...],
-  "new_words": [{"dutch": "word", "english": "translation"}, ...],
+  "title": "string (3–5 English words)",
+  "dutch_sentences": ["English sentence 1", "English sentence 2", ...],
+  "english_sentences": ["Russian translation 1", "Russian translation 2", ...],
+  "new_words": [{"dutch": "English word", "english": "Russian translation"}, ...],
   "words_used": ["word1", "word2", ...]
 }
 
@@ -214,7 +213,7 @@ export function StoryTask({ onBack }: { onBack: () => void }) {
                       : 'border-border bg-card text-muted-foreground hover:border-primary/50'
                   }`}
                 >
-                  <BookOpen className="h-3.5 w-3.5" /> Dutch only
+                  <BookOpen className="h-3.5 w-3.5" /> English only
                 </button>
                 <button
                   onClick={() => setMode('translate')}
@@ -224,7 +223,7 @@ export function StoryTask({ onBack }: { onBack: () => void }) {
                       : 'border-border bg-card text-muted-foreground hover:border-primary/50'
                   }`}
                 >
-                  <Languages className="h-3.5 w-3.5" /> + English
+                  <Languages className="h-3.5 w-3.5" /> + Russian
                 </button>
               </div>
             </div>

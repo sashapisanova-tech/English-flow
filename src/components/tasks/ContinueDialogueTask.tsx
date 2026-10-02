@@ -20,18 +20,15 @@ async function fetchWordInfo(dutch: string): Promise<{ translation: string; arti
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 40,
-        system: 'You are a Dutch dictionary. Reply with JSON only, no markdown: {"translation":"<1-4 word English translation>","article":"de" or "het" or null}. Use null for article if the word is not a noun.',
-        messages: [{ role: 'user', content: `Dutch word: "${dutch}"` }],
+        system: 'You are an English–Russian dictionary. Reply with JSON only, no markdown: {"translation":"<1-4 word Russian translation>"}.',
+        messages: [{ role: 'user', content: `English word: "${dutch}"` }],
       }),
     });
     if (!res.ok) return { translation: '' };
     const data = await res.json() as { content: { text: string }[] };
     const raw = data.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
-    const parsed = JSON.parse(raw) as { translation: string; article?: string | null };
-    return {
-      translation: parsed.translation || '',
-      article: parsed.article === 'de' ? 'de' : parsed.article === 'het' ? 'het' : undefined,
-    };
+    const parsed = JSON.parse(raw) as { translation: string };
+    return { translation: parsed.translation || '' };
   } catch { return { translation: '' }; }
 }
 
@@ -42,7 +39,7 @@ async function generateExample(dutch: string): Promise<string> {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 80,
-        system: 'You are a Dutch language teacher. Generate ONE short, natural Dutch A1–A2 sentence using the given word. Return ONLY the Dutch sentence — no translation, no explanation.',
+        system: 'You are a British English teacher. Generate ONE short, natural British English A1–A2 sentence using the given word. Return ONLY the English sentence — no translation, no explanation.',
         messages: [{ role: 'user', content: `Word: ${dutch}` }],
       }),
     });
@@ -56,25 +53,25 @@ async function generateExample(dutch: string): Promise<string> {
 
 const LEVEL_TOPICS: Record<Level, { dutch: string; english: string }[]> = {
   A1: [
-    { dutch: 'Bij de bakker',        english: 'At the bakery' },
-    { dutch: 'Op straat vragen',     english: 'Asking on the street' },
-    { dutch: 'In de supermarkt',     english: 'At the supermarket' },
-    { dutch: 'Jezelf voorstellen',   english: 'Introducing yourself' },
-    { dutch: 'Het weer',             english: 'The weather' },
+    { dutch: 'At the bakery',        english: 'В пекарне' },
+    { dutch: 'Asking for directions', english: 'Как пройти?' },
+    { dutch: 'At the supermarket',   english: 'В супермаркете' },
+    { dutch: 'Introducing yourself', english: 'Знакомство' },
+    { dutch: 'The weather',          english: 'Погода' },
   ],
   A2: [
-    { dutch: 'In het café bestellen', english: 'Ordering at a café' },
-    { dutch: 'Met de tram',           english: 'Taking the tram' },
-    { dutch: 'Bij de dokter',         english: 'At the doctor' },
-    { dutch: 'Een afspraak maken',    english: 'Making an appointment' },
-    { dutch: 'Op het werk',           english: 'At work' },
+    { dutch: 'Ordering at a café',    english: 'Заказ в кафе' },
+    { dutch: 'Taking the bus',        english: 'Поездка на автобусе' },
+    { dutch: "At the doctor's",       english: 'У врача' },
+    { dutch: 'Making an appointment', english: 'Запись на приём' },
+    { dutch: 'At work',               english: 'На работе' },
   ],
   B1: [
-    { dutch: 'Een discussie op het werk', english: 'A work discussion' },
-    { dutch: 'Nieuws bespreken',          english: 'Discussing the news' },
-    { dutch: 'Een klacht indienen',       english: 'Filing a complaint' },
-    { dutch: 'Plannen voor het weekend',  english: 'Weekend plans' },
-    { dutch: 'Een mening verdedigen',     english: 'Defending an opinion' },
+    { dutch: 'A discussion at work',  english: 'Обсуждение на работе' },
+    { dutch: 'Discussing the news',   english: 'Обсуждаем новости' },
+    { dutch: 'Making a complaint',    english: 'Жалоба' },
+    { dutch: 'Plans for the weekend', english: 'Планы на выходные' },
+    { dutch: 'Defending an opinion',  english: 'Отстаиваем мнение' },
   ],
 };
 
@@ -111,12 +108,12 @@ function makeSystemPrompt(level: Level, topic: string): string {
       ? 'Use simple present tense, common vocabulary, short sentences.'
       : 'May use past tense, subordinate clauses.';
 
-  return `You are a friendly Dutch conversation partner. Hold a natural, encouraging conversation in Dutch with a learner. Keep messages short (1–3 sentences). Stay on the given topic. Do NOT correct grammar mid-conversation — respond naturally. After exactly 5 learner messages, end the conversation warmly and write [END_CONVERSATION] on a new line.
+  return `You are a friendly British English conversation partner. Hold a natural, encouraging conversation in British English with a learner whose native language is Russian. Keep messages short (1–3 sentences). Stay on the given topic. Do NOT correct grammar mid-conversation — respond naturally. After exactly 5 learner messages, end the conversation warmly and write [END_CONVERSATION] on a new line.
 ${levelGuide}
-Never switch to English. If learner writes English: respond 'Probeer het in het Nederlands!'
+Never switch to Russian. If the learner writes in Russian: respond 'Try to say it in English!'
 Topic: ${topic}
 
-Return each response as JSON: {"dutch":"...","english":"..."}`;
+Return each response as JSON: {"dutch":"<your message in English>","english":"<Russian translation of your message>"}`;
 }
 
 // ─── API helpers ──────────────────────────────────────────────────────────────
@@ -125,7 +122,7 @@ async function getOpeningMessage(level: Level, topic: string): Promise<AiRespons
 
   const res = await claudeFetch({
     method: 'POST',
-    body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 256, system: makeSystemPrompt(level, topic), messages: [{ role: 'user', content: 'Start the conversation with a Dutch greeting related to the topic.' }] }),
+    body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 256, system: makeSystemPrompt(level, topic), messages: [{ role: 'user', content: 'Start the conversation with an English greeting related to the topic.' }] }),
   });
   if (!res.ok) throw new Error(`API error ${res.status}`);
   const data = await res.json() as { content: { text: string }[] };
@@ -160,22 +157,22 @@ async function sendTurn(level: Level, topic: string, history: Message[], userTex
 async function getGrammarReview(level: Level, topic: string, messages: Message[], pastErrorTypes: string[]): Promise<GrammarReview> {
 
   const transcript = messages.map(m => m.role === 'user' ? `Learner: ${m.text}` : `AI: ${m.dutch}`).join('\n');
-  const system = `You are a Dutch language tutor reviewing a learner's conversation. Return JSON only, no markdown:
+  const system = `You are a British English tutor reviewing a conversation with a learner whose native language is Russian. Return JSON only, no markdown:
 {
-  "overallImpression": "2-3 sentences in English, warm and specific",
-  "strongPoints": ["English", "English"],
+  "overallImpression": "2-3 sentences in simple Russian, warm and specific",
+  "strongPoints": ["in Russian", "in Russian"],
   "patternErrors": [
     {
-      "type": "error type in English",
-      "typeDutch": "hetzelfde in het Nederlands",
-      "example": "learner's Dutch sentence with error",
-      "correction": "corrected Dutch sentence",
-      "reason": "brief explanation in English",
-      "reasonDutch": "korte uitleg in het Nederlands"
+      "type": "error type in Russian",
+      "typeDutch": "the same error type in simple English",
+      "example": "learner's English sentence with error",
+      "correction": "corrected British English sentence",
+      "reason": "brief explanation in simple Russian",
+      "reasonDutch": "the same short explanation in simple English"
     }
   ],
-  "oneThingToFocus": "one actionable tip in English",
-  "oneThingToFocusDutch": "hetzelfde in het Nederlands"
+  "oneThingToFocus": "one actionable tip in simple Russian",
+  "oneThingToFocusDutch": "the same tip in simple English"
 }
 patternErrors = only errors appearing more than once OR one significant structural error, max 3. Tone: warm, specific, forward-looking.`;
 
@@ -251,17 +248,12 @@ function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveW
         </div>
 
         <div className="space-y-2">
-          {/* Dutch word with article badge */}
+          {/* English word */}
           <div className="flex gap-2 items-center">
-            {article && (
-              <span className={`shrink-0 px-2.5 py-2 rounded-xl text-xs font-bold border ${article === 'de' ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-pink-50 border-pink-200 text-pink-700'}`}>
-                {article}
-              </span>
-            )}
             <input
               value={dutch}
               onChange={e => { setDutch(e.target.value); setArticle(undefined); setExample(''); lastFetchedRef.current = ''; }}
-              placeholder="Dutch word or phrase…"
+              placeholder="English word or phrase…"
               autoFocus
               autoComplete="off"
               className="flex-1 rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -273,7 +265,7 @@ function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveW
           <input
             value={english}
             onChange={e => setEnglish(e.target.value)}
-            placeholder={fetching ? 'Fetching translation…' : 'Translation (optional)'}
+            placeholder={fetching ? 'Fetching translation…' : 'Russian translation (optional)'}
             autoComplete="off"
             className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
@@ -498,7 +490,7 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
         </button>
         <div>
           <h2 className="font-heading text-xl font-bold text-foreground">Chat with AI</h2>
-          <p className="text-sm text-muted-foreground mt-0.5">Hold a short Dutch conversation. Grammar review after 5 messages.</p>
+          <p className="text-sm text-muted-foreground mt-0.5">Hold a short English conversation. Grammar review after 5 messages.</p>
         </div>
         <Card className="p-4">
           <TaskFilters level={level} theme="Dagelijks leven" onLevelChange={setLevel} onThemeChange={() => {}} hideTheme />
@@ -709,7 +701,7 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
             value={userInput}
             onChange={e => setUserInput(e.target.value)}
             onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); } }}
-            placeholder="Typ je antwoord in het Nederlands…"
+            placeholder="Type your answer in English…"
             disabled={loading}
             autoComplete="new-password"
             autoCorrect="off"

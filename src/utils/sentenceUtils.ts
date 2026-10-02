@@ -2,7 +2,7 @@ import { claudeFetch } from '@/lib/ai';
 // De-duplicate in-flight AI requests for the same word
 const pendingGenerations = new Set<string>();
 
-/** Find the sentence in a Dutch text that contains the given word. */
+/** Find the sentence in a text that contains the given word. */
 export function extractSentence(content: string, word: string): string | null {
   const sentences = content.match(/[^.!?]+[.!?]*/g) ?? [];
   const wordLower = word.toLowerCase();
@@ -11,7 +11,7 @@ export function extractSentence(content: string, word: string): string | null {
 }
 
 /**
- * Ask Claude Haiku to generate a short Dutch example sentence for a word.
+ * Ask Claude Haiku to generate a short English example sentence for a word.
  * Returns null silently on any error.
  * Non-blocking: callers should fire-and-forget with .catch(() => {}).
  */
@@ -25,10 +25,10 @@ export async function generateExampleSentence(dutch: string, english: string): P
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 80,
-        system: 'You are an English language teacher. Write one short, natural English sentence (max 15 words) that clearly uses the given word in context. Reply with the sentence only — no quotes, no explanation.',
+        system: 'You are a British English teacher. Write one short, natural sentence in British English (British spelling) (max 15 words) that clearly uses the given word in context. Reply with the sentence only — no quotes, no explanation.',
         messages: [{
           role: 'user',
-          content: `English word: "${dutch}" (Translation: "${english}"). Write one example sentence in English.`,
+          content: `English word: "${dutch}" (Russian translation: "${english}"). Write one example sentence in English.`,
         }],
       }),
     });

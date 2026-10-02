@@ -14,15 +14,15 @@ interface GenerateTextViewProps {
 }
 
 const THEMES_BY_LEVEL: Record<string, string[]> = {
-  A1: ['Dagelijkse routine', 'Eten & drinken', 'Thuis', 'Het weer', 'Winkelen', 'Vrije tijd', 'Op school', 'Familie'],
-  default: ['Werk', 'Reizen', 'Gezondheid', 'In de stad', 'Vriendschappen', 'Technologie', 'Natuur', "Hobby's"],
+  A1: ['Daily routine', 'Food & drink', 'At home', 'The weather', 'Shopping', 'Free time', 'At school', 'Family'],
+  default: ['Work', 'Travel', 'Health', 'In the city', 'Friendships', 'Technology', 'Nature', 'Hobbies'],
 };
 
 const GRAMMAR_TAGS = [
   'Present tense',
   'Past tense',
   'Modal verbs',
-  'Separable verbs',
+  'Phrasal verbs',
   'Prepositions',
   'Adjectives',
 ];
@@ -75,7 +75,7 @@ export function GenerateTextView({ level, onBack, onTextGenerated }: GenerateTex
     } else if (themeMode === 'custom') {
       // Strip anything that isn't letters, spaces, digits, or common punctuation
       // to prevent prompt injection via the custom theme field
-      effectiveTheme = customTheme.trim().replace(/[^\p{L}\p{N}\s\-'&]/gu, '').slice(0, 100) || 'Dagelijkse routine';
+      effectiveTheme = customTheme.trim().replace(/[^\p{L}\p{N}\s\-'&]/gu, '').slice(0, 100) || 'Daily routine';
     } else {
       effectiveTheme = selectedTheme;
     }
@@ -91,7 +91,7 @@ export function GenerateTextView({ level, onBack, onTextGenerated }: GenerateTex
       ? 'A1 (beginner): very simple sentences, present tense, high-frequency words only (top 500 English words), short sentences max 10 words'
       : 'A2 (elementary): simple past tense allowed, everyday vocabulary, slightly varied sentence length';
 
-    const prompt = `Write a high-quality English reading text for a ${level} language learner.
+    const prompt = `Write a high-quality British English reading text for a ${level} learner whose native language is Russian. Use British spelling and vocabulary.
 
 SPECIFICATIONS:
 - Word count: ~${wordCount} words
@@ -113,13 +113,13 @@ QUALITY REQUIREMENTS (strictly enforce):
 Return ONLY a JSON object — no markdown fences, no explanation, just the raw JSON:
 {
   "title": "English title",
-  "titleTranslation": "Translation of title in the learner's language",
+  "titleTranslation": "Translation of the title into natural Russian",
   "content": "The complete English text",
   "words": {
-    "english_word": { "english": "definition or translation", "example": "exact sentence from the text containing this word" }
+    "english_word": { "english": "Russian translation (1–4 words)", "example": "exact sentence from the text containing this word" }
   },
   "comprehensionQuestions": [
-    { "question": "Question about the text?", "options": ["Option A", "Option B", "Option C", "Option D"], "correctIndex": 0 }
+    { "question": "Question about the text in simple English?", "options": ["Option A", "Option B", "Option C", "Option D"], "correctIndex": 0 }
   ]
 }
 
@@ -136,7 +136,7 @@ Return ONLY a JSON object — no markdown fences, no explanation, just the raw J
           model: 'claude-sonnet-4-5',
           max_tokens: 2000,
           system:
-            'You are an expert English language teacher and native English writer. You create pedagogically sound, grammatically perfect reading texts for language learners. You always verify English grammar and word choice before returning. You respond with valid JSON only — no markdown fences, no explanation, just the raw JSON object.',
+            'You are an expert British English teacher and native British English writer. You create pedagogically sound, grammatically perfect reading texts for language learners. You always verify English grammar and word choice before returning. You respond with valid JSON only — no markdown fences, no explanation, just the raw JSON object.',
           messages: [{ role: 'user', content: prompt }],
         }),
       });

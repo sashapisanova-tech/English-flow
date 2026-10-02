@@ -18,18 +18,15 @@ async function fetchWordInfo(dutch: string): Promise<WordInfo> {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 40,
-        system: 'You are an English dictionary. Reply with JSON only, no markdown: {"translation":"<1-4 word simple definition or translation>","article":null}.',
+        system: 'You are an English–Russian dictionary. Reply with JSON only, no markdown: {"translation":"<1-4 word Russian translation>"}.',
         messages: [{ role: 'user', content: `English word: "${dutch}"` }],
       }),
     });
     if (!res.ok) return { translation: '' };
     const data = await res.json() as { content: { text: string }[] };
     const raw = data.content[0].text.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
-    const parsed = JSON.parse(raw) as { translation: string; article?: string | null };
-    return {
-      translation: parsed.translation || '',
-      article: parsed.article === 'de' ? 'de' : parsed.article === 'het' ? 'het' : undefined,
-    };
+    const parsed = JSON.parse(raw) as { translation: string };
+    return { translation: parsed.translation || '' };
   } catch { return { translation: '' }; }
 }
 
@@ -40,7 +37,7 @@ async function generateExample(dutch: string): Promise<string> {
       body: JSON.stringify({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 80,
-        system: 'You are an English language teacher. Generate ONE short, natural English A1–A2 sentence using the given word. Return ONLY the English sentence — no translation, no explanation.',
+        system: 'You are an English language teacher. Generate ONE short, natural British English A1–A2 sentence using the given word. Return ONLY the English sentence — no translation, no explanation.',
         messages: [{ role: 'user', content: `Word: ${dutch}` }],
       }),
     });
@@ -96,7 +93,7 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
   function handleAdd() {
     const d = dutch.trim();
     const e = english.trim();
-    if (!d || !e) { setAddError('Enter both Dutch and English.'); return; }
+    if (!d || !e) { setAddError('Enter both the English word and the Russian translation.'); return; }
     if (set.words.some(w => w.dutch.toLowerCase() === d.toLowerCase())) {
       setAddError('Word already in this set.'); return;
     }
@@ -154,29 +151,23 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">English word</label>
             <div className="flex gap-2">
-              {/* Article badge */}
-              {article && (
-                <span className={`shrink-0 self-center px-2.5 py-1.5 rounded-lg text-xs font-bold border ${
-                  article === 'de' ? 'bg-blue-50 border-blue-200 text-blue-700' : 'bg-pink-50 border-pink-200 text-pink-700'
-                }`}>{article}</span>
-              )}
               <Input
                 value={dutch}
                 onChange={e => { setDutch(e.target.value); setArticle(undefined); }}
                 onBlur={handleDutchBlur}
-                placeholder="e.g. fiets"
+                placeholder="e.g. bicycle"
                 className="text-sm"
               />
             </div>
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1 block">
-              English {fetching && <Loader2 className="h-3 w-3 animate-spin" />}
+              Russian {fetching && <Loader2 className="h-3 w-3 animate-spin" />}
             </label>
             <Input
               value={english}
               onChange={e => setEnglish(e.target.value)}
-              placeholder="e.g. bicycle"
+              placeholder="e.g. велосипед"
               className="text-sm"
             />
           </div>
@@ -229,19 +220,14 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
                 <div className="space-y-2">
                   <div className="grid grid-cols-2 gap-2">
                     <div>
-                      <label className="text-[10px] text-muted-foreground mb-0.5 block">Dutch</label>
+                      <label className="text-[10px] text-muted-foreground mb-0.5 block">English</label>
                       <div className="flex gap-1.5">
-                        {editArticle && (
-                          <span className={`shrink-0 self-center px-1.5 py-1 rounded text-[10px] font-bold ${
-                            editArticle === 'de' ? 'bg-blue-50 text-blue-700' : 'bg-pink-50 text-pink-700'
-                          }`}>{editArticle}</span>
-                        )}
                         <input value={editDutch} onChange={e => setEditDutch(e.target.value)}
                           className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
                       </div>
                     </div>
                     <div>
-                      <label className="text-[10px] text-muted-foreground mb-0.5 block">English</label>
+                      <label className="text-[10px] text-muted-foreground mb-0.5 block">Russian</label>
                       <input value={editEnglish} onChange={e => setEditEnglish(e.target.value)}
                         className="w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30" />
                     </div>
@@ -272,11 +258,6 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
                 <div className="flex items-start gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      {word.article && (
-                        <span className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                          word.article === 'de' ? 'bg-blue-50 text-blue-700' : 'bg-pink-50 text-pink-700'
-                        }`}>{word.article}</span>
-                      )}
                       <span className="font-semibold text-sm text-foreground">{word.dutch}</span>
                       <span className="text-muted-foreground text-xs">·</span>
                       <span className="text-sm text-muted-foreground">{word.english}</span>

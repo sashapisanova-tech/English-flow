@@ -15,7 +15,7 @@ interface GapItem {
   answer: string;       // correct answer, lowercase
   after: string;
   hint: string;         // empty = no hint shown
-  explanation: string;  // "werkt — hij is third person singular, so werk + t"
+  explanation: string;  // "works — he: 3rd person singular, so work + s"
   gapType: 'verb' | 'article' | 'preposition' | 'particle' | 'noun';
 }
 
@@ -43,35 +43,35 @@ async function generateGaps(
 
   const levelGuide = level === 'A1'
     ? `A1 rules:
-- ONLY target: present-tense verb conjugations and very common prepositions (op, naar, bij, in, met, van).
-- Hint format for verbs: "infinitive / subject pronoun" — e.g. "werken / hij".
-- Hint for prepositions: English meaning — e.g. "to / towards".
+- ONLY target: present-tense verb forms (am/is/are, he/she/it + -s) and very common prepositions (in, on, at, to, with, from).
+- Hint format for verbs: "base form / subject" — e.g. "work / he".
+- Hint for prepositions: Russian meaning — e.g. "в / на".
 - Do NOT target articles at A1.`
     : `A2 rules:
-- Target (in priority order): verb conjugations, articles (de/het), prepositions, separable verb particles, subordinate clause final verb position.
-- Hint for verbs: "infinitive / subject pronoun".
+- Target (in priority order): verb forms (present and past simple), articles (a/an/the), prepositions, phrasal verb particles, auxiliaries (do/does/did, have/has).
+- Hint for verbs: "base form / subject" — e.g. "go / she (past)".
 - Hint for articles: "" (empty — learner must recall with no hint).
-- Hint for prepositions: English meaning.
-- Hint for particles/word-order: short English description — e.g. "separable particle" or "verb at end".`;
+- Hint for prepositions: Russian meaning.
+- Hint for particles: short Russian description — e.g. "частица фразового глагола".`;
 
-  const system = `You are a Dutch grammar teacher building gap-fill exercises.
+  const system = `You are a British English grammar teacher building gap-fill exercises for native Russian speakers.
 
 ${levelGuide}
 
 Gap selection priority:
-1. Conjugated finite verb (highest priority)
-2. Article (de / het) — A2 only
+1. Verb form (highest priority)
+2. Article (a / an / the) — A2 only
 3. Preposition
-4. Separable verb prefix/particle
+4. Phrasal verb particle
 5. Noun — ONLY if it appears in the weak-word list: [${weakWordList}]
 
 Rules:
 - Gap EXACTLY one word per sentence.
 - Never gap a proper noun, name, or punctuation.
-- Explanation format: "correct_word — reason" (max 12 words). Examples:
-  "werkt — hij is third person singular, so werk + t"
-  "het — muziek compound nouns often take het"
-  "op — use op for days and fixed locations"
+- Explanation format: "correct_word — reason in simple Russian" (max 12 words). Examples:
+  "works — he: в 3-м лице ед. числа добавляем -s"
+  "the — предмет уже знаком, поэтому the"
+  "at — at используем с точным временем: at 7 o'clock"
 - If no suitable grammar target exists in a sentence, skip it.
 - Return exactly 6 items if possible (fewer if not enough good sentences).
 
