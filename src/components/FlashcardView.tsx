@@ -7,6 +7,7 @@ import { useLearning } from '@/context/LearningContext';
 import { flashcardSets } from '@/data/flashcardSets';
 import { FlashcardSet, FlashcardSetWord, DutchWord } from '@/types/dutch';
 import { useCustomSets } from '@/hooks/useCustomSets';
+import { getSetIcon } from '@/lib/setIcons';
 import type { CustomSet } from '@/hooks/useCustomSets';
 import { CustomSetEditor, CreateSetModal } from '@/components/CustomSetEditor';
 import { fsrsPreviewInterval, FSRSCard, FSRSRating } from '@/utils/fsrs';
@@ -324,9 +325,10 @@ export function FlashcardView() {
     const setRow = (set: FlashcardSet) => {
       const learned = learnedIn(set.words);
       const total = set.words.length;
+      const SetIcon = getSetIcon(set);
       return (
         <button key={set.id} type="button" onClick={() => startSet(set)} className={`${rowClass} w-full text-left`}>
-          <div className={`${iconTile} text-[19px] leading-none`} aria-hidden>{set.emoji}</div>
+          <div className={iconTile} aria-hidden><SetIcon className="h-[19px] w-[19px]" /></div>
           <div className="flex min-w-0 flex-1 flex-col gap-px">
             <span className="truncate text-[15px] font-semibold text-foreground">{set.title}</span>
             <span className="text-xs text-muted-foreground">{total} word{total !== 1 ? 's' : ''}</span>

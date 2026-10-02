@@ -216,6 +216,9 @@ function streakMessage(days: number): string {
   return 'Consistent learner — impressive!';
 }
 
+// Cards on Home sit partly over the London backdrop: slightly translucent + blur
+const cardSurface = 'rounded-xl border border-border bg-card/90 backdrop-blur-[4px]';
+
 const eyebrow = 'text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground';
 
 function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOpenText, onGoToFlashcards }: HomeScreenProps) {
@@ -262,7 +265,9 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
   }, [texts]);
 
   return (
-    <div className="animate-fade-in flex flex-col gap-4">
+    <div className="relative -mx-5 -mt-4 px-5 pt-4">
+    <LondonBackdrop />
+    <div className="animate-fade-in relative flex flex-col gap-4">
       {/* Wordmark + streak pill */}
       <div className="flex items-center justify-between">
         <span className="flex items-center gap-2 font-heading text-xl font-semibold tracking-[-0.01em] text-foreground">
@@ -281,17 +286,17 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
         </div>
       </div>
 
+      {/* Room for the London backdrop */}
+      <div className="h-[150px] shrink-0" aria-hidden="true" />
+
       {/* Date + greeting */}
       <div className="flex flex-col gap-0.5">
         <span className="text-[13px] text-muted-foreground">{dateLabel}</span>
         <h1 className="font-heading text-[28px] font-semibold leading-tight tracking-[-0.015em] text-foreground">{greeting}</h1>
       </div>
 
-      {/* Today's goal, with the London skyline */}
-      <div className="relative h-[196px] shrink-0 overflow-hidden rounded-xl border border-border bg-card">
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[84px]" aria-hidden="true">
-          <LondonSkyline />
-        </div>
+      {/* Today's goal */}
+      <div className={`relative shrink-0 overflow-hidden ${cardSurface}`}>
         <div className="relative flex max-w-[190px] flex-col gap-1.5 px-[18px] py-4">
           <span className={eyebrow}>Today's goal</span>
           <span className="font-heading text-[22px] font-semibold leading-tight text-foreground">
@@ -309,7 +314,7 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
       </div>
 
       {/* Streak week */}
-      <div className="flex flex-col gap-3 rounded-xl border border-border bg-card px-[18px] py-3.5">
+      <div className={`flex flex-col gap-3 px-[18px] py-3.5 ${cardSurface}`}>
         <div className="flex items-baseline justify-between gap-2">
           <span className="font-heading text-[17px] font-semibold text-foreground">
             {streak.currentStreak}-day streak
@@ -347,7 +352,7 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
 
       {/* Continue reading */}
       {reading && (
-        <div className="flex flex-col gap-2.5 rounded-xl border border-border bg-card px-[18px] py-4">
+        <div className={`flex flex-col gap-2.5 px-[18px] py-4 ${cardSurface}`}>
           <div className="flex items-center justify-between gap-2">
             <span className={eyebrow}>{reading.label}</span>
             <span className="rounded-full bg-highlight-soft px-[9px] py-[3px] text-xs font-semibold text-highlight-ink">
@@ -374,45 +379,66 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
         onGoToFlashcards={onGoToFlashcards}
       />
     </div>
+    </div>
   );
 }
 
 /**
- * London skyline (Flow series illustration recipe): Big Ben, Westminster and
- * the London Eye on one ground line, anchored bottom-right. Fill = primary at
- * 10% over the card, outline = foreground at 38%, one solid red bus.
+ * London header backdrop (Flow series "Union, London header"): a large
+ * skyline (London Eye, Westminster, Big Ben, a red bus) tinted from the
+ * primary colour, behind the top of the home screen, fading into the page
+ * background so the cards below float over it.
  */
-function LondonSkyline() {
-  const fill = 'color-mix(in oklab, hsl(var(--primary)) 10%, hsl(var(--card)))';
-  const line = 'hsl(var(--foreground) / 0.38)';
+function LondonBackdrop() {
+  const tint = (pct: number) => `color-mix(in oklab, hsl(var(--primary)) ${pct}%, hsl(var(--background)))`;
+  const fill = tint(26);
+  const line = tint(45);
+  const bg = 'hsl(var(--background))';
   return (
-    <svg viewBox="0 0 360 120" width="100%" height="84" preserveAspectRatio="xMaxYMax meet" className="block">
-      <g fill={fill} stroke={line} strokeWidth={1.4} strokeLinejoin="round">
-        <path d="M300 104V44h-4V26h4V16l10-14 10 14v10h4v18h-4v60" />
-        <path d="M200 104V70h6v-8h6v8h16v-8h6v8h16v-8h6v8h14v-8h6v8h24v34" />
-        <path d="M320 104V74h10v-8h6v8h18v30" />
-      </g>
-      <circle cx="310" cy="35" r="6" fill="hsl(var(--card))" stroke={line} strokeWidth={1.4} />
-      <path d="M310 35v-3.5M310 35l2.5 1.5" stroke={line} strokeWidth={1.2} strokeLinecap="round" />
-      <g fill={line}>
-        <rect x="216" y="80" width="5" height="10" rx="1" />
-        <rect x="232" y="80" width="5" height="10" rx="1" />
-        <rect x="248" y="80" width="5" height="10" rx="1" />
-        <rect x="264" y="80" width="5" height="10" rx="1" />
-        <rect x="280" y="80" width="5" height="10" rx="1" />
-        <rect x="306" y="54" width="8" height="10" rx="1" />
-        <rect x="306" y="72" width="8" height="10" rx="1" />
-      </g>
-      <circle cx="146" cy="58" r="40" fill="none" stroke={line} strokeWidth={1.4} />
-      <circle cx="146" cy="58" r="4" fill={line} />
-      <path d="M146 18v80M106 58h80M118 30l56 56M174 30l-56 56" stroke={line} strokeWidth={0.9} />
-      <path d="M146 58l-14 46M146 58l14 46" stroke={line} strokeWidth={1.4} />
-      <path d="M100 104h260" stroke={line} strokeWidth={1.4} />
-      <rect x="226" y="84" width="40" height="20" rx="3" fill="hsl(var(--highlight))" />
-      <path d="M226 93h40" stroke="hsl(var(--card))" strokeWidth={1.4} />
-      <circle cx="235" cy="105" r="3" fill="hsl(var(--foreground))" />
-      <circle cx="258" cy="105" r="3" fill="hsl(var(--foreground))" />
-      <path d="M120 114h40M190 117h90M300 112h50" stroke={line} strokeWidth={1.4} strokeLinecap="round" />
-    </svg>
+    <div
+      className="pointer-events-none absolute inset-x-0 top-0 h-[400px] overflow-hidden sm:[mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]"
+      aria-hidden="true"
+    >
+      <svg viewBox="0 0 390 300" width="100%" height="400" preserveAspectRatio="xMidYMax slice" className="block opacity-75">
+        <rect width="390" height="300" fill={tint(16)} fillOpacity={0.5} />
+        <g fill={fill} stroke={line} strokeWidth={1.2} strokeLinejoin="round">
+          <path d="M300 270V96h-10V60h10V40l22-34 22 34v20h10v36h-10v174z" />
+          <path d="M150 270v-70h12v-16h10v16h22v-16h10v16h22v-16h10v16h22v-16h10v16h30v70z" />
+          <path d="M354 270v-62h18v-14h10v14h30v62z" />
+          <path d="M-10 270v-50h20v-14h12v14h22v50z" />
+        </g>
+        <circle cx="322" cy="78" r="12" fill={bg} fillOpacity={0.8} stroke={line} strokeWidth={1.2} />
+        <path d="M322 78v-7M322 78l5 3" stroke={line} strokeWidth={1.2} strokeLinecap="round" />
+        <g fill={line} fillOpacity={0.55}>
+          <rect x="172" y="212" width="7" height="14" rx="1" />
+          <rect x="196" y="212" width="7" height="14" rx="1" />
+          <rect x="220" y="212" width="7" height="14" rx="1" />
+          <rect x="244" y="212" width="7" height="14" rx="1" />
+          <rect x="268" y="212" width="7" height="14" rx="1" />
+          <rect x="316" y="110" width="12" height="16" rx="1" />
+          <rect x="316" y="140" width="12" height="16" rx="1" />
+          <rect x="316" y="170" width="12" height="16" rx="1" />
+        </g>
+        <circle cx="92" cy="170" r="82" fill="none" stroke={line} strokeWidth={1.4} />
+        <circle cx="92" cy="170" r="74" fill="none" stroke={line} strokeWidth={0.6} />
+        <path
+          d="M92 88v164M10 170h164M34 112l116 116M150 112L34 228M50 99l84 142M134 99L50 241M21 128l142 84M163 128L21 212"
+          stroke={line}
+          strokeWidth={0.6}
+        />
+        <circle cx="92" cy="170" r="6" fill={line} />
+        <path d="M92 170l-28 100M92 170l28 100" stroke={line} strokeWidth={1.6} />
+        <path d="M-10 270h410" stroke={line} strokeWidth={1.4} />
+        <rect x="196" y="236" width="62" height="32" rx="4" fill="hsl(var(--highlight))" fillOpacity={0.45} />
+        <path d="M196 250h62" stroke={bg} strokeOpacity={0.7} strokeWidth={1.4} />
+      </svg>
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(to bottom, hsl(var(--background) / 0.55) 0%, transparent 22%, transparent 45%, hsl(var(--background) / 0.8) 72%, hsl(var(--background)) 96%)',
+        }}
+      />
+    </div>
   );
 }
