@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, BookmarkPlus, X, ChevronDown, ChevronRight, Loader2, Pencil } from 'lucide-react';
@@ -9,6 +9,7 @@ import { Level, SetupHeader, SectionLabel, LevelSegmented, TopicChip, SetupFoote
 import { savePracticeSession } from '@/lib/practiceSession';
 import { PREPARED_LEVELS, getAllPreparedSets } from '@/data/preparedSets';
 import { claudeFetch } from '@/lib/ai';
+import { XP } from '@/utils/levels';
 
 async function callClaude(system: string, user: string, maxTokens = 800): Promise<string> {
   const res = await claudeFetch({
@@ -258,7 +259,9 @@ function Skeleton({ className = '' }: { className?: string }) {
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
-  const { vocabulary, texts } = useLearning();
+  const { vocabulary, texts, addXP } = useLearning();
+  // XP once per generated text, when its translation has been checked
+  const xpAwardedForRef = useRef<object | null>(null);
   const { sets, addWordToSet, createSet } = useCustomSets();
   const { user } = useAuth();
 
@@ -340,6 +343,10 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
       const result = await checkTranslation(level, generatedText.english, userTranslation);
       setFeedback(result);
       setScreen('feedback');
+      if (xpAwardedForRef.current !== generatedText) {
+        xpAwardedForRef.current = generatedText;
+        addXP(XP.TASK_COMPLETE);
+      }
 
       // Save session for AI tutor
       if (user) {

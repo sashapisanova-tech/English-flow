@@ -10,6 +10,8 @@ const USER_DATA_KEYS = [
   'english-text-progress-v1',
   'english-daily-goals-v1',
   'english-new-cards-today-v1',
+  'english-active-time-v1',
+  'english-daily-goal-minutes-v1',
   'english-past-errors-v1',
   'english-tutor-daily-cache',
   'dutch-translate-last-hard-grammar',

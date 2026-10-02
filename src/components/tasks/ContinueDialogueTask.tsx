@@ -12,6 +12,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Level, SetupHeader, SectionLabel, LevelSegmented, SetupFooter } from './TaskFilters';
 import { savePracticeSession } from '@/lib/practiceSession';
 import { claudeFetch } from '@/lib/ai';
+import { XP } from '@/utils/levels';
 
 
 
@@ -370,7 +371,7 @@ function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveW
 type Screen = 'config' | 'chat';
 
 export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
-  const { texts, pastErrors, addPastError } = useLearning();
+  const { texts, pastErrors, addPastError, addXP } = useLearning();
   const { sets: customSets, addWordToSet, createSet } = useCustomSets();
   const { user } = useAuth();
 
@@ -455,6 +456,7 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
       const result = await getGrammarReview(level, topicToUse, messages, pastErrors.map(e => e.type));
       setReview(result);
       setShowReviewButton(false);
+      addXP(XP.TASK_COMPLETE);
       for (const pe of result.patternErrors) {
         addPastError({ type: pe.type, example: pe.example, date: new Date().toISOString() });
       }

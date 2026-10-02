@@ -2,11 +2,13 @@ import React, { createContext, useContext, useState, useCallback, useEffect, use
 import { DutchWord, WordStatus, DailyGoal, ReadingText } from '@/types/dutch';
 import { generateExampleSentence } from '@/utils/sentenceUtils';
 import { sampleTexts } from '@/data/texts';
-import { getLevelInfo } from '@/utils/levels';
+import { getLevelInfo, XP } from '@/utils/levels';
 import { fsrsReview, FSRSCard, FSRSRating } from '@/utils/fsrs';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { useStreak, StreakState } from '@/hooks/useStreak';
+import { useActiveTime } from '@/hooks/useActiveTime';
+import { goalReached } from '@/lib/activeTime';
 import { toast } from '@/components/ui/sonner';
 
 const VOCAB_STORAGE_KEY     = 'english-vocabulary-v1';
@@ -105,7 +107,12 @@ interface LearningState {
   setGoals:             (textsGoal: number, flashcardsGoal: number) => void;
   addPastError:         (error: PastError) => void;
   streak:               StreakState;
-  recordActivity:       () => void;
+  /** Active learning seconds today (visible page + recent interaction). */
+  activeSecondsToday:   number;
+  /** Active seconds per local date (YYYY-MM-DD), last ~14 days. */
+  activeSecondsByDate:  Record<string, number>;
+  dailyGoalMinutes:     number;
+  setDailyGoalMinutes:  (minutes: number) => void;
 }
 
 const LearningContext = createContext<LearningState | null>(null);
@@ -117,10 +124,18 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   const userRef = useRef(user);
   useEffect(() => { userRef.current = user; }, [user]);
 
-  const { streakState, loadStreak, recordActivity: doRecordActivity } = useStreak(user?.id ?? null);
+  const { streakState, loadStreak, recordGoalMet } = useStreak(user?.id ?? null);
 
-  const triggerActivity = useCallback(() => {
-    doRecordActivity().then(({ freezeConsumed }) => {
+  // ── Daily goal (active time) → streak ───────────────────────────────────
+  // The streak counts a day once, the moment today's active time reaches the goal.
+  const activeTime = useActiveTime(user?.id ?? null);
+  const goalMetToday = goalReached(activeTime.todaySeconds, activeTime.goalMinutes);
+
+  useEffect(() => {
+    if (!goalMetToday || streakState.lastActivityDate === activeTime.today) return;
+    recordGoalMet().then(({ recorded, freezeConsumed }) => {
+      if (!recorded) return;
+      toast('Daily goal reached — streak +1', { duration: 4000 });
       if (freezeConsumed) {
         toast('🧊 Streak saved by freeze!', {
           description: 'A freeze was automatically used to protect your streak.',
@@ -128,7 +143,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         });
       }
     });
-  }, [doRecordActivity]);
+  }, [goalMetToday, activeTime.today, activeTime.todaySeconds, streakState.lastActivityDate, recordGoalMet]);
 
   const [syncing, setSyncing] = useState(false);
 
@@ -300,7 +315,6 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         syncWord(updated);
         return { ...prev, [key]: updated };
       }
-      addXP(2);
       const newWord: DutchWord = {
         dutch: key, english,
         status: 'new', timesEncountered: 1, reviewInterval: 1,
@@ -318,7 +332,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         .then(sentence => { if (sentence) updateWordExample(key, sentence, 'ai'); })
         .catch(() => {});
     }
-  }, [addXP, syncWord, updateWordExample]);
+  }, [syncWord, updateWordExample]);
 
   const removeWord = useCallback((dutch: string) => {
     const key = dutch.toLowerCase();
@@ -428,7 +442,6 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         syncWord(updated);
         return { ...prev, [key]: updated };
       }
-      addXP(2);
       const newWord: DutchWord = {
         dutch: key, english,
         status: 'new', timesEncountered: 1, reviewInterval: 1,
@@ -437,7 +450,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
       syncWord(newWord);
       return { ...prev, [key]: newWord };
     });
-  }, [addXP, syncWord]);
+  }, [syncWord]);
 
   const [texts, setTexts] = useState<ReadingText[]>(() => {
     try {
@@ -459,6 +472,8 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   });
 
   const markTextCompleted = useCallback((textId: string) => {
+    // Called when the comprehension questions are submitted. XP only the first time.
+    const firstTime = !texts.find(t => t.id === textId)?.completed;
     setTexts(prev => {
       const updated = prev.map(t => t.id === textId ? { ...t, completed: true, lastRead: new Date() } : t);
       try {
@@ -479,14 +494,12 @@ export function LearningProvider({ children }: { children: ReactNode }) {
       return updated;
     });
     setDailyGoal(prev => ({ ...prev, textsRead: prev.textsRead + 1 }));
-    addXP(20);
-    triggerActivity();
-  }, [addXP, triggerActivity]);
+    if (firstTime) addXP(XP.READ_TEXT);
+  }, [addXP, texts]);
 
   const incrementFlashcards = useCallback(() => {
     setDailyGoal(prev => ({ ...prev, flashcardsReviewed: prev.flashcardsReviewed + 1 }));
-    triggerActivity();
-  }, [triggerActivity]);
+  }, []);
 
   /**
    * Rate a word with Again / Hard / Good / Easy using full FSRS-4.5.
@@ -503,7 +516,6 @@ export function LearningProvider({ children }: { children: ReactNode }) {
       // reviewWordSRS's upsert (dueDate=future), resetting the card to due-today.
       if (!word) {
         if (!english) return prev;
-        addXP(2);
         word = {
           dutch: key, english,
           status: 'new', timesEncountered: 1, reviewInterval: 1,
@@ -556,8 +568,9 @@ export function LearningProvider({ children }: { children: ReactNode }) {
       return { ...prev, [key]: updated };
     });
     incrementFlashcards();
-    if (rating === 'easy') addXP(10);
-    else if (rating !== 'again') addXP(5);
+    // XP only for a real review: Easy 10, Good/Hard 5, Again 0
+    if (rating === 'easy') addXP(XP.FLASHCARD_EASY);
+    else if (rating !== 'again') addXP(XP.FLASHCARD_RIGHT);
   }, [incrementFlashcards, addXP, syncWord, incrementNewCards]);
 
 
@@ -580,8 +593,8 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         result.state === 'review' && result.stability >= 21 ? 'known' : 'learning';
 
       if (correct) {
-        if (newStatus === 'known' && word.status !== 'known') addXP(10);
-        else addXP(5);
+        if (newStatus === 'known' && word.status !== 'known') addXP(XP.WORD_MASTERED);
+        else addXP(XP.FLASHCARD_RIGHT);
       }
 
       // Compute dueDate from FSRS interval so the SRS queue reads it correctly
@@ -641,7 +654,11 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     <LearningContext.Provider value={{
       vocabulary, texts, dailyGoal, xp, level, syncing, dueCount, newCardsToday,
       pastErrors, addPastError,
-      streak: streakState, recordActivity: triggerActivity,
+      streak: streakState,
+      activeSecondsToday: activeTime.todaySeconds,
+      activeSecondsByDate: activeTime.secondsByDate,
+      dailyGoalMinutes: activeTime.goalMinutes,
+      setDailyGoalMinutes: activeTime.setGoalMinutes,
       addXP, addWord, removeWord, updateWord, updateWordStatus,
       getWordsForReview, getWordsDueForReview, enrollWord, reviewWordSRS,
       markTextCompleted, incrementFlashcards, reviewWord, setGoals,

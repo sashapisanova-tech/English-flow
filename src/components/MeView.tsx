@@ -5,6 +5,8 @@ import { useLearning } from '@/context/LearningContext';
 import { ProgressView } from '@/components/ProgressView';
 import { StreakState } from '@/hooks/useStreak';
 import { getLevelInfo } from '@/utils/levels';
+import { DailyGoalPicker } from '@/components/DailyGoalPicker';
+import { localYMD } from '@/lib/activeTime';
 
 const WEEKDAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
@@ -69,6 +71,75 @@ function StreakCalendar({ streak }: { streak: StreakState }) {
   );
 }
 
+/** Minutes of active practice per day this week (Mon–Sun) with a goal line. */
+function WeekMinutesChart({ secondsByDate, goalMinutes }: { secondsByDate: Record<string, number>; goalMinutes: number }) {
+  const now = new Date();
+  const today = localYMD(now);
+  const monday = new Date(now);
+  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
+  const days = WEEKDAYS.map((letter, i) => {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    const date = localYMD(d);
+    const minutes = Math.floor((secondsByDate[date] ?? 0) / 60);
+    return {
+      letter, date, minutes,
+      label: d.toLocaleDateString('en-GB', { weekday: 'long' }),
+      isToday: date === today, isFuture: date > today,
+    };
+  });
+  const total = days.reduce((sum, d) => sum + d.minutes, 0);
+  const max = Math.max(goalMinutes * 1.25, ...days.map(d => d.minutes));
+  const goalPct = (goalMinutes / max) * 100;
+  const H = 96; // plot height, px
+
+  return (
+    <div className="flex flex-col gap-2.5 rounded-xl border border-border bg-card px-4 py-3.5">
+      <div className="flex items-baseline justify-between">
+        <h3 className="font-heading text-[17px] font-semibold">This week</h3>
+        <span className="text-[13px] text-muted-foreground">{total} min · goal {goalMinutes} min/day</span>
+      </div>
+      <div className="relative" style={{ height: H }}>
+        {/* Goal line */}
+        <div
+          className="pointer-events-none absolute inset-x-0 border-t border-dashed border-muted-foreground/60"
+          style={{ bottom: `${goalPct}%` }}
+          aria-hidden="true"
+        />
+        <div className="relative grid h-full grid-cols-7 items-end gap-1.5" role="list" aria-label="Active minutes per day this week">
+          {days.map(d => {
+            const met = d.minutes >= goalMinutes;
+            const h = d.minutes > 0 ? Math.max(4, (d.minutes / max) * H) : 0;
+            return (
+              <div
+                key={d.date}
+                role="listitem"
+                title={`${d.label}: ${d.minutes} min`}
+                aria-label={`${d.label}: ${d.minutes} minutes${met ? ', goal met' : ''}`}
+                className="flex h-full items-end justify-center"
+              >
+                <div
+                  className={`w-full max-w-[22px] rounded-t ${
+                    d.isToday ? 'bg-highlight' : met ? 'bg-primary' : 'bg-primary/45'
+                  }`}
+                  style={{ height: h }}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="grid grid-cols-7 gap-1.5 border-t border-track pt-1.5 text-center text-[11px] text-muted-foreground">
+        {days.map(d => (
+          <span key={d.date} className={d.isToday ? 'font-semibold text-foreground' : d.isFuture ? 'opacity-60' : ''}>
+            {d.letter}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function useDarkMode() {
   const [dark, setDark] = useState(() =>
     document.documentElement.classList.contains('dark')
@@ -94,6 +165,7 @@ const rowClass = 'flex h-[50px] w-full items-center justify-between px-4 text-le
 function SettingsPanel({ onBack }: { onBack: () => void }) {
   const { user, signOut } = useAuth();
   const { dark, set } = useDarkMode();
+  const { dailyGoalMinutes, setDailyGoalMinutes } = useLearning();
 
   const modes = [
     { key: 'light', label: 'Light', icon: Sun,  on: !dark, select: () => set(false) },
@@ -136,6 +208,14 @@ function SettingsPanel({ onBack }: { onBack: () => void }) {
       </div>
 
       <div className="flex flex-col gap-2">
+        <SectionLabel>Daily goal</SectionLabel>
+        <DailyGoalPicker value={dailyGoalMinutes} onChange={setDailyGoalMinutes} />
+        <span className="pl-1 text-[13px] text-muted-foreground">
+          Minutes of active practice a day. Reaching it keeps your streak going.
+        </span>
+      </div>
+
+      <div className="flex flex-col gap-2">
         <SectionLabel>Help</SectionLabel>
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           <button
@@ -169,7 +249,7 @@ function SettingsPanel({ onBack }: { onBack: () => void }) {
 
 export function MeView() {
   const { user } = useAuth();
-  const { streak, vocabulary, texts, xp } = useLearning();
+  const { streak, vocabulary, texts, xp, activeSecondsByDate, dailyGoalMinutes } = useLearning();
   const [view, setView] = useState<'me' | 'settings'>('me');
 
   const open = (v: 'me' | 'settings') => {
@@ -233,6 +313,8 @@ export function MeView() {
           </div>
         ))}
       </div>
+
+      <WeekMinutesChart secondsByDate={activeSecondsByDate} goalMinutes={dailyGoalMinutes} />
 
       <StreakCalendar streak={streak} />
 

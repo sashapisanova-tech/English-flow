@@ -14,6 +14,7 @@ import { VoiceSettings } from '@/components/VoiceSettings';
 import { ReadingText, Level, Module } from '@/types/dutch';
 import { ReadingOnboarding, useReadingOnboarding } from '@/components/ReadingOnboarding';
 import { TutorView } from '@/components/TutorView';
+import { DailyGoalPicker } from '@/components/DailyGoalPicker';
 
 type Tab = 'home' | 'reading' | 'flashcards' | 'progress' | 'tasks';
 type TutorLaunch = { task: 'translate' | 'dialogue'; grammarFocus?: string; level?: string } | null;
@@ -223,7 +224,8 @@ const eyebrow = 'text-xs font-semibold uppercase tracking-[0.06em] text-muted-fo
 
 function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOpenText, onGoToFlashcards }: HomeScreenProps) {
   const { user } = useAuth();
-  const { texts, dailyGoal, streak } = useLearning();
+  const { texts, dailyGoal, streak, activeSecondsToday, dailyGoalMinutes, setDailyGoalMinutes } = useLearning();
+  const [goalPickerOpen, setGoalPickerOpen] = useState(false);
 
   const now = new Date();
   const dateLabel = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
@@ -232,9 +234,11 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
   const firstName = rawName?.trim().split(/\s+/)[0];
   const greeting = `${greetingFor(now.getHours())}${firstName ? `, ${firstName}` : ''}`;
 
-  // Today's goal (texts), plus cards and words as secondary lines
-  const textsPct = dailyGoal.textsGoal > 0 ? Math.min(100, (dailyGoal.textsRead / dailyGoal.textsGoal) * 100) : 0;
-  const textsLeft = Math.max(0, dailyGoal.textsGoal - dailyGoal.textsRead);
+  // Today's goal: active minutes vs the daily time goal; cards and words as a secondary line
+  const activeMinutes = Math.floor(activeSecondsToday / 60);
+  const goalMet = activeSecondsToday >= dailyGoalMinutes * 60;
+  const goalPct = Math.min(100, (activeSecondsToday / (dailyGoalMinutes * 60)) * 100);
+  const minutesLeft = Math.max(1, Math.ceil((dailyGoalMinutes * 60 - activeSecondsToday) / 60));
 
   // This week, Monday first, from the streak's activity dates
   const todayYMD = toLocalYMD(now);
@@ -295,22 +299,38 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
         <h1 className="font-heading text-[28px] font-semibold leading-tight tracking-[-0.015em] text-foreground">{greeting}</h1>
       </div>
 
-      {/* Today's goal */}
+      {/* Today's goal — tap to change the daily goal */}
       <div className={`relative shrink-0 overflow-hidden ${cardSurface}`}>
-        <div className="relative flex max-w-[190px] flex-col gap-1.5 px-[18px] py-4">
-          <span className={eyebrow}>Today's goal</span>
-          <span className="font-heading text-[22px] font-semibold leading-tight text-foreground">
-            {dailyGoal.textsRead} of {dailyGoal.textsGoal} text{dailyGoal.textsGoal !== 1 ? 's' : ''}
-          </span>
-          <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-track">
-            <div className="h-full rounded-full bg-highlight transition-all duration-500" style={{ width: `${textsPct}%` }} />
+        <button
+          onClick={() => setGoalPickerOpen(o => !o)}
+          aria-expanded={goalPickerOpen}
+          aria-label={`Today's goal: ${activeMinutes} of ${dailyGoalMinutes} minutes. Change daily goal`}
+          className="flex w-full items-center justify-between gap-4 px-[18px] py-4 text-left"
+        >
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <span className={eyebrow}>Today's goal</span>
+            <span className="font-heading text-[22px] font-semibold leading-tight text-foreground">
+              {Math.min(activeMinutes, 999)} of {dailyGoalMinutes} min
+            </span>
+            <span className="text-[13px] leading-snug text-muted-foreground">
+              {goalMet
+                ? <span className="font-semibold text-highlight-ink">Goal reached — streak +1</span>
+                : `${minutesLeft} more min of practice today`}
+              <br />
+              {dailyGoal.flashcardsReviewed} card{dailyGoal.flashcardsReviewed !== 1 ? 's' : ''} · {wordCount} word{wordCount !== 1 ? 's' : ''} saved
+            </span>
           </div>
-          <span className="text-[13px] leading-snug text-muted-foreground">
-            {textsLeft === 0 ? 'Goal reached today' : `${textsLeft} more text${textsLeft !== 1 ? 's' : ''} today`}
-            <br />
-            {dailyGoal.flashcardsReviewed} card{dailyGoal.flashcardsReviewed !== 1 ? 's' : ''} · {wordCount} word{wordCount !== 1 ? 's' : ''} saved
-          </span>
-        </div>
+          <GoalRing pct={goalPct} done={goalMet} />
+        </button>
+        {goalPickerOpen && (
+          <div className="flex flex-col gap-2 border-t border-border px-[18px] pb-4 pt-3">
+            <span className="text-[13px] text-muted-foreground">Daily goal · active practice time</span>
+            <DailyGoalPicker
+              value={dailyGoalMinutes}
+              onChange={m => { setDailyGoalMinutes(m); setGoalPickerOpen(false); }}
+            />
+          </div>
+        )}
       </div>
 
       {/* Streak week */}
@@ -379,6 +399,28 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
         onGoToFlashcards={onGoToFlashcards}
       />
     </div>
+    </div>
+  );
+}
+
+/** Progress ring for the daily goal: track circle + highlight arc. */
+function GoalRing({ pct, done }: { pct: number; done: boolean }) {
+  const r = 26;
+  const c = 2 * Math.PI * r;
+  return (
+    <div className="relative h-16 w-16 shrink-0" aria-hidden="true">
+      <svg viewBox="0 0 64 64" className="h-16 w-16 -rotate-90">
+        <circle cx="32" cy="32" r={r} fill="none" stroke="hsl(var(--track))" strokeWidth={6} />
+        <circle
+          cx="32" cy="32" r={r} fill="none"
+          stroke="hsl(var(--highlight))" strokeWidth={6} strokeLinecap={pct > 0 ? "round" : "butt"}
+          strokeDasharray={c} strokeDashoffset={c * (1 - pct / 100)}
+          className="transition-[stroke-dashoffset] duration-500"
+        />
+      </svg>
+      <span className="absolute inset-0 grid place-items-center text-[13px] font-semibold text-foreground">
+        {done ? <Check className="h-5 w-5 text-highlight" strokeWidth={3} /> : `${Math.round(pct)}%`}
+      </span>
     </div>
   );
 }

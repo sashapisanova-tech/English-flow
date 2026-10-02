@@ -32,11 +32,12 @@ export function getXPProgress(xp: number): { current: number; needed: number; pc
   return { current, needed, pct: Math.min(100, Math.round((current / needed) * 100)) };
 }
 
-// XP rewards
+// XP rewards — only for real learning actions (never for opening screens,
+// saving words, taps or time spent)
 export const XP = {
-  READ_TEXT:       20,
-  FLASHCARD_RIGHT:  5,
-  WORD_SAVED:       2,
-  WORD_MASTERED:   10,
-  TASK_COMPLETE:   15,
+  READ_TEXT:       20, // first time a text is finished with its comprehension questions
+  FLASHCARD_RIGHT:  5, // card rated Hard or Good
+  FLASHCARD_EASY:  10, // card rated Easy
+  WORD_MASTERED:   10, // legacy reviewWord(): card becomes "known"
+  TASK_COMPLETE:   15, // translate challenge checked / dialogue grammar review received
 } as const;

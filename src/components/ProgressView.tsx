@@ -107,10 +107,10 @@ export function ProgressView() {
         </h3>
         <div className="grid grid-cols-2 gap-2">
           {[
-            { action: 'Complete a text',    xp: XP.READ_TEXT       },
-            { action: 'Correct flashcard',  xp: XP.FLASHCARD_RIGHT },
-            { action: 'Master a word',      xp: XP.WORD_MASTERED   },
-            { action: 'Save a new word',    xp: XP.WORD_SAVED      },
+            { action: 'Finish a text and its questions', xp: XP.READ_TEXT       },
+            { action: 'Review a card (Hard / Good)',     xp: XP.FLASHCARD_RIGHT },
+            { action: 'Review a card (Easy)',            xp: XP.FLASHCARD_EASY  },
+            { action: 'Complete a task',                 xp: XP.TASK_COMPLETE   },
           ].map(({ action, xp: pts }) => (
             <div key={action} className="flex flex-col gap-0.5 rounded-lg bg-track px-3 py-2.5">
               <span className="text-[13px] font-semibold text-foreground">+{pts} XP</span>

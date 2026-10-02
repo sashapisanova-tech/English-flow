@@ -1,19 +1,13 @@
 import { useState, useCallback, useRef } from 'react';
 import { supabase } from '@/lib/supabase';
+import { localYMD } from '@/lib/activeTime';
+import { applyGoalMet } from '@/lib/streakRule';
 
-/** Returns YYYY-MM-DD in the user's local timezone, optionally shifted by N days */
-function localDate(tz: string, offsetDays = 0): string {
+/** YYYY-MM-DD in the user's local timezone, optionally shifted by N days */
+function localDate(offsetDays = 0): string {
   const d = new Date();
   if (offsetDays) d.setDate(d.getDate() + offsetDays);
-  return d.toLocaleDateString('en-CA', { timeZone: tz });
-}
-
-/** Integer day gap between two YYYY-MM-DD strings (uses noon to avoid DST issues) */
-function daysBetween(from: string, to: string): number {
-  return Math.round(
-    (new Date(`${to}T12:00:00`).getTime() - new Date(`${from}T12:00:00`).getTime())
-    / 86_400_000
-  );
+  return localYMD(d);
 }
 
 export interface StreakState {
@@ -22,7 +16,7 @@ export interface StreakState {
   freezesAvailable: number;
   freezesUsedTotal: number;
   lastActivityDate: string | null;
-  activityDates:    string[]; // YYYY-MM-DD strings for heatmap
+  activityDates:    string[]; // YYYY-MM-DD days where the daily goal was met (or bridged by a freeze)
 }
 
 export const STREAK_INITIAL: StreakState = {
@@ -34,25 +28,46 @@ export const STREAK_INITIAL: StreakState = {
   activityDates:    [],
 };
 
+/**
+ * Marks a day as goal-met in activity_log. Only the goal_met column is written,
+ * so active_seconds (written by useActiveTime) is left alone. Falls back to a
+ * plain date row if the goal_met column does not exist yet.
+ */
+async function markDayGoalMet(userId: string, date: string) {
+  const { error } = await supabase.from('activity_log').upsert(
+    { user_id: userId, date, goal_met: true },
+    { onConflict: 'user_id,date' },
+  );
+  if (error) {
+    await supabase.from('activity_log').upsert({ user_id: userId, date }, { onConflict: 'user_id,date' });
+  }
+}
+
 export function useStreak(userId: string | null) {
   const [state, setState] = useState<StreakState>(STREAK_INITIAL);
-  // Prevents redundant Supabase round-trips when recordActivity fires many times per day
+  // Prevents redundant Supabase round-trips once today has been counted
   const todayLoggedRef = useRef<string | null>(null);
-  // Mutex: prevents two concurrent recordActivity calls from double-writing the streak
+  // Mutex: prevents two concurrent recordGoalMet calls from double-writing the streak
   const isWritingRef = useRef(false);
 
-  /** Load streak + 60-day activity history from Supabase on login. */
+  /** Load streak + 60-day goal history from Supabase on login. */
   const loadStreak = useCallback(async () => {
     if (!userId) return;
-    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const since = localDate(tz, -60);
+    const since = localDate(-60);
 
-    const [{ data: row }, { data: logs }] = await Promise.all([
+    const logsQuery = (cols: string) => supabase
+      .from('activity_log').select(cols).eq('user_id', userId).gte('date', since).order('date', { ascending: false });
+
+    const [{ data: row }, logsRes] = await Promise.all([
       supabase.from('user_streaks').select('*').eq('user_id', userId).maybeSingle(),
-      supabase.from('activity_log').select('date').eq('user_id', userId).gte('date', since).order('date', { ascending: false }),
+      logsQuery('date, goal_met'),
     ]);
+    // Before supabase-daily-goal.sql is run there is no goal_met column:
+    // every row then counts as an active day (the old rule).
+    let logs = logsRes.data as unknown as { date: string; goal_met?: boolean | null }[] | null;
+    if (logsRes.error) logs = ((await logsQuery('date')).data as unknown as { date: string }[] | null) ?? [];
 
-    const today = localDate(tz);
+    const today = localDate();
     if (row?.last_activity_date === today) todayLoggedRef.current = today;
 
     setState({
@@ -61,119 +76,88 @@ export function useStreak(userId: string | null) {
       freezesAvailable: row?.freezes_available  ?? 0,
       freezesUsedTotal: row?.freezes_used_total ?? 0,
       lastActivityDate: row?.last_activity_date ?? null,
-      activityDates:    (logs ?? []).map((r: { date: string }) => r.date),
+      activityDates:    (logs ?? []).filter(r => r.goal_met !== false).map(r => r.date),
     });
   }, [userId]);
 
   /**
-   * Call whenever the user completes any learning activity.
-   * Safe to call many times per day — only does real work (Supabase writes) once per day.
-   * Returns whether a streak freeze was auto-consumed.
+   * Call when today's active time reaches the daily goal.
+   * Safe to call repeatedly — the streak changes at most once per day.
    */
-  const recordActivity = useCallback(async (): Promise<{ freezeConsumed: boolean }> => {
-    if (!userId) return { freezeConsumed: false };
+  const recordGoalMet = useCallback(async (): Promise<{ recorded: boolean; freezeConsumed: boolean }> => {
+    const none = { recorded: false, freezeConsumed: false };
+    if (!userId) return none;
 
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    const today = localDate(tz);
+    const today = localDate();
 
-    // Synchronous fast-path: already logged today in this session
-    if (todayLoggedRef.current === today) return { freezeConsumed: false };
-
-    // Mutex: skip if another call is already in progress
-    if (isWritingRef.current) return { freezeConsumed: false };
+    if (todayLoggedRef.current === today) return none;
+    if (isWritingRef.current) return none;
     isWritingRef.current = true;
 
     try {
-      const { data: row } = await supabase
+      const { data: row, error: readErr } = await supabase
         .from('user_streaks')
         .select('*')
         .eq('user_id', userId)
         .maybeSingle();
+      // Don't risk resetting the streak on a failed read; we'll retry on the next tick
+      if (readErr) return none;
 
-      const last = (row?.last_activity_date as string | null) ?? null;
+      const update = applyGoalMet({
+        currentStreak:    (row?.current_streak     as number) ?? 0,
+        longestStreak:    (row?.longest_streak     as number) ?? 0,
+        freezesAvailable: (row?.freezes_available  as number) ?? 0,
+        freezesUsedTotal: (row?.freezes_used_total as number) ?? 0,
+        lastActivityDate: (row?.last_activity_date as string | null) ?? null,
+      }, today);
 
-      // Another device may have already logged today
-      if (last === today) {
+      // Another device may have already counted today
+      if (!update.changed) {
         todayLoggedRef.current = today;
-        return { freezeConsumed: false };
+        return none;
       }
 
-      let currentStreak    = (row?.current_streak     as number) ?? 0;
-      let longestStreak    = (row?.longest_streak     as number) ?? 0;
-      let freezesAvailable = (row?.freezes_available  as number) ?? 0;
-      let freezesUsedTotal = (row?.freezes_used_total as number) ?? 0;
-      let freezeConsumed   = false;
-
-      if (!last) {
-        // First ever activity
-        currentStreak = 1;
-      } else {
-        const gap = daysBetween(last, today);
-        if (gap === 1) {
-          // Consecutive day
-          currentStreak += 1;
-        } else if (gap === 2 && freezesAvailable > 0) {
-          // Exactly one missed day — bridge with a freeze
-          currentStreak += 1;
-          freezesAvailable -= 1;
-          freezesUsedTotal += 1;
-          freezeConsumed = true;
-          // Log the bridged day so the heatmap stays visually continuous
-          await supabase.from('activity_log').upsert(
-            { user_id: userId, date: localDate(tz, -1) },
-            { onConflict: 'user_id,date' }
-          );
-        } else {
-          // Gap too large or no freeze available — reset
-          currentStreak = 1;
-        }
-      }
-
-      // Award a freeze at every 7-day milestone (capped at 2)
-      if (currentStreak % 7 === 0 && freezesAvailable < 2) {
-        freezesAvailable = Math.min(2, freezesAvailable + 1);
-      }
-
-      longestStreak = Math.max(longestStreak, currentStreak);
+      const { next, bridgedDate, freezeConsumed } = update;
+      const { error: writeErr } = await supabase.from('user_streaks').upsert(
+        {
+          user_id:            userId,
+          current_streak:     next.currentStreak,
+          longest_streak:     next.longestStreak,
+          last_activity_date: today,
+          freezes_available:  next.freezesAvailable,
+          freezes_used_total: next.freezesUsedTotal,
+          timezone:           tz,
+          updated_at:         new Date().toISOString(),
+        },
+        { onConflict: 'user_id' },
+      );
+      if (writeErr) return none;
 
       await Promise.all([
-        supabase.from('user_streaks').upsert(
-          {
-            user_id:            userId,
-            current_streak:     currentStreak,
-            longest_streak:     longestStreak,
-            last_activity_date: today,
-            freezes_available:  freezesAvailable,
-            freezes_used_total: freezesUsedTotal,
-            timezone:           tz,
-            updated_at:         new Date().toISOString(),
-          },
-          { onConflict: 'user_id' }
-        ),
-        supabase.from('activity_log').upsert(
-          { user_id: userId, date: today },
-          { onConflict: 'user_id,date' }
-        ),
+        markDayGoalMet(userId, today),
+        bridgedDate ? markDayGoalMet(userId, bridgedDate) : Promise.resolve(),
       ]);
 
       todayLoggedRef.current = today;
 
-      setState(prev => ({
-        currentStreak,
-        longestStreak,
-        freezesAvailable,
-        freezesUsedTotal,
-        lastActivityDate: today,
-        activityDates: prev.activityDates.includes(today)
-          ? prev.activityDates
-          : [today, ...prev.activityDates],
-      }));
+      setState(prev => {
+        const dates = new Set(prev.activityDates);
+        dates.add(today);
+        if (bridgedDate) dates.add(bridgedDate);
+        return {
+          ...next,
+          activityDates: [...dates].sort().reverse(),
+        };
+      });
 
-      return { freezeConsumed };
+      return { recorded: true, freezeConsumed };
+    } catch {
+      return none;
     } finally {
       isWritingRef.current = false;
     }
   }, [userId]);
 
-  return { streakState: state, loadStreak, recordActivity };
+  return { streakState: state, loadStreak, recordGoalMet };
 }
