@@ -43,20 +43,23 @@ export function TasksView({ initialTask = null, onTaskLaunched, onActiveTaskChan
     onActiveTaskChange?.(activeTask);
   }, [activeTask]);
 
-  if (activeTask === 'translate') return <TranslateChallengeTask onBack={() => setActiveTask(null)} />;
-  if (activeTask === 'dialogue')  return <ContinueDialogueTask   onBack={() => setActiveTask(null)} />;
+  // Laptops: tasks and their setup screens sit in a centred, readable column.
+  const column = 'lg:mx-auto lg:w-full lg:max-w-[720px]';
+
+  if (activeTask === 'translate') return <div className={column}><TranslateChallengeTask onBack={() => setActiveTask(null)} /></div>;
+  if (activeTask === 'dialogue')  return <div className={column}><ContinueDialogueTask   onBack={() => setActiveTask(null)} /></div>;
 
   return (
-    <div className="animate-fade-in flex flex-col gap-5">
+    <div className={`animate-fade-in flex flex-col gap-5 ${column}`}>
       {/* Subtitle sits under the shell's "Tasks" page title */}
-      <p className="-mt-3 text-[15px] text-muted-foreground">Practise with your AI tutor.</p>
+      <p className="-mt-3 text-[15px] text-muted-foreground lg:-mt-4 lg:text-base">Practise with your AI tutor.</p>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 lg:grid lg:grid-cols-2 lg:gap-4">
         {tasks.map(task => (
           <button
             key={task.id}
             onClick={() => setActiveTask(task.id)}
-            className="group flex w-full flex-col gap-3.5 rounded-xl border border-border bg-card p-[18px] text-left transition-colors hover:border-primary/40 active:scale-[0.99]"
+            className="group flex w-full flex-col gap-3.5 rounded-xl border border-border bg-card p-[18px] text-left transition-colors hover:border-primary/40 active:scale-[0.99] lg:p-[22px]"
           >
             <div className="flex w-full items-center gap-3.5">
               <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-accent">

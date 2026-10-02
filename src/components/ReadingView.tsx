@@ -1,7 +1,8 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { ReadingText } from '@/types/dutch';
 import { recordTextRead } from '@/lib/textReadHistory';
-import { WordPopover } from '@/components/WordPopover';
+import { WordPopover, WordDetails, WordSelectionContext } from '@/components/WordPopover';
+import type { WordDetailsProps, WordSelection } from '@/components/WordPopover';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
@@ -26,6 +27,13 @@ interface ReadingViewProps {
   onNext?: () => void;
   onPrev?: () => void;
 }
+
+/** What the laptop side panel shows (lg only; phones and tablets use popups). */
+type PanelItem =
+  | { kind: 'word'; id: string; details: WordDetailsProps }
+  | { kind: 'expr'; id: string; phrase: string; english: string; sentence: string };
+
+const isLaptop = () => window.matchMedia('(min-width: 1024px)').matches;
 
 interface PhrasePopup {
   text: string;
@@ -165,6 +173,17 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
     x: number; anchorY: number; position: 'left' | 'above' | 'below';
   } | null>(null);
 
+  // ── Laptop side panel (selected word / expression) ──
+  const [panelItem, setPanelItem] = useState<PanelItem | null>(null);
+  const selectWord = useCallback((id: string, details: WordDetailsProps) => {
+    setPanelItem({ kind: 'word', id, details });
+    return true;
+  }, []);
+  const wordSelection = useMemo<WordSelection>(() => ({
+    selectedId: panelItem?.kind === 'word' ? panelItem.id : null,
+    select: selectWord,
+  }), [panelItem, selectWord]);
+
   // ── TTS ──
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -205,6 +224,7 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
   // ── Reset all exercise state when the text changes ──
   useEffect(() => {
     setActiveTab(null);
+    setPanelItem(null);
     setQuizAnswers({});
     setQuizSubmitted(false);
     setRetrievalAnswers({});
@@ -496,6 +516,7 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
 
   // ─── Text rendering ───────────────────────────────────────────────────────
 
+  const selectedMark = ' shadow-[inset_0_-2px_0_hsl(var(--highlight))]';
   const renderText = () => {
     return tokens.map((token, i) => {
       // Skip tokens that are non-first parts of expressions
@@ -514,8 +535,12 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
         return (
           <span
             key={i}
-            className="word-expression word-clickable"
+            className={`word-expression word-clickable${panelItem?.id === `expr-${i}` ? selectedMark : ''}`}
             onClick={(e) => {
+              if (isLaptop()) {
+                setPanelItem({ kind: 'expr', id: `expr-${i}`, phrase: exprInfo.phrase, english: exprInfo.english, sentence: sentenceForExpr });
+                return;
+              }
               const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
               const { x, anchorY, position } = computePopupPos(rect, 288, 220);
               setExprPopup({ phrase: exprInfo.phrase, english: exprInfo.english, sentence: sentenceForExpr, savedState: 'idle', x, anchorY, position });
@@ -543,8 +568,17 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
           <span key={i}>
             {leadPunct}
             <span
-              className="word-expression word-clickable"
+              className={`word-expression word-clickable${panelItem?.id === `split-${i}` ? selectedMark : ''}`}
               onClick={(e) => {
+                if (isLaptop()) {
+                  setPanelItem({
+                    kind: 'expr', id: `split-${i}`,
+                    phrase: splitEntry.display ?? `${splitEntry.word1} … ${splitEntry.word2}`,
+                    english: splitEntry.english,
+                    sentence: sent,
+                  });
+                  return;
+                }
                 const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
                 const { x, anchorY, position } = computePopupPos(rect, 288, 220);
                 setExprPopup({
@@ -662,18 +696,27 @@ Return ONLY valid JSON, no markdown:
   const wordCount = text.content.split(/\s+/).filter(Boolean).length;
   const readMinutes = Math.max(1, Math.round(wordCount / 100));
   const keyWordCount = Object.keys(keywords).length;
+  // Side panel list: the text's key words, then its fixed expressions
+  const newWords: [string, string][] = [
+    ...Object.entries(keywords),
+    ...Object.entries(fixedExpressions).map(([phrase, { english }]) => [phrase, english] as [string, string]),
+  ];
 
   return (
-    <div className="animate-fade-in space-y-6">
+    <WordSelectionContext.Provider value={wordSelection}>
+    <div className="animate-fade-in lg:grid lg:grid-cols-[minmax(0,1fr)_340px] lg:items-start lg:gap-10">
+    {/* Left column: the text, prev/next and practice exercises */}
+    <div className="flex min-w-0 flex-col gap-6">
       {/* Header: back · listen (design: 'text') */}
       <div className="-mx-2.5 flex items-center justify-between">
         <button
           type="button"
           onClick={onBack}
-          className="grid h-11 w-11 place-items-center rounded-full text-foreground transition-colors hover:bg-secondary"
+          className="grid h-11 w-11 place-items-center rounded-full text-foreground transition-colors hover:bg-secondary lg:flex lg:w-auto lg:gap-1 lg:rounded-xl lg:px-2.5 lg:text-sm lg:font-medium lg:text-muted-foreground lg:hover:text-foreground"
           aria-label="Back to texts"
         >
-          <ChevronLeft className="h-6 w-6" />
+          <ChevronLeft className="h-6 w-6 lg:h-5 lg:w-5" />
+          <span className="hidden lg:inline">All texts</span>
         </button>
         <button
           type="button"
@@ -699,7 +742,7 @@ Return ONLY valid JSON, no markdown:
           </span>
         </div>
         <div className="space-y-1">
-          <h2 className="font-heading text-[26px] font-semibold leading-tight tracking-[-0.015em] text-foreground">{text.title}</h2>
+          <h2 className="font-heading text-[26px] font-semibold leading-tight tracking-[-0.015em] text-foreground lg:text-[38px] lg:leading-[1.15] lg:tracking-[-0.02em]">{text.title}</h2>
           {text.titleTranslation && <p className="text-sm text-muted-foreground">{text.titleTranslation}</p>}
         </div>
       </div>
@@ -858,18 +901,18 @@ Return ONLY valid JSON, no markdown:
       {/* Reading text */}
       <div className="relative">
         <Card
-          className={`rounded-xl px-5 py-6 md:p-8${activeTab !== null ? ' select-none' : ''}${activeTab !== null && !isTextRevealed ? ' cursor-pointer' : ''}`}
+          className={`rounded-xl px-5 py-6 md:p-8 lg:border-0 lg:bg-transparent lg:p-0${activeTab !== null ? ' select-none' : ''}${activeTab !== null && !isTextRevealed ? ' cursor-pointer' : ''}`}
           onMouseDown={() => { if (activeTab !== null) setIsTextRevealed(true); }}
           onTouchStart={() => { if (activeTab !== null) setIsTextRevealed(true); }}
           onMouseUp={() => { setIsTextRevealed(false); handleSelectionEnd(); }}
           onTouchEnd={() => { setIsTextRevealed(false); handleSelectionEnd(); }}
           onMouseLeave={() => setIsTextRevealed(false)}
         >
-          <div className={`font-heading text-lg leading-[1.9] text-foreground transition-[filter] duration-150${activeTab !== null && !isTextRevealed ? ' blur-sm' : ''}`}>
+          <div className={`font-heading text-lg leading-[1.9] text-foreground lg:text-xl lg:leading-[1.75] transition-[filter] duration-150${activeTab !== null && !isTextRevealed ? ' blur-sm' : ''}`}>
             {renderText()}
           </div>
           {text.grammarNote && (
-            <div className="mt-6 flex gap-3 rounded-xl bg-accent px-4 py-3.5">
+            <div className="mt-6 flex lg:mt-8 gap-3 rounded-xl bg-accent px-4 py-3.5">
               <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
               <div>
                 <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-accent-foreground">Grammar spotlight</p>
@@ -886,6 +929,33 @@ Return ONLY valid JSON, no markdown:
           </div>
         )}
       </div>
+
+      {/* Previous / next text (design: 'text' — "Next page" bar). Phones: after the
+          exercises; laptops: right under the text, as in FlowDesktop 'read'. */}
+      {(onPrev || onNext) && (
+        <div className="order-last flex items-center gap-3 pt-2 lg:order-none lg:justify-between lg:pt-0">
+          {onPrev && (
+            <button
+              type="button"
+              onClick={onPrev}
+              className="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-xl border border-border bg-card text-foreground transition-colors hover:bg-secondary lg:flex lg:h-[46px] lg:w-auto lg:gap-2 lg:px-[18px] lg:text-[15px] lg:font-semibold"
+              aria-label="Previous text"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              <span className="hidden lg:inline">Previous</span>
+            </button>
+          )}
+          {onNext && (
+            <button
+              type="button"
+              onClick={onNext}
+              className="flex h-[50px] flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-[15px] font-semibold text-foreground transition-colors hover:bg-secondary lg:ml-auto lg:h-[46px] lg:flex-none lg:border-primary lg:bg-primary lg:px-5 lg:text-primary-foreground lg:hover:bg-primary/90"
+            >
+              Next text <ArrowRight className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      )}
 
       {/* ── Practice exercises ────────────────────────────────────────────── */}
       <div className="space-y-3">
@@ -1441,30 +1511,79 @@ Return ONLY valid JSON, no markdown:
         )}
       </div>
 
-      {/* Previous / next text (design: 'text' — "Next page" bar) */}
-      {(onPrev || onNext) && (
-        <div className="flex items-center gap-3 pt-2">
-          {onPrev && (
-            <button
-              type="button"
-              onClick={onPrev}
-              className="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-xl border border-border bg-card text-foreground transition-colors hover:bg-secondary"
-              aria-label="Previous text"
-            >
-              <ArrowLeft className="h-4 w-4" />
-            </button>
-          )}
-          {onNext && (
-            <button
-              type="button"
-              onClick={onNext}
-              className="flex h-[50px] flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-[15px] font-semibold text-foreground transition-colors hover:bg-secondary"
-            >
-              Next text <ArrowRight className="h-4 w-4" />
-            </button>
-          )}
+    </div>
+
+    {/* Laptop side panel (design: FlowDesktop 'read'): selected word + new words on this page */}
+    <aside className="hidden lg:sticky lg:top-24 lg:flex lg:max-h-[calc(100dvh-7.5rem)] lg:flex-col lg:gap-6 lg:overflow-y-auto lg:rounded-xl lg:border lg:border-border lg:bg-card lg:p-6">
+      <div className="flex flex-col gap-2.5">
+        <span className="text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground">Selected word</span>
+        {panelItem?.kind === 'word' && (
+          <WordDetails key={panelItem.id} {...panelItem.details} />
+        )}
+        {panelItem?.kind === 'expr' && (() => {
+          const exprKey = panelItem.phrase.toLowerCase();
+          const exprSaved = !!vocabulary[exprKey] && vocabulary[exprKey]?.status !== 'ignored';
+          return (
+            <div key={panelItem.id} className="flex flex-col gap-3">
+              <span className="self-start rounded-full bg-highlight-soft px-2.5 py-0.5 text-xs font-semibold text-highlight-ink">Expression</span>
+              <span className="break-words font-heading text-[26px] font-semibold leading-tight text-foreground">{panelItem.phrase}</span>
+              <span className="font-heading text-[19px] italic text-foreground">{panelItem.english}</span>
+              {panelItem.sentence && (
+                <p className="text-sm leading-relaxed text-muted-foreground">"{panelItem.sentence}"</p>
+              )}
+              <button
+                type="button"
+                onClick={() => {
+                  if (exprSaved) {
+                    removeWord(exprKey);
+                    toast(`"${panelItem.phrase}" removed from cards`, { duration: 3000 });
+                  } else {
+                    addWord(exprKey, panelItem.english, { example: panelItem.sentence });
+                    toast(`"${panelItem.phrase}" saved to learning`, {
+                      duration: 4000,
+                      action: { label: 'Undo', onClick: () => removeWord(exprKey) },
+                    });
+                  }
+                }}
+                aria-pressed={exprSaved}
+                className={`mt-1 flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[15px] font-semibold transition-all active:scale-[0.98] ${
+                  exprSaved ? 'border border-border bg-card text-foreground hover:bg-secondary' : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                }`}
+              >
+                {exprSaved
+                  ? <><Check className="h-[18px] w-[18px]" /> Saved to cards</>
+                  : <><Plus className="h-[18px] w-[18px]" /> Add to cards</>}
+              </button>
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this English expression for me: "${panelItem.phrase}"` } }))}
+                className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-accent text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/80"
+              >
+                <MessageCircleMore className="h-4 w-4" /> Ask Emma
+              </button>
+            </div>
+          );
+        })()}
+        {!panelItem && (
+          <p className="rounded-xl border border-dashed border-border px-3.5 py-3 text-sm leading-snug text-muted-foreground">
+            Tap any word in the text to see its translation here.
+          </p>
+        )}
+      </div>
+
+      {newWords.length > 0 && (
+        <div className="flex flex-col">
+          <span className="pb-1.5 text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground">New words on this page</span>
+          {newWords.map(([w, ru]) => (
+            <div key={w} className="flex justify-between gap-3 border-t border-border py-2.5">
+              <span className="font-heading text-base font-semibold text-foreground">{w}</span>
+              <span className="text-right text-sm text-muted-foreground">{ru}</span>
+            </div>
+          ))}
         </div>
       )}
+    </aside>
     </div>
+    </WordSelectionContext.Provider>
   );
 }

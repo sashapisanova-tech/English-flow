@@ -87,7 +87,8 @@ export function TopicChip({ label, selected, onClick }: { label: string; selecte
 
 /**
  * Bottom action bar of a setup screen: full-width primary button with a caption.
- * Sticks just above the app's bottom navigation while the setup content scrolls.
+ * Sticks just above the app's bottom navigation while the setup content scrolls
+ * (on laptops, where there is no bottom navigation, to the bottom of the window).
  */
 export function SetupFooter({ label, caption, onClick, disabled, busy }: {
   label: ReactNode;
@@ -97,7 +98,7 @@ export function SetupFooter({ label, caption, onClick, disabled, busy }: {
   busy?: boolean;
 }) {
   return (
-    <div className="sticky bottom-[calc(3.375rem+max(1rem,env(safe-area-inset-bottom)))] z-10 -mx-5 mt-2 flex flex-col gap-2 border-t border-border bg-background px-5 pb-3.5 pt-3">
+    <div className="sticky bottom-[calc(3.375rem+max(1rem,env(safe-area-inset-bottom)))] z-10 lg:bottom-0 -mx-5 mt-2 flex flex-col gap-2 border-t border-border bg-background px-5 pb-3.5 pt-3">
       <button
         onClick={onClick}
         disabled={disabled}

@@ -60,7 +60,7 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
     }));
 
   const eyebrow = 'text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground';
-  const rowCard = 'flex w-full items-center gap-3 rounded-xl border border-border bg-card px-3.5 py-3 text-left transition-colors';
+  const rowCard = 'flex w-full items-center gap-3 rounded-xl border border-border bg-card px-3.5 py-3 text-left transition-colors lg:gap-3.5 lg:px-4 lg:py-3.5';
   const rowInteractive = 'card-hover cursor-pointer active:scale-[0.99]';
   const iconTile = 'grid h-[38px] w-[38px] shrink-0 place-items-center rounded-[10px] bg-accent';
   const backButton = 'flex items-center gap-1 self-start -ml-1 rounded-lg px-1 py-1 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground';
@@ -90,7 +90,7 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
             <p className="text-sm text-muted-foreground">Texts for this module are coming soon.</p>
           </div>
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 lg:grid lg:grid-cols-2 lg:gap-3">
             {mod.texts.map((text, i) => (
               <button
                 key={text.id}
@@ -123,6 +123,7 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
   // ===== AI TEXT GENERATOR =====
   if (openLevel && showGenerator) {
     return (
+      <div className="lg:mx-auto lg:w-full lg:max-w-[720px]">
       <GenerateTextView
         level={openLevel}
         onBack={() => setShowGenerator(false)}
@@ -131,6 +132,7 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
           onSelect(text);
         }}
       />
+      </div>
     );
   }
 
@@ -150,7 +152,7 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
           <h2 className="font-heading text-[22px] font-semibold leading-tight text-foreground">{levelMeta[openLevel]?.subtitle ?? openLevel}</h2>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 lg:grid lg:grid-cols-2 lg:gap-3 xl:grid-cols-3">
           {modules.map(mod => {
             const total = mod.texts.length;
             const done = mod.texts.filter(t => t.completed).length;
@@ -189,7 +191,7 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
         {/* Generate your own text — below the last module */}
         <button
           onClick={() => setShowGenerator(true)}
-          className={`${rowCard} ${rowInteractive} border-dashed border-primary/40`}
+          className={`${rowCard} ${rowInteractive} border-dashed border-primary/40 lg:max-w-[calc(50%-0.375rem)] xl:max-w-[calc((100%-1.5rem)/3)]`}
         >
           <div className={iconTile}>
             <Sparkles className="h-5 w-5 text-primary" strokeWidth={1.75} />
@@ -206,8 +208,8 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
 
   // ===== LEVELS (top) =====
   return (
-    <div className="animate-fade-in flex flex-col gap-2">
-      <span className={`${eyebrow} pb-1 text-xs`}>Choose your level</span>
+    <div className="animate-fade-in flex flex-col gap-2 lg:grid lg:grid-cols-3 lg:gap-4">
+      <span className={`${eyebrow} pb-1 text-xs lg:col-span-3 lg:pb-0`}>Choose your level</span>
       {levels.map(lvl => {
         const levelModules = new Set(moduleInfo.filter(m => m.level === lvl.key).map(m => m.key));
         const levelTexts = texts.filter(t => t.module && levelModules.has(t.module));

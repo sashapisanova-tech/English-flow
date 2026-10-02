@@ -40,7 +40,7 @@ export function VoiceSettings({ visible = false }: { visible?: boolean }) {
       {visible && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-36 right-4 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card shadow-sm transition-all hover:bg-secondary active:scale-95"
+          className="fixed bottom-36 right-4 z-40 flex h-11 w-11 lg:bottom-28 lg:right-8 lg:[html[data-reading-panel]_&]:right-[calc(max(0px,(100vw-1160px)/2)+410px)] items-center justify-center rounded-full border border-border bg-card shadow-sm transition-all hover:bg-secondary active:scale-95"
           aria-label="Voice settings"
         >
           <Settings2 className="h-[18px] w-[18px] text-foreground" />

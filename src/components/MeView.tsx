@@ -32,7 +32,7 @@ function StreakCalendar({ streak }: { streak: StreakState }) {
   const activeDays = cells.filter(c => !c.isFuture && c.isActive).length;
 
   return (
-    <div className="flex flex-col gap-2.5 rounded-xl border border-border bg-card px-4 py-3.5">
+    <div className="flex flex-col gap-2.5 rounded-xl border border-border bg-card px-4 py-3.5 lg:gap-3 lg:px-5 lg:py-4">
       <div className="flex items-baseline justify-between">
         <h3 className="font-heading text-[17px] font-semibold">Last 5 weeks</h3>
         <span className="text-[13px] text-muted-foreground">{activeDays} of {pastDays} days</span>
@@ -51,7 +51,7 @@ function StreakCalendar({ streak }: { streak: StreakState }) {
             <div
               key={c.date}
               title={c.date}
-              className={`grid h-8 place-items-center rounded-lg text-[11px] ${cls}`}
+              className={`grid h-8 place-items-center rounded-lg text-[11px] lg:h-10 lg:text-xs ${cls}`}
             >
               {c.day}
             </div>
@@ -94,7 +94,7 @@ function WeekMinutesChart({ secondsByDate, goalMinutes }: { secondsByDate: Recor
   const H = 96; // plot height, px
 
   return (
-    <div className="flex flex-col gap-2.5 rounded-xl border border-border bg-card px-4 py-3.5">
+    <div className="flex flex-col gap-2.5 rounded-xl border border-border bg-card px-4 py-3.5 lg:gap-3 lg:px-5 lg:py-4">
       <div className="flex items-baseline justify-between">
         <h3 className="font-heading text-[17px] font-semibold">This week</h3>
         <span className="text-[13px] text-muted-foreground">{total} min · goal {goalMinutes} min/day</span>
@@ -173,7 +173,7 @@ function SettingsPanel({ onBack }: { onBack: () => void }) {
   ];
 
   return (
-    <div className="animate-fade-in flex flex-col gap-[22px]">
+    <div className="animate-fade-in flex flex-col gap-[22px] lg:mx-auto lg:w-full lg:max-w-[640px]">
       <div className="-ml-2.5 flex items-center gap-1">
         <button
           onClick={onBack}
@@ -182,7 +182,7 @@ function SettingsPanel({ onBack }: { onBack: () => void }) {
         >
           <ChevronLeft className="h-[22px] w-[22px]" strokeWidth={2.4} />
         </button>
-        <h2 className="font-heading text-[28px] font-semibold tracking-[-0.015em]">Settings</h2>
+        <h2 className="font-heading text-[28px] font-semibold tracking-[-0.015em] lg:text-[36px] lg:tracking-[-0.02em]">Settings</h2>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -276,15 +276,15 @@ export function MeView() {
   ];
 
   return (
-    <div className="animate-fade-in flex flex-col gap-4">
+    <div className="animate-fade-in flex flex-col gap-4 lg:gap-5">
 
       {/* Profile */}
-      <div className="flex items-center gap-3.5">
-        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-accent font-heading text-[22px] font-semibold text-accent-foreground">
+      <div className="flex items-center gap-3.5 lg:gap-4">
+        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-accent font-heading text-[22px] font-semibold text-accent-foreground lg:h-16 lg:w-16 lg:text-[26px]">
           {initial}
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="truncate font-heading text-[19px] font-semibold">{name}</span>
+          <span className="truncate font-heading text-[19px] font-semibold lg:text-[28px] lg:tracking-[-0.015em]">{name}</span>
           <span className="text-[13px] text-muted-foreground">
             Level {levelInfo.level} · {levelInfo.title}{since ? ` · learning since ${since}` : ''}
           </span>
@@ -292,33 +292,37 @@ export function MeView() {
         <button
           onClick={() => open('settings')}
           aria-label="Settings"
-          className="-mr-2.5 shrink-0 rounded-full p-2.5 text-foreground transition-colors hover:bg-secondary"
+          className="-mr-2.5 shrink-0 rounded-full p-2.5 text-foreground transition-colors hover:bg-secondary lg:mr-0 lg:flex lg:items-center lg:gap-2 lg:rounded-xl lg:border lg:border-border lg:bg-card lg:px-4 lg:py-2.5"
         >
-          <Settings className="h-6 w-6" />
+          <Settings className="h-6 w-6 lg:h-5 lg:w-5" />
+          <span className="hidden text-[15px] font-semibold lg:inline">Settings</span>
         </button>
       </div>
 
       {/* Stat tiles */}
-      <div className="grid grid-cols-3 gap-2.5">
+      <div className="grid grid-cols-3 gap-2.5 lg:gap-4">
         {stats.map(s => (
-          <div key={s.label} className="flex flex-col gap-0.5 rounded-xl border border-border bg-card px-3.5 py-3">
-            <span className="flex items-center gap-1 font-heading text-2xl font-semibold">
+          <div key={s.label} className="flex flex-col gap-0.5 rounded-xl border border-border bg-card px-3.5 py-3 lg:px-5 lg:py-4">
+            <span className="flex items-center gap-1 font-heading text-2xl font-semibold lg:text-[28px]">
               {s.value}
               {s.flame && <Flame className="h-[18px] w-[18px] text-highlight" />}
               {s.total !== undefined && (
                 <span className="font-body text-[13px] font-normal text-muted-foreground">/{s.total}</span>
               )}
             </span>
-            <span className="text-xs text-muted-foreground">{s.label}</span>
+            <span className="text-xs text-muted-foreground lg:text-[13px]">{s.label}</span>
           </div>
         ))}
       </div>
 
-      <WeekMinutesChart secondsByDate={activeSecondsByDate} goalMinutes={dailyGoalMinutes} />
-
-      <StreakCalendar streak={streak} />
-
-      <ProgressView />
+      {/* Phones: one column. Laptops: time + calendar on the left, level/words/achievements on the right. */}
+      <div className="contents lg:grid lg:grid-cols-2 lg:items-start lg:gap-5">
+        <div className="contents lg:flex lg:flex-col lg:gap-4">
+          <WeekMinutesChart secondsByDate={activeSecondsByDate} goalMinutes={dailyGoalMinutes} />
+          <StreakCalendar streak={streak} />
+        </div>
+        <ProgressView />
+      </div>
 
     </div>
   );

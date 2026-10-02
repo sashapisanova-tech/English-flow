@@ -122,7 +122,7 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
   }
 
   return (
-    <div className="animate-fade-in mx-auto max-w-md space-y-5 pb-6">
+    <div className="animate-fade-in mx-auto max-w-md space-y-5 pb-6 lg:max-w-2xl lg:pb-28">
       {/* Header */}
       <button onClick={onBack} className="-ml-1 flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Cards
@@ -145,7 +145,7 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
       <Card className="space-y-3 p-4">
         <p className="text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground">Add a word</p>
 
-        <div className="space-y-2">
+        <div className="space-y-2 lg:grid lg:grid-cols-2 lg:gap-x-3 lg:gap-y-2 lg:space-y-0">
           <div>
             <label className="text-xs text-muted-foreground mb-1 block">English word</label>
             <div className="flex gap-2">
@@ -169,7 +169,7 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
               className="text-sm"
             />
           </div>
-          <div>
+          <div className="lg:col-span-2">
             <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1.5 block">
               <Sparkles className="h-3 w-3 text-primary" />
               Example sentence
@@ -196,7 +196,7 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
         {addError && <p className="text-xs text-destructive">{addError}</p>}
 
         <Button
-          className="h-11 w-full gap-1.5 rounded-lg text-[15px] font-semibold"
+          className="h-11 w-full gap-1.5 rounded-lg text-[15px] font-semibold lg:w-auto lg:px-6"
           onClick={handleAdd}
           disabled={!dutch.trim() || !english.trim() || generating || fetching}
         >
@@ -310,7 +310,7 @@ export function CreateSetModal({ onCancel, onCreate }: CreateSetProps) {
   const [emoji, setEmoji] = useState('📝');
 
   return (
-    <div className="animate-fade-in mx-auto max-w-md space-y-5">
+    <div className="animate-fade-in mx-auto max-w-md space-y-5 lg:max-w-xl lg:pb-28">
       <button onClick={onCancel} className="-ml-1 flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Cards
       </button>

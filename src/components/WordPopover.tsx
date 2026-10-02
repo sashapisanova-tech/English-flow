@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useId, useState } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Check, Plus, Volume2, Loader2 } from 'lucide-react';
@@ -72,37 +72,50 @@ async function fetchWordInfo(word: string, sentence?: string): Promise<WordInfo>
   }
 }
 
-export function WordPopover({
-  word, display, translation, plural, example, exampleTranslation,
-  status = 'new', highlighted = true, sentence, separableVerb,
-}: WordPopoverProps) {
-  const [open, setOpen] = useState(false);
+export interface WordDetailsProps {
+  word: string;
+  translation: string;
+  plural?: string;
+  example?: string;
+  exampleTranslation?: string;
+  status?: WordStatus;
+  sentence?: string;
+  separableVerb?: SeparableVerbEntry;
+}
+
+/**
+ * Lets a parent (ReadingView on laptops) show tapped words in a side panel
+ * instead of a popover. When `select` returns true the word is handled there.
+ */
+export interface WordSelection {
+  selectedId: string | null;
+  select: (id: string, details: WordDetailsProps) => boolean;
+}
+export const WordSelectionContext = createContext<WordSelection | null>(null);
+
+/** Word card body: word, listen, translation (prepared dictionary, then AI), Add to cards. */
+export function WordDetails({
+  word, translation, plural, example, exampleTranslation,
+  status = 'new', sentence, separableVerb,
+}: WordDetailsProps) {
   const { addWord, removeWord, vocabulary } = useLearning();
   const [liveTranslation, setLiveTranslation] = useState(translation);
   const [loading, setLoading] = useState(false);
-  // Phones get a bottom sheet (design: 'reading'); wider screens keep the anchored popover.
-  // Decided at tap time so each word doesn't need its own media-query listener.
-  const [asSheet, setAsSheet] = useState(false);
 
   // For separable verbs, check saved state by infinitive
   const saveKey = separableVerb ? separableVerb.infinitive.split(' ')[0].toLowerCase() : word.toLowerCase();
   const isSaved = !!vocabulary[saveKey] && vocabulary[saveKey]?.status !== 'ignored';
 
-  const statusClass = separableVerb
-    ? 'word-separable'
-    : highlighted
-      ? 'word-keyword'
-      : status === 'known' ? 'word-known' : status === 'learning' ? 'word-learning' : 'word-plain';
-
   useEffect(() => {
-    if (!open) return;
     if (separableVerb) return; // no external translation needed
     if (translation) { setLiveTranslation(translation); return; }
+    let cancelled = false;
     setLoading(true);
     fetchWordInfo(word, sentence)
-      .then(info => setLiveTranslation(info.translation || 'Перевод недоступен'))
-      .finally(() => setLoading(false));
-  }, [open, word, translation, sentence, separableVerb]);
+      .then(info => { if (!cancelled) setLiveTranslation(info.translation || 'Перевод недоступен'); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+  }, [word, translation, sentence, separableVerb]);
 
   const speak = () => {
     try { playDutch(separableVerb ? separableVerb.infinitive.split(' ')[0] : word); } catch {}
@@ -143,15 +156,10 @@ export function WordPopover({
     }
   };
 
-  const openWord = () => {
-    setAsSheet(window.matchMedia('(max-width: 767px)').matches);
-    setOpen(true);
-  };
-
   const statusLabel = status === 'known' ? 'Known' : status === 'learning' ? 'Learning' : 'New word';
   const shownWord = separableVerb ? separableVerb.infinitive : word;
 
-  const content = (
+  return (
     <div className="flex flex-col gap-3">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-0.5">
@@ -168,7 +176,7 @@ export function WordPopover({
         <button
           type="button"
           onClick={speak}
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-primary transition-transform active:scale-95"
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-accent text-primary transition-transform hover:bg-accent/80 active:scale-95"
           aria-label={`Listen to "${shownWord}"`}
         >
           <Volume2 className="h-5 w-5" />
@@ -234,10 +242,48 @@ export function WordPopover({
       </button>
     </div>
   );
+}
 
-  const openClass = open && !highlighted && !separableVerb
+export function WordPopover({
+  word, display, translation, plural, example, exampleTranslation,
+  status = 'new', highlighted = true, sentence, separableVerb,
+}: WordPopoverProps) {
+  const [open, setOpen] = useState(false);
+  // Phones get a bottom sheet (design: 'reading'); tablets keep the anchored popover;
+  // laptops (inside ReadingView) show the word in the side panel.
+  // Decided at tap time so each word doesn't need its own media-query listener.
+  const [asSheet, setAsSheet] = useState(false);
+  const selection = useContext(WordSelectionContext);
+  const id = useId();
+  const inPanel = selection?.selectedId === id;
+
+  const details: WordDetailsProps = {
+    word, translation, plural, example, exampleTranslation, status, sentence, separableVerb,
+  };
+
+  const statusClass = separableVerb
+    ? 'word-separable'
+    : highlighted
+      ? 'word-keyword'
+      : status === 'known' ? 'word-known' : status === 'learning' ? 'word-learning' : 'word-plain';
+
+  const openWord = () => {
+    if (selection && window.matchMedia('(min-width: 1024px)').matches && selection.select(id, details)) {
+      setOpen(false);
+      return;
+    }
+    setAsSheet(window.matchMedia('(max-width: 767px)').matches);
+    setOpen(true);
+  };
+
+  const shownWord = separableVerb ? separableVerb.infinitive : word;
+  const content = <WordDetails {...details} />;
+
+  const openClass = (open || inPanel) && !highlighted && !separableVerb
     ? ' bg-highlight-soft shadow-[inset_0_-2px_0_hsl(var(--highlight))]'
-    : '';
+    : inPanel
+      ? ' shadow-[inset_0_-2px_0_hsl(var(--highlight))]'
+      : '';
 
   return (
     <>
@@ -263,7 +309,7 @@ export function WordPopover({
             >
               <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-border" />
               <DialogPrimitive.Title className="sr-only">{shownWord}</DialogPrimitive.Title>
-              {content}
+              {open && content}
             </DialogPrimitive.Content>
           </DialogPrimitive.Portal>
         </DialogPrimitive.Root>

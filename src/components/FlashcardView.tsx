@@ -32,6 +32,7 @@ function highlightWord(sentence: string, word: string): ReactNode {
 const LEVELS = ['A1', 'A2', 'B1'] as const;
 // Folders shown as collapsible groups inside an opened level; 'Core' sets are listed directly.
 const FOLDERS = ['Verbs', 'Nouns', 'Adjectives'] as const;
+const LEVEL_NAMES: Record<string, string> = { A1: 'Beginner', A2: 'Elementary', B1: 'Intermediate' };
 
 /** Toggle `key` in a Set held in state. */
 function toggleIn(setter: (fn: (prev: Set<string>) => Set<string>) => void, key: string) {
@@ -56,6 +57,7 @@ export function FlashcardView() {
   const [activeCustomSet, setActiveCustomSet] = useState<CustomSet | null>(null);
   const [openLevels, setOpenLevels]   = useState<Set<string>>(new Set());
   const [openFolders, setOpenFolders] = useState<Set<string>>(new Set());
+  const [selectedLevel, setSelectedLevel] = useState<string | null>(null); // laptop: level shown in the side panel
   const [practiceQueue, setPracticeQueue] = useState<FlashcardSetWord[]>([]);
   const [isShuffled, setIsShuffled]     = useState(false);
   const [savedWords, setSavedWords]     = useState<Set<string>>(new Set());
@@ -232,11 +234,10 @@ export function FlashcardView() {
     touchStartX.current = null;
     setSwipeDeltaX(0);
     if (Math.abs(dx) < 60) return;
-    if (dx < 0) {
-      mode === 'my-words' ? handleSRSRating('again') : handleAnswer(false);
-    } else {
-      mode === 'my-words' ? handleSRSRating('good') : handleAnswer(true);
-    }
+    // Swipe left = "again", swipe right = "good"
+    const knewIt = dx > 0;
+    if (mode === 'my-words') handleSRSRating(knewIt ? 'good' : 'again');
+    else handleAnswer(knewIt);
   };
 
   const openCustomEditor = (cs: CustomSet) => { setActiveCustomSet(cs); setMode('custom-editor'); };
@@ -360,17 +361,52 @@ export function FlashcardView() {
     const plural = (n: number, word: string) => `${n} ${word}${n !== 1 ? 's' : ''}`;
     const hasMySets = activeWords.length > 0 || customSets.length > 0 || learnedWords.length > 0 || ignoredWords.length > 0;
 
+    // Laptop (lg): the selected level's sets are shown in a panel next to the level cards.
+    const deskLevel = levels.find(l => l.level === selectedLevel) ?? levels[0];
+
+    // Laptop set card (design: FlowDesktop 'cards'): icon tile, title, word count, status.
+    const setCard = (set: FlashcardSet) => {
+      const learned = learnedIn(set.words);
+      const total = set.words.length;
+      const SetIcon = getSetIcon(set);
+      return (
+        <button
+          key={set.id}
+          type="button"
+          onClick={() => startSet(set)}
+          className="card-hover flex items-center gap-3 rounded-xl border border-border bg-card p-4 text-left"
+        >
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-accent text-primary" aria-hidden>
+            <SetIcon className="h-5 w-5" />
+          </div>
+          <div className="flex min-w-0 flex-1 flex-col gap-px">
+            <span className="truncate text-[15px] font-semibold text-foreground">{set.title}</span>
+            <span className="text-xs text-muted-foreground">{total} word{total !== 1 ? 's' : ''}</span>
+          </div>
+          {total > 0 && learned >= total ? (
+            <CircleCheck className="h-5 w-5 shrink-0 fill-success text-card" aria-label="All learned" />
+          ) : learned > 0 ? (
+            <span className="shrink-0 text-[13px] text-muted-foreground">{learned} of {total}</span>
+          ) : (
+            <span className="shrink-0 text-[13px] font-semibold text-accent-foreground">Start</span>
+          )}
+        </button>
+      );
+    };
+
     return (
-      <div className="animate-fade-in mx-auto flex max-w-md flex-col gap-[22px] pb-6">
+      <div className="animate-fade-in mx-auto flex max-w-md flex-col gap-[22px] pb-6 lg:grid lg:max-w-none lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start lg:gap-10 lg:pb-28 lg:pt-1">
+        <div className="flex flex-col gap-[22px] lg:gap-6">
+        <h1 className="hidden font-heading text-4xl font-semibold tracking-[-0.02em] text-foreground lg:block">Cards</h1>
 
         {/* Due cards (spaced repetition) */}
         {allWords.length > 0 && (
           <Card
-            className="card-hover flex cursor-pointer items-center gap-3.5 p-4"
+            className="card-hover flex cursor-pointer items-center gap-3.5 p-4 lg:flex-col lg:items-stretch lg:p-[22px]"
             onClick={startMyWords}
           >
             <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="font-heading text-[22px] font-semibold leading-tight text-foreground">
+              <span className="font-heading text-[22px] font-semibold leading-tight text-foreground lg:text-[26px]">
                 {dueCount > 0 ? `${dueCount} card${dueCount !== 1 ? 's' : ''} due` : 'All caught up'}
               </span>
               <span className="text-[13px] text-muted-foreground">
@@ -380,17 +416,19 @@ export function FlashcardView() {
               </span>
             </div>
             {dueCount > 0 ? (
-              <span className="flex h-11 shrink-0 items-center rounded-lg bg-primary px-[18px] text-[15px] font-semibold text-primary-foreground">
-                Review
+              <span className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-[18px] text-[15px] font-semibold text-primary-foreground lg:h-12 lg:rounded-xl">
+                <span className="lg:hidden">Review</span>
+                <span className="hidden lg:inline">Review now</span>
+                <ArrowRight className="hidden h-4 w-4 lg:block" strokeWidth={2.5} />
               </span>
             ) : (
-              <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground" />
+              <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground lg:hidden" />
             )}
           </Card>
         )}
 
-        {/* My sets: saved words, custom sets, learned, archive */}
-        <div className="flex flex-col gap-2.5">
+        {/* My sets: saved words, custom sets, learned, archive (phone: above prepared sets; laptop: below) */}
+        <div className="flex flex-col gap-2.5 lg:order-last">
           <div className="flex items-center justify-between">
             <span className={sectionLabel}>My sets</span>
             <button
@@ -459,34 +497,56 @@ export function FlashcardView() {
           )}
         </div>
 
-        {/* Prepared sets, by level */}
+        {/* Prepared sets, by level. Phone: each level card expands in place.
+            Laptop: the level cards select which level's sets show in the panel on the right. */}
         <div className="flex flex-col gap-2.5">
           <span className={sectionLabel}>Prepared sets</span>
           {levels.map(({ level, sets, total, learned }) => {
             const isOpen = openLevels.has(level);
+            const isSelected = deskLevel?.level === level;
             const pct = total > 0 ? Math.round((learned / total) * 100) : 0;
             const coreSets = sets.filter(s => !s.folder || s.folder === 'Core');
             const folders = FOLDERS
               .map(folder => ({ folder, sets: sets.filter(s => s.folder === folder) }))
               .filter(f => f.sets.length > 0);
+            const levelHeader = (
+              <>
+                <span className="w-[34px] shrink-0 font-heading text-xl font-semibold text-foreground lg:w-9 lg:text-[22px]">{level}</span>
+                <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                  <div className="flex justify-between text-[13px] text-muted-foreground">
+                    <span>{total} words</span>
+                    <span>{learned} learned</span>
+                  </div>
+                  <div className="h-[5px] overflow-hidden rounded-full bg-track">
+                    <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
+                  </div>
+                </div>
+              </>
+            );
             return (
-              <Card key={level} className="flex flex-col gap-2.5 px-4 py-3.5">
+              <div key={level}>
+                {/* Laptop: selectable level card */}
+                <button
+                  type="button"
+                  onClick={() => setSelectedLevel(level)}
+                  aria-pressed={isSelected}
+                  className={`card-hover hidden w-full items-center gap-3.5 rounded-xl border bg-card px-[18px] py-4 text-left lg:flex ${
+                    isSelected ? 'border-primary hover:border-primary' : 'border-border'
+                  }`}
+                >
+                  {levelHeader}
+                  <ChevronRight className={`h-4 w-4 shrink-0 ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} strokeWidth={2.5} />
+                </button>
+
+                {/* Phone: expandable level card */}
+                <Card className="flex flex-col gap-2.5 px-4 py-3.5 lg:hidden">
                 <button
                   type="button"
                   onClick={() => toggleIn(setOpenLevels, level)}
                   className="flex w-full items-center gap-3 text-left"
                   aria-expanded={isOpen}
                 >
-                  <span className="w-[34px] shrink-0 font-heading text-xl font-semibold text-foreground">{level}</span>
-                  <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                    <div className="flex justify-between text-[13px] text-muted-foreground">
-                      <span>{total} words</span>
-                      <span>{learned} learned</span>
-                    </div>
-                    <div className="h-[5px] overflow-hidden rounded-full bg-track">
-                      <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
-                    </div>
-                  </div>
+                  {levelHeader}
                   <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} strokeWidth={2.5} />
                 </button>
 
@@ -524,17 +584,74 @@ export function FlashcardView() {
                     })}
                   </div>
                 )}
-              </Card>
+                </Card>
+              </div>
             );
           })}
 
           {/* Sets without a level (none at the moment; kept so they still show) */}
           {unlevelledSets.length > 0 && (
-            <Card className="flex flex-col px-4 py-1">
+            <Card className="flex flex-col px-4 py-1 lg:hidden">
               {unlevelledSets.map(setRow)}
             </Card>
           )}
         </div>
+        </div>
+
+        {/* Laptop: the selected level's sets */}
+        {deskLevel && (() => {
+          const { level, sets, total, learned } = deskLevel;
+          const coreSets = sets.filter(s => !s.folder || s.folder === 'Core');
+          const folders = FOLDERS
+            .map(folder => ({ folder, sets: sets.filter(s => s.folder === folder) }))
+            .filter(f => f.sets.length > 0);
+          return (
+            <section className="hidden flex-col gap-[18px] pt-2 lg:flex" aria-label={`${level} sets`}>
+              <div className="flex items-baseline justify-between gap-4">
+                <h2 className="font-heading text-[26px] font-semibold text-foreground">
+                  {level}{LEVEL_NAMES[level] ? ` · ${LEVEL_NAMES[level]}` : ''}
+                </h2>
+                <span className="shrink-0 text-sm text-muted-foreground">{learned} of {total} words learned</span>
+              </div>
+              {coreSets.length > 0 && (
+                <div className="grid grid-cols-2 gap-3">{coreSets.map(setCard)}</div>
+              )}
+              {folders.map(({ folder, sets: folderSets }) => {
+                const key = `${level}-${folder}`;
+                const folderOpen = openFolders.has(key);
+                const words = folderSets.reduce((t, s) => t + s.words.length, 0);
+                return (
+                  <div key={key} className="flex flex-col gap-3">
+                    <button
+                      type="button"
+                      onClick={() => toggleIn(setOpenFolders, key)}
+                      className="card-hover flex w-full items-center gap-3 rounded-xl border border-border bg-card p-4 text-left"
+                      aria-expanded={folderOpen}
+                    >
+                      <div className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-accent text-primary">
+                        {folderOpen ? <FolderOpen className="h-5 w-5" /> : <Folder className="h-5 w-5" />}
+                      </div>
+                      <div className="flex min-w-0 flex-1 flex-col gap-px">
+                        <span className="truncate text-[15px] font-semibold text-foreground">{folder}</span>
+                        <span className="text-xs text-muted-foreground">{plural(folderSets.length, 'set')} · {words} words</span>
+                      </div>
+                      <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${folderOpen ? 'rotate-180' : ''}`} strokeWidth={2.5} />
+                    </button>
+                    {folderOpen && (
+                      <div className="grid grid-cols-2 gap-3">{folderSets.map(setCard)}</div>
+                    )}
+                  </div>
+                );
+              })}
+              {unlevelledSets.length > 0 && (
+                <div className="flex flex-col gap-3">
+                  <span className={sectionLabel}>Other sets</span>
+                  <div className="grid grid-cols-2 gap-3">{unlevelledSets.map(setCard)}</div>
+                </div>
+              )}
+            </section>
+          );
+        })()}
       </div>
     );
   }
@@ -553,7 +670,7 @@ export function FlashcardView() {
       : learningWords;
 
     return (
-      <div className="animate-fade-in space-y-4 pb-6">
+      <div className="animate-fade-in mx-auto w-full max-w-2xl space-y-4 pb-6 lg:pb-28">
         {/* Header */}
         <div className="flex items-center justify-between">
           <button onClick={goBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
@@ -691,7 +808,7 @@ export function FlashcardView() {
   // ===== ARCHIVE MODE =====
   if (mode === 'archive') {
     return (
-      <div className="animate-fade-in space-y-4 pb-6">
+      <div className="animate-fade-in mx-auto w-full max-w-2xl space-y-4 pb-6 lg:pb-28">
         <div className="flex items-center justify-between">
           <button onClick={goBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="h-4 w-4" /> Back
@@ -736,7 +853,7 @@ export function FlashcardView() {
   // ===== LEARNED WORDS MODE =====
   if (mode === 'learned') {
     return (
-      <div className="animate-fade-in space-y-4">
+      <div className="animate-fade-in mx-auto w-full max-w-2xl space-y-4 pb-6 lg:pb-28">
         <div className="flex items-center justify-between">
           <button onClick={goBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="h-4 w-4" /> Back
@@ -788,7 +905,7 @@ export function FlashcardView() {
     // No saved words at all
     if (allWords.filter(w => w.status !== 'known' && w.status !== 'ignored').length === 0) {
       return (
-        <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
+        <div className="mx-auto flex w-full max-w-md flex-col items-center justify-center py-20 text-center animate-fade-in">
           <Button variant="ghost" className="self-start mb-4" onClick={goBack}>
             <ArrowLeft className="h-4 w-4 mr-1" /> Back
           </Button>
@@ -832,7 +949,7 @@ export function FlashcardView() {
       };
 
       return (
-        <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
+        <div className="mx-auto flex w-full max-w-md flex-col items-center justify-center py-20 text-center animate-fade-in">
           <Button variant="ghost" className="self-start mb-4" onClick={goBack}>
             <ArrowLeft className="h-4 w-4 mr-1" /> Back
           </Button>
@@ -875,7 +992,7 @@ export function FlashcardView() {
   // ===== SET PRACTICE: done state =====
   if (mode === 'set-practice' && (!currentSetWord || currentIndex >= totalCards)) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in">
+      <div className="mx-auto flex w-full max-w-md flex-col items-center justify-center py-20 text-center animate-fade-in">
         <Button variant="ghost" className="self-start mb-4" onClick={goBack}>
           <ArrowLeft className="h-4 w-4 mr-1" /> Back
         </Button>
@@ -907,7 +1024,7 @@ export function FlashcardView() {
   const progressPct = totalCards > 0 ? Math.min(100, ((currentIndex + 1) / totalCards) * 100) : 0;
 
   return (
-    <div className="animate-fade-in mx-auto max-w-md space-y-5">
+    <div className="animate-fade-in mx-auto max-w-md space-y-5 lg:max-w-[520px] lg:pb-28">
       {/* Header: close · count · direction (design: 'cards') */}
       <div className="-mx-2.5 flex items-center justify-between gap-2">
         <button
@@ -942,8 +1059,8 @@ export function FlashcardView() {
         onTouchEnd={handleTouchEnd}
       >
         {/* Stacked cards behind */}
-        <div className="pointer-events-none absolute inset-x-6 top-0 h-[22rem] rounded-xl border border-border bg-card opacity-50" />
-        <div className="pointer-events-none absolute inset-x-3 top-2 h-[22rem] rounded-xl border border-border bg-card opacity-80" />
+        <div className="pointer-events-none absolute inset-x-6 top-0 h-[22rem] lg:h-[24rem] rounded-xl border border-border bg-card opacity-50" />
+        <div className="pointer-events-none absolute inset-x-3 top-2 h-[22rem] lg:h-[24rem] rounded-xl border border-border bg-card opacity-80" />
 
         <div className="relative">
           {/* Soft swipe cues — left = Again, right = Good */}
@@ -975,7 +1092,7 @@ export function FlashcardView() {
             <Volume2 className="h-[22px] w-[22px]" />
           </button>
           <div
-            className="flashcard h-[22rem] cursor-pointer"
+            className="flashcard h-[22rem] lg:h-[24rem] cursor-pointer"
             style={{ transform: swipeDeltaX !== 0 ? `translateX(${swipeDeltaX * 0.2}px) rotate(${swipeDeltaX * 0.015}deg)` : undefined, transition: swipeDeltaX === 0 ? 'transform 0.2s ease' : 'none' }}
             onClick={() => { setFlipped(!flipped); }}
           >

@@ -177,14 +177,17 @@ export function AIChat() {
   return (
     <>
       {/* Floating AI button (design: 'text' — navy circle with a red "AI" tag) */}
+      {/* Phones: above the bottom tab bar. Laptops (no tab bar): bottom-right pill
+          "Ask your tutor"; while a text is open (html[data-reading-panel]) a round
+          button left of the reading side panel, as in FlowDesktop. */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed right-4 z-40 grid place-items-center rounded-full bg-primary shadow-[0_8px_20px_-6px_hsl(var(--primary)/0.45)] transition-all hover:bg-primary/90 active:scale-95"
-        style={{ bottom: 'calc(env(safe-area-inset-bottom) + 5rem)', width: 56, height: 56 }}
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+5rem)] right-4 z-40 flex h-14 min-w-14 items-center justify-center gap-2.5 rounded-full bg-primary shadow-[0_8px_20px_-6px_hsl(var(--primary)/0.45)] transition-all hover:bg-primary/90 active:scale-95 lg:bottom-8 lg:right-8 lg:pl-[18px] lg:pr-[22px] lg:[html[data-reading-panel]_&]:right-[calc(max(0px,(100vw-1160px)/2)+404px)] lg:[html[data-reading-panel]_&]:p-0"
         aria-label="Open English tutor chat"
       >
-        <MessageCircleMore className="h-[26px] w-[26px] text-primary-foreground" />
-        <span className="absolute -right-0.5 -top-0.5 flex h-5 items-center rounded-full border-2 border-background bg-highlight px-1.5 text-[10px] font-bold tracking-[0.04em] text-highlight-foreground">
+        <MessageCircleMore className="h-[26px] w-[26px] shrink-0 text-primary-foreground" />
+        <span className="hidden text-[15px] font-semibold text-primary-foreground lg:inline lg:[html[data-reading-panel]_&]:hidden">Ask your tutor</span>
+        <span className="absolute -right-0.5 -top-0.5 flex h-5 items-center rounded-full border-2 border-background bg-highlight px-1.5 text-[10px] font-bold tracking-[0.04em] text-highlight-foreground lg:static lg:border-0 lg:[html[data-reading-panel]_&]:absolute lg:[html[data-reading-panel]_&]:border-2">
           AI
         </span>
       </button>

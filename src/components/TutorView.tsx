@@ -277,15 +277,15 @@ Rules:
   // No cached analysis yet — show the CTA
   if (!analysis) {
     return (
-      <div className="flex flex-col items-center gap-2.5 rounded-xl border border-border bg-card px-5 py-[22px] text-center">
+      <div className="flex flex-col items-center gap-2.5 rounded-xl border border-border bg-card px-5 py-[22px] text-center lg:px-8 lg:py-7">
         {tutorAvatar('lg')}
         <p className="mt-1 font-heading text-xl font-semibold text-foreground">Get today's study plan</p>
-        <p className="text-sm leading-normal text-muted-foreground text-pretty">
+        <p className="max-w-[440px] text-sm leading-normal text-muted-foreground text-pretty">
           Your AI tutor looks at your reading, words and practice, then tells you what to focus on today.
         </p>
         <button
           onClick={() => load(false)}
-          className="mt-1.5 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 active:scale-[0.99]"
+          className="mt-1.5 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 active:scale-[0.99] lg:w-auto lg:px-8"
         >
           Get today's plan <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
         </button>
@@ -354,7 +354,7 @@ Rules:
             </div>
             <button
               onClick={() => handleActivity(first)}
-              className="flex h-12 items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 active:scale-[0.99]"
+              className="flex h-12 items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 active:scale-[0.99] lg:self-start lg:px-8"
             >
               Start <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
             </button>

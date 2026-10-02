@@ -62,7 +62,7 @@ export function ProgressView() {
     <div className="animate-fade-in flex flex-col gap-4">
 
       {/* Level card with ring */}
-      <Card className="rounded-xl px-4 py-4">
+      <Card className="rounded-xl px-4 py-4 lg:px-5 lg:py-5">
         <div className="flex items-center gap-4">
           <XPRing pct={xpProgress.pct} level={levelInfo.level} />
           <div className="min-w-0 flex-1">
@@ -101,7 +101,7 @@ export function ProgressView() {
       </Card>
 
       {/* XP how-to */}
-      <Card className="flex flex-col gap-2.5 rounded-xl px-4 py-3.5">
+      <Card className="flex flex-col gap-2.5 rounded-xl px-4 py-3.5 lg:px-5 lg:py-4">
         <h3 className="flex items-center gap-1.5 font-heading text-[17px] font-semibold text-foreground">
           <Zap className="h-4 w-4 text-highlight" /> How to earn XP
         </h3>
@@ -121,7 +121,7 @@ export function ProgressView() {
       </Card>
 
       {/* Vocabulary breakdown */}
-      <Card className="flex flex-col gap-3 rounded-xl px-4 py-3.5">
+      <Card className="flex flex-col gap-3 rounded-xl px-4 py-3.5 lg:px-5 lg:py-4">
         <div className="flex items-baseline justify-between">
           <h3 className="font-heading text-[17px] font-semibold text-foreground">Your words</h3>
           <span className="text-[13px] text-muted-foreground">{allWords.length} saved</span>

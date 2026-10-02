@@ -11,7 +11,7 @@ function LoginSkyline() {
       width="100%"
       height="110"
       preserveAspectRatio="xMidYMax meet"
-      className="mt-1 block"
+      className="mt-1 block lg:mt-4 lg:h-[180px]"
       aria-hidden="true"
     >
       <g className="fill-primary/10 stroke-foreground/40" strokeWidth="1.4" strokeLinejoin="round">
@@ -45,7 +45,7 @@ function LoginSkyline() {
 }
 
 const inputClass =
-  'h-[50px] w-full rounded-xl border border-border bg-card px-3.5 text-[15px] text-foreground ' +
+  'h-[50px] w-full rounded-xl border border-border bg-card px-3.5 text-[15px] text-foreground lg:bg-background ' +
   'placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-[0.5px] focus:ring-primary';
 
 export function AuthScreen() {
@@ -89,21 +89,27 @@ export function AuthScreen() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <div className="mx-auto flex min-h-screen w-full max-w-sm flex-col gap-3 px-6 pt-8 pb-8">
+      {/* Phones: one column (brand, skyline, spacer, form).
+          Laptops: brand panel on the left, form card on the right, centred on the page. */}
+      <div className="mx-auto flex min-h-screen w-full max-w-sm flex-col gap-3 px-6 pt-8 pb-8 lg:grid lg:max-w-[1000px] lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center lg:gap-20 lg:px-10 lg:py-16">
+        <div className="flex flex-col gap-3 lg:gap-5">
         {/* Wordmark + tagline */}
         <div className="flex items-center gap-3">
           <BrandLogo size={48} />
           <div className="flex flex-col">
-            <h1 className="font-heading text-[26px] font-semibold leading-tight tracking-[-0.015em]">English Flow</h1>
+            <h1 className="font-heading text-[26px] font-semibold leading-tight tracking-[-0.015em] lg:text-[34px]">English Flow</h1>
             <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">by LingoFlow</span>
           </div>
         </div>
-        <p className="text-base leading-normal text-muted-foreground text-pretty">
+        <p className="text-base leading-normal text-muted-foreground text-pretty lg:max-w-[420px] lg:font-heading lg:text-[22px] lg:leading-snug lg:text-foreground">
           British English through short, funny stories. Ten minutes a day.
         </p>
         <LoginSkyline />
+        </div>
 
-        <div className="flex-1 min-h-6" />
+        <div className="flex-1 min-h-6 lg:hidden" />
+
+        <div className="flex flex-col gap-3 lg:rounded-xl lg:border lg:border-border lg:bg-card lg:p-8">
 
         {success ? (
           <div className="flex flex-col gap-3">
@@ -206,6 +212,7 @@ export function AuthScreen() {
             </p>
           </>
         )}
+        </div>
       </div>
     </div>
   );
