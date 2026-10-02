@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { BrandLogo } from '@/components/BrandLogo';
 import { useLearning } from '@/context/LearningContext';
 import { useAuth } from '@/context/AuthContext';
 import { getTextReadHistory } from '@/lib/textReadHistory';
@@ -264,7 +265,10 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
     <div className="animate-fade-in flex flex-col gap-4">
       {/* Wordmark + streak pill */}
       <div className="flex items-center justify-between">
-        <span className="font-heading text-xl font-semibold tracking-[-0.01em] text-foreground">English Flow</span>
+        <span className="flex items-center gap-2 font-heading text-xl font-semibold tracking-[-0.01em] text-foreground">
+          <BrandLogo size={32} />
+          English Flow
+        </span>
         <div className="flex items-center gap-2">
           {syncing && <Cloud className="h-4 w-4 text-primary animate-pulse" />}
           <div

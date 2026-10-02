@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { BrandLogo } from '@/components/BrandLogo';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 
@@ -90,7 +91,13 @@ export function AuthScreen() {
     <div className="min-h-screen bg-background text-foreground">
       <div className="mx-auto flex min-h-screen w-full max-w-sm flex-col gap-3 px-6 pt-8 pb-8">
         {/* Wordmark + tagline */}
-        <h1 className="font-heading text-[26px] font-semibold tracking-[-0.015em]">English Flow</h1>
+        <div className="flex items-center gap-3">
+          <BrandLogo size={48} />
+          <div className="flex flex-col">
+            <h1 className="font-heading text-[26px] font-semibold leading-tight tracking-[-0.015em]">English Flow</h1>
+            <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">by LingoFlow</span>
+          </div>
+        </div>
         <p className="text-base leading-normal text-muted-foreground text-pretty">
           British English through short, funny stories. Ten minutes a day.
         </p>

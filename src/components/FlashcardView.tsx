@@ -986,7 +986,7 @@ export function FlashcardView() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
                     {direction === 'dutch-to-english' ? 'English' : 'Russian'}
                   </p>
-                  <p className={`font-heading text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground ${direction === 'english-to-dutch' ? 'italic' : ''}`}>{front}</p>
+                  <p className={`font-heading text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground`}>{front}</p>
                   {direction === 'dutch-to-english' && exampleSentence && (
                     <p className="mt-3 text-[15px] leading-normal text-muted-foreground">
                       {highlightWord(exampleSentence, displayWord.dutch)}
@@ -1000,7 +1000,7 @@ export function FlashcardView() {
                 <div className="flex flex-1 flex-col items-center justify-center gap-1.5 overflow-y-auto text-center">
                   <p className="font-heading text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground">{englishWord}</p>
                   <div className="my-3.5 h-0.5 w-8 rounded-full bg-highlight" />
-                  <p className="font-heading text-[21px] italic text-foreground">{displayWord.english}</p>
+                  <p className="font-heading text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground">{displayWord.english}</p>
                   {exampleSentence && (
                     <p className="mt-4 text-[15px] leading-normal text-foreground">"{exampleSentence}"</p>
                   )}
@@ -1062,7 +1062,7 @@ export function FlashcardView() {
               <span className="text-xs text-muted-foreground w-14 shrink-0 mt-0.5">example</span>
               <div>
                 <p className="text-xs font-medium leading-snug">{displayWord.example}</p>
-                <p className="text-xs text-muted-foreground italic leading-snug">{displayWord.exampleTranslation}</p>
+                <p className="text-xs text-muted-foreground leading-snug">{displayWord.exampleTranslation}</p>
               </div>
             </div>
           )}
