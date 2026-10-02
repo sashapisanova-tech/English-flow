@@ -157,6 +157,9 @@ if that's not possible, simplify the sentence.
 - **Budget:** `words` + `expressions` + `splitExpressions` together stay within
   the key-word limit in §6. Aim for **at least 1 expression per text at A1 and
   2–3 at A2–B1**.
+- **Words everyone already knows** (*OK, TV, pizza, taxi, internet*: the
+  international words in the starter list) are never key items. Use them freely
+  in texts: familiar words lower the reading load, especially at A1.
 - Key-item slots are for **new vocabulary**. Grammar chunks made only of known
   words (*there is, have got*) are practised through the grammar focus and
   `grammarNote`, not taught as key items.
