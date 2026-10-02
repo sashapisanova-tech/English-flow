@@ -72,11 +72,12 @@ export function sentencesOf(content: string): string[] {
     .split(/\n\s*\n/)
     .flatMap(p => p.match(/[^.!?…]+[.!?…]*["”»)]*/g) ?? [])
     .map(s => s.trim())
-    .filter(s => /[A-Za-z0-9]/.test(s));
+    .filter(s => /[A-Za-zÀ-ÿ0-9]/.test(s));
 }
 
 export function tokensOf(sentence: string): string[] {
-  return sentence.match(/[A-Za-z]+(?:'[A-Za-z]+)?(?:-[A-Za-z]+)*|\d+(?:[.,:]\d+)*/g) ?? [];
+  // Letters include accents (café, naïve)
+  return sentence.match(/[A-Za-zÀ-ÖØ-öø-ÿ]+(?:'[A-Za-zÀ-ÖØ-öø-ÿ]+)?(?:-[A-Za-zÀ-ÖØ-öø-ÿ]+)*|\d+(?:[.,:]\d+)*/g) ?? [];
 }
 
 const CONTRACTIONS: Record<string, string[]> = {

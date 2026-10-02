@@ -50,7 +50,7 @@ for (const list of [starter, a1, a2, b1] as WordListEntry[][]) {
 
 /** Looks up a word or phrase; returns null when it isn't in the prepared lists. */
 export function lookupWord(text: string): DictionaryHit | null {
-  const w = text.trim().toLowerCase().replace(/[’‘]/g, "'").replace(/^[^a-z']+|[^a-z']+$/g, '');
+  const w = text.trim().toLowerCase().replace(/[’‘]/g, "'").replace(/^[^a-zà-ÿ']+|[^a-zà-ÿ']+$/g, '');
   if (!w) return null;
   if (CONTRACTIONS[w]) return { translation: CONTRACTIONS[w] };
   const exact = entries.get(w);

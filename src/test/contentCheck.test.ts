@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { candidates, checkCourse, sentencesOf, type WordLists } from '@/lib/contentCheck';
+import { candidates, checkCourse, sentencesOf, tokensOf, type WordLists } from '@/lib/contentCheck';
 import type { ReadingText } from '@/types/dutch';
 
 const lists: WordLists = {
@@ -48,6 +48,12 @@ describe('candidates', () => {
     expect(candidates("don't", irregular)).toContain('do');
     expect(candidates("she's", irregular)).toContain('she');
     expect(candidates("can't", irregular)).toContain('can');
+  });
+});
+
+describe('tokensOf', () => {
+  it('keeps accented letters inside words', () => {
+    expect(tokensOf('The café is open.')).toEqual(['The', 'café', 'is', 'open']);
   });
 });
 
