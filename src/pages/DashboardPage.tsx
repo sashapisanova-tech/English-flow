@@ -11,7 +11,6 @@ import { TasksView } from '@/components/TasksView';
 import { MeView } from '@/components/MeView';
 import { VoiceSettings } from '@/components/VoiceSettings';
 import { ReadingText, Level, Module } from '@/types/dutch';
-import heroImage from '@/assets/hero-dutch.jpg';
 import { ReadingOnboarding, useReadingOnboarding } from '@/components/ReadingOnboarding';
 import { TutorView } from '@/components/TutorView';
 
@@ -80,7 +79,6 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <div className="relative w-full overflow-hidden min-h-[220px] flex flex-col justify-end">
-        <img src={heroImage} alt="" className="absolute inset-0 w-full h-full object-cover object-center opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/60 to-background" />
         <div className="relative mx-auto w-full max-w-lg px-5 pt-10 pb-6">
           <div className="flex items-start justify-between gap-2">
