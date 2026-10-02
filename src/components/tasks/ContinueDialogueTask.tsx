@@ -1,11 +1,15 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Send, BookmarkPlus, X, ChevronDown, Loader2, Sparkles } from 'lucide-react';
+import {
+  ArrowLeft, Send, BookmarkPlus, X, ChevronDown, Loader2, Sparkles, CheckCircle2, Pencil, MessageCircleMore,
+  Croissant, Signpost, ShoppingCart, Hand, CloudSun, Coffee, Bus, Stethoscope, CalendarClock, Briefcase,
+  Users, Newspaper, MessageSquareWarning, CalendarDays, Scale, type LucideIcon,
+} from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { useCustomSets } from '@/hooks/useCustomSets';
 import { useAuth } from '@/context/AuthContext';
-import { TaskFilters, Level } from './TaskFilters';
+import { Level, SetupHeader, SectionLabel, LevelSegmented, SetupFooter } from './TaskFilters';
 import { savePracticeSession } from '@/lib/practiceSession';
 import { claudeFetch } from '@/lib/ai';
 
@@ -73,6 +77,25 @@ const LEVEL_TOPICS: Record<Level, { dutch: string; english: string }[]> = {
     { dutch: 'Plans for the weekend', english: 'Планы на выходные' },
     { dutch: 'Defending an opinion',  english: 'Отстаиваем мнение' },
   ],
+};
+
+// Icons for the topic tiles on the setup screen (keyed by topic title).
+const TOPIC_ICONS: Record<string, LucideIcon> = {
+  'At the bakery': Croissant,
+  'Asking for directions': Signpost,
+  'At the supermarket': ShoppingCart,
+  'Introducing yourself': Hand,
+  'The weather': CloudSun,
+  'Ordering at a café': Coffee,
+  'Taking the bus': Bus,
+  "At the doctor's": Stethoscope,
+  'Making an appointment': CalendarClock,
+  'At work': Briefcase,
+  'A discussion at work': Users,
+  'Discussing the news': Newspaper,
+  'Making a complaint': MessageSquareWarning,
+  'Plans for the weekend': CalendarDays,
+  'Defending an opinion': Scale,
 };
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -344,7 +367,7 @@ function SaveWordModal({ onClose, onSave, onCreateAndSave, existingSets }: SaveW
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-type Screen = 'config' | 'topic' | 'chat';
+type Screen = 'config' | 'chat';
 
 export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
   const { texts, pastErrors, addPastError } = useLearning();
@@ -360,6 +383,7 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
   const [level, setLevel] = useState<Level>('A1');
   const [selectedTopic, setSelectedTopic] = useState<string>('');
   const [customTopic, setCustomTopic] = useState('');
+  const [ownTopicMode, setOwnTopicMode] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [userInput, setUserInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -467,6 +491,7 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
     setError(null);
     setSelectedTopic('');
     setCustomTopic('');
+    setOwnTopicMode(false);
   }
 
   function handleSaveWord(dutch: string, english: string, example: string, article: 'de' | 'het' | undefined, setId: string) {
@@ -480,90 +505,87 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
     setShowSaveWord(false);
   }
 
-  // ── Config screen ────────────────────────────────────────────────────────────
+  // ── Setup screen (level + topic) ─────────────────────────────────────────────
 
   if (screen === 'config') {
-    return (
-      <div className="animate-fade-in space-y-4 pb-6">
-        <button onClick={onBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="h-4 w-4" /> Tasks
-        </button>
-        <div>
-          <h2 className="font-heading text-xl font-bold text-foreground">Chat with AI</h2>
-          <p className="text-sm text-muted-foreground mt-0.5">Hold a short English conversation. Grammar review after 5 messages.</p>
-        </div>
-        <Card className="p-4">
-          <TaskFilters level={level} theme="Everyday life" onLevelChange={setLevel} onThemeChange={() => {}} hideTheme />
-        </Card>
-        {error && <Card className="border-red-200 bg-red-50 p-4"><p className="text-sm text-red-700">{error}</p></Card>}
-        <Button className="w-full gap-2 py-5 text-base font-semibold" onClick={() => setScreen('topic')}>
-          Choose topic
-        </Button>
-      </div>
-    );
-  }
-
-  // ── Topic selection screen ───────────────────────────────────────────────────
-
-  if (screen === 'topic') {
     const suggestedTopics = LEVEL_TOPICS[level];
+    // The topic actually used when starting: own topic, picked topic, or the level's first topic.
+    const activeTopic = ownTopicMode ? null : (selectedTopic || suggestedTopics[0].dutch);
+    const tileClass = (on: boolean) => `relative flex flex-col gap-2 rounded-xl p-3 text-left transition-colors ${
+      on ? 'border-[1.5px] border-highlight bg-highlight-soft' : 'border border-border bg-card hover:border-primary/40'
+    }`;
+    const tileCheck = <CheckCircle2 className="absolute right-2.5 top-2.5 h-[18px] w-[18px] fill-highlight text-highlight-soft" />;
 
     return (
-      <div className="animate-fade-in space-y-4 pb-6">
-        <button onClick={() => setScreen('config')} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="h-4 w-4" /> Back
-        </button>
+      <div className="animate-fade-in flex flex-col gap-[22px]">
+        <SetupHeader title="Chat with AI" onBack={onBack} />
 
-        <div>
-          <h2 className="font-heading text-xl font-bold text-foreground">Choose a topic</h2>
+        <div className="flex flex-col gap-2">
+          <SectionLabel>Level</SectionLabel>
+          <LevelSegmented level={level} onChange={l => { setLevel(l); setSelectedTopic(''); }} />
         </div>
 
-        {/* Info note */}
-        <div className="rounded-xl bg-muted/60 border border-border px-3.5 py-3">
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            Choose a real-life situation you'd like to practice — like ordering a coffee, asking for directions, or shopping at the market.
-          </p>
-        </div>
-
-        {/* Level-aware suggested topics */}
-        <div className="space-y-2">
-          {suggestedTopics.map(topic => (
+        <div className="flex flex-col gap-2.5">
+          <SectionLabel>Topic</SectionLabel>
+          <div className="grid grid-cols-2 gap-2">
+            {suggestedTopics.map(topic => {
+              const on = activeTopic === topic.dutch;
+              const Icon = TOPIC_ICONS[topic.dutch] ?? MessageCircleMore;
+              return (
+                <button
+                  key={topic.dutch}
+                  aria-pressed={on}
+                  onClick={() => { setSelectedTopic(topic.dutch); setCustomTopic(''); setOwnTopicMode(false); }}
+                  className={tileClass(on)}
+                >
+                  <Icon className={`h-[22px] w-[22px] ${on ? 'text-highlight' : 'text-primary'}`} strokeWidth={1.75} />
+                  <span className="flex flex-col gap-px pr-5">
+                    <span className={`text-sm font-semibold leading-snug ${on ? 'text-highlight-ink' : 'text-foreground'}`}>{topic.dutch}</span>
+                    <span className={`text-xs ${on ? 'text-highlight-ink/80' : 'text-muted-foreground'}`}>{topic.english}</span>
+                  </span>
+                  {on && tileCheck}
+                </button>
+              );
+            })}
             <button
-              key={topic.dutch}
-              onClick={() => { setSelectedTopic(topic.dutch); setCustomTopic(''); }}
-              className={`w-full text-left rounded-xl border p-3.5 transition-colors ${
-                selectedTopic === topic.dutch && !customTopic
-                  ? 'border-primary bg-primary/5 text-foreground'
-                  : 'border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
-              }`}
+              aria-pressed={ownTopicMode}
+              onClick={() => { setOwnTopicMode(true); setSelectedTopic(''); }}
+              className={tileClass(ownTopicMode)}
             >
-              <span className="text-sm font-medium block">{topic.dutch}</span>
-              <span className="text-xs text-muted-foreground/70">{topic.english}</span>
+              <Pencil className={`h-[22px] w-[22px] ${ownTopicMode ? 'text-highlight' : 'text-primary'}`} strokeWidth={1.75} />
+              <span className="flex flex-col gap-px pr-5">
+                <span className={`text-sm font-semibold leading-snug ${ownTopicMode ? 'text-highlight-ink' : 'text-foreground'}`}>Your own topic</span>
+                <span className={`text-xs ${ownTopicMode ? 'text-highlight-ink/80' : 'text-muted-foreground'}`}>Свою тему</span>
+              </span>
+              {ownTopicMode && tileCheck}
             </button>
-          ))}
+          </div>
+
+          {ownTopicMode && (
+            <label className="flex h-[46px] items-center gap-2.5 rounded-xl border border-border bg-card px-3.5 animate-fade-in focus-within:border-primary">
+              <Pencil className="h-4 w-4 shrink-0 text-muted-foreground" />
+              <input
+                value={customTopic}
+                onChange={e => setCustomTopic(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter' && customTopic.trim() && !loading) handleStart(); }}
+                placeholder="e.g. Buying a train ticket"
+                autoComplete="off"
+                autoFocus
+                className="min-w-0 flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+              />
+            </label>
+          )}
         </div>
 
-        {/* Custom topic */}
-        <div className="space-y-1.5">
-          <p className="text-xs text-muted-foreground font-medium">Or type your own topic…</p>
-          <input
-            value={customTopic}
-            onChange={e => { setCustomTopic(e.target.value); if (e.target.value) setSelectedTopic(''); }}
-            placeholder="e.g. Buying a train ticket"
-            autoComplete="off"
-            className="w-full rounded-xl border border-border bg-card px-3 py-2.5 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30"
-          />
-        </div>
+        {error && <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4"><p className="text-sm text-destructive">{error}</p></div>}
 
-        {error && <Card className="border-red-200 bg-red-50 p-4"><p className="text-sm text-red-700">{error}</p></Card>}
-
-        <Button
-          className="w-full gap-2 py-5 text-base font-semibold"
+        <SetupFooter
+          label={loading ? 'Starting…' : 'Start conversation'}
+          busy={loading}
+          caption={`Grammar review after ${MAX_USER_TURNS} messages`}
           onClick={handleStart}
-          disabled={loading}
-        >
-          {loading ? <span className="animate-pulse">Starting…</span> : 'Start conversation'}
-        </Button>
+          disabled={loading || (ownTopicMode && !customTopic.trim())}
+        />
       </div>
     );
   }
@@ -641,8 +663,8 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
       </div>
 
       {error && (
-        <Card className="border-red-200 bg-red-50 p-4">
-          <p className="text-sm text-red-700">{error}</p>
+        <Card className="border-destructive/30 bg-destructive/5 p-4">
+          <p className="text-sm text-destructive">{error}</p>
         </Card>
       )}
 
@@ -654,7 +676,7 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
 
           {review.strongPoints.length > 0 && (
             <div className="space-y-1">
-              <p className="text-xs font-semibold text-emerald-700 uppercase tracking-wide">Strong points</p>
+              <p className="text-xs font-semibold text-success uppercase tracking-wide">Strong points</p>
               <ul className="space-y-0.5">
                 {review.strongPoints.map((sp, i) => <li key={i} className="text-sm text-foreground">· {sp}</li>)}
               </ul>

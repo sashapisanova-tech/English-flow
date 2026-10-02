@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+</helmet>
+<div style="width:390px;height:844px;border-radius:52px;background:hsl(20 12% 12%);padding:10px;box-sizing:border-box;box-shadow:0 30px 60px -20px hsl(20 30% 20% / 0.35);">
+  <div style="position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 30px 0;font-size:15px;font-weight:600;height:32px;flex-shrink:0;">
+      <span>9:41</span>
+      <div style="width:110px;height:30px;border-radius:20px;background:hsl(20 12% 8%);"></div>
+      <span style="display:flex;gap:5px;font-size:14px;"><i class="ph-fill ph-cell-signal-full"></i><i class="ph-fill ph-wifi-high"></i><i class="ph-fill ph-battery-full"></i></span>
+    </div>
+
+    <sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:20px 24px 30px;gap:12px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <svg width="48" height="48" viewBox="0 0 34 34"><rect width="34" height="34" rx="10" fill="var(--accent)"></rect><path d="M8 13c3-3 6-3 9 0s6 3 9 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M8 21c3-3 6-3 9 0s6 3 9 0" fill="none" stroke="var(--accent-2-logo, #fff)" stroke-width="2.4" stroke-linecap="round"></path></svg>
+          <span style="font-family:Lora,serif;font-size:26px;font-weight:600;letter-spacing:-0.015em;">English Flow</span>
+        </div>
+        <span style="font-size:16px;line-height:1.5;color:var(--muted);text-wrap:pretty;">British English through short, funny stories. Ten minutes a day.</span>
+        <svg viewBox="0 0 360 120" width="100%" height="110" preserveAspectRatio="xMidYMax meet" style="display:block;margin-top:4px;">
+          <g fill="color-mix(in oklab, var(--accent) 10%, var(--bg))" stroke="var(--line)" stroke-width="1.4" stroke-linejoin="round">
+            <path d="M300 104V44h-4V26h4V16l10-14 10 14v10h4v18h-4v60"></path>
+            <path d="M200 104V70h6v-8h6v8h16v-8h6v8h16v-8h6v8h14v-8h6v8h24v34"></path>
+            <path d="M320 104V74h10v-8h6v8h18v30"></path>
+          </g>
+          <circle cx="310" cy="35" r="6" fill="var(--bg)" stroke="var(--line)" stroke-width="1.4"></circle>
+          <path d="M310 35v-3.5M310 35l2.5 1.5" stroke="var(--line)" stroke-width="1.2" stroke-linecap="round"></path>
+          <g fill="var(--line)"><rect x="216" y="80" width="5" height="10" rx="1"></rect><rect x="232" y="80" width="5" height="10" rx="1"></rect><rect x="248" y="80" width="5" height="10" rx="1"></rect><rect x="264" y="80" width="5" height="10" rx="1"></rect><rect x="280" y="80" width="5" height="10" rx="1"></rect><rect x="306" y="54" width="8" height="10" rx="1"></rect><rect x="306" y="72" width="8" height="10" rx="1"></rect></g>
+          <circle cx="146" cy="58" r="40" fill="none" stroke="var(--line)" stroke-width="1.4"></circle>
+          <circle cx="146" cy="58" r="4" fill="var(--line)"></circle>
+          <path d="M146 18v80M106 58h80M118 30l56 56M174 30l-56 56" stroke="var(--line)" stroke-width="0.9"></path>
+          <path d="M146 58l-14 46M146 58l14 46" stroke="var(--line)" stroke-width="1.4"></path>
+          <path d="M20 104h340" stroke="var(--line)" stroke-width="1.4"></path>
+          <rect x="226" y="84" width="40" height="20" rx="3" fill="var(--accent-2, var(--accent))"></rect>
+          <path d="M226 93h40" stroke="var(--bg)" stroke-width="1.4"></path>
+          <circle cx="235" cy="105" r="3" fill="var(--text)"></circle><circle cx="258" cy="105" r="3" fill="var(--text)"></circle>
+          <path d="M40 114h60M150 117h110M290 112h50" stroke="var(--line)" stroke-width="1.4" stroke-linecap="round"></path>
+        </svg>
+        <div style="flex:1;"></div>
+        <span style="font-family:Lora,serif;font-size:22px;font-weight:600;">Welcome back</span>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <span style="font-size:13px;font-weight:600;">Email</span>
+          <div style="height:50px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;display:flex;align-items:center;padding:0 14px;font-size:15px;">masha@example.com</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-size:13px;font-weight:600;">Password</span><span style="font-size:13px;font-weight:600;">Forgot?</span></div>
+          <div style="height:50px;border-radius:12px;background:var(--card);border:1.5px solid var(--accent);box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:0 14px;font-size:15px;"><span style="display:flex;align-items:center;letter-spacing:0.2em;">••••••••<span style="width:1.5px;height:20px;background:var(--accent);margin-left:2px;"></span></span><i class="ph-bold ph-eye" style="font-size:18px;color:var(--muted);"></i></div>
+        </div>
+        <div style="height:50px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;">Log in</div>
+        <div style="display:flex;align-items:center;gap:12px;font-size:13px;color:var(--muted);"><div style="flex:1;height:1px;background:var(--border);"></div>or<div style="flex:1;height:1px;background:var(--border);"></div></div>
+        <div style="height:50px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:10px;font-weight:600;font-size:15px;"><i class="ph-duotone ph-google-logo" style="font-size:20px;"></i>Continue with Google</div>
+        <span style="font-size:14px;color:var(--muted);text-align:center;margin-top:4px;">New here? <span style="color:var(--accent-2-ink, var(--accent-ink));font-weight:600;">Create an account</span></span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTutor }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;gap:16px;padding:14px 20px 0;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <svg width="34" height="34" viewBox="0 0 34 34"><rect width="34" height="34" rx="10" fill="var(--accent)"></rect><path d="M8 13c3-3 6-3 9 0s6 3 9 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M8 21c3-3 6-3 9 0s6 3 9 0" fill="none" stroke="var(--accent-2-logo, #fff)" stroke-width="2.4" stroke-linecap="round"></path></svg>
+            <span style="font-family:Lora,serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;">English Flow</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--card);border:1px solid var(--border);font-weight:600;font-size:14px;"><i class="ph-duotone ph-flame" style="font-size:18px;color:var(--accent-2, var(--accent));"></i>0</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <span style="font-size:13px;color:var(--muted);">Thursday, 1 October</span>
+          <span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;">Good morning, Masha</span>
+        </div>
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:14px;">
+          <div style="width:52px;height:52px;border-radius:12px;background:var(--accent-2-soft, var(--accent-soft));display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-flame" style="font-size:28px;color:var(--accent-2, var(--accent));"></i></div>
+          <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-family:Lora,serif;font-size:22px;font-weight:600;">0 days</span><span style="font-size:13px;color:var(--muted);">Practise today to start your streak</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;"><i class="ph-duotone ph-book-open" style="font-size:20px;color:var(--accent);"></i><span style="font-family:Lora,serif;font-size:22px;font-weight:600;">0</span><span style="font-size:12px;color:var(--muted);">texts today</span></div><div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;"><i class="ph-duotone ph-cards" style="font-size:20px;color:var(--accent);"></i><span style="font-family:Lora,serif;font-size:22px;font-weight:600;">0</span><span style="font-size:12px;color:var(--muted);">cards done</span></div><div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 10px;display:flex;flex-direction:column;align-items:center;gap:2px;"><i class="ph-duotone ph-books" style="font-size:20px;color:var(--accent);"></i><span style="font-family:Lora,serif;font-size:22px;font-weight:600;">0</span><span style="font-size:12px;color:var(--muted);">words saved</span></div>
+        </div>
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:22px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;">
+          <div style="width:56px;height:56px;border-radius:999px;background:var(--accent-2-soft, var(--accent-soft));display:grid;place-items:center;"><i class="ph-duotone ph-chalkboard-teacher" style="font-size:28px;color:var(--accent-2, var(--accent));"></i></div>
+          <span style="font-family:Lora,serif;font-size:20px;font-weight:600;margin-top:4px;">Get today's study plan</span>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);text-wrap:pretty;">Your AI tutor looks at your reading, words and practice, then tells you what to focus on today.</span>
+          <div style="width:100%;height:48px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;margin-top:6px;">Get today's plan<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+          <span style="font-size:12px;color:var(--muted);">Saved for the rest of the day</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-house" style="font-size:24px;color:var(--accent);"></i>Home</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;"><i class="ph-duotone ph-cards" style="font-size:24px;"></i>Cards<span style="position:absolute;top:-4px;left:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:999px;background:var(--accent-2, var(--accent));color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center;border:2px solid var(--card);">35</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-target" style="font-size:24px;"></i>Tasks</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isPlan }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;gap:18px;padding:14px 20px 0;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <svg width="34" height="34" viewBox="0 0 34 34"><rect width="34" height="34" rx="10" fill="var(--accent)"></rect><path d="M8 13c3-3 6-3 9 0s6 3 9 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path><path d="M8 21c3-3 6-3 9 0s6 3 9 0" fill="none" stroke="var(--accent-2-logo, #fff)" stroke-width="2.4" stroke-linecap="round"></path></svg>
+            <span style="font-family:Lora,serif;font-size:20px;font-weight:600;letter-spacing:-0.01em;">English Flow</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--card);border:1px solid var(--border);font-weight:600;font-size:14px;"><i class="ph-duotone ph-flame" style="font-size:18px;color:var(--accent-2, var(--accent));"></i>7</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <span style="font-size:13px;color:var(--muted);">Thursday, 1 October</span>
+          <span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;">Good morning, Masha</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start;">
+          <div style="width:40px;height:40px;border-radius:999px;background:var(--accent-2-soft, var(--accent-soft));display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-chalkboard-teacher" style="font-size:22px;color:var(--accent-2, var(--accent));"></i></div>
+          <div style="display:flex;flex-direction:column;gap:3px;padding-top:1px;">
+            <span style="font-size:13px;font-weight:600;color:var(--muted);">Your tutor</span>
+            <span style="font-size:15px;line-height:1.5;text-wrap:pretty;">Nice work reading twice this week. Today is about words: 35 are ready to review.</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;">
+            <span style="font-family:Lora,serif;font-size:19px;font-weight:600;">Today's plan</span>
+            <span style="font-size:13px;color:var(--muted);">3 steps · 20 min</span>
+          </div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:center;gap:14px;">
+              <div style="width:28px;height:28px;border-radius:999px;background:var(--accent-2, var(--accent));color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;flex-shrink:0;">1</div>
+              <div style="flex:1;display:flex;flex-direction:column;gap:1px;"><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Review 35 words</span><span style="font-size:13px;color:var(--muted);">Flashcards · about 10 min</span></div>
+            </div>
+            <div style="height:48px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;">Start<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+          </div>
+          <div style="display:flex;flex-direction:column;padding:0 12px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:12px 4px;">
+            <div style="width:28px;height:28px;border-radius:999px;border:1.5px solid var(--border);box-sizing:border-box;display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--muted);flex-shrink:0;">2</div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:1px;"><span style="font-size:15px;font-weight:600;">Read the next story</span><span style="font-size:13px;color:var(--muted);">Biscuit’s Rules · 5 min</span></div>
+            <i class="ph-duotone ph-book-open" style="font-size:22px;color:var(--muted);"></i>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:12px 4px;">
+            <div style="width:28px;height:28px;border-radius:999px;border:1.5px solid var(--border);box-sizing:border-box;display:grid;place-items:center;font-size:13px;font-weight:600;color:var(--muted);flex-shrink:0;">3</div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:1px;"><span style="font-size:15px;font-weight:600;">Chat with your tutor</span><span style="font-size:13px;color:var(--muted);">Present perfect · 5 min</span></div>
+            <i class="ph-duotone ph-chat-circle-dots" style="font-size:22px;color:var(--muted);"></i>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-house" style="font-size:24px;color:var(--accent);"></i>Home</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;"><i class="ph-duotone ph-cards" style="font-size:24px;"></i>Cards<span style="position:absolute;top:-4px;left:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:999px;background:var(--accent-2, var(--accent));color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center;border:2px solid var(--card);">35</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-target" style="font-size:24px;"></i>Tasks</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTasks }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;gap:16px;padding:14px 20px 0;overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;">Tasks</span>
+          <span style="font-size:13px;color:var(--muted);">2 of 5 done today</span>
+        </div>
+        <div style="height:6px;border-radius:999px;background:var(--track);overflow:hidden;margin-top:-6px;"><div style="width:40%;height:100%;border-radius:999px;background:var(--accent-2, var(--accent));"></div></div>
+        <div style="display:flex;gap:8px;overflow:hidden;margin-right:-20px;"><span style="height:34px;padding:0 14px;border-radius:999px;background:var(--accent);color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;white-space:nowrap;">All</span><span style="height:34px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:13px;font-weight:500;display:flex;align-items:center;white-space:nowrap;">Grammar</span><span style="height:34px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:13px;font-weight:500;display:flex;align-items:center;white-space:nowrap;">Writing</span><span style="height:34px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:13px;font-weight:500;display:flex;align-items:center;white-space:nowrap;">Speaking</span><span style="height:34px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:13px;font-weight:500;display:flex;align-items:center;white-space:nowrap;">Listening</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">From your tutor</span>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:12px;">
+            <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-chat-circle-dots" style="font-size:20px;color:var(--accent);"></i></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;"><span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Speaking · 5 min</span><span style="font-family:Lora,serif;font-size:16px;font-weight:600;line-height:1.25;">Present perfect chat</span><span style="font-size:13px;color:var(--muted);">Tell your tutor what you have done this week</span></div>
+            <span style="font-size:11px;font-weight:700;letter-spacing:0.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--accent-2-soft, var(--accent-soft));color:var(--accent-2-ink, var(--accent-ink));">New</span>
+          </div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:12px;">
+            <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-translate" style="font-size:20px;color:var(--accent);"></i></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;"><span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Grammar · 8 sentences</span><span style="font-family:Lora,serif;font-size:16px;font-weight:600;line-height:1.25;">Translate: have got / have</span><span style="font-size:13px;color:var(--muted);">From The Flat on Camden Road</span></div>
+            <i class="ph-bold ph-caret-right" style="font-size:16px;color:var(--muted);"></i>
+          </div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:12px;">
+            <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-pencil-simple-line" style="font-size:20px;color:var(--accent);"></i></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;"><span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Writing · 4 min</span><span style="font-family:Lora,serif;font-size:16px;font-weight:600;line-height:1.25;">A note to your landlord</span><span style="font-size:13px;color:var(--muted);">Write 3 polite sentences to Mrs Hughes</span></div>
+            <i class="ph-bold ph-caret-right" style="font-size:16px;color:var(--muted);"></i>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Done</span>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:12px;">
+            <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-headphones" style="font-size:20px;color:var(--accent);"></i></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;"><span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Listening · 3 min</span><span style="font-family:Lora,serif;font-size:16px;font-weight:600;line-height:1.25;">At the corner shop</span><span style="font-size:13px;color:var(--muted);">9 of 10 correct</span></div>
+            <i class="ph-fill ph-check-circle" style="font-size:22px;color:hsl(142 60% 40%);"></i>
+          </div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;align-items:center;gap:12px;">
+            <div style="width:38px;height:38px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-text-aa" style="font-size:20px;color:var(--accent);"></i></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:2px;min-width:0;"><span style="font-size:11px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Grammar · 6 sentences</span><span style="font-family:Lora,serif;font-size:16px;font-weight:600;line-height:1.25;">a, an or the?</span><span style="font-size:13px;color:var(--muted);">6 of 6 correct</span></div>
+            <i class="ph-fill ph-check-circle" style="font-size:22px;color:hsl(142 60% 40%);"></i>
+          </div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-house" style="font-size:24px;"></i>Home</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;position:relative;"><i class="ph-duotone ph-cards" style="font-size:24px;"></i>Cards<span style="position:absolute;top:-4px;left:calc(50% + 6px);min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:999px;background:var(--accent-2, var(--accent));color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center;border:2px solid var(--card);">35</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-target" style="font-size:24px;color:var(--accent);"></i>Tasks</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isHub }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;gap:20px;padding:14px 20px 0;overflow:hidden;">
+        <div style="display:flex;flex-direction:column;gap:4px;"><span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;">Tasks</span><span style="font-size:15px;color:var(--muted);">Practise with your AI tutor.</span></div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:18px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;gap:14px;"><div style="width:48px;height:48px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-translate" style="font-size:24px;color:var(--accent);"></i></div><div style="flex:1;display:flex;flex-direction:column;gap:2px;"><span style="font-family:Lora,serif;font-size:19px;font-weight:600;">Translate to English</span><span style="font-size:13px;color:var(--muted);">10 min · written</span></div><i class="ph-bold ph-caret-right" style="font-size:18px;color:var(--muted);"></i></div>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);">The tutor writes a short Russian text for your level. You translate it and get feedback.</span>
+        </div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:18px;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;gap:14px;"><div style="width:48px;height:48px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-chat-circle-dots" style="font-size:24px;color:var(--accent);"></i></div><div style="flex:1;display:flex;flex-direction:column;gap:2px;"><span style="font-family:Lora,serif;font-size:19px;font-weight:600;">Chat with AI</span><span style="font-size:13px;color:var(--muted);">5 min · conversation</span></div><i class="ph-bold ph-caret-right" style="font-size:18px;color:var(--muted);"></i></div>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);">A short conversation on a topic you pick. Grammar review at the end.</span>
+        </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Last time</span>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 4px;border-top:1px solid var(--border);"><i class="ph-fill ph-check-circle" style="font-size:20px;color:hsl(142 60% 40%);"></i><span style="flex:1;font-size:15px;">Chat · At the bakery</span><span style="font-size:13px;color:var(--muted);">Yesterday</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 4px;border-top:1px solid var(--border);"><i class="ph-fill ph-check-circle" style="font-size:20px;color:hsl(142 60% 40%);"></i><span style="flex:1;font-size:15px;">Translation · A day at work</span><span style="font-size:13px;color:var(--muted);">Mon</span></div>
+        </div>
+      </div>
+      <div style="position:absolute;right:20px;bottom:104px;width:56px;height:56px;border-radius:999px;background:var(--accent);display:grid;place-items:center;box-shadow:0 8px 20px -6px hsl(220 62% 20% / 0.45);"><i class="ph-fill ph-chat-circle-dots" style="font-size:26px;color:#fff;"></i><div style="position:absolute;top:-2px;right:-2px;height:20px;padding:0 6px;border-radius:999px;background:var(--accent-2, var(--accent));border:2px solid var(--bg);display:flex;align-items:center;color:#fff;font-size:10px;font-weight:700;">AI</div></div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;flex-shrink:0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-house" style="font-size:24px;"></i>Home</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-cards" style="font-size:24px;"></i>Cards</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-target" style="font-size:24px;color:var(--accent);"></i>Tasks</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div></div>
+    </sc-if>
+
+    <sc-if value="{{ isTransSetup }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;gap:22px;padding:0 20px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:4px;padding-top:12px;margin-left:-10px;"><i class="ph-bold ph-caret-left" style="font-size:22px;padding:10px;"></i><span style="font-family:Lora,serif;font-size:24px;font-weight:600;letter-spacing:-0.015em;">Translate to English</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Level</span><div style="display:grid;grid-template-columns:repeat(3,1fr);padding:4px;gap:4px;border-radius:12px;background:var(--track);"><div style="height:40px;border-radius:9px;display:grid;place-items:center;font-size:15px;font-weight:500;color:var(--muted);">A1</div><div style="height:40px;border-radius:9px;background:var(--card);box-shadow:0 1px 3px hsl(20 30% 10% / 0.15);display:grid;place-items:center;font-size:15px;font-weight:700;color:var(--accent-ink);">A2</div><div style="height:40px;border-radius:9px;display:grid;place-items:center;font-size:15px;font-weight:500;color:var(--muted);">B1</div></div><span style="font-size:13px;color:var(--muted);">Short paragraphs, past tense, everyday situations.</span></div>
+        <div style="display:flex;flex-direction:column;gap:10px;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Topic</span>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;"><span style="height:36px;padding:0 14px;border-radius:999px;background:var(--accent-2-soft, var(--accent-soft));border:1.5px solid var(--accent-2, var(--accent));box-sizing:border-box;color:var(--accent-2-ink, var(--accent-ink));font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px;"><i class="ph-bold ph-check" style="font-size:13px;"></i>At a café</span><span style="height:36px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:14px;display:flex;align-items:center;">A day at work</span><span style="height:36px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:14px;display:flex;align-items:center;">At the doctor</span><span style="height:36px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:14px;display:flex;align-items:center;">Weekend plans</span><span style="height:36px;padding:0 14px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:14px;display:flex;align-items:center;">A diary entry</span></div>
+          <div style="height:46px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:0 14px;font-size:14px;color:var(--muted);"><i class="ph-bold ph-pencil-simple" style="font-size:16px;"></i>Or write your own topic</div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:12px;background:var(--card);border:1px solid var(--border);">
+          <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:15px;font-weight:600;">Use my flashcard words</span><span style="font-size:13px;color:var(--muted);">Adds words from a set you choose</span></div>
+          <div style="width:44px;height:26px;border-radius:999px;background:var(--track);position:relative;flex-shrink:0;"><div style="position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:999px;background:#fff;box-shadow:0 1px 2px hsl(20 30% 10% / 0.25);"></div></div>
+        </div>
+      </div>
+      <div style="padding:12px 20px 14px;background:var(--bg);border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px;flex-shrink:0;"><div style="height:50px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;">Generate text<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div><span style="font-size:12px;color:var(--muted);text-align:center;">About 80 words · takes a few seconds</span></div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;flex-shrink:0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-house" style="font-size:24px;"></i>Home</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-cards" style="font-size:24px;"></i>Cards</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-target" style="font-size:24px;color:var(--accent);"></i>Tasks</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div></div>
+    </sc-if>
+
+    <sc-if value="{{ isChatSetup }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;gap:22px;padding:0 20px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:4px;padding-top:12px;margin-left:-10px;"><i class="ph-bold ph-caret-left" style="font-size:22px;padding:10px;"></i><span style="font-family:Lora,serif;font-size:24px;font-weight:600;letter-spacing:-0.015em;">Chat with AI</span></div>
+        <div style="display:flex;flex-direction:column;gap:8px;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Level</span><div style="display:grid;grid-template-columns:repeat(3,1fr);padding:4px;gap:4px;border-radius:12px;background:var(--track);"><div style="height:40px;border-radius:9px;background:var(--card);box-shadow:0 1px 3px hsl(20 30% 10% / 0.15);display:grid;place-items:center;font-size:15px;font-weight:700;color:var(--accent-ink);">A1</div><div style="height:40px;border-radius:9px;display:grid;place-items:center;font-size:15px;font-weight:500;color:var(--muted);">A2</div><div style="height:40px;border-radius:9px;display:grid;place-items:center;font-size:15px;font-weight:500;color:var(--muted);">B1</div></div></div>
+        <div style="display:flex;flex-direction:column;gap:10px;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Topic</span>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="border-radius:12px;background:var(--accent-2-soft, var(--accent-soft));border:1.5px solid var(--accent-2, var(--accent));padding:12px;display:flex;flex-direction:column;gap:8px;position:relative;"><i class="ph-duotone ph-hand-waving" style="font-size:22px;color:var(--accent-2, var(--accent));"></i><div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:14px;font-weight:600;color:var(--accent-2-ink, var(--accent-ink));">Introducing yourself</span><span style="font-size:12px;color:var(--accent-2-ink, var(--accent-ink));opacity:0.8;">Знакомство</span></div><i class="ph-fill ph-check-circle" style="position:absolute;top:10px;right:10px;font-size:18px;color:var(--accent-2, var(--accent));"></i></div>
+            <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:8px;"><i class="ph-duotone ph-bread" style="font-size:22px;color:var(--accent);"></i><div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:14px;font-weight:600;">At the bakery</span><span style="font-size:12px;color:var(--muted);">В пекарне</span></div></div>
+            <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:8px;"><i class="ph-duotone ph-signpost" style="font-size:22px;color:var(--accent);"></i><div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:14px;font-weight:600;">Asking for directions</span><span style="font-size:12px;color:var(--muted);">Как пройти?</span></div></div>
+            <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:8px;"><i class="ph-duotone ph-shopping-cart" style="font-size:22px;color:var(--accent);"></i><div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:14px;font-weight:600;">At the supermarket</span><span style="font-size:12px;color:var(--muted);">В супермаркете</span></div></div>
+            <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:8px;"><i class="ph-duotone ph-cloud-sun" style="font-size:22px;color:var(--accent);"></i><div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:14px;font-weight:600;">The weather</span><span style="font-size:12px;color:var(--muted);">Погода</span></div></div>
+            <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:8px;"><i class="ph-duotone ph-pencil-simple" style="font-size:22px;color:var(--accent);"></i><div style="display:flex;flex-direction:column;gap:1px;"><span style="font-size:14px;font-weight:600;">Your own topic</span><span style="font-size:12px;color:var(--muted);">Свою тему</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:12px 20px 14px;background:var(--bg);border-top:1px solid var(--border);display:flex;flex-direction:column;gap:8px;flex-shrink:0;"><div style="height:50px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;">Start conversation<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div><span style="font-size:12px;color:var(--muted);text-align:center;">Grammar review after 5 messages</span></div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;flex-shrink:0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-house" style="font-size:24px;"></i>Home</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-cards" style="font-size:24px;"></i>Cards</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-target" style="font-size:24px;color:var(--accent);"></i>Tasks</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div></div>
+    </sc-if>
+
+    <sc-if value="{{ isSets }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;gap:22px;padding:14px 20px 0;overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;">Cards</span><i class="ph-bold ph-sliders-horizontal" style="font-size:22px;padding:10px;margin-right:-10px;"></i></div>
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:16px;display:flex;align-items:center;gap:14px;">
+          <div style="display:flex;flex-direction:column;gap:2px;flex:1;"><span style="font-family:Lora,serif;font-size:22px;font-weight:600;">35 cards due</span><span style="font-size:13px;color:var(--muted);">From all your sets · about 10 min</span></div>
+          <div style="height:44px;padding:0 18px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;font-weight:600;font-size:15px;">Review</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">My sets</span><span style="display:flex;align-items:center;gap:4px;font-size:14px;font-weight:600;color:var(--accent-ink);"><i class="ph-bold ph-plus" style="font-size:14px;"></i>New set</span></div>
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;border:1px dashed var(--border);"><i class="ph-duotone ph-bookmarks" style="font-size:22px;color:var(--muted);"></i><span style="font-size:14px;color:var(--muted);line-height:1.4;">Words you add while reading land in “Saved words”.</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Prepared sets</span>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:Lora,serif;font-size:20px;font-weight:600;width:34px;">A1</span><div style="flex:1;display:flex;flex-direction:column;gap:6px;"><div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);"><span>555 words</span><span>212 learned</span></div><div style="height:5px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:38%;height:100%;border-radius:999px;background:var(--accent);"></div></div></div><i class="ph-bold ph-caret-down" style="font-size:16px;color:var(--muted);"></i></div>
+            
+          </div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:Lora,serif;font-size:20px;font-weight:600;width:34px;">A2</span><div style="flex:1;display:flex;flex-direction:column;gap:6px;"><div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);"><span>471 words</span><span>38 learned</span></div><div style="height:5px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:8%;height:100%;border-radius:999px;background:var(--accent);"></div></div></div><i class="ph-bold ph-caret-down" style="font-size:16px;color:var(--muted);"></i></div>
+            
+          </div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:Lora,serif;font-size:20px;font-weight:600;width:34px;">B1</span><div style="flex:1;display:flex;flex-direction:column;gap:6px;"><div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);"><span>541 words</span><span>0 learned</span></div><div style="height:5px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:0%;height:100%;border-radius:999px;background:var(--accent);"></div></div></div><i class="ph-bold ph-caret-down" style="font-size:16px;color:var(--muted);"></i></div>
+            
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;right:20px;bottom:104px;width:56px;height:56px;border-radius:999px;background:var(--accent);display:grid;place-items:center;box-shadow:0 8px 20px -6px hsl(220 62% 20% / 0.45);"><i class="ph-fill ph-chat-circle-dots" style="font-size:26px;color:#fff;"></i><div style="position:absolute;top:-2px;right:-2px;height:20px;padding:0 6px;border-radius:999px;background:var(--accent-2, var(--accent));border:2px solid var(--bg);display:flex;align-items:center;color:#fff;font-size:10px;font-weight:700;">AI</div></div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;flex-shrink:0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-house" style="font-size:24px;"></i>Home</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-cards" style="font-size:24px;color:var(--accent);"></i>Cards</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-target" style="font-size:24px;"></i>Tasks</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div></div>
+    </sc-if>
+
+    <sc-if value="{{ isSetsOpen }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;gap:22px;padding:14px 20px 0;overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;">Cards</span><i class="ph-bold ph-sliders-horizontal" style="font-size:22px;padding:10px;margin-right:-10px;"></i></div>
+        <div style="display:flex;flex-direction:column;gap:10px;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Prepared sets</span>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:Lora,serif;font-size:20px;font-weight:600;width:34px;">A1</span><div style="flex:1;display:flex;flex-direction:column;gap:6px;"><div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);"><span>555 words</span><span>212 learned</span></div><div style="height:5px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:38%;height:100%;border-radius:999px;background:var(--accent);"></div></div></div><i class="ph-bold ph-caret-up" style="font-size:16px;color:var(--muted);"></i></div>
+            <div style="display:flex;flex-direction:column;margin-top:2px;"><div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--border);"><div style="width:36px;height:36px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-hand-waving" style="font-size:19px;color:var(--accent);"></i></div><div style="flex:1;display:flex;flex-direction:column;gap:1px;"><span style="font-size:15px;font-weight:600;">Hello &amp; thanks</span><span style="font-size:12px;color:var(--muted);">11 words</span></div><i class="ph-fill ph-check-circle" style="font-size:20px;color:hsl(142 60% 40%);"></i></div><div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--border);"><div style="width:36px;height:36px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-users" style="font-size:19px;color:var(--accent);"></i></div><div style="flex:1;display:flex;flex-direction:column;gap:1px;"><span style="font-size:15px;font-weight:600;">Pronouns 1</span><span style="font-size:12px;color:var(--muted);">11 words</span></div><i class="ph-fill ph-check-circle" style="font-size:20px;color:hsl(142 60% 40%);"></i></div><div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--border);"><div style="width:36px;height:36px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-users" style="font-size:19px;color:var(--accent);"></i></div><div style="flex:1;display:flex;flex-direction:column;gap:1px;"><span style="font-size:15px;font-weight:600;">Pronouns 2</span><span style="font-size:12px;color:var(--muted);">11 words</span></div><span style="font-size:13px;color:var(--muted);">6 / 11</span></div><div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--border);"><div style="width:36px;height:36px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-users" style="font-size:19px;color:var(--accent);"></i></div><div style="flex:1;display:flex;flex-direction:column;gap:1px;"><span style="font-size:15px;font-weight:600;">Pronouns 3</span><span style="font-size:12px;color:var(--muted);">11 words</span></div><span style="font-size:13px;font-weight:600;color:var(--accent-ink);">Start</span></div><div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-top:1px solid var(--border);"><div style="width:36px;height:36px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;flex-shrink:0;"><i class="ph-duotone ph-hash" style="font-size:19px;color:var(--accent);"></i></div><div style="flex:1;display:flex;flex-direction:column;gap:1px;"><span style="font-size:15px;font-weight:600;">Numbers 1–20</span><span style="font-size:12px;color:var(--muted);">20 words</span></div><span style="font-size:13px;font-weight:600;color:var(--accent-ink);">Start</span></div></div>
+          </div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+            <div style="display:flex;align-items:center;gap:12px;"><span style="font-family:Lora,serif;font-size:20px;font-weight:600;width:34px;">A2</span><div style="flex:1;display:flex;flex-direction:column;gap:6px;"><div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);"><span>471 words</span><span>38 learned</span></div><div style="height:5px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:8%;height:100%;border-radius:999px;background:var(--accent);"></div></div></div><i class="ph-bold ph-caret-down" style="font-size:16px;color:var(--muted);"></i></div>
+            
+          </div>
+        </div>
+      </div>
+      <div style="position:absolute;right:20px;bottom:104px;width:56px;height:56px;border-radius:999px;background:var(--accent);display:grid;place-items:center;box-shadow:0 8px 20px -6px hsl(220 62% 20% / 0.45);"><i class="ph-fill ph-chat-circle-dots" style="font-size:26px;color:#fff;"></i><div style="position:absolute;top:-2px;right:-2px;height:20px;padding:0 6px;border-radius:999px;background:var(--accent-2, var(--accent));border:2px solid var(--bg);display:flex;align-items:center;color:#fff;font-size:10px;font-weight:700;">AI</div></div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;flex-shrink:0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-house" style="font-size:24px;"></i>Home</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-cards" style="font-size:24px;color:var(--accent);"></i>Cards</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-target" style="font-size:24px;"></i>Tasks</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div></div>
+    </sc-if>
+
+    <sc-if value="{{ isText }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;">
+          <i class="ph-bold ph-caret-left" style="font-size:22px;padding:10px;"></i>
+          <span style="font-size:13px;color:var(--muted);">Page 2 of 5</span>
+          <i class="ph-bold ph-text-aa" style="font-size:22px;padding:10px;"></i>
+        </div>
+        <div style="height:4px;margin:0 24px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:40%;height:100%;background:var(--accent-2, var(--accent));border-radius:999px;"></div></div>
+        <div style="padding:22px 24px 0;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);"><span style="font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--accent-2-soft, var(--accent-soft));color:var(--accent-2-ink, var(--accent-ink));">A2</span>4 min read · 6 new words</div>
+          <span style="font-family:Lora,serif;font-size:26px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;">The Flat on Camden Road</span>
+          <div style="font-family:Lora,serif;font-size:18px;line-height:1.7;display:flex;flex-direction:column;gap:14px;">
+            <p style="margin:0;">Tom has found a <span style="background:var(--accent-soft);border-radius:4px;padding:0 3px;">flat</span>. It's cheap, it's central, and the landlord is a cat.</p>
+            <p style="margin:0;">Well, not exactly. The <span style="background:var(--accent-soft);border-radius:4px;padding:0 3px;">landlord</span> is Mrs Hughes, but her cat, Biscuit, makes all the decisions.</p>
+            <p style="margin:0;">'He likes you,' says Mrs Hughes. 'The <span style="background:var(--accent-soft);border-radius:4px;padding:0 3px;">rent</span> is <span style="background:var(--accent-soft);border-radius:4px;padding:0 3px;">due</span> on Fridays. Biscuit prefers cash.'</p>
+            <p style="margin:0;">Tom laughs. Then he sees her face. She isn't <span style="background:var(--accent-soft);border-radius:4px;padding:0 3px;">joking</span>.</p>
+            <p style="margin:0;color:var(--muted);">The next morning, there is a note under his door. It is <span style="background:var(--accent-soft);border-radius:4px;padding:0 3px;">signed</span> with a paw.</p>
+          </div>
+        </div>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(to bottom, transparent, var(--bg) 55%);"></div>
+        <div style="position:absolute;left:24px;right:24px;bottom:30px;display:flex;align-items:center;gap:12px;">
+          <div style="flex:1;height:50px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;">Next page <i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+          <div style="position:relative;width:56px;height:56px;border-radius:999px;background:var(--accent);display:grid;place-items:center;box-shadow:0 8px 20px -6px hsl(220 62% 20% / 0.45);flex-shrink:0;">
+            <i class="ph-fill ph-chat-circle-dots" style="font-size:26px;color:#fff;"></i>
+            <div style="position:absolute;top:-2px;right:-2px;height:20px;padding:0 6px;border-radius:999px;background:var(--accent-2, var(--accent));border:2px solid var(--bg);display:flex;align-items:center;color:#fff;font-size:10px;font-weight:700;letter-spacing:0.04em;">AI</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isReading }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;">
+          <i class="ph-duotone ph-caret-left" style="font-size:24px;padding:10px;"></i>
+          <span style="font-size:13px;color:var(--muted);">Page 2 of 5</span>
+          <i class="ph-duotone ph-text-aa" style="font-size:24px;padding:10px;"></i>
+        </div>
+        <div style="height:4px;margin:0 24px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:40%;height:100%;background:var(--accent-2, var(--accent));border-radius:999px;"></div></div>
+        <div style="padding:22px 24px 0;display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);"><span style="font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--accent-2-soft, var(--accent-soft));color:var(--accent-2-ink, var(--accent-ink));">A2</span>4 min read</div>
+          <span style="font-family:Lora,serif;font-size:26px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;">The Flat on Camden Road</span>
+          <div style="font-family:Lora,serif;font-size:18px;line-height:1.7;display:flex;flex-direction:column;gap:14px;">
+            <p style="margin:0;">Tom has found a <span style="background:var(--accent-soft);border-radius:4px;padding:0 3px;">flat</span>. It's cheap, it's central, and the landlord is a cat.</p>
+            <p style="margin:0;">Well, not exactly. The <span style="background:var(--accent-2-soft, var(--accent-soft));border-radius:4px;padding:0 3px;box-shadow:inset 0 -2px 0 var(--accent-2, var(--accent));">landlord</span> is Mrs Hughes, but her cat, Biscuit, makes all the decisions.</p>
+            <p style="margin:0;">'He likes you,' says Mrs Hughes. 'The <span style="background:var(--accent-soft);border-radius:4px;padding:0 3px;">rent</span> is <span style="background:var(--accent-soft);border-radius:4px;padding:0 3px;">due</span> on Fridays. Biscuit prefers cash.'</p>
+          </div>
+        </div>
+        <div style="position:absolute;inset:0;background:hsl(20 20% 14% / 0.18);"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;background:var(--card);border-radius:22px 22px 0 0;padding:10px 24px 34px;display:flex;flex-direction:column;gap:12px;box-shadow:0 -10px 30px -10px hsl(20 30% 20% / 0.25);">
+          <div style="width:40px;height:4px;border-radius:999px;background:var(--border);align-self:center;"></div>
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <span style="font-family:Lora,serif;font-size:26px;font-weight:600;">landlord</span>
+              <span style="font-size:14px;color:var(--muted);">/ˈlænd.lɔːd/ · noun</span>
+            </div>
+            <div style="width:44px;height:44px;border-radius:999px;background:var(--accent-soft);display:grid;place-items:center;"><i class="ph-duotone ph-speaker-high" style="font-size:22px;color:var(--accent);"></i></div>
+          </div>
+          <span style="font-family:Lora,serif;font-size:19px;font-style:italic;">арендодатель, хозяин квартиры</span>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);">The person who owns the flat you rent.</span>
+          <div style="height:48px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;margin-top:4px;"><i class="ph-duotone ph-plus" style="font-size:18px;"></i>Add to cards</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isExercises }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:0 24px 34px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px;margin:0 -10px;">
+          <i class="ph-bold ph-x" style="font-size:24px;padding:10px;"></i>
+          <span></span>
+          <span style="width:44px;"></span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-top:20px;">
+          <span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;">Story done.<br>Now make it stick.</span>
+          <span style="font-size:15px;color:var(--muted);">5 exercises · 12 min</span>
+        </div>
+        <div style="display:flex;flex-direction:column;margin-top:28px;">
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 4px;">
+            <div style="width:26px;height:26px;border-radius:999px;background:var(--accent-2, var(--accent));color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0;">1</div>
+            <span style="flex:1;font-size:16px;font-weight:600;">Questions</span>
+            
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 4px;border-top:1px solid var(--border);">
+            <div style="width:26px;height:26px;border-radius:999px;border:1.5px solid var(--border);box-sizing:border-box;color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0;">2</div>
+            <span style="flex:1;font-size:16px;font-weight:500;">Match the words</span>
+            
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 4px;border-top:1px solid var(--border);">
+            <div style="width:26px;height:26px;border-radius:999px;border:1.5px solid var(--border);box-sizing:border-box;color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0;">3</div>
+            <span style="flex:1;font-size:16px;font-weight:500;">Fill the gaps</span>
+            
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 4px;border-top:1px solid var(--border);">
+            <div style="width:26px;height:26px;border-radius:999px;border:1.5px solid var(--border);box-sizing:border-box;color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0;">4</div>
+            <span style="flex:1;font-size:16px;font-weight:500;">Word order</span>
+            
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:14px 4px;border-top:1px solid var(--border);">
+            <div style="width:26px;height:26px;border-radius:999px;border:1.5px solid var(--border);box-sizing:border-box;color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:700;flex-shrink:0;">5</div>
+            <span style="flex:1;font-size:16px;font-weight:500;">Translate</span>
+            <i class="ph-fill ph-star" style="font-size:16px;color:var(--accent-2, var(--accent));"></i>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:14px;font-size:13px;color:var(--muted);"><i class="ph-fill ph-star" style="font-size:14px;color:var(--accent-2, var(--accent));"></i>Translating helps you remember the most</div>
+        <div style="flex:1;"></div>
+        <div style="height:50px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;">Start</div>
+        <span style="font-size:13px;color:var(--muted);text-align:center;margin-top:14px;">Skip</span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isQuiz }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:0 24px 34px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px;margin:0 -10px;">
+          <i class="ph-bold ph-x" style="font-size:24px;padding:10px;"></i>
+          <span style="font-size:13px;color:var(--muted);">Exercise 1 of 5 · Question 2 of 3</span>
+          <span style="width:44px;"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">
+          <div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:66%;height:100%;background:var(--accent-2, var(--accent));"></div></div>
+          <div style="height:4px;border-radius:999px;background:var(--track);"></div>
+          <div style="height:4px;border-radius:999px;background:var(--track);"></div>
+          <div style="height:4px;border-radius:999px;background:var(--track);"></div>
+          <div style="height:4px;border-radius:999px;background:var(--track);"></div>
+        </div>
+        <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-top:28px;">The Flat on Camden Road</span>
+        <span style="font-family:Lora,serif;font-size:24px;font-weight:600;line-height:1.3;margin-top:8px;text-wrap:pretty;">Who really makes the decisions in the flat?</span>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:24px;">
+          <div style="height:54px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;padding:0 16px;font-size:16px;">Mrs Hughes</div>
+          <div style="height:54px;border-radius:12px;background:hsl(142 50% 94%);border:1.5px solid hsl(142 60% 40%);box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:16px;font-weight:600;color:hsl(142 60% 24%);">Biscuit, the cat<i class="ph-fill ph-check-circle" style="font-size:22px;color:hsl(142 60% 40%);"></i></div>
+          <div style="height:54px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;padding:0 16px;font-size:16px;">Tom</div>
+          <div style="height:54px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;padding:0 16px;font-size:16px;">Nobody</div>
+        </div>
+        <span style="font-family:Lora,serif;font-style:italic;font-size:16px;color:hsl(142 60% 28%);margin-top:16px;">Right. Biscuit is the real boss.</span>
+        <div style="flex:1;"></div>
+        <div style="height:50px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;">Next question <i class="ph-duotone ph-arrow-right" style="font-size:18px;"></i></div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMatch }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:0 24px 34px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px;margin:0 -10px;">
+          <i class="ph-bold ph-x" style="font-size:24px;padding:10px;"></i>
+          <span style="font-size:13px;color:var(--muted);">Exercise 2 of 5</span>
+          <span style="width:44px;"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;"><div style="height:4px;border-radius:999px;background:var(--accent-2, var(--accent));overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:50%;height:100%;background:var(--accent-2, var(--accent));"></div></div><div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"></div></div>
+        <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-top:28px;">Match the words</span><span style="font-family:Lora,serif;font-size:24px;font-weight:600;line-height:1.3;margin-top:8px;text-wrap:pretty;">Tap an English word, then its Russian meaning</span>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px;">
+          <div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;font-family:Lora,serif;font-size:16px;background:hsl(142 45% 94%);border:1px solid hsl(142 40% 80%);color:hsl(142 40% 32%);opacity:0.75;">flat</div><div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;background:var(--card);border:1px solid var(--border);">до́лжен быть оплачен</div>
+          <div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;font-family:Lora,serif;font-size:16px;background:var(--accent-2-soft, var(--accent-soft));border:1.5px solid var(--accent-2, var(--accent));color:var(--accent-2-ink, var(--accent-ink));font-weight:600;">landlord</div><div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;background:hsl(142 45% 94%);border:1px solid hsl(142 40% 80%);color:hsl(142 40% 32%);opacity:0.75;">квартира</div>
+          <div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;font-family:Lora,serif;font-size:16px;background:var(--card);border:1px solid var(--border);">rent</div><div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;background:var(--card);border:1px solid var(--border);">шутить</div>
+          <div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;font-family:Lora,serif;font-size:16px;background:var(--card);border:1px solid var(--border);">due</div><div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;background:var(--card);border:1px solid var(--border);">арендодатель</div>
+          <div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;font-family:Lora,serif;font-size:16px;background:var(--card);border:1px solid var(--border);">joking</div><div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;background:var(--card);border:1px solid var(--border);">подписан</div>
+          <div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;font-family:Lora,serif;font-size:16px;background:var(--card);border:1px solid var(--border);">signed</div><div style="height:52px;border-radius:12px;display:flex;align-items:center;justify-content:center;padding:0 10px;text-align:center;font-size:15px;box-sizing:border-box;background:var(--card);border:1px solid var(--border);">арендная плата</div>
+        </div>
+        <span style="font-size:13px;color:var(--muted);margin-top:16px;">1 of 6 matched</span><div style="flex:1;"></div>
+        <div style="height:50px;border-radius:12px;background:var(--track);color:var(--muted);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;">Check</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isGaps }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:0 24px 34px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px;margin:0 -10px;">
+          <i class="ph-bold ph-x" style="font-size:24px;padding:10px;"></i>
+          <span style="font-size:13px;color:var(--muted);">Exercise 3 of 5</span>
+          <span style="width:44px;"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;"><div style="height:4px;border-radius:999px;background:var(--accent-2, var(--accent));overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--accent-2, var(--accent));overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:50%;height:100%;background:var(--accent-2, var(--accent));"></div></div><div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"></div></div>
+        <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-top:28px;">Fill the gaps</span><span style="font-family:Lora,serif;font-size:24px;font-weight:600;line-height:1.3;margin-top:8px;text-wrap:pretty;">Choose the right word for each gap</span>
+        <div style="display:flex;flex-direction:column;gap:18px;margin-top:22px;font-family:Lora,serif;font-size:18px;line-height:1.6;">
+          <div style="display:flex;gap:12px;"><span style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--muted);padding-top:4px;">1</span><span>Tom has found a cheap <span style="display:inline-block;padding:0 8px;border-radius:6px;background:hsl(142 45% 94%);color:hsl(142 60% 26%);font-weight:600;">flat</span> in Camden.</span></div>
+          <div style="display:flex;gap:12px;"><span style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--muted);padding-top:4px;">2</span><span>The <span style="display:inline-block;padding:0 8px;border-radius:6px;background:var(--accent-2-soft, var(--accent-soft));color:var(--accent-2-ink, var(--accent-ink));font-weight:600;border-bottom:2px solid var(--accent-2, var(--accent));">rent</span> is due on Fridays.</span></div>
+          <div style="display:flex;gap:12px;"><span style="font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--muted);padding-top:4px;">3</span><span>Mrs Hughes isn't <span style="display:inline-block;min-width:70px;border-bottom:2px dashed var(--border);">&nbsp;</span>. She means it.</span></div>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:28px;padding-top:20px;border-top:1px solid var(--border);">
+          <span style="height:42px;padding:0 16px;border-radius:12px;background:var(--track);color:transparent;font-family:Lora,serif;font-size:16px;display:flex;align-items:center;">flat</span><span style="height:42px;padding:0 16px;border-radius:12px;background:var(--track);color:transparent;font-family:Lora,serif;font-size:16px;display:flex;align-items:center;">rent</span><span style="height:42px;padding:0 16px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-family:Lora,serif;font-size:16px;display:flex;align-items:center;">joking</span><span style="height:42px;padding:0 16px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-family:Lora,serif;font-size:16px;display:flex;align-items:center;">landlord</span><span style="height:42px;padding:0 16px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-family:Lora,serif;font-size:16px;display:flex;align-items:center;">signed</span>
+        </div><div style="flex:1;"></div>
+        <div style="height:50px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;">Check</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isOrder }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:0 24px 34px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px;margin:0 -10px;">
+          <i class="ph-bold ph-x" style="font-size:24px;padding:10px;"></i>
+          <span style="font-size:13px;color:var(--muted);">Exercise 4 of 5</span>
+          <span style="width:44px;"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;"><div style="height:4px;border-radius:999px;background:var(--accent-2, var(--accent));overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--accent-2, var(--accent));overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--accent-2, var(--accent));overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:50%;height:100%;background:var(--accent-2, var(--accent));"></div></div><div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"></div></div>
+        <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-top:28px;">Put the words in order</span><span style="font-family:Lora,serif;font-size:24px;font-weight:600;line-height:1.3;margin-top:8px;text-wrap:pretty;">Make the sentence</span>
+        <div style="display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);margin-top:6px;"><i class="ph-bold ph-speaker-high" style="font-size:16px;color:var(--accent);"></i>Бисквит предпочитает наличные.</div>
+        <div style="min-height:110px;margin-top:22px;padding:12px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px;">
+          <span style="height:42px;padding:0 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-family:Lora,serif;font-size:17px;display:flex;align-items:center;box-shadow:0 2px 0 var(--border);">Biscuit</span><span style="height:42px;padding:0 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-family:Lora,serif;font-size:17px;display:flex;align-items:center;box-shadow:0 2px 0 var(--border);">prefers</span><span style="width:2px;height:42px;background:var(--accent-2, var(--accent));border-radius:2px;"></span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;justify-content:center;">
+          <span style="height:42px;padding:0 14px;border-radius:12px;background:var(--track);color:transparent;font-family:Lora,serif;font-size:17px;display:flex;align-items:center;">Biscuit</span><span style="height:42px;padding:0 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-family:Lora,serif;font-size:17px;display:flex;align-items:center;box-shadow:0 2px 0 var(--border);">cash</span><span style="height:42px;padding:0 14px;border-radius:12px;background:var(--track);color:transparent;font-family:Lora,serif;font-size:17px;display:flex;align-items:center;">prefers</span><span style="height:42px;padding:0 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-family:Lora,serif;font-size:17px;display:flex;align-items:center;box-shadow:0 2px 0 var(--border);">.</span><span style="height:42px;padding:0 14px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-family:Lora,serif;font-size:17px;display:flex;align-items:center;box-shadow:0 2px 0 var(--border);">money</span>
+        </div>
+        <span style="font-size:13px;color:var(--muted);text-align:center;margin-top:14px;">One word is extra</span><div style="flex:1;"></div>
+        <div style="height:50px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;">Check</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isTranslate }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:0 24px 34px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px;margin:0 -10px;">
+          <i class="ph-bold ph-x" style="font-size:24px;padding:10px;"></i>
+          <span style="font-size:13px;color:var(--muted);">Exercise 5 of 5</span>
+          <span style="width:44px;"></span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;"><div style="height:4px;border-radius:999px;background:var(--accent-2, var(--accent));overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--accent-2, var(--accent));overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--accent-2, var(--accent));overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--accent-2, var(--accent));overflow:hidden;"></div><div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:50%;height:100%;background:var(--accent-2, var(--accent));"></div></div></div>
+        <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-top:28px;">Translate into English</span><span style="font-family:Lora,serif;font-size:24px;font-weight:600;line-height:1.3;margin-top:8px;text-wrap:pretty;">Переведите на английский</span>
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:16px;margin-top:20px;display:flex;flex-direction:column;gap:6px;">
+          <span style="font-size:12px;color:var(--muted);">Sentence 2 of 3 · last exercise</span>
+          <span style="font-family:Lora,serif;font-size:19px;line-height:1.45;">Хозяйка квартиры говорит, что кот принимает все решения.</span>
+        </div>
+        <div style="border-radius:12px;background:var(--card);border:1.5px solid var(--accent);padding:14px 16px;margin-top:12px;min-height:110px;box-sizing:border-box;font-size:16px;line-height:1.5;">The landlady says that the cat makes all the<span style="display:inline-block;width:1.5px;height:18px;background:var(--accent);vertical-align:-3px;margin-left:2px;"></span></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:13px;color:var(--muted);">
+          <span style="display:flex;align-items:center;gap:6px;"><i class="ph-bold ph-lightbulb" style="font-size:16px;"></i>Hint: <span style="font-family:Lora,serif;font-style:italic;">decisions</span></span>
+          <span style="display:flex;align-items:center;gap:6px;"><i class="ph-bold ph-microphone" style="font-size:16px;"></i>Speak</span>
+        </div><div style="flex:1;"></div>
+        <div style="height:50px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:15px;">Check</div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:0 24px 34px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px;margin:0 -10px;"><i class="ph-bold ph-x" style="font-size:24px;padding:10px;"></i><span></span><span style="width:44px;"></span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-top:24px;">
+          <span style="font-family:Lora,serif;font-size:64px;font-weight:600;letter-spacing:-0.03em;line-height:1;">19<span style="font-size:28px;color:var(--muted);">/21</span></span>
+          <span style="font-family:Lora,serif;font-size:24px;font-weight:600;margin-top:8px;">Well done, Masha</span>
+          <span style="font-size:14px;color:var(--muted);">The Flat on Camden Road · 11 min</span>
+        </div>
+        <div style="display:flex;flex-direction:column;margin-top:32px;border-bottom:1px solid var(--border);">
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--border);"><i class="ph-fill ph-check-circle" style="font-size:20px;color:hsl(142 60% 40%);"></i><span style="flex:1;font-size:15px;">Understand the story</span><span style="font-size:14px;font-weight:600;color:var(--muted);">3/3</span></div><div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--border);"><i class="ph-fill ph-check-circle" style="font-size:20px;color:hsl(142 60% 40%);"></i><span style="flex:1;font-size:15px;">Match the words</span><span style="font-size:14px;font-weight:600;color:var(--muted);">6/6</span></div><div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--border);"><i class="ph-bold ph-arrow-counter-clockwise" style="font-size:20px;color:var(--accent-2, var(--accent));"></i><span style="flex:1;font-size:15px;">Fill the gaps</span><span style="font-size:14px;font-weight:600;color:var(--muted);">4/5</span></div><div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--border);"><i class="ph-bold ph-arrow-counter-clockwise" style="font-size:20px;color:var(--accent-2, var(--accent));"></i><span style="flex:1;font-size:15px;">Put the words in order</span><span style="font-size:14px;font-weight:600;color:var(--muted);">3/4</span></div><div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--border);"><i class="ph-fill ph-check-circle" style="font-size:20px;color:hsl(142 60% 40%);"></i><span style="flex:1;font-size:15px;">Translate into English</span><span style="font-size:14px;font-weight:600;color:var(--muted);">3/3</span></div>
+        </div>
+        <span style="font-size:13px;color:var(--muted);margin-top:14px;">2 mistakes added to your flashcards</span><div style="flex:1;"></div>
+        <div style="height:50px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;">Done</div>
+        <span style="font-size:13px;font-weight:600;text-align:center;margin-top:14px;">Review mistakes</span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isCards }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:0 24px 34px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0 10px;margin:0 -10px;">
+          <i class="ph-bold ph-x" style="font-size:24px;padding:10px;"></i>
+          <span style="font-size:13px;color:var(--muted);">8 of 18</span>
+          <i class="ph-bold ph-dots-three" style="font-size:24px;padding:10px;"></i>
+        </div>
+        <div style="height:4px;border-radius:999px;background:var(--track);overflow:hidden;"><div style="width:44%;height:100%;background:var(--accent-2, var(--accent));border-radius:999px;"></div></div>
+        <div style="position:relative;margin-top:36px;height:430px;">
+          <div style="position:absolute;left:24px;right:24px;top:-16px;height:100%;border-radius:12px;background:var(--card);border:1px solid var(--border);opacity:0.5;"></div>
+          <div style="position:absolute;left:12px;right:12px;top:-8px;height:100%;border-radius:12px;background:var(--card);border:1px solid var(--border);opacity:0.8;"></div>
+          <div style="position:absolute;inset:0;border-radius:12px;background:var(--card);border:1px solid var(--border);box-shadow:0 12px 30px -16px hsl(20 30% 20% / 0.3);padding:22px;display:flex;flex-direction:column;">
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--accent-2-soft, var(--accent-soft));color:var(--accent-2-ink, var(--accent-ink));">Phrase</span>
+              <i class="ph-duotone ph-speaker-high" style="font-size:22px;color:var(--accent);"></i>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:6px;">
+              <span style="font-family:Lora,serif;font-size:32px;font-weight:600;letter-spacing:-0.015em;">to fancy something</span>
+              <span style="font-size:14px;color:var(--muted);">/ˈfæn.si/</span>
+              <div style="width:32px;height:2px;border-radius:999px;background:var(--accent-2, var(--accent));margin:14px 0;"></div>
+              <span style="font-family:Lora,serif;font-size:21px;font-style:italic;">хотеть чего-то, нравиться</span>
+              <span style="font-size:15px;line-height:1.5;margin-top:16px;">"Do you fancy a cup of tea?"</span>
+              <span style="font-size:14px;color:var(--muted);">Хочешь чашку чая?</span>
+            </div>
+            <span style="font-size:12px;color:var(--muted);text-align:center;">From The Flat on Camden Road</span>
+          </div>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;"><div style="width:100%;height:52px;border-radius:12px;background:var(--accent-2, var(--accent));display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:#fff;">Again</div><span style="font-size:12px;color:var(--muted);">1 min</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;"><div style="width:100%;height:52px;border-radius:12px;background:var(--card);border:1.5px solid var(--accent-2, var(--accent));box-sizing:border-box;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:var(--accent-2-ink, var(--accent-ink));">Hard</div><span style="font-size:12px;color:var(--muted);">10 min</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;"><div style="width:100%;height:52px;border-radius:12px;background:var(--card);border:1.5px solid var(--accent);box-sizing:border-box;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:var(--accent-ink);">Good</div><span style="font-size:12px;color:var(--muted);">1 day</span></div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;"><div style="width:100%;height:52px;border-radius:12px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;color:#fff;">Easy</div><span style="font-size:12px;color:var(--muted);">4 days</span></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isSettings }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;gap:22px;padding:0 20px;overflow:hidden;">
+        <div style="display:flex;align-items:center;gap:4px;padding-top:12px;margin-left:-10px;">
+          <i class="ph-bold ph-caret-left" style="font-size:22px;padding:10px;"></i>
+          <span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;">Settings</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);padding-left:4px;">Appearance</span>
+          <div style="display:flex;padding:4px;gap:4px;border-radius:12px;background:var(--track);">
+            <sc-for list="{{ modes }}" as="m" hint-placeholder-count="3">
+              <div style="flex:1;">
+                <sc-if value="{{ m.on }}" hint-placeholder-val="{{ false }}"><div style="height:40px;border-radius:9px;background:var(--card);box-shadow:0 1px 3px hsl(20 30% 10% / 0.15);display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:600;color:var(--text);"><i class="ph-duotone {{ m.icon }}" style="font-size:18px;color:var(--accent-2, var(--accent));"></i>{{ m.label }}</div></sc-if>
+                <sc-if value="{{ m.off }}" hint-placeholder-val="{{ true }}"><div style="height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;font-weight:500;color:var(--muted);"><i class="ph-duotone {{ m.icon }}" style="font-size:18px;"></i>{{ m.label }}</div></sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;flex-direction:column;font-size:15px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px;height:50px;"><span>Reading text size</span><span style="display:flex;align-items:center;gap:6px;color:var(--muted);">Medium<i class="ph-bold ph-caret-right"></i></span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);padding-left:4px;">Learning</span>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;flex-direction:column;font-size:15px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px;height:50px;"><span>Daily goal</span><span style="display:flex;align-items:center;gap:6px;color:var(--muted);">15 min<i class="ph-bold ph-caret-right"></i></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px;height:50px;border-top:1px solid var(--border);"><span>Level</span><span style="display:flex;align-items:center;gap:6px;color:var(--muted);">A2<i class="ph-bold ph-caret-right"></i></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px;height:50px;border-top:1px solid var(--border);"><span>Translations in</span><span style="display:flex;align-items:center;gap:6px;color:var(--muted);">Русский<i class="ph-bold ph-caret-right"></i></span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px;height:50px;border-top:1px solid var(--border);"><span>Daily reminder</span><span style="display:flex;align-items:center;gap:10px;color:var(--muted);">20:00<div style="width:44px;height:26px;border-radius:999px;background:var(--accent);position:relative;"><div style="position:absolute;right:3px;top:3px;width:20px;height:20px;border-radius:999px;background:#fff;"></div></div></span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);padding-left:4px;">Account</span>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;flex-direction:column;font-size:15px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px;height:50px;"><span>Email</span><span style="color:var(--muted);">masha@example.com</span></div>
+            <div style="display:flex;align-items:center;padding:0 16px;height:50px;border-top:1px solid var(--border);color:var(--accent-2-ink, var(--accent-ink));font-weight:600;">Sign out</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ isMe }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;gap:16px;padding:14px 20px 0;overflow:hidden;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;">Me</span>
+          <i class="ph-bold ph-gear-six" style="font-size:24px;padding:10px;margin-right:-10px;"></i>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:56px;height:56px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center;font-family:Lora,serif;font-size:22px;font-weight:600;">M</div>
+          <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-family:Lora,serif;font-size:19px;font-weight:600;">Masha Petrova</span><span style="font-size:13px;color:var(--muted);">Level A2 · learning since March</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;flex-direction:column;gap:2px;"><span style="display:flex;align-items:center;gap:4px;font-family:Lora,serif;font-size:24px;font-weight:600;">7<i class="ph-duotone ph-flame" style="font-size:18px;color:var(--accent-2, var(--accent));"></i></span><span style="font-size:12px;color:var(--muted);">Day streak</span></div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;flex-direction:column;gap:2px;"><span style="font-family:Lora,serif;font-size:24px;font-weight:600;">142</span><span style="font-size:12px;color:var(--muted);">Words</span></div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px 14px;display:flex;flex-direction:column;gap:2px;"><span style="font-family:Lora,serif;font-size:24px;font-weight:600;">23</span><span style="font-size:12px;color:var(--muted);">Stories</span></div>
+        </div>
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;"><span style="font-family:Lora,serif;font-size:17px;font-weight:600;">Last 5 weeks</span><span style="font-size:13px;color:var(--muted);">19 of 31 days</span></div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;font-size:11px;color:var(--muted);text-align:center;"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;">
+            <sc-for list="{{ cells }}" as="c" hint-placeholder-count="35">
+              <div style="height:32px;">
+                <sc-if value="{{ c.done }}" hint-placeholder-val="{{ false }}"><div style="height:32px;border-radius:8px;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:600;">{{ c.d }}</div></sc-if>
+                <sc-if value="{{ c.miss }}" hint-placeholder-val="{{ true }}"><div style="height:32px;border-radius:8px;background:var(--track);color:var(--muted);display:grid;place-items:center;font-size:11px;">{{ c.d }}</div></sc-if>
+                <sc-if value="{{ c.today }}" hint-placeholder-val="{{ false }}"><div style="height:32px;border-radius:8px;border:2px solid var(--accent-2, var(--accent));box-sizing:border-box;color:var(--accent-2-ink, var(--accent-ink));display:grid;place-items:center;font-size:11px;font-weight:700;">{{ c.d }}</div></sc-if>
+                <sc-if value="{{ c.future }}" hint-placeholder-val="{{ false }}"><div style="height:32px;border-radius:8px;border:1px dashed var(--border);box-sizing:border-box;color:var(--muted);display:grid;place-items:center;font-size:11px;">{{ c.d }}</div></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;flex-direction:column;font-size:15px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px;height:50px;"><span>Daily goal</span><span style="display:flex;align-items:center;gap:6px;color:var(--muted);">15 min<i class="ph-duotone ph-caret-right"></i></span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px;height:50px;border-top:1px solid var(--border);"><span>Reminder</span><span style="display:flex;align-items:center;gap:6px;color:var(--muted);">20:00<i class="ph-duotone ph-caret-right"></i></span></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:0 16px;height:50px;border-top:1px solid var(--border);"><span>Translations in</span><span style="display:flex;align-items:center;gap:6px;color:var(--muted);">Русский<i class="ph-duotone ph-caret-right"></i></span></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-house" style="font-size:24px;"></i>Home</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-cards" style="font-size:24px;"></i>Cards</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-target" style="font-size:24px;"></i>Tasks</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-user" style="font-size:24px;color:var(--accent);"></i>Me</div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;login&quot;,&quot;reading&quot;,&quot;quiz&quot;,&quot;cards&quot;,&quot;me&quot;],&quot;default&quot;:&quot;login&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.props.screen ?? 'login';
+    const start = new Date(2026, 7, 31), todayIdx = 31;
+    const missed = new Set([2, 5, 6, 9, 12, 13, 16, 19, 20, 23, 24]);
+    const cells = Array.from({ length: 35 }, (_, i) => {
+      const d = new Date(start); d.setDate(start.getDate() + i);
+      const future = i > todayIdx, today = i === todayIdx;
+      const miss = !future && !today && missed.has(i);
+      return { d: d.getDate(), future, today, miss, done: !future && !today && !miss };
+    });
+    return { isLogin: s === 'login', isReading: s === 'reading', isQuiz: s === 'quiz', isCards: s === 'cards', isMe: s === 'me', isSettings: s === 'settings', isText: s === 'text', isTutor: s === 'tutor', isPlan: s === 'plan', isTasks: s === 'tasks', isHub: s === 'hub', isTransSetup: s === 'transSetup', isChatSetup: s === 'chatSetup', isSets: s === 'sets', isSetsOpen: s === 'setsOpen', isExercises: s === 'exercises', isMatch: s === 'match', isGaps: s === 'gaps', isOrder: s === 'order', isTranslate: s === 'translate', isResults: s === 'results', cells, modes: [['light','Light','ph-sun'],['dark','Dark','ph-moon'],['system','System','ph-device-mobile']].map(([k,label,icon]) => ({ label, icon, on: (this.props.appearance ?? 'light') === k, off: (this.props.appearance ?? 'light') !== k })) };
+  }
+}
+</script>
+</body>
+</html>

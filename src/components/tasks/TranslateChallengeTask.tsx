@@ -1,11 +1,11 @@
 import { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, BookmarkPlus, X, ChevronDown, ChevronRight, Loader2, Sparkles } from 'lucide-react';
+import { ArrowLeft, BookmarkPlus, X, ChevronDown, ChevronRight, Loader2, Pencil } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { useCustomSets } from '@/hooks/useCustomSets';
 import { useAuth } from '@/context/AuthContext';
-import { Level } from '@/components/tasks/TaskFilters';
+import { Level, SetupHeader, SectionLabel, LevelSegmented, TopicChip, SetupFooter } from '@/components/tasks/TaskFilters';
 import { savePracticeSession } from '@/lib/practiceSession';
 import { PREPARED_LEVELS, getAllPreparedSets } from '@/data/preparedSets';
 import { claudeFetch } from '@/lib/ai';
@@ -55,6 +55,13 @@ const SUGGESTIONS: Record<Level, string[]> = {
   A1: ['at the bakery', 'my family', 'the weather today', 'at school', 'introducing myself', 'my morning routine', 'shopping for food'],
   A2: ['ordering at a café', 'a trip to the market', 'planning a weekend', 'a day at work', 'at the doctor', 'making plans with a friend', 'a short diary entry'],
   B1: ['a work meeting', 'discussing a news story', 'writing a formal email', 'defending an opinion', 'a job interview', 'life in the UK', 'a neighbourhood dispute'],
+};
+
+// Text length per level (matches LEVEL_GUIDE below), shown under the Generate button.
+const LEVEL_LENGTH: Record<Level, string> = {
+  A1: '3–5 short sentences',
+  A2: '5–8 sentences',
+  B1: '8–12 sentences',
 };
 
 // ─── API: generate English text ───────────────────────────────────────────────
@@ -390,110 +397,106 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
   // ─────────────────────────────────────────────────────────────────────────
 
   if (screen === 'config') {
+    const promptParts = userPrompt.split(',').map(p => p.trim()).filter(Boolean);
+    const toggleSuggestion = (s: string) => setUserPrompt(prev => {
+      const parts = prev.split(',').map(p => p.trim()).filter(Boolean);
+      return parts.includes(s) ? parts.filter(p => p !== s).join(', ') : (prev.trim() ? `${prev.trim()}, ${s}` : s);
+    });
+    const selectedSetLabel = selectedSetSource === 'my' && selectedMySet
+      ? `${selectedMySet.emoji} ${selectedMySet.title}`
+      : selectedSetSource === 'prepared' && selectedPreparedSet
+        ? `${selectedPreparedSet.emoji} ${selectedPreparedSet.title}`
+        : null;
+    const setRowClass = (on: boolean) => `w-full text-left rounded-lg px-3 py-2 text-sm transition-colors ${on ? 'bg-accent text-accent-foreground font-semibold' : 'text-foreground hover:bg-muted'}`;
+
     return (
       <>
-      <div className="animate-fade-in space-y-5 pb-8">
-        <button onClick={onBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="h-4 w-4" /> Tasks
-        </button>
+      <div className="animate-fade-in flex flex-col gap-[22px]">
+        <SetupHeader title="Translate to English" onBack={onBack} />
 
-        <div>
-          <h1 className="text-xl font-semibold text-foreground">Translate to English</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">The AI writes a text for your level — you translate it into English.</p>
-        </div>
+        {error && <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-4"><p className="text-sm text-destructive">{error}</p></div>}
 
-        {error && <Card className="border-destructive/30 bg-destructive/5 p-4"><p className="text-sm text-destructive">{error}</p></Card>}
-
-        {/* Level — required */}
-        <div className="space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your level</p>
-          <div className="flex gap-2">
-            {(['A1', 'A2', 'B1'] as Level[]).map(l => (
-              <button key={l} onClick={() => { setLevel(l); setUserPrompt(''); }}
-                className={`rounded-full px-5 py-2 text-sm font-semibold transition-colors ${level === l ? 'bg-primary text-primary-foreground' : 'border border-border text-muted-foreground hover:border-primary/40'}`}>
-                {l}
-              </button>
-            ))}
-          </div>
-          <p className="text-xs text-muted-foreground px-1">
+        {/* Level */}
+        <div className="flex flex-col gap-2">
+          <SectionLabel>Level</SectionLabel>
+          <LevelSegmented level={level} onChange={l => { setLevel(l); setUserPrompt(''); }} />
+          <p className="text-[13px] text-muted-foreground">
             {level === 'A1' && 'Very simple sentences, everyday vocabulary — great for beginners.'}
-            {level === 'A2' && 'Short paragraphs with past tense and everyday situations.'}
+            {level === 'A2' && 'Short paragraphs, past tense, everyday situations.'}
             {level === 'B1' && 'Full paragraphs with complex grammar — subordinate clauses, perfect tense.'}
           </p>
         </div>
 
-        {/* Prompt — optional */}
-        <div className="space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-            What do you want it to be about? <span className="font-normal normal-case text-muted-foreground">(optional)</span>
-          </p>
-          <textarea
-            value={userPrompt}
-            onChange={e => setUserPrompt(e.target.value)}
-            placeholder="Describe a topic, situation, or anything you want to practise… or pick a suggestion below."
-            rows={2}
-            className="w-full rounded-xl border border-border bg-card p-3 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary/30 resize-none"
-          />
-          {/* Suggestion chips */}
+        {/* Topic — optional */}
+        <div className="flex flex-col gap-2.5">
+          <SectionLabel>Topic <span className="font-medium normal-case tracking-normal">(optional)</span></SectionLabel>
           <div className="flex flex-wrap gap-2">
             {suggestions.map(s => (
-              <button key={s} onClick={() => setUserPrompt(prev => prev ? `${prev}, ${s}` : s)}
-                className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
-                  userPrompt.includes(s)
-                    ? 'border-primary/50 bg-primary/10 text-primary'
-                    : 'border-border text-muted-foreground hover:border-primary/40 hover:text-foreground'
-                }`}>
-                {s}
-              </button>
+              <TopicChip key={s} label={s.charAt(0).toUpperCase() + s.slice(1)} selected={promptParts.includes(s)} onClick={() => toggleSuggestion(s)} />
             ))}
           </div>
+          <label className="flex min-h-[46px] items-start gap-2.5 rounded-xl border border-border bg-card px-3.5 py-3 focus-within:border-primary">
+            <Pencil className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" />
+            <textarea
+              value={userPrompt}
+              onChange={e => setUserPrompt(e.target.value)}
+              placeholder="Or write your own topic"
+              rows={1}
+              className="min-w-0 flex-1 resize-none bg-transparent text-sm leading-snug text-foreground placeholder:text-muted-foreground focus:outline-none [field-sizing:content]"
+            />
+          </label>
         </div>
 
         {/* Flashcard set — optional */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
-              Practice a flashcard set <span className="font-normal normal-case">(optional)</span>
-            </p>
-            <button
-              onClick={() => {
-                setUseFlashcardSet(v => !v);
-                setSelectedSetId(null);
-                setSelectedPreparedSetId(null);
-                setSelectedSetSource(null);
-                setOpenMySets(false);
-                setOpenPreparedSets(false);
-                setOpenPreparedLevel(null);
-              }}
-              className={`text-xs font-medium px-3 py-1 rounded-full border transition-colors ${useFlashcardSet ? 'border-primary/50 bg-primary/10 text-primary' : 'border-border text-muted-foreground'}`}
-            >
-              {useFlashcardSet ? 'On' : 'Off'}
-            </button>
-          </div>
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <button
+            role="switch"
+            aria-checked={useFlashcardSet}
+            onClick={() => {
+              setUseFlashcardSet(v => !v);
+              setSelectedSetId(null);
+              setSelectedPreparedSetId(null);
+              setSelectedSetSource(null);
+              setOpenMySets(false);
+              setOpenPreparedSets(false);
+              setOpenPreparedLevel(null);
+            }}
+            className="flex w-full items-center justify-between gap-3 px-4 py-3.5 text-left"
+          >
+            <span className="flex flex-col gap-0.5">
+              <span className="text-[15px] font-semibold text-foreground">Use my flashcard words</span>
+              <span className="text-[13px] text-muted-foreground">
+                {selectedSetLabel ? <>Words from <span className="font-medium text-foreground">{selectedSetLabel}</span></> : 'Adds words from a set you choose'}
+              </span>
+            </span>
+            <span className={`relative h-[26px] w-11 shrink-0 rounded-full transition-colors ${useFlashcardSet ? 'bg-primary' : 'bg-track'}`}>
+              <span className={`absolute top-[3px] h-5 w-5 rounded-full shadow-[0_1px_2px_hsl(var(--foreground)/0.25)] transition-all ${useFlashcardSet ? 'left-[21px] bg-primary-foreground' : 'left-[3px] bg-card'}`} />
+            </span>
+          </button>
 
           {useFlashcardSet && (
-            <div className="rounded-xl border border-border overflow-hidden divide-y divide-border">
+            <div className="divide-y divide-border border-t border-border">
 
               {/* ── My sets ── */}
               <div>
                 <button
                   onClick={() => setOpenMySets(v => !v)}
-                  className="w-full flex items-center justify-between px-3 py-3 text-sm font-medium text-foreground hover:bg-muted/40 transition-colors"
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted/40"
                 >
                   <span>My sets</span>
                   <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${openMySets ? 'rotate-180' : ''}`} />
                 </button>
                 {openMySets && (
-                  <div className="px-2 pb-2 space-y-0.5">
+                  <div className="space-y-0.5 px-2 pb-2">
                     {sets.length === 0 ? (
-                      <p className="text-xs text-muted-foreground px-2 py-2">No sets yet — create one in Cards.</p>
+                      <p className="px-2 py-2 text-xs text-muted-foreground">No sets yet — create one in Cards.</p>
                     ) : sets.map(s => (
                       <button key={s.id}
                         onClick={() => { setSelectedSetId(s.id); setSelectedPreparedSetId(null); setSelectedSetSource('my'); }}
-                        className={`w-full text-left rounded-lg px-3 py-2 text-sm transition-colors ${selectedSetSource === 'my' && selectedSetId === s.id ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'}`}
+                        className={setRowClass(selectedSetSource === 'my' && selectedSetId === s.id)}
                       >
                         {s.emoji} {s.title}
-                        <span className="text-xs ml-2 opacity-60">{s.words.length} words</span>
+                        <span className="ml-2 text-xs opacity-60">{s.words.length} words</span>
                       </button>
                     ))}
                   </div>
@@ -504,23 +507,23 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
               <div>
                 <button
                   onClick={() => setOpenPreparedSets(v => !v)}
-                  className="w-full flex items-center justify-between px-3 py-3 text-sm font-medium text-foreground hover:bg-muted/40 transition-colors"
+                  className="flex w-full items-center justify-between px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted/40"
                 >
                   <span>Prepared sets</span>
                   <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform duration-200 ${openPreparedSets ? 'rotate-180' : ''}`} />
                 </button>
                 {openPreparedSets && (
-                  <div className="px-2 pb-2 space-y-0.5">
+                  <div className="space-y-0.5 px-2 pb-2">
                     {PREPARED_LEVELS.map(lvl => (
                       <div key={lvl.level}>
                         <button
                           onClick={() => lvl.available && setOpenPreparedLevel(openPreparedLevel === lvl.level ? null : lvl.level)}
                           disabled={!lvl.available}
-                          className={`w-full flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${!lvl.available ? 'opacity-40 cursor-not-allowed' : 'hover:bg-muted/50'}`}
+                          className={`flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${!lvl.available ? 'cursor-not-allowed opacity-40' : 'hover:bg-muted/50'}`}
                         >
                           <span className={`font-medium ${lvl.available ? 'text-foreground' : 'text-muted-foreground'}`}>
                             {lvl.level}
-                            {!lvl.available && <span className="text-xs font-normal ml-2 text-muted-foreground">coming soon</span>}
+                            {!lvl.available && <span className="ml-2 text-xs font-normal text-muted-foreground">coming soon</span>}
                           </span>
                           {lvl.available && (
                             openPreparedLevel === lvl.level
@@ -530,14 +533,14 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
                         </button>
 
                         {lvl.available && openPreparedLevel === lvl.level && (
-                          <div className="ml-3 pl-2 border-l border-border space-y-0.5 mb-1">
+                          <div className="mb-1 ml-3 space-y-0.5 border-l border-border pl-2">
                             {lvl.sets.map(s => (
                               <button key={s.id}
                                 onClick={() => { setSelectedPreparedSetId(s.id); setSelectedSetId(null); setSelectedSetSource('prepared'); }}
-                                className={`w-full text-left rounded-lg px-3 py-2 text-sm transition-colors ${selectedSetSource === 'prepared' && selectedPreparedSetId === s.id ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground'}`}
+                                className={setRowClass(selectedSetSource === 'prepared' && selectedPreparedSetId === s.id)}
                               >
                                 {s.emoji} {s.title}
-                                <span className="text-xs ml-2 opacity-60">{s.words.length} words</span>
+                                <span className="ml-2 text-xs opacity-60">{s.words.length} words</span>
                               </button>
                             ))}
                           </div>
@@ -549,21 +552,13 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
               </div>
             </div>
           )}
-
-          {/* Selected set hint */}
-          {useFlashcardSet && (selectedMySet || selectedPreparedSet) && (
-            <p className="text-xs text-muted-foreground px-1">
-              The AI will write a text using words from <span className="font-medium text-foreground">
-                {selectedSetSource === 'my' ? `${selectedMySet!.emoji} ${selectedMySet!.title}` : `${selectedPreparedSet!.emoji} ${selectedPreparedSet!.title}`}
-              </span>.
-            </p>
-          )}
         </div>
 
-        <Button className="w-full py-5 text-base font-semibold gap-2" onClick={handleGenerate}>
-          <Sparkles className="h-4 w-4" />
-          Generate my text
-        </Button>
+        <SetupFooter
+          label="Generate text"
+          caption={`${LEVEL_LENGTH[level]} · takes a few seconds`}
+          onClick={handleGenerate}
+        />
       </div>
       </>
     );
@@ -668,8 +663,8 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
 
   if (screen === 'feedback' && feedback) {
     const ratingColors = {
-      great: { card: 'border-green-200 bg-green-50', label: 'text-green-700', badge: 'bg-green-100 text-green-800' },
-      good: { card: 'border-blue-200 bg-blue-50', label: 'text-blue-700', badge: 'bg-blue-100 text-blue-800' },
+      great: { card: 'border-success/30 bg-success/10', label: 'text-success', badge: 'bg-success/15 text-success' },
+      good: { card: 'border-primary/25 bg-accent', label: 'text-accent-foreground', badge: 'bg-card text-accent-foreground' },
       needs_work: { card: 'border-highlight/40 bg-highlight-soft', label: 'text-highlight-ink', badge: 'bg-highlight-soft text-highlight-ink' },
     }[feedback.rating];
     const ratingLabel = { great: 'Great job!', good: 'Good effort!', needs_work: 'Keep going!' }[feedback.rating];
@@ -698,7 +693,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
             <ul className="space-y-1">
               {feedback.strengths.map((s, i) => (
                 <li key={i} className="flex items-start gap-2 text-sm text-foreground">
-                  <span className="text-green-500 mt-0.5 shrink-0">✓</span>
+                  <span className="text-success mt-0.5 shrink-0">✓</span>
                   {s}
                 </li>
               ))}
@@ -741,7 +736,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">How did it feel?</p>
           <div className="flex gap-2">
             <button onClick={() => handleRate('easy')}
-              className={`flex-1 rounded-xl border py-2.5 text-sm font-semibold transition-colors ${rating === 'easy' ? 'border-green-400 bg-green-50 text-green-700' : 'border-border text-muted-foreground hover:border-green-300'}`}>
+              className={`flex-1 rounded-xl border py-2.5 text-sm font-semibold transition-colors ${rating === 'easy' ? 'border-success bg-success/10 text-success' : 'border-border text-muted-foreground hover:border-success/50'}`}>
               Easy
             </button>
             <button onClick={() => handleRate('hard')}

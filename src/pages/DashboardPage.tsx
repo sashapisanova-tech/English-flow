@@ -21,6 +21,8 @@ export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState<Tab>('home');
   const [tabResetKeys, setTabResetKeys] = useState<Record<Tab, number>>({ home: 0, reading: 0, flashcards: 0, tasks: 0, progress: 0 });
   const [selectedText, setSelectedText] = useState<ReadingText | null>(null);
+  // A task open in the Tasks tab shows its own header (back arrow + task title)
+  const [taskOpen, setTaskOpen] = useState(false);
   const [readingLevel, setReadingLevel] = useState<Level | null>(null);
   const [readingModule, setReadingModule] = useState<Module | null>(null);
   const [tutorLaunch, setTutorLaunch] = useState<TutorLaunch>(null);
@@ -82,7 +84,7 @@ export default function DashboardPage() {
 
   // No shell title on Home (own header), on Me (MeView has its own header) or
   // while a text is open (ReadingView shows its own title).
-  const showPageTitle = activeTab !== 'home' && activeTab !== 'progress' && !(activeTab === 'reading' && selectedText);
+  const showPageTitle = activeTab !== 'home' && activeTab !== 'progress' && !(activeTab === 'reading' && selectedText) && !(activeTab === 'tasks' && taskOpen);
 
   return (
     <div className="min-h-screen bg-background pb-24">
@@ -132,6 +134,7 @@ export default function DashboardPage() {
             key={tabResetKeys.tasks}
             initialTask={tutorLaunch?.task ?? null}
             onTaskLaunched={() => setTutorLaunch(null)}
+            onActiveTaskChange={task => setTaskOpen(task !== null)}
           />
         )}
         {activeTab === 'progress' && <MeView key={tabResetKeys.progress} />}

@@ -122,30 +122,28 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
   }
 
   return (
-    <div className="animate-fade-in space-y-4 pb-6">
+    <div className="animate-fade-in mx-auto max-w-md space-y-5 pb-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <button onClick={onBack} className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors">
-          <ArrowLeft className="h-4 w-4" /> Flashcards
-        </button>
-        <span className="text-xl">{set.emoji}</span>
-      </div>
+      <button onClick={onBack} className="-ml-1 flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+        <ArrowLeft className="h-4 w-4" /> Cards
+      </button>
 
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="font-heading text-lg font-bold text-foreground">{set.title}</h2>
-          <p className="text-xs text-muted-foreground">{set.words.length} word{set.words.length !== 1 ? 's' : ''}</p>
+      <div className="flex items-center gap-3">
+        <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-accent text-2xl leading-none" aria-hidden>{set.emoji}</div>
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <h2 className="truncate font-heading text-[22px] font-semibold leading-tight tracking-[-0.01em] text-foreground">{set.title}</h2>
+          <p className="text-[13px] text-muted-foreground">{set.words.length} word{set.words.length !== 1 ? 's' : ''}</p>
         </div>
         {set.words.length > 0 && (
-          <Button size="sm" onClick={() => onStartPractice(set)} className="gap-1.5">
-            Practice <ChevronRight className="h-3.5 w-3.5" />
+          <Button onClick={() => onStartPractice(set)} className="h-11 shrink-0 gap-1.5 rounded-lg px-[18px] text-[15px] font-semibold">
+            Practise <ChevronRight className="h-4 w-4" />
           </Button>
         )}
       </div>
 
       {/* Add word form */}
-      <Card className="p-4 space-y-3 bg-secondary/40">
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Add a word</p>
+      <Card className="space-y-3 p-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground">Add a word</p>
 
         <div className="space-y-2">
           <div>
@@ -173,11 +171,11 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
           </div>
           <div>
             <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1.5 block">
-              <Sparkles className="h-3 w-3 text-purple-500" />
+              <Sparkles className="h-3 w-3 text-primary" />
               Example sentence
               {generating && <Loader2 className="h-3 w-3 animate-spin" />}
               {!generating && !example && dutch.trim() && (
-                <button className="text-xs text-primary underline underline-offset-2"
+                <button type="button" className="text-xs font-semibold text-accent-foreground underline underline-offset-2"
                   onClick={async () => {
                     setGenerating(true);
                     const ex = await generateExample(dutch.trim());
@@ -195,10 +193,10 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
           </div>
         </div>
 
-        {addError && <p className="text-xs text-red-600">{addError}</p>}
+        {addError && <p className="text-xs text-destructive">{addError}</p>}
 
         <Button
-          className="w-full gap-1.5"
+          className="h-11 w-full gap-1.5 rounded-lg text-[15px] font-semibold"
           onClick={handleAdd}
           disabled={!dutch.trim() || !english.trim() || generating || fetching}
         >
@@ -208,13 +206,13 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
 
       {/* Word list */}
       {set.words.length === 0 ? (
-        <Card className="p-6 text-center">
+        <div className="rounded-lg border border-dashed border-border px-3.5 py-5 text-center">
           <p className="text-sm text-muted-foreground">No words yet — add your first one above.</p>
-        </Card>
+        </div>
       ) : (
-        <div className="space-y-2">
+        <Card className="flex flex-col px-4 py-1">
           {set.words.map(word => (
-            <Card key={word.dutch} className="p-3">
+            <div key={word.dutch} className="border-t border-border py-3 first:border-t-0">
               {editingDutch === word.dutch ? (
                 // ── Edit mode ──
                 <div className="space-y-2">
@@ -250,7 +248,7 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
                   <div className="flex gap-2 shrink-0">
                     <button onClick={() => setConfirmDeleteWord(null)} className="text-xs text-muted-foreground hover:text-foreground px-2 py-1">Cancel</button>
                     <button onClick={() => { onRemoveWord(set.id, word.dutch); setConfirmDeleteWord(null); }}
-                      className="text-xs font-semibold text-white bg-destructive px-3 py-1 rounded-md">Remove</button>
+                      className="rounded-md bg-destructive px-3 py-1 text-xs font-semibold text-destructive-foreground">Remove</button>
                   </div>
                 </div>
               ) : (
@@ -258,7 +256,7 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
                 <div className="flex items-start gap-3">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <span className="font-semibold text-sm text-foreground">{word.dutch}</span>
+                      <span className="text-[15px] font-semibold text-foreground">{word.dutch}</span>
                       <span className="text-muted-foreground text-xs">·</span>
                       <span className="text-sm text-muted-foreground">{word.english}</span>
                     </div>
@@ -276,9 +274,9 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
                   </div>
                 </div>
               )}
-            </Card>
+            </div>
           ))}
-        </div>
+        </Card>
       )}
 
       {/* Delete set */}
@@ -288,7 +286,7 @@ export function CustomSetEditor({ set, onBack, onAddWord, onRemoveWord, onUpdate
             <p className="text-sm text-destructive font-medium">Delete "{set.title}"?</p>
             <div className="flex gap-2 shrink-0">
               <button onClick={() => setConfirmDelete(false)} className="text-xs text-muted-foreground hover:text-foreground px-2 py-1">Cancel</button>
-              <button onClick={() => { onDelete(set.id); onBack(); }} className="text-xs font-semibold text-white bg-destructive px-3 py-1 rounded-md">Delete</button>
+              <button onClick={() => { onDelete(set.id); onBack(); }} className="rounded-md bg-destructive px-3 py-1 text-xs font-semibold text-destructive-foreground">Delete</button>
             </div>
           </div>
         ) : (
@@ -312,34 +310,32 @@ export function CreateSetModal({ onCancel, onCreate }: CreateSetProps) {
   const [emoji, setEmoji] = useState('📝');
 
   return (
-    <div className="animate-fade-in space-y-4">
-      <div className="flex items-center gap-2">
-        <button onClick={onCancel} className="text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="h-5 w-5" />
-        </button>
-        <h2 className="font-heading text-lg font-bold">New Flashcard Set</h2>
-      </div>
+    <div className="animate-fade-in mx-auto max-w-md space-y-5">
+      <button onClick={onCancel} className="-ml-1 flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+        <ArrowLeft className="h-4 w-4" /> Cards
+      </button>
+      <h2 className="font-heading text-[22px] font-semibold leading-tight tracking-[-0.01em] text-foreground">New set</h2>
 
       <Card className="p-4 space-y-4">
         <div>
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide block mb-1.5">Set name</label>
+          <label className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground">Set name</label>
           <Input value={title} onChange={e => setTitle(e.target.value)} placeholder="e.g. Food & Drinks" autoFocus />
         </div>
 
         <div>
-          <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide block mb-2">Icon</label>
+          <label className="mb-2 block text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground">Icon</label>
           <div className="flex flex-wrap gap-2">
             {EMOJI_OPTIONS.map(e => (
-              <button key={e} onClick={() => setEmoji(e)}
-                className={`text-xl rounded-lg p-1.5 transition-all ${emoji === e ? 'bg-primary/15 ring-2 ring-primary' : 'hover:bg-secondary'}`}>
+              <button key={e} type="button" onClick={() => setEmoji(e)}
+                className={`grid h-10 w-10 place-items-center rounded-[10px] text-xl leading-none transition-all ${emoji === e ? 'bg-accent ring-2 ring-primary' : 'hover:bg-secondary'}`}>
                 {e}
               </button>
             ))}
           </div>
         </div>
 
-        <Button className="w-full" disabled={!title.trim()} onClick={() => onCreate(title.trim(), emoji)}>
-          Create Set
+        <Button className="h-11 w-full rounded-lg text-[15px] font-semibold" disabled={!title.trim()} onClick={() => onCreate(title.trim(), emoji)}>
+          Create set
         </Button>
       </Card>
     </div>

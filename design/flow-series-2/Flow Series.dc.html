@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+<style>body{margin:0;background:hsl(40 33% 96%);} a{color:hsl(24 80% 38%);} a:hover{color:hsl(24 80% 30%);}</style>
+</helmet>
+<div ref="{{ rootRef }}" style="--bg:hsl(40 33% 96%);--card:hsl(40 40% 98%);--border:hsl(30 20% 87%);--text:hsl(20 20% 14%);--muted:hsl(20 10% 46%);--line:hsl(20 20% 14% / 0.38);--track:hsl(30 20% 91%);background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;padding:64px;display:flex;flex-direction:column;gap:96px;min-width:8100px;">
+
+<section style="display:flex;flex-direction:column;gap:32px;">
+  <div style="display:flex;flex-direction:column;gap:8px;max-width:760px;">
+    <span style="font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">English Flow · Union · Redesign</span>
+    <h1 style="margin:0;font-family:Lora,serif;font-size:44px;font-weight:600;letter-spacing:-0.02em;">Tasks and Cards</h1>
+    <p style="margin:0;font-size:17px;line-height:1.55;color:var(--muted);text-wrap:pretty;">Shorter copy, one clear action per screen. Setup screens pin their button above the tab bar and drop the floating chat button so nothing overlaps.</p>
+  </div>
+  <div style="display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start;">
+    <div id="3a" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">3a</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Tasks</span></div>
+      <dc-import name="FlowScreens" screen="hub" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="3b" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">3b</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Translate · setup</span></div>
+      <dc-import name="FlowScreens" screen="transSetup" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="3c" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">3c</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Chat with AI · setup</span></div>
+      <dc-import name="FlowScreens" screen="chatSetup" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="3d" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">3d</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Cards</span></div>
+      <dc-import name="FlowScreens" screen="sets" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="3e" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">3e</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Cards · level open</span></div>
+      <dc-import name="FlowScreens" screen="setsOpen" hint-size="390px,844px"></dc-import>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:32px;">
+  <div style="display:flex;flex-direction:column;gap:8px;max-width:760px;">
+    <span style="font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">English Flow · Union</span>
+    <h1 style="margin:0;font-family:Lora,serif;font-size:44px;font-weight:600;letter-spacing:-0.02em;">Key screens</h1>
+    <p style="margin:0;font-size:17px;line-height:1.55;color:var(--muted);text-wrap:pretty;">Navy carries actions and completed states; UK red marks progress, today, tags and the word being translated.</p>
+  </div>
+  <div style="display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start;">
+    <div id="2a" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2a</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Login</span></div>
+      <dc-import name="FlowScreens" screen="login" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2j" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2j</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Home · AI tutor, before plan</span></div>
+      <dc-import name="FlowScreens" screen="tutor" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2k" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2k</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Home · AI tutor, today's plan</span></div>
+      <dc-import name="FlowScreens" screen="plan" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2l" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2l</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Tasks</span></div>
+      <dc-import name="FlowScreens" screen="tasks" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2i" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2i</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Reading · text + AI chat</span></div>
+      <dc-import name="FlowScreens" screen="text" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2b" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2b</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Reading · tap for translation</span></div>
+      <dc-import name="FlowScreens" screen="reading" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2m" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2m</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">After the story · 5 exercises</span></div>
+      <dc-import name="FlowScreens" screen="exercises" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2c" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2c</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Exercise 1 · questions</span></div>
+      <dc-import name="FlowScreens" screen="quiz" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2o" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2o</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Exercise 2 · match the words</span></div>
+      <dc-import name="FlowScreens" screen="match" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2p" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2p</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Exercise 3 · fill the gaps</span></div>
+      <dc-import name="FlowScreens" screen="gaps" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2q" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2q</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Exercise 4 · word order</span></div>
+      <dc-import name="FlowScreens" screen="order" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2r" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2r</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Exercise 5 · translate</span></div>
+      <dc-import name="FlowScreens" screen="translate" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2s" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2s</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Exercises · results</span></div>
+      <dc-import name="FlowScreens" screen="results" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2d" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2d</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Flashcards</span></div>
+      <dc-import name="FlowScreens" screen="cards" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2e" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">2e</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Me</span></div>
+      <dc-import name="FlowScreens" screen="me" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2f" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:hsl(20 20% 14%);color:hsl(40 33% 96%);">2f</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;color:hsl(20 20% 14%);">Settings</span></div>
+      <dc-import name="FlowScreens" screen="settings" appearance="light" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2g" style="--accent:hsl(220 70% 62%);--accent-2:hsl(354 80% 62%);--accent-2-soft:hsl(354 40% 22%);--accent-2-ink:hsl(354 85% 78%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 35% 22%);--accent-ink:hsl(220 80% 80%);--bg:hsl(20 14% 9%);--card:hsl(20 14% 12%);--border:hsl(20 10% 21%);--text:hsl(35 30% 92%);--muted:hsl(30 10% 62%);--line:hsl(35 30% 92% / 0.35);--track:hsl(20 10% 19%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:hsl(20 20% 14%);color:hsl(40 33% 96%);">2g</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;color:hsl(20 20% 14%);">Settings · dark mode</span></div>
+      <dc-import name="FlowScreens" screen="settings" appearance="dark" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="2h" style="--accent:hsl(220 70% 62%);--accent-2:hsl(354 80% 62%);--accent-2-soft:hsl(354 40% 22%);--accent-2-ink:hsl(354 85% 78%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 35% 22%);--accent-ink:hsl(220 80% 80%);--bg:hsl(20 14% 9%);--card:hsl(20 14% 12%);--border:hsl(20 10% 21%);--text:hsl(35 30% 92%);--muted:hsl(30 10% 62%);--line:hsl(35 30% 92% / 0.35);--track:hsl(20 10% 19%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:hsl(20 20% 14%);color:hsl(40 33% 96%);">2h</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;color:hsl(20 20% 14%);">Me · dark mode</span></div>
+      <dc-import name="FlowScreens" screen="me" hint-size="390px,844px"></dc-import>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:32px;">
+  <div style="display:flex;flex-direction:column;gap:8px;max-width:760px;">
+    <span style="font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Flow series · Home</span>
+    <h1 style="margin:0;font-family:Lora,serif;font-size:44px;font-weight:600;letter-spacing:-0.02em;">One layout, one accent each</h1>
+    <p style="margin:0;font-size:17px;line-height:1.55;color:var(--muted);text-wrap:pretty;">Dutch Flow in its orange, English Flow in three UK-flag accents. Layout, type, shapes and neutrals are identical; only the accent and the skyline change.</p>
+  </div>
+  <div style="display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start;">
+    <div id="1a" style="--accent:hsl(24 80% 50%);--accent-soft:hsl(24 80% 92%);--accent-ink:hsl(24 80% 32%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">1a</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">Dutch Flow · Orange</span></div>
+      <dc-import name="FlowHome" app="Dutch" city="ams" greeting="Goedemorgen, Sanne" level="A2" story-title="Een fiets voor Mila" story-line="Mila wil een nieuwe fiets. Maar in Amsterdam is dat niet zo makkelijk…" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="1b" style="--accent:hsl(220 62% 34%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">1b</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">English Flow · Navy</span></div>
+      <dc-import name="FlowHome" app="English" city="lon" greeting="Good morning, Masha" level="A2" story-title="The Flat on Camden Road" story-line="Tom has found a flat. It's cheap, it's central, and the landlord is a cat…" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="1c" style="--accent:hsl(350 62% 34%);--accent-soft:hsl(350 55% 92%);--accent-ink:hsl(350 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">1c</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">English Flow · Maroon</span></div>
+      <dc-import name="FlowHome" app="English" city="lon" greeting="Good morning, Masha" level="A2" story-title="The Flat on Camden Road" story-line="Tom has found a flat. It's cheap, it's central, and the landlord is a cat…" hint-size="390px,844px"></dc-import>
+    </div>
+    <div id="1d" style="--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);display:flex;flex-direction:column;gap:16px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px;background:var(--text);color:var(--bg);">1d</span><span style="font-family:Lora,serif;font-size:18px;font-weight:600;">English Flow · Union (navy + red)</span></div>
+      <dc-import name="FlowHome" app="English" city="lon" greeting="Good morning, Masha" level="A2" story-title="The Flat on Camden Road" story-line="Tom has found a flat. It's cheap, it's central, and the landlord is a cat…" hint-size="390px,844px"></dc-import>
+    </div>
+  </div>
+</section>
+
+<section style="display:flex;flex-direction:column;gap:48px;max-width:1500px;">
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <span style="font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);">Design system</span>
+    <h2 style="margin:0;font-family:Lora,serif;font-size:36px;font-weight:600;letter-spacing:-0.02em;">Flow series foundations</h2>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;">
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <h3 style="margin:0;font-family:Lora,serif;font-size:22px;font-weight:600;">Shared neutrals</h3>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;font-size:13px;">
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:12px;background:hsl(40 33% 96%);border:1px solid var(--border);"></div><b>Background</b><span style="color:var(--muted);">hsl(40 33% 96%)</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:12px;background:hsl(40 40% 98%);border:1px solid var(--border);"></div><b>Card</b><span style="color:var(--muted);">hsl(40 40% 98%)</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:12px;background:hsl(30 20% 87%);"></div><b>Border</b><span style="color:var(--muted);">hsl(30 20% 87%)</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:12px;background:hsl(30 20% 91%);"></div><b>Track</b><span style="color:var(--muted);">hsl(30 20% 91%)</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:12px;background:hsl(20 20% 14%);"></div><b>Text</b><span style="color:var(--muted);">hsl(20 20% 14%)</span></div>
+        <div style="display:flex;flex-direction:column;gap:6px;"><div style="height:56px;border-radius:12px;background:hsl(20 10% 46%);"></div><b>Muted</b><span style="color:var(--muted);">hsl(20 10% 46%)</span></div>
+      </div>
+      <div style="display:flex;gap:12px;font-size:13px;">
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px;"><div style="height:28px;border-radius:8px;background:hsl(142 60% 40%);"></div>Success</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px;"><div style="height:28px;border-radius:8px;background:hsl(38 92% 50%);"></div>Warning</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:6px;"><div style="height:28px;border-radius:8px;background:hsl(0 72% 51%);"></div>Error</div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <h3 style="margin:0;font-family:Lora,serif;font-size:22px;font-weight:600;">Accent per app</h3>
+      <p style="margin:0;font-size:14px;line-height:1.5;color:var(--muted);">Each accent has three steps: base (fills, buttons, active icons), soft (tags, highlighted words), ink (text on soft).</p>
+      <div style="display:flex;flex-direction:column;gap:12px;font-size:13px;">
+        <div style="display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:8px;align-items:center;"><b>Dutch · Orange</b><div style="height:36px;border-radius:8px;background:hsl(24 80% 50%);"></div><div style="height:36px;border-radius:8px;background:hsl(24 80% 92%);"></div><div style="height:36px;border-radius:8px;background:hsl(24 80% 32%);"></div></div>
+        <div style="display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:8px;align-items:center;"><b>English · Navy</b><div style="height:36px;border-radius:8px;background:hsl(220 62% 34%);"></div><div style="height:36px;border-radius:8px;background:hsl(220 60% 92%);"></div><div style="height:36px;border-radius:8px;background:hsl(220 62% 28%);"></div></div>
+        <div style="display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:8px;align-items:center;"><b>English · Maroon</b><div style="height:36px;border-radius:8px;background:hsl(350 62% 34%);"></div><div style="height:36px;border-radius:8px;background:hsl(350 55% 92%);"></div><div style="height:36px;border-radius:8px;background:hsl(350 62% 28%);"></div></div>
+        <div style="display:grid;grid-template-columns:120px 1fr 1fr 1fr;gap:8px;align-items:center;"><b>English · Union</b><div style="height:36px;border-radius:8px;background:hsl(220 62% 34%);"></div><div style="height:36px;border-radius:8px;background:hsl(220 60% 92%);"></div><div style="height:36px;border-radius:8px;background:hsl(354 72% 46%);"></div></div>
+        <span style="color:var(--muted);">Union: navy for buttons, tabs and streak days; UK red for small details (streak flame and today ring, goal bar, level tag, logo wave, bus).</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <h3 style="margin:0;font-family:Lora,serif;font-size:22px;font-weight:600;">Type</h3>
+      <div style="display:flex;flex-direction:column;gap:4px;"><span style="font-family:Lora,serif;font-size:32px;font-weight:600;letter-spacing:-0.02em;">Goedemorgen</span><span style="font-size:13px;color:var(--muted);">Lora 600 · 28–32 · screen titles</span></div>
+      <div style="display:flex;flex-direction:column;gap:4px;"><span style="font-family:Lora,serif;font-size:19px;font-weight:600;">The Flat on Camden Road</span><span style="font-size:13px;color:var(--muted);">Lora 600 · 17–22 · card titles</span></div>
+      <div style="display:flex;flex-direction:column;gap:4px;"><span style="font-family:Lora,serif;font-style:italic;font-size:15px;">Reading text and excerpts</span><span style="font-size:13px;color:var(--muted);">Lora 500 italic · 15 · story lines</span></div>
+      <div style="display:flex;flex-direction:column;gap:4px;"><span style="font-size:15px;">Body and interface text in DM Sans</span><span style="font-size:13px;color:var(--muted);">DM Sans 400–600 · 13–15</span></div>
+      <div style="display:flex;flex-direction:column;gap:4px;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Today's goal</span><span style="font-size:13px;color:var(--muted);">DM Sans 600 caps · 12 · kickers</span></div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px;--accent:hsl(24 80% 50%);--accent-soft:hsl(24 80% 92%);--accent-ink:hsl(24 80% 32%);">
+      <h3 style="margin:0;font-family:Lora,serif;font-size:22px;font-weight:600;">Shapes and components</h3>
+      <p style="margin:0;font-size:14px;line-height:1.5;color:var(--muted);">Radius 12 for cards and buttons, full pill for tags and chips. Cards: card fill + 1px border, no shadow. Icons: Phosphor duotone, 24 in the tab bar.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+        <div style="height:46px;padding:0 20px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;gap:8px;font-weight:600;font-size:15px;">Continue <i class="ph-duotone ph-arrow-right"></i></div>
+        <div style="height:46px;padding:0 20px;border-radius:12px;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;font-weight:600;font-size:15px;">Hard</div>
+        <span style="font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);">A2</span>
+        <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--card);border:1px solid var(--border);font-weight:600;font-size:14px;"><i class="ph-duotone ph-flame" style="font-size:18px;color:var(--accent);"></i>7</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <svg width="48" height="48" viewBox="0 0 34 34"><rect width="34" height="34" rx="10" fill="hsl(24 80% 50%)"></rect><path d="M8 13c3-3 6-3 9 0s6 3 9 0M8 21c3-3 6-3 9 0s6 3 9 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path></svg>
+        <svg width="48" height="48" viewBox="0 0 34 34"><rect width="34" height="34" rx="10" fill="hsl(220 62% 34%)"></rect><path d="M8 13c3-3 6-3 9 0s6 3 9 0M8 21c3-3 6-3 9 0s6 3 9 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path></svg>
+        <svg width="48" height="48" viewBox="0 0 34 34"><rect width="34" height="34" rx="10" fill="hsl(350 62% 34%)"></rect><path d="M8 13c3-3 6-3 9 0s6 3 9 0M8 21c3-3 6-3 9 0s6 3 9 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path></svg>
+        <span style="font-size:13px;color:var(--muted);">Logo: one shape, accent fill</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <h3 style="margin:0;font-family:Lora,serif;font-size:22px;font-weight:600;">Illustration recipe</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;line-height:1.5;">
+        <span>Flat skyline silhouettes sitting on a single ground line, anchored bottom-right of the card.</span>
+        <span>Fill: accent at 10% over the card colour. Outline: text colour at 38%, 1.4px, round joins.</span>
+        <span>One solid accent object per scene (canal boat, red bus) as the only strong colour.</span>
+        <span>Same frame for both apps: Amsterdam gables for Dutch Flow, Big Ben, Westminster and the London Eye for English Flow.</span>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;dark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+  componentDidMount() { this.applyMode(); }
+  componentDidUpdate() { this.applyMode(); }
+  applyMode() {
+    const el = this.rootRef.current; if (!el) return;
+    const dark = this.props.dark ?? false;
+    const v = dark
+      ? { bg: 'hsl(20 14% 9%)', card: 'hsl(20 14% 12%)', border: 'hsl(20 10% 21%)', text: 'hsl(35 30% 92%)', muted: 'hsl(30 10% 62%)', line: 'hsl(35 30% 92% / 0.35)', track: 'hsl(20 10% 19%)' }
+      : { bg: 'hsl(40 33% 96%)', card: 'hsl(40 40% 98%)', border: 'hsl(30 20% 87%)', text: 'hsl(20 20% 14%)', muted: 'hsl(20 10% 46%)', line: 'hsl(20 20% 14% / 0.38)', track: 'hsl(30 20% 91%)' };
+    Object.entries(v).forEach(([k, val]) => el.style.setProperty('--' + k, val));
+  }
+  renderVals() { return { rootRef: this.rootRef }; }
+}
+</script>
+</body>
+</html>

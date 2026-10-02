@@ -1,11 +1,11 @@
 import { useState, useMemo, useRef, type ReactNode } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, X, RotateCcw, ArrowLeft, ArrowRight, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2, Pencil, Search } from 'lucide-react';
+import { Check, X, RotateCcw, ArrowLeft, ArrowRight, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2, Pencil, Search, Bookmark, Archive, Folder, FolderOpen, CircleCheck } from 'lucide-react';
 import { playDutch, stopDutch } from '@/utils/playDutch';
 import { useLearning } from '@/context/LearningContext';
 import { flashcardSets } from '@/data/flashcardSets';
-import { FlashcardSet, FlashcardSetCategory, FlashcardSetWord, DutchWord } from '@/types/dutch';
+import { FlashcardSet, FlashcardSetWord, DutchWord } from '@/types/dutch';
 import { useCustomSets } from '@/hooks/useCustomSets';
 import type { CustomSet } from '@/hooks/useCustomSets';
 import { CustomSetEditor, CreateSetModal } from '@/components/CustomSetEditor';
@@ -28,13 +28,18 @@ function highlightWord(sentence: string, word: string): ReactNode {
   );
 }
 
-const categoryLabels: Record<FlashcardSetCategory, { label: string; emoji: string }> = {
-  verbs:      { label: 'Verbs',      emoji: '' },
-  adjectives: { label: 'Adjectives', emoji: '' },
-  nouns:      { label: 'Nouns',      emoji: '' },
-  numbers:    { label: 'Numbers',    emoji: '' },
-  location:   { label: 'Location',   emoji: '' },
-};
+const LEVELS = ['A1', 'A2', 'B1'] as const;
+// Folders shown as collapsible groups inside an opened level; 'Core' sets are listed directly.
+const FOLDERS = ['Verbs', 'Nouns', 'Adjectives'] as const;
+
+/** Toggle `key` in a Set held in state. */
+function toggleIn(setter: (fn: (prev: Set<string>) => Set<string>) => void, key: string) {
+  setter(prev => {
+    const next = new Set(prev);
+    if (next.has(key)) next.delete(key); else next.add(key);
+    return next;
+  });
+}
 
 export function FlashcardView() {
   const { getWordsForReview, getWordsDueForReview, reviewWordSRS, vocabulary, addWord, removeWord, updateWord, updateWordStatus, dueCount, newCardsToday } = useLearning();
@@ -48,18 +53,8 @@ export function FlashcardView() {
   const [mode, setMode]                 = useState<FlashcardMode>('browse');
   const [activeSet, setActiveSet]       = useState<FlashcardSet | null>(null);
   const [activeCustomSet, setActiveCustomSet] = useState<CustomSet | null>(null);
-  const [a1Open, setA1Open]             = useState(false);
-  const [a1VerbsOpen, setA1VerbsOpen]   = useState(false);
-  const [a1NounsOpen, setA1NounsOpen]   = useState(false);
-  const [a1AdjOpen, setA1AdjOpen]       = useState(false);
-  const [a2Open, setA2Open]             = useState(false);
-  const [a2VerbsOpen, setA2VerbsOpen]   = useState(false);
-  const [a2NounsOpen, setA2NounsOpen]   = useState(false);
-  const [a2AdjsOpen, setA2AdjsOpen]     = useState(false);
-  const [b1Open, setB1Open]             = useState(false);
-  const [b1VerbsOpen, setB1VerbsOpen]   = useState(false);
-  const [b1NounsOpen, setB1NounsOpen]   = useState(false);
-  const [b1AdjsOpen, setB1AdjsOpen]     = useState(false);
+  const [openLevels, setOpenLevels]   = useState<Set<string>>(new Set());
+  const [openFolders, setOpenFolders] = useState<Set<string>>(new Set());
   const [practiceQueue, setPracticeQueue] = useState<FlashcardSetWord[]>([]);
   const [isShuffled, setIsShuffled]     = useState(false);
   const [savedWords, setSavedWords]     = useState<Set<string>>(new Set());
@@ -301,547 +296,243 @@ export function FlashcardView() {
     );
   }
 
-  // ===== BROWSE MODE =====
+  // ===== BROWSE MODE (design: 'sets' / 'setsOpen') =====
   if (mode === 'browse') {
-    const a1Sets = flashcardSets.filter(s => s.level === 'A1');
-    const a1CoreSets = a1Sets.filter(s => s.folder === 'Core');
-    const a1VerbSets = a1Sets.filter(s => s.folder === 'Verbs');
-    const a1NounSets = a1Sets.filter(s => s.folder === 'Nouns');
-    const a1AdjSets  = a1Sets.filter(s => s.folder === 'Adjectives');
-    const a2Sets = flashcardSets.filter(s => s.level === 'A2');
-    const a2VerbSets  = a2Sets.filter(s => s.folder === 'Verbs');
-    const a2NounSets  = a2Sets.filter(s => s.folder === 'Nouns');
-    const a2AdjSets   = a2Sets.filter(s => s.folder === 'Adjectives');
-    const b1Sets = flashcardSets.filter(s => s.level === 'B1');
-    const b1VerbSets  = b1Sets.filter(s => s.folder === 'Verbs');
-    const b1NounSets  = b1Sets.filter(s => s.folder === 'Nouns');
-    const b1AdjSets   = b1Sets.filter(s => s.folder === 'Adjectives');
-    const groupedSets = Object.entries(categoryLabels).map(([cat, info]) => ({
-      category: cat as FlashcardSetCategory,
-      ...info,
-      sets: flashcardSets.filter(s => s.category === cat && !s.level),
-    }));
+    const today = new Date().toISOString().slice(0, 10);
+    const activeWords = allWords.filter(w => w.status !== 'known' && w.status !== 'ignored');
+    const newWords    = activeWords.filter(w => !w.stability);
+    const newAllowed  = Math.max(0, NEW_CARDS_DAILY_LIMIT - newCardsToday);
+    const newDue      = Math.min(newWords.length, newAllowed);
+    const reviewDue   = activeWords.filter(w => w.stability && w.dueDate && w.dueDate <= today).length;
+
+    const learnedIn = (words: FlashcardSetWord[]) =>
+      words.filter(w => vocabulary[w.dutch.toLowerCase()]?.status === 'known').length;
+
+    const levels = LEVELS
+      .map(level => {
+        const sets = flashcardSets.filter(s => s.level === level);
+        const words = sets.flatMap(s => s.words);
+        return { level, sets, total: words.length, learned: learnedIn(words) };
+      })
+      .filter(l => l.sets.length > 0);
+    const unlevelledSets = flashcardSets.filter(s => !s.level);
+
+    const sectionLabel = 'text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground';
+    const rowClass = 'flex items-center gap-3 border-t border-border py-[11px] first:border-t-0';
+    const iconTile = 'grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-accent text-primary';
+
+    const setRow = (set: FlashcardSet) => {
+      const learned = learnedIn(set.words);
+      const total = set.words.length;
+      return (
+        <button key={set.id} type="button" onClick={() => startSet(set)} className={`${rowClass} w-full text-left`}>
+          <div className={`${iconTile} text-[19px] leading-none`} aria-hidden>{set.emoji}</div>
+          <div className="flex min-w-0 flex-1 flex-col gap-px">
+            <span className="truncate text-[15px] font-semibold text-foreground">{set.title}</span>
+            <span className="text-xs text-muted-foreground">{total} word{total !== 1 ? 's' : ''}</span>
+          </div>
+          {total > 0 && learned >= total ? (
+            <CircleCheck className="h-5 w-5 shrink-0 fill-success text-card" aria-label="All learned" />
+          ) : learned > 0 ? (
+            <span className="shrink-0 text-[13px] text-muted-foreground">{learned} / {total}</span>
+          ) : (
+            <span className="shrink-0 text-[13px] font-semibold text-accent-foreground">Start</span>
+          )}
+        </button>
+      );
+    };
+
+    const myRow = (key: string, icon: ReactNode, title: string, sub: string, onOpen: () => void, extra?: ReactNode) => (
+      <div key={key} className={rowClass}>
+        <button type="button" onClick={onOpen} className="flex min-w-0 flex-1 items-center gap-3 text-left">
+          <div className={iconTile}>{icon}</div>
+          <div className="flex min-w-0 flex-1 flex-col gap-px">
+            <span className="truncate text-[15px] font-semibold text-foreground">{title}</span>
+            <span className="text-xs text-muted-foreground">{sub}</span>
+          </div>
+        </button>
+        {extra}
+        <ChevronRight className="h-4 w-4 shrink-0 cursor-pointer text-muted-foreground" onClick={onOpen} />
+      </div>
+    );
+    const plural = (n: number, word: string) => `${n} ${word}${n !== 1 ? 's' : ''}`;
+    const hasMySets = activeWords.length > 0 || customSets.length > 0 || learnedWords.length > 0 || ignoredWords.length > 0;
 
     return (
-      <div className="animate-fade-in space-y-5">
+      <div className="animate-fade-in mx-auto flex max-w-md flex-col gap-[22px] pb-6">
 
-        {/* Spaced Repetition Review */}
-        {allWords.length > 0 && (() => {
-          const today = new Date().toISOString().slice(0, 10);
-          const newWords   = allWords.filter(w => !w.stability && w.status !== 'known' && w.status !== 'ignored');
-          const newAllowed = Math.max(0, NEW_CARDS_DAILY_LIMIT - newCardsToday);
-          const reviewDue  = allWords.filter(w => w.stability && w.dueDate && w.dueDate <= today && w.status !== 'known' && w.status !== 'ignored');
-          return (
-            <Card
-              className={`card-hover cursor-pointer p-4 ${dueCount > 0 ? 'border-primary/30 bg-primary/5' : ''}`}
-              onClick={startMyWords}
-            >
-              <div className="flex items-center justify-between mb-3">
-                <p className="font-heading font-semibold text-foreground">Daily Review</p>
-                {dueCount > 0 && (
-                  <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-primary px-1.5 text-xs font-bold text-primary-foreground">
-                    {dueCount}
-                  </span>
-                )}
-                {dueCount === 0 && <ChevronRight className="h-5 w-5 text-muted-foreground" />}
-              </div>
-              <div className="flex gap-4 text-xs">
-                <div className="text-center">
-                  <p className="font-bold text-base text-foreground">{reviewDue.length}</p>
-                  <p className="text-muted-foreground">due</p>
-                </div>
-                <div className="w-px bg-border" />
-                <div className="text-center">
-                  <p className="font-bold text-base text-foreground">{Math.min(newWords.length, newAllowed)}</p>
-                  <p className="text-muted-foreground">new</p>
-                </div>
-                <div className="w-px bg-border" />
-                <div className="text-center">
-                  <p className="font-bold text-base text-foreground">{allWords.length}</p>
-                  <p className="text-muted-foreground">total</p>
-                </div>
-              </div>
-              {dueCount === 0 && (
-                <p className="mt-2 text-xs text-muted-foreground">All caught up — come back tomorrow.</p>
-              )}
-            </Card>
-          );
-        })()}
-
-        {/* Learning card */}
-        {allWords.filter(w => w.status !== 'known' && w.status !== 'ignored').length > 0 && (
+        {/* Due cards (spaced repetition) */}
+        {allWords.length > 0 && (
           <Card
-            className="card-hover cursor-pointer p-4 flex items-center justify-between"
-            onClick={() => { setWordListSearch(''); setEditingWord(null); setConfirmDeleteWord(null); setMode('word-list'); }}
+            className="card-hover flex cursor-pointer items-center gap-3.5 p-4"
+            onClick={startMyWords}
           >
-            <div className="flex items-center gap-3">
-              <div>
-                <p className="font-heading font-semibold text-foreground">My Words</p>
-                <p className="text-xs text-muted-foreground">
-                  {allWords.filter(w => w.status !== 'known' && w.status !== 'ignored').length} saved word{allWords.filter(w => w.status !== 'known' && w.status !== 'ignored').length !== 1 ? 's' : ''} — tap to view &amp; edit
-                </p>
-              </div>
+            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="font-heading text-[22px] font-semibold leading-tight text-foreground">
+                {dueCount > 0 ? `${dueCount} card${dueCount !== 1 ? 's' : ''} due` : 'All caught up'}
+              </span>
+              <span className="text-[13px] text-muted-foreground">
+                {dueCount > 0
+                  ? `${reviewDue} to review · ${newDue} new`
+                  : `${plural(activeWords.length, 'word')} in review · come back tomorrow`}
+              </span>
             </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
+            {dueCount > 0 ? (
+              <span className="flex h-11 shrink-0 items-center rounded-lg bg-primary px-[18px] text-[15px] font-semibold text-primary-foreground">
+                Review
+              </span>
+            ) : (
+              <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground" />
+            )}
           </Card>
         )}
 
-        {/* My Custom Sets */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
-              My Sets
-            </h3>
+        {/* My sets: saved words, custom sets, learned, archive */}
+        <div className="flex flex-col gap-2.5">
+          <div className="flex items-center justify-between">
+            <span className={sectionLabel}>My sets</span>
             <button
+              type="button"
               onClick={openCreateSet}
-              className="flex items-center gap-1 rounded-lg border border-border px-2 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary"
+              className="flex items-center gap-1 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-80"
             >
-              <Plus className="h-3 w-3" /> New set
+              <Plus className="h-3.5 w-3.5" strokeWidth={2.5} /> New set
             </button>
           </div>
-          {customSets.length === 0 ? (
-            <p className="text-xs text-muted-foreground px-1 leading-relaxed">
-              Group words your own way — save tricky vocab, themed lists, or lesson notes into a custom set.
-            </p>
-          ) : (
-            <div className="space-y-2">
-              {customSets.map(cs => (
-                <Card key={cs.id} className="p-3.5">
-                  {confirmDeleteId === cs.id ? (
-                    <div className="flex items-center justify-between gap-3">
-                      <p className="text-sm text-destructive font-medium">Delete "{cs.title}"?</p>
-                      <div className="flex gap-2 shrink-0">
-                        <button onClick={() => setConfirmDeleteId(null)} className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1">Cancel</button>
-                        <button onClick={() => { deleteSet(cs.id); setConfirmDeleteId(null); }} className="text-xs font-semibold text-white bg-destructive hover:bg-destructive/90 transition-colors px-3 py-1 rounded-md">Delete</button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer" onClick={() => openCustomEditor(cs)}>
-                        <span className="text-lg">{cs.emoji}</span>
-                        <div className="min-w-0">
-                          <p className="text-sm font-medium text-foreground truncate">{cs.title}</p>
-                          <p className="text-xs text-muted-foreground">{cs.words.length} word{cs.words.length !== 1 ? 's' : ''}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1 shrink-0">
-                        <button onClick={(e) => { e.stopPropagation(); setConfirmDeleteId(cs.id); }} className="p-1.5 text-muted-foreground hover:text-destructive transition-colors rounded-md hover:bg-destructive/10">
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                        <ChevronRight className="h-4 w-4 text-muted-foreground cursor-pointer" onClick={() => openCustomEditor(cs)} />
-                      </div>
-                    </div>
-                  )}
-                </Card>
-              ))}
+
+          {!hasMySets ? (
+            <div className="flex items-center gap-3 rounded-lg border border-dashed border-border px-3.5 py-3">
+              <Bookmark className="h-[22px] w-[22px] shrink-0 text-muted-foreground" />
+              <span className="text-sm leading-snug text-muted-foreground">
+                Words you add while reading land in “My words”. Or make your own set.
+              </span>
             </div>
+          ) : (
+            <Card className="flex flex-col px-4 py-1">
+              {activeWords.length > 0 && myRow(
+                'my-words',
+                <Bookmark className="h-[19px] w-[19px]" />,
+                'My words',
+                `${plural(activeWords.length, 'saved word')} · view & edit`,
+                () => { setWordListSearch(''); setEditingWord(null); setConfirmDeleteWord(null); setMode('word-list'); },
+              )}
+              {customSets.map(cs => confirmDeleteId === cs.id ? (
+                <div key={cs.id} className={`${rowClass} justify-between`}>
+                  <p className="min-w-0 truncate text-sm font-medium text-destructive">Delete “{cs.title}”?</p>
+                  <div className="flex shrink-0 gap-2">
+                    <button type="button" onClick={() => setConfirmDeleteId(null)} className="px-2 py-1 text-xs text-muted-foreground transition-colors hover:text-foreground">Cancel</button>
+                    <button type="button" onClick={() => { deleteSet(cs.id); setConfirmDeleteId(null); }} className="rounded-md bg-destructive px-3 py-1 text-xs font-semibold text-destructive-foreground transition-colors hover:bg-destructive/90">Delete</button>
+                  </div>
+                </div>
+              ) : myRow(
+                cs.id,
+                <span className="text-[19px] leading-none" aria-hidden>{cs.emoji}</span>,
+                cs.title,
+                plural(cs.words.length, 'word'),
+                () => openCustomEditor(cs),
+                <button
+                  type="button"
+                  onClick={() => setConfirmDeleteId(cs.id)}
+                  className="shrink-0 rounded-md p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
+                  aria-label={`Delete ${cs.title}`}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>,
+              ))}
+              {learnedWords.length > 0 && myRow(
+                'learned',
+                <GraduationCap className="h-[19px] w-[19px]" />,
+                'Learned words',
+                `${plural(learnedWords.length, 'word')} mastered`,
+                startLearned,
+              )}
+              {ignoredWords.length > 0 && myRow(
+                'archive',
+                <Archive className="h-[19px] w-[19px]" />,
+                'Archive',
+                `${plural(ignoredWords.length, 'removed word')} · tap to restore`,
+                () => setMode('archive'),
+              )}
+            </Card>
           )}
         </div>
 
-        {/* Learned Words */}
-        {learnedWords.length > 0 && (
-          <Card
-            className="card-hover cursor-pointer p-4 flex items-center justify-between"
-            onClick={startLearned}
-          >
-            <div className="flex items-center gap-3">
-              <div>
-                <p className="font-heading font-semibold text-foreground">Learned Words</p>
-                <p className="text-xs text-muted-foreground">{learnedWords.length} word{learnedWords.length !== 1 ? 's' : ''} mastered</p>
-              </div>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
-        )}
-
-        {/* Archive */}
-        {ignoredWords.length > 0 && (
-          <Card
-            className="card-hover cursor-pointer p-4 flex items-center justify-between border-border bg-muted/30"
-            onClick={() => setMode('archive')}
-          >
-            <div>
-              <p className="font-heading font-semibold text-foreground">Archive</p>
-              <p className="text-xs text-muted-foreground">{ignoredWords.length} removed word{ignoredWords.length !== 1 ? 's' : ''} — tap to restore</p>
-            </div>
-            <ChevronRight className="h-5 w-5 text-muted-foreground" />
-          </Card>
-        )}
-
-        {/* ── Prepared Sets ── */}
-        <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium pt-1">Prepared sets</p>
-
-        {/* A1 Level folder */}
-        {a1Sets.length > 0 && (
-          <div>
-            <button
-              onClick={() => setA1Open(v => !v)}
-              className="w-full flex items-center justify-between mb-2"
-            >
-              <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
-                A1 Level
-                <span className="text-xs font-normal text-muted-foreground">
-                  {a1VerbSets.reduce((t, s) => t + s.words.length, 0)} verbs · {a1NounSets.reduce((t, s) => t + s.words.length, 0)} nouns · {a1AdjSets.reduce((t, s) => t + s.words.length, 0)} adjectives
-                </span>
-              </h3>
-              <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${a1Open ? 'rotate-180' : ''}`} />
-            </button>
-            {a1Open && (
-              <div className="ml-3 border-l-2 border-border pl-3 space-y-3">
-                {/* Core sets — shown individually, no subfolder */}
-                {a1CoreSets.map(set => (
-                  <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between border-primary/20 bg-primary/5" onClick={() => startSet(set)}>
-                    <div className="flex items-center gap-3">
-                      <span className="text-lg">{set.emoji}</span>
-                      <div>
-                        <p className="text-sm font-semibold text-foreground">{set.title}</p>
-                        <p className="text-xs text-muted-foreground">{set.words.length} words · Start here</p>
-                      </div>
+        {/* Prepared sets, by level */}
+        <div className="flex flex-col gap-2.5">
+          <span className={sectionLabel}>Prepared sets</span>
+          {levels.map(({ level, sets, total, learned }) => {
+            const isOpen = openLevels.has(level);
+            const pct = total > 0 ? Math.round((learned / total) * 100) : 0;
+            const coreSets = sets.filter(s => !s.folder || s.folder === 'Core');
+            const folders = FOLDERS
+              .map(folder => ({ folder, sets: sets.filter(s => s.folder === folder) }))
+              .filter(f => f.sets.length > 0);
+            return (
+              <Card key={level} className="flex flex-col gap-2.5 px-4 py-3.5">
+                <button
+                  type="button"
+                  onClick={() => toggleIn(setOpenLevels, level)}
+                  className="flex w-full items-center gap-3 text-left"
+                  aria-expanded={isOpen}
+                >
+                  <span className="w-[34px] shrink-0 font-heading text-xl font-semibold text-foreground">{level}</span>
+                  <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                    <div className="flex justify-between text-[13px] text-muted-foreground">
+                      <span>{total} words</span>
+                      <span>{learned} learned</span>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  </Card>
-                ))}
-                {/* Verbs subfolder */}
-                {a1VerbSets.length > 0 && (
-                  <div>
-                    <button
-                      onClick={() => setA1VerbsOpen(v => !v)}
-                      className="w-full flex items-center justify-between py-1"
-                    >
-                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        Verbs <span className="font-normal normal-case">({a1VerbSets.length} sets)</span>
-                      </span>
-                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a1VerbsOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {a1VerbsOpen && (
-                      <div className="space-y-2 mt-2">
-                        {a1VerbSets.map(set => (
-                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg">{set.emoji}</span>
-                              <div>
-                                <p className="text-sm font-medium text-foreground">{set.title}</p>
-                                <p className="text-xs text-muted-foreground">{set.words.length} verbs</p>
-                              </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </Card>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {/* Nouns subfolder */}
-                {a1NounSets.length > 0 && (
-                  <div>
-                    <button
-                      onClick={() => setA1NounsOpen(v => !v)}
-                      className="w-full flex items-center justify-between py-1"
-                    >
-                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        Nouns <span className="font-normal normal-case">({a1NounSets.length} sets)</span>
-                      </span>
-                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a1NounsOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {a1NounsOpen && (
-                      <div className="space-y-2 mt-2">
-                        {a1NounSets.map(set => (
-                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg">{set.emoji}</span>
-                              <div>
-                                <p className="text-sm font-medium text-foreground">{set.title}</p>
-                                <p className="text-xs text-muted-foreground">{set.words.length} nouns</p>
-                              </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </Card>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {/* Adjectives subfolder */}
-                {a1AdjSets.length > 0 && (
-                  <div>
-                    <button
-                      onClick={() => setA1AdjOpen(v => !v)}
-                      className="w-full flex items-center justify-between py-1"
-                    >
-                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        Adjectives <span className="font-normal normal-case">({a1AdjSets.length} sets)</span>
-                      </span>
-                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a1AdjOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {a1AdjOpen && (
-                      <div className="space-y-2 mt-2">
-                        {a1AdjSets.map(set => (
-                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg">{set.emoji}</span>
-                              <div>
-                                <p className="text-sm font-medium text-foreground">{set.title}</p>
-                                <p className="text-xs text-muted-foreground">{set.words.length} adjectives</p>
-                              </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </Card>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* A2 Level folder */}
-        {a2Sets.length > 0 && (
-          <div>
-            <button
-              onClick={() => setA2Open(v => !v)}
-              className="w-full flex items-center justify-between mb-2"
-            >
-              <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
-                A2 Level
-                <span className="text-xs font-normal text-muted-foreground">
-                  {a2VerbSets.reduce((t, s) => t + s.words.length, 0)} verbs · {a2NounSets.reduce((t, s) => t + s.words.length, 0)} nouns · {a2AdjSets.reduce((t, s) => t + s.words.length, 0)} adjectives
-                </span>
-              </h3>
-              <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${a2Open ? 'rotate-180' : ''}`} />
-            </button>
-            {a2Open && (
-              <div className="ml-3 border-l-2 border-border pl-3 space-y-3">
-                {/* Verbs subfolder */}
-                {a2VerbSets.length > 0 && (
-                  <div>
-                    <button
-                      onClick={() => setA2VerbsOpen(v => !v)}
-                      className="w-full flex items-center justify-between py-1"
-                    >
-                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        Verbs <span className="font-normal normal-case">({a2VerbSets.length} sets)</span>
-                      </span>
-                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a2VerbsOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {a2VerbsOpen && (
-                      <div className="space-y-2 mt-2">
-                        {a2VerbSets.map(set => (
-                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg">{set.emoji}</span>
-                              <div>
-                                <p className="text-sm font-medium text-foreground">{set.title}</p>
-                                <p className="text-xs text-muted-foreground">{set.words.length} verbs</p>
-                              </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </Card>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {/* Nouns subfolder */}
-                {a2NounSets.length > 0 && (
-                  <div>
-                    <button
-                      onClick={() => setA2NounsOpen(v => !v)}
-                      className="w-full flex items-center justify-between py-1"
-                    >
-                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        Nouns <span className="font-normal normal-case">({a2NounSets.length} sets)</span>
-                      </span>
-                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a2NounsOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {a2NounsOpen && (
-                      <div className="space-y-2 mt-2">
-                        {a2NounSets.map(set => (
-                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg">{set.emoji}</span>
-                              <div>
-                                <p className="text-sm font-medium text-foreground">{set.title}</p>
-                                <p className="text-xs text-muted-foreground">{set.words.length} nouns</p>
-                              </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </Card>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {/* Adjectives subfolder */}
-                {a2AdjSets.length > 0 && (
-                  <div>
-                    <button
-                      onClick={() => setA2AdjsOpen(v => !v)}
-                      className="w-full flex items-center justify-between py-1"
-                    >
-                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        Adjectives <span className="font-normal normal-case">({a2AdjSets.length} sets)</span>
-                      </span>
-                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${a2AdjsOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {a2AdjsOpen && (
-                      <div className="space-y-2 mt-2">
-                        {a2AdjSets.map(set => (
-                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg">{set.emoji}</span>
-                              <div>
-                                <p className="text-sm font-medium text-foreground">{set.title}</p>
-                                <p className="text-xs text-muted-foreground">{set.words.length} adjectives</p>
-                              </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </Card>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* B1 Level folder */}
-        {b1Sets.length > 0 && (
-          <div>
-            <button
-              onClick={() => setB1Open(v => !v)}
-              className="w-full flex items-center justify-between mb-2"
-            >
-              <h3 className="font-heading font-semibold text-foreground flex items-center gap-2">
-                B1 Level
-                <span className="text-xs font-normal text-muted-foreground">
-                  {b1VerbSets.reduce((t, s) => t + s.words.length, 0)} verbs · {b1NounSets.reduce((t, s) => t + s.words.length, 0)} nouns · {b1AdjSets.reduce((t, s) => t + s.words.length, 0)} adjectives
-                </span>
-              </h3>
-              <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${b1Open ? 'rotate-180' : ''}`} />
-            </button>
-            {b1Open && (
-              <div className="ml-3 border-l-2 border-border pl-3 space-y-3">
-                {/* Verbs subfolder */}
-                {b1VerbSets.length > 0 && (
-                  <div>
-                    <button
-                      onClick={() => setB1VerbsOpen(v => !v)}
-                      className="w-full flex items-center justify-between py-1"
-                    >
-                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        Verbs <span className="font-normal normal-case">({b1VerbSets.length} sets)</span>
-                      </span>
-                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${b1VerbsOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {b1VerbsOpen && (
-                      <div className="space-y-2 mt-2">
-                        {b1VerbSets.map(set => (
-                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg">{set.emoji}</span>
-                              <div>
-                                <p className="text-sm font-medium text-foreground">{set.title}</p>
-                                <p className="text-xs text-muted-foreground">{set.words.length} verbs</p>
-                              </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </Card>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {/* Nouns subfolder */}
-                {b1NounSets.length > 0 && (
-                  <div>
-                    <button
-                      onClick={() => setB1NounsOpen(v => !v)}
-                      className="w-full flex items-center justify-between py-1"
-                    >
-                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        Nouns <span className="font-normal normal-case">({b1NounSets.length} sets)</span>
-                      </span>
-                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${b1NounsOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {b1NounsOpen && (
-                      <div className="space-y-2 mt-2">
-                        {b1NounSets.map(set => (
-                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg">{set.emoji}</span>
-                              <div>
-                                <p className="text-sm font-medium text-foreground">{set.title}</p>
-                                <p className="text-xs text-muted-foreground">{set.words.length} nouns</p>
-                              </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </Card>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {/* Adjectives subfolder */}
-                {b1AdjSets.length > 0 && (
-                  <div>
-                    <button
-                      onClick={() => setB1AdjsOpen(v => !v)}
-                      className="w-full flex items-center justify-between py-1"
-                    >
-                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
-                        Adjectives <span className="font-normal normal-case">({b1AdjSets.length} sets)</span>
-                      </span>
-                      <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground transition-transform ${b1AdjsOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {b1AdjsOpen && (
-                      <div className="space-y-2 mt-2">
-                        {b1AdjSets.map(set => (
-                          <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
-                            <div className="flex items-center gap-3">
-                              <span className="text-lg">{set.emoji}</span>
-                              <div>
-                                <p className="text-sm font-medium text-foreground">{set.title}</p>
-                                <p className="text-xs text-muted-foreground">{set.words.length} adjectives</p>
-                              </div>
-                            </div>
-                            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                          </Card>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Built-in category sections */}
-        {groupedSets.map(({ category, label, emoji, sets }) => sets.length === 0 ? null : (
-          <div key={category}>
-            <h3 className="mb-2 font-heading font-semibold text-foreground flex items-center gap-2">
-              {label}
-            </h3>
-            <div className="space-y-2">
-              {sets.map(set => (
-                <Card key={set.id} className="card-hover cursor-pointer p-3.5 flex items-center justify-between" onClick={() => startSet(set)}>
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg">{set.emoji}</span>
-                    <div>
-                      <p className="text-sm font-medium text-foreground">{set.title}</p>
-                      <p className="text-xs text-muted-foreground">{set.words.length} words</p>
+                    <div className="h-[5px] overflow-hidden rounded-full bg-track">
+                      <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
                     </div>
                   </div>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </Card>
-              ))}
-            </div>
-          </div>
-        ))}
+                  <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} strokeWidth={2.5} />
+                </button>
+
+                {isOpen && (
+                  <div className="mt-0.5 flex flex-col border-t border-border">
+                    {coreSets.map(setRow)}
+                    {folders.map(({ folder, sets: folderSets }) => {
+                      const key = `${level}-${folder}`;
+                      const folderOpen = openFolders.has(key);
+                      const words = folderSets.reduce((t, s) => t + s.words.length, 0);
+                      return (
+                        <div key={key} className="flex flex-col border-t border-border first:border-t-0">
+                          <button
+                            type="button"
+                            onClick={() => toggleIn(setOpenFolders, key)}
+                            className="flex w-full items-center gap-3 py-[11px] text-left"
+                            aria-expanded={folderOpen}
+                          >
+                            <div className={iconTile}>
+                              {folderOpen ? <FolderOpen className="h-[19px] w-[19px]" /> : <Folder className="h-[19px] w-[19px]" />}
+                            </div>
+                            <div className="flex min-w-0 flex-1 flex-col gap-px">
+                              <span className="truncate text-[15px] font-semibold text-foreground">{folder}</span>
+                              <span className="text-xs text-muted-foreground">{plural(folderSets.length, 'set')} · {words} words</span>
+                            </div>
+                            <ChevronDown className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${folderOpen ? 'rotate-180' : ''}`} strokeWidth={2.5} />
+                          </button>
+                          {folderOpen && (
+                            <div className="flex flex-col border-t border-border pl-4">
+                              {folderSets.map(setRow)}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </Card>
+            );
+          })}
+
+          {/* Sets without a level (none at the moment; kept so they still show) */}
+          {unlevelledSets.length > 0 && (
+            <Card className="flex flex-col px-4 py-1">
+              {unlevelledSets.map(setRow)}
+            </Card>
+          )}
+        </div>
       </div>
     );
   }

@@ -1,33 +1,35 @@
 import { useState, useEffect } from 'react';
 import { TranslateChallengeTask } from './tasks/TranslateChallengeTask';
 import { ContinueDialogueTask } from './tasks/ContinueDialogueTask';
-import { ArrowLeftRight, MessageCircle, ChevronRight } from 'lucide-react';
+import { Languages, MessageCircleMore, ChevronRight } from 'lucide-react';
 
 type ActiveTask = 'translate' | 'dialogue' | null;
 
 interface TasksViewProps {
   initialTask?: ActiveTask;
   onTaskLaunched?: () => void;
+  /** Called whenever a task opens or closes, so the shell can hide its "Tasks" title inside a task. */
+  onActiveTaskChange?: (task: ActiveTask) => void;
 }
 
 const tasks = [
   {
     id: 'translate' as const,
-    icon: ArrowLeftRight,
+    icon: Languages,
     title: 'Translate to English',
-    tag: 'Translation',
-    description: 'Translate a short Russian text into English at your level — type your answer and get warm, level-aware AI feedback.',
+    meta: '10 min · written',
+    description: 'The tutor writes a short Russian text for your level. You translate it and get feedback.',
   },
   {
     id: 'dialogue' as const,
-    icon: MessageCircle,
+    icon: MessageCircleMore,
     title: 'Chat with AI',
-    tag: 'Conversation',
-    description: 'Hold a short English conversation with an AI partner. Save words to flashcards. Grammar review at the end.',
+    meta: '5 min · conversation',
+    description: 'A short conversation on a topic you pick. Grammar review at the end.',
   },
 ];
 
-export function TasksView({ initialTask = null, onTaskLaunched }: TasksViewProps) {
+export function TasksView({ initialTask = null, onTaskLaunched, onActiveTaskChange }: TasksViewProps) {
   const [activeTask, setActiveTask] = useState<ActiveTask>(initialTask);
 
   useEffect(() => {
@@ -37,36 +39,36 @@ export function TasksView({ initialTask = null, onTaskLaunched }: TasksViewProps
     }
   }, [initialTask]);
 
+  useEffect(() => {
+    onActiveTaskChange?.(activeTask);
+  }, [activeTask]);
+
   if (activeTask === 'translate') return <TranslateChallengeTask onBack={() => setActiveTask(null)} />;
   if (activeTask === 'dialogue')  return <ContinueDialogueTask   onBack={() => setActiveTask(null)} />;
 
   return (
-    <div className="animate-fade-in space-y-6">
-      <div>
-        <p className="text-sm text-muted-foreground mt-0.5">Choose an exercise and practise your English.</p>
-      </div>
+    <div className="animate-fade-in flex flex-col gap-5">
+      {/* Subtitle sits under the shell's "Tasks" page title */}
+      <p className="-mt-3 text-[15px] text-muted-foreground">Practise with your AI tutor.</p>
 
-      <div className="space-y-2">
-        {tasks.map((task, idx) => (
+      <div className="flex flex-col gap-3">
+        {tasks.map(task => (
           <button
             key={task.id}
             onClick={() => setActiveTask(task.id)}
-            className="w-full text-left group flex items-center gap-4 rounded-2xl border border-border bg-card px-4 py-4 transition-all hover:border-foreground/25 hover:shadow-sm active:scale-[0.99]"
+            className="group flex w-full flex-col gap-3.5 rounded-xl border border-border bg-card p-[18px] text-left transition-colors hover:border-primary/40 active:scale-[0.99]"
           >
-            <span className="shrink-0 font-heading text-xs font-semibold text-muted-foreground/50 w-5 text-right tabular-nums">
-              {String(idx + 1).padStart(2, '0')}
-            </span>
-            <span className="shrink-0 flex h-9 w-9 items-center justify-center rounded-xl bg-muted">
-              <task.icon className="h-4 w-4 text-foreground/70" />
-            </span>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-0.5">
-                <span className="font-heading font-semibold text-sm text-foreground">{task.title}</span>
-                <span className="text-[10px] font-medium text-muted-foreground/70 uppercase tracking-wider">{task.tag}</span>
+            <div className="flex w-full items-center gap-3.5">
+              <span className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-accent">
+                <task.icon className="h-6 w-6 text-primary" strokeWidth={1.75} />
+              </span>
+              <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                <span className="font-heading text-[19px] font-semibold leading-snug text-foreground">{task.title}</span>
+                <span className="text-[13px] text-muted-foreground">{task.meta}</span>
               </div>
-              <p className="text-xs text-muted-foreground leading-snug">{task.description}</p>
+              <ChevronRight className="h-[18px] w-[18px] shrink-0 text-muted-foreground transition-colors group-hover:text-foreground" strokeWidth={2.5} />
             </div>
-            <ChevronRight className="shrink-0 h-4 w-4 text-muted-foreground/40 group-hover:text-muted-foreground transition-colors" />
+            <p className="text-sm leading-normal text-muted-foreground">{task.description}</p>
           </button>
         ))}
       </div>
