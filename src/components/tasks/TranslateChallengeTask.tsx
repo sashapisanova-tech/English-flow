@@ -670,7 +670,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
     const ratingColors = {
       great: { card: 'border-green-200 bg-green-50', label: 'text-green-700', badge: 'bg-green-100 text-green-800' },
       good: { card: 'border-blue-200 bg-blue-50', label: 'text-blue-700', badge: 'bg-blue-100 text-blue-800' },
-      needs_work: { card: 'border-orange-200 bg-orange-50', label: 'text-orange-700', badge: 'bg-orange-100 text-orange-800' },
+      needs_work: { card: 'border-highlight/40 bg-highlight-soft', label: 'text-highlight-ink', badge: 'bg-highlight-soft text-highlight-ink' },
     }[feedback.rating];
     const ratingLabel = { great: 'Great job!', good: 'Good effort!', needs_work: 'Keep going!' }[feedback.rating];
 
@@ -745,7 +745,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
               Easy
             </button>
             <button onClick={() => handleRate('hard')}
-              className={`flex-1 rounded-xl border py-2.5 text-sm font-semibold transition-colors ${rating === 'hard' ? 'border-orange-400 bg-orange-50 text-orange-700' : 'border-border text-muted-foreground hover:border-orange-300'}`}>
+              className={`flex-1 rounded-xl border py-2.5 text-sm font-semibold transition-colors ${rating === 'hard' ? 'border-highlight bg-highlight-soft text-highlight-ink' : 'border-border text-muted-foreground hover:border-highlight/40'}`}>
               Hard
             </button>
           </div>
@@ -754,7 +754,7 @@ export function TranslateChallengeTask({ onBack }: { onBack: () => void }) {
         {/* Save word */}
         {rating === 'hard' ? (
           <button onClick={() => setShowSaveWord(true)}
-            className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-orange-300 bg-orange-50 px-3 py-2.5 text-sm font-medium text-orange-700 hover:bg-orange-100 transition-colors">
+            className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-highlight/40 bg-highlight-soft px-3 py-2.5 text-sm font-medium text-highlight-ink hover:bg-highlight-soft transition-colors">
             <BookmarkPlus className="h-4 w-4" /> Save a word from this text
           </button>
         ) : (

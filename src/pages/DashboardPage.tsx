@@ -107,8 +107,8 @@ export default function DashboardPage() {
           <div className="animate-fade-in space-y-5">
             {/* Streak card */}
             <Card className="p-4 flex items-center gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-orange-100">
-                <Flame className="h-7 w-7 text-orange-500" />
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-highlight-soft">
+                <Flame className="h-7 w-7 text-highlight" />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-heading text-2xl font-bold text-foreground leading-none">

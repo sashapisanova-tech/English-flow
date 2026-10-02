@@ -59,12 +59,12 @@ export default {
           DEFAULT: "hsl(var(--warning))",
           foreground: "hsl(var(--warning-foreground))",
         },
-        dutch: {
-          orange: "hsl(var(--dutch-orange))",
-          cream: "hsl(var(--dutch-cream))",
-          warm: "hsl(var(--dutch-warm))",
-          dark: "hsl(var(--dutch-dark))",
+        highlight: {
+          DEFAULT: "hsl(var(--highlight))",
+          soft: "hsl(var(--highlight-soft))",
+          ink: "hsl(var(--highlight-ink))",
         },
+        track: "hsl(var(--track))",
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

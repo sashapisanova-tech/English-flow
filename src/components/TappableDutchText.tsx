@@ -147,7 +147,7 @@ export function TappableDutchText({
           const wordOnly = tok.replace(/[.,!?;:"'«»''""()]/g, '');
 
           const wordClass = highlightWords?.has(clean)
-            ? 'font-semibold text-orange-500'
+            ? 'font-semibold text-highlight-ink'
             : newWords?.has(clean)
             ? 'font-semibold text-purple-600 underline decoration-dotted underline-offset-2'
             : '';

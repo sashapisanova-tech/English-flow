@@ -1436,7 +1436,7 @@ export function FlashcardView() {
                   variant="outline"
                   size="sm"
                   onClick={() => handleSRSRating('hard')}
-                  className="gap-1 border-orange-300 text-orange-600 hover:bg-orange-50 text-xs px-3 flex-1"
+                  className="gap-1 border-highlight/40 text-highlight-ink hover:bg-highlight-soft text-xs px-3 flex-1"
                 >
                   Hard
                 </Button>

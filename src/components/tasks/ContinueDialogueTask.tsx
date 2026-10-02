@@ -493,7 +493,7 @@ export function ContinueDialogueTask({ onBack }: { onBack: () => void }) {
           <p className="text-sm text-muted-foreground mt-0.5">Hold a short English conversation. Grammar review after 5 messages.</p>
         </div>
         <Card className="p-4">
-          <TaskFilters level={level} theme="Dagelijks leven" onLevelChange={setLevel} onThemeChange={() => {}} hideTheme />
+          <TaskFilters level={level} theme="Everyday life" onLevelChange={setLevel} onThemeChange={() => {}} hideTheme />
         </Card>
         {error && <Card className="border-red-200 bg-red-50 p-4"><p className="text-sm text-red-700">{error}</p></Card>}
         <Button className="w-full gap-2 py-5 text-base font-semibold" onClick={() => setScreen('topic')}>

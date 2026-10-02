@@ -227,8 +227,8 @@ function StepColors() {
 
   const items = [
     {
-      color: 'bg-orange-100 text-orange-700 border-orange-200',
-      dot: 'bg-orange-400',
+      color: 'bg-highlight-soft text-highlight-ink border-highlight/40',
+      dot: 'bg-highlight',
       label: 'Vocabulary word',
       desc: 'A word from your saved flashcard list — already familiar territory.',
       word: 'kitchen',
@@ -248,7 +248,7 @@ function StepColors() {
       <div className="rounded-xl border border-border bg-card p-3 text-sm leading-[2.2]">
         <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-1000 ${revealed ? 'bg-green-100 text-green-700 border-green-200' : 'bg-transparent text-foreground border-transparent'}`}>By the way</span>
         <span>, the </span>
-        <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-500 ${revealed ? 'bg-orange-100 text-orange-700 border-orange-200' : 'bg-transparent text-foreground border-transparent'}`}>kitchen</span>
+        <span className={`rounded border px-1 py-0.5 font-medium transition-all duration-500 ${revealed ? 'bg-highlight-soft text-highlight-ink border-highlight/40' : 'bg-transparent text-foreground border-transparent'}`}>kitchen</span>
         <span> is very small.</span>
       </div>
 

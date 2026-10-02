@@ -5,14 +5,14 @@ export type Level = typeof LEVELS[number];
 export type Theme = string; // open string — can be a preset or custom
 
 export const SUGGESTED_THEMES = [
-  'Dagelijks leven',
-  'Werk & Studie',
-  'Reizen',
-  'Eten & Drinken',
-  'Familie & Vrienden',
-  'Vrije tijd',
-  'In de stad',
-  'Gezondheid',
+  'Everyday life',
+  'Work & Study',
+  'Travel',
+  'Food & Drink',
+  'Family & Friends',
+  'Free time',
+  'In the city',
+  'Health',
 ];
 
 interface TaskFiltersProps {

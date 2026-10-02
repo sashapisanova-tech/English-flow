@@ -15,7 +15,7 @@
     --popover: 40 40% 98%;
     --popover-foreground: 20 20% 14%;
 
-    --primary: 24 80% 50%;
+    --primary: 220 62% 34%;
     --primary-foreground: 40 40% 98%;
 
     --secondary: 40 30% 90%;
@@ -24,15 +24,15 @@
     --muted: 40 20% 92%;
     --muted-foreground: 20 10% 46%;
 
-    --accent: 24 70% 92%;
-    --accent-foreground: 24 80% 30%;
+    --accent: 220 60% 92%;
+    --accent-foreground: 220 62% 28%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 30 20% 87%;
     --input: 30 20% 87%;
-    --ring: 24 80% 50%;
+    --ring: 220 62% 34%;
 
     --radius: 0.75rem;
 
@@ -41,52 +41,58 @@
     --warning: 38 92% 50%;
     --warning-foreground: 20 20% 14%;
 
-    --dutch-orange: 24 80% 50%;
-    --dutch-cream: 40 33% 96%;
-    --dutch-warm: 30 40% 85%;
-    --dutch-dark: 20 20% 14%;
+    /* English Flow "Union" (design/flow-series): navy carries actions and completed
+       states (primary); UK red marks progress, today, tags and highlighted words. */
+    --highlight: 354 72% 46%;
+    --highlight-soft: 354 72% 93%;
+    --highlight-ink: 354 72% 34%;
+    --track: 30 20% 91%;
 
     --sidebar-background: 40 33% 96%;
     --sidebar-foreground: 20 20% 14%;
-    --sidebar-primary: 24 80% 50%;
+    --sidebar-primary: 220 62% 34%;
     --sidebar-primary-foreground: 40 40% 98%;
-    --sidebar-accent: 24 70% 92%;
-    --sidebar-accent-foreground: 24 80% 30%;
+    --sidebar-accent: 220 60% 92%;
+    --sidebar-accent-foreground: 220 62% 28%;
     --sidebar-border: 30 20% 87%;
-    --sidebar-ring: 24 80% 50%;
+    --sidebar-ring: 220 62% 34%;
 
     --font-heading: 'Lora', Georgia, serif;
     --font-body: 'DM Sans', system-ui, sans-serif;
   }
 
   .dark {
-    --background: 20 20% 8%;
-    --foreground: 40 20% 92%;
-    --card: 20 18% 12%;
-    --card-foreground: 40 20% 92%;
-    --popover: 20 18% 12%;
-    --popover-foreground: 40 20% 92%;
-    --primary: 24 80% 55%;
-    --primary-foreground: 20 20% 8%;
-    --secondary: 20 15% 18%;
-    --secondary-foreground: 40 20% 92%;
-    --muted: 20 15% 18%;
-    --muted-foreground: 30 10% 55%;
-    --accent: 24 40% 18%;
-    --accent-foreground: 24 70% 70%;
+    --background: 20 14% 9%;
+    --foreground: 35 30% 92%;
+    --card: 20 14% 12%;
+    --card-foreground: 35 30% 92%;
+    --popover: 20 14% 12%;
+    --popover-foreground: 35 30% 92%;
+    --primary: 220 70% 62%;
+    --primary-foreground: 20 14% 9%;
+    --secondary: 20 10% 18%;
+    --secondary-foreground: 35 30% 92%;
+    --muted: 20 10% 18%;
+    --muted-foreground: 30 10% 62%;
+    --accent: 220 35% 22%;
+    --accent-foreground: 220 80% 80%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 100%;
-    --border: 20 15% 20%;
-    --input: 20 15% 20%;
-    --ring: 24 80% 55%;
-    --sidebar-background: 20 20% 8%;
-    --sidebar-foreground: 40 20% 92%;
-    --sidebar-primary: 24 80% 55%;
-    --sidebar-primary-foreground: 20 20% 8%;
-    --sidebar-accent: 24 40% 18%;
-    --sidebar-accent-foreground: 24 70% 70%;
-    --sidebar-border: 20 15% 20%;
-    --sidebar-ring: 24 80% 55%;
+    --border: 20 10% 21%;
+    --input: 20 10% 21%;
+    --ring: 220 70% 62%;
+    --highlight: 354 80% 62%;
+    --highlight-soft: 354 40% 22%;
+    --highlight-ink: 354 85% 78%;
+    --track: 20 10% 19%;
+    --sidebar-background: 20 14% 9%;
+    --sidebar-foreground: 35 30% 92%;
+    --sidebar-primary: 220 70% 62%;
+    --sidebar-primary-foreground: 20 14% 9%;
+    --sidebar-accent: 220 35% 22%;
+    --sidebar-accent-foreground: 220 80% 80%;
+    --sidebar-border: 20 10% 21%;
+    --sidebar-ring: 220 70% 62%;
   }
 }
 
@@ -134,8 +140,10 @@
   }
 
   .word-keyword {
-    @apply font-semibold;
-    color: hsl(var(--dutch-orange));
+    @apply font-semibold rounded;
+    background: hsl(var(--highlight-soft));
+    box-shadow: inset 0 -2px 0 hsl(var(--highlight));
+    color: hsl(var(--highlight-ink));
   }
 
   .word-plain {
@@ -166,11 +174,8 @@
     @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold tracking-wider uppercase;
   }
 
-  .level-a0 { @apply bg-accent text-accent-foreground; }
-  .level-a1 { @apply bg-accent text-accent-foreground; }
-  .level-a2 { @apply bg-secondary text-secondary-foreground; }
-  .level-b1 { @apply bg-primary text-primary-foreground; }
-  .level-b2 { @apply bg-primary text-primary-foreground; }
+  /* Level tags: soft UK red pill, the same for every level (design: Union) */
+  .level-a0, .level-a1, .level-a2, .level-b1, .level-b2 { @apply bg-highlight-soft text-highlight-ink hover:bg-highlight-soft; }
 
   .streak-glow {
     box-shadow: 0 0 20px hsl(var(--primary) / 0.3), 0 0 40px hsl(var(--primary) / 0.1);

@@ -87,7 +87,7 @@ function StepSaveWords() {
         <span>She goes to work by </span>
         <span
           className={`rounded px-1 py-0.5 font-semibold transition-all duration-300 cursor-pointer ${
-            tapped ? 'bg-orange-100 text-orange-700 border border-orange-200' : 'text-foreground'
+            tapped ? 'bg-highlight-soft text-highlight-ink border border-highlight/40' : 'text-foreground'
           }`}
         >
           bike
@@ -164,7 +164,7 @@ function StepFlashcards() {
         <button className="flex-1 rounded-xl border border-red-200 bg-red-50 py-2.5 text-xs font-semibold text-red-600">
           Again
         </button>
-        <button className="flex-1 rounded-xl border border-orange-300 bg-amber-50 py-2.5 text-xs font-semibold text-orange-600">
+        <button className="flex-1 rounded-xl border border-highlight/40 bg-amber-50 py-2.5 text-xs font-semibold text-highlight-ink">
           Hard
         </button>
         <button className="flex-1 rounded-xl border border-primary/30 bg-primary/5 py-2.5 text-xs font-semibold text-primary">
