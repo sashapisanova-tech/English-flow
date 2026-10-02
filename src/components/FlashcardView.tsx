@@ -898,8 +898,6 @@ export function FlashcardView() {
   const displayWord: (DutchWord | FlashcardSetWord) & Partial<FlashcardSetWord> = mode === 'my-words' ? currentWord : currentSetWord;
   if (!displayWord) return null;
 
-  const front = direction === 'dutch-to-english' ? displayWord.dutch : displayWord.english;
-  const back  = direction === 'dutch-to-english' ? displayWord.english : displayWord.dutch;
   const exampleSentence = displayWord.example;
   const englishWord = displayWord.dutch;
   const cardTag = displayWord.verbType === 'sep' || /\s/.test(englishWord.trim()) ? 'Phrase' : 'Word';
@@ -980,36 +978,34 @@ export function FlashcardView() {
             onClick={() => { setFlipped(!flipped); }}
           >
             <div className={`flashcard-inner ${flipped ? 'flipped' : ''} ${noFlipAnim ? '!transition-none' : ''}`}>
-              {/* Front */}
-              <Card className="flashcard-face flex-col rounded-xl border bg-card p-[22px] shadow-[0_12px_30px_-16px_hsl(var(--foreground)/0.3)]">
-                <div className="flex flex-1 flex-col items-center justify-center gap-1.5 text-center">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
-                    {direction === 'dutch-to-english' ? 'English' : 'Russian'}
-                  </p>
-                  <p className={`font-heading text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground`}>{front}</p>
-                  {direction === 'dutch-to-english' && exampleSentence && (
-                    <p className="mt-3 text-[15px] leading-normal text-muted-foreground">
-                      {highlightWord(exampleSentence, displayWord.dutch)}
+              {/* Front and back each show one language only: English word + English example,
+                  or Russian word + Russian example. */}
+              {([false, true] as const).map(isBack => {
+                const showEnglish = (direction === 'dutch-to-english') !== isBack;
+                const word = showEnglish ? displayWord.dutch : displayWord.english;
+                const example = showEnglish ? exampleSentence : displayWord.exampleTranslation;
+                return (
+                  <Card
+                    key={isBack ? 'back' : 'front'}
+                    className={`flashcard-face ${isBack ? 'flashcard-back' : ''} flex-col rounded-xl border bg-card p-[22px] shadow-[0_12px_30px_-16px_hsl(var(--foreground)/0.3)]`}
+                  >
+                    <div className="flex flex-1 flex-col items-center justify-center gap-1.5 overflow-y-auto text-center">
+                      <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+                        {showEnglish ? 'English' : 'Russian'}
+                      </p>
+                      <p className="font-heading text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground">{word}</p>
+                      {example && (
+                        <p className="mt-3 text-[15px] leading-normal text-muted-foreground">
+                          {showEnglish ? highlightWord(example, displayWord.dutch) : example}
+                        </p>
+                      )}
+                    </div>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {isBack ? `From ${sourceLabel}` : 'Tap to reveal'}
                     </p>
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground">Tap to reveal</p>
-              </Card>
-              {/* Back: English word, divider, Russian, example (design: 'cards') */}
-              <Card className="flashcard-face flashcard-back flex-col rounded-xl border bg-card p-[22px] shadow-[0_12px_30px_-16px_hsl(var(--foreground)/0.3)]">
-                <div className="flex flex-1 flex-col items-center justify-center gap-1.5 overflow-y-auto text-center">
-                  <p className="font-heading text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground">{englishWord}</p>
-                  <div className="my-3.5 h-0.5 w-8 rounded-full bg-highlight" />
-                  <p className="font-heading text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground">{displayWord.english}</p>
-                  {exampleSentence && (
-                    <p className="mt-4 text-[15px] leading-normal text-foreground">"{exampleSentence}"</p>
-                  )}
-                  {displayWord.exampleTranslation && (
-                    <p className="text-sm text-muted-foreground">{displayWord.exampleTranslation}</p>
-                  )}
-                </div>
-                <p className="truncate text-xs text-muted-foreground">From {sourceLabel}</p>
-              </Card>
+                  </Card>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -1049,21 +1045,12 @@ export function FlashcardView() {
         )}
       </div>
 
-      {flipped && (displayWord.plural || displayWord.exampleTranslation || displayWord.nounTip) && (
+      {flipped && (displayWord.plural || displayWord.nounTip) && (
         <Card className="animate-fade-in space-y-1.5 rounded-xl p-4 text-sm">
           {displayWord.plural && (
             <div className="flex gap-2 items-center">
               <span className="text-xs text-muted-foreground w-14 shrink-0">plural</span>
               <span className="font-medium">{displayWord.plural}</span>
-            </div>
-          )}
-          {displayWord.exampleTranslation && (
-            <div className="flex gap-2 items-start pt-1 border-t border-border">
-              <span className="text-xs text-muted-foreground w-14 shrink-0 mt-0.5">example</span>
-              <div>
-                <p className="text-xs font-medium leading-snug">{displayWord.example}</p>
-                <p className="text-xs text-muted-foreground leading-snug">{displayWord.exampleTranslation}</p>
-              </div>
             </div>
           )}
           {displayWord.nounTip && (
