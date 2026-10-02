@@ -95,8 +95,10 @@ export function candidates(word: string, irregular: Map<string, string>): string
   const apos = w.match(/^([a-z]+)'(s|m|re|ve|ll|d|t)$/);
   if (apos) {
     const base = apos[1];
-    if (apos[2] === 't' && base.endsWith('n')) add(base.slice(0, -1)); // don't → do, isn't → is
-    else add(base);
+    const stem = apos[2] === 't' && base.endsWith('n') ? base.slice(0, -1) : base; // don't → do, isn't → is
+    add(stem);
+    const irrStem = irregular.get(stem);
+    if (irrStem) add(irrStem); // didn't → did → do
   }
 
   const irr = irregular.get(w);

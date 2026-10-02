@@ -48,6 +48,7 @@ describe('candidates', () => {
     expect(candidates("don't", irregular)).toContain('do');
     expect(candidates("she's", irregular)).toContain('she');
     expect(candidates("can't", irregular)).toContain('can');
+    expect(candidates("didn't", new Map([['did', 'do']]))).toContain('do');
   });
 });
 
