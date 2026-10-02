@@ -18,6 +18,7 @@ import { getKeywordsForText, getSeparableVerbsForText, getFixedExpressionsForTex
 import type { SeparableVerbEntry, FixedExpressionEntry, SplitExpressionEntry } from '@/data/vocabulary';
 import type { Level } from '@/types/dutch';
 import { playDutch, stopDutch } from '@/utils/playDutch';
+import { lookupWord } from '@/lib/dictionary';
 import { claudeFetch } from '@/lib/ai';
 
 interface ReadingViewProps {
@@ -41,6 +42,9 @@ const translationCache: Record<string, string> = {};
 async function fetchPhraseTranslation(phrase: string): Promise<string> {
   const key = phrase.toLowerCase();
   if (translationCache[key]) return translationCache[key];
+  // Prepared translations first (single words and list phrases like "get up")
+  const local = lookupWord(phrase);
+  if (local) return (translationCache[key] = local.base ? `${local.translation} (${local.base})` : local.translation);
   try {
     { // Claude first; falls back to MyMemory below
       // Use Claude for contextual translation
@@ -60,14 +64,8 @@ async function fetchPhraseTranslation(phrase: string): Promise<string> {
         return t;
       }
     }
-    // Fallback to MyMemory if Claude fails
-    const res = await fetch(
-      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(phrase)}&langpair=en|ru`
-    );
-    const data = await res.json();
-    const t = (data?.responseData?.translatedText as string) || '';
-    translationCache[key] = t;
-    return t;
+    // No unreliable public fallback: it returned junk translations
+    return '';
   } catch { return ''; }
 }
 

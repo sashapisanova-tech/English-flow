@@ -7,6 +7,7 @@ import { playDutch } from '@/utils/playDutch';
 import { toast } from '@/components/ui/sonner';
 import type { SeparableVerbEntry } from '@/data/vocabulary';
 import { claudeFetch } from '@/lib/ai';
+import { lookupWord } from '@/lib/dictionary';
 
 interface WordPopoverProps {
   word: string;
@@ -27,8 +28,15 @@ const wordInfoCache: Record<string, WordInfo> = {};
 async function fetchWordInfo(word: string, sentence?: string): Promise<WordInfo> {
   const key = sentence ? `${word.toLowerCase()}||${sentence}` : word.toLowerCase();
   if (wordInfoCache[key]) return wordInfoCache[key];
+  // Prepared translations first: instant, free, and no AI needed
+  const local = lookupWord(word);
+  if (local) {
+    const info = { translation: local.base ? `${local.translation} (${local.base})` : local.translation };
+    wordInfoCache[key] = info;
+    return info;
+  }
   try {
-    { // Claude first; falls back to MyMemory below
+    { // AI only for words outside the prepared word lists
       const contextSentence = sentence && sentence.toLowerCase().includes(word.toLowerCase()) ? sentence : undefined;
       const userMsg = contextSentence
         ? `English word: "${word}" in context: "${contextSentence}"`
@@ -56,12 +64,8 @@ async function fetchWordInfo(word: string, sentence?: string): Promise<WordInfo>
         }
       }
     }
-    // Fallback: MyMemory
-    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|ru`);
-    const data = await res.json();
-    const t = (data?.responseData?.translatedText as string) || '';
-    wordInfoCache[key] = { translation: t };
-    return wordInfoCache[key];
+    // No unreliable public fallback: it returned junk translations
+    return { translation: '' };
   } catch {
     return { translation: '' };
   }
@@ -92,7 +96,7 @@ export function WordPopover({
     if (translation) { setLiveTranslation(translation); return; }
     setLoading(true);
     fetchWordInfo(word, sentence)
-      .then(info => setLiveTranslation(info.translation || '—'))
+      .then(info => setLiveTranslation(info.translation || 'Перевод недоступен'))
       .finally(() => setLoading(false));
   }, [open, word, translation, sentence, separableVerb]);
 
