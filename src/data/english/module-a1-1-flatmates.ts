@@ -73,7 +73,7 @@ export const moduleA1_1Texts: ReadingText[] = [
       {
         question: 'Why is the fridge a problem?',
         questionTranslation: 'Почему холодильник — проблема?',
-        options: ['There is no fridge in the flat.', "Tom's tomatoes, lemons and pizzas are in it.", "Priya's box is very big."],
+        options: ['There is no fridge in the flat.', "Tom's tomatoes, lemons and pizzas are in it.", 'The fridge is very small.'],
         correctIndex: 1,
       },
       {
@@ -169,8 +169,8 @@ export const moduleA1_1Texts: ReadingText[] = [
         correctIndex: 1,
       },
       {
-        question: 'How is Lena at the end?',
-        questionTranslation: 'Как Лена себя чувствует в конце?',
+        question: 'How is Lena on Thursday?',
+        questionTranslation: 'Как Лена себя чувствует в четверг?',
         options: ['Angry and hungry', 'Very good: there are six yoghurts', 'Not angry: the room is OK'],
         correctIndex: 0,
       },
@@ -253,8 +253,8 @@ export const moduleA1_1Texts: ReadingText[] = [
         correctIndex: 2,
       },
       {
-        question: "Why is there a question about Joan?",
-        questionTranslation: 'Почему Лена подозревает Джоан?',
+        question: 'What is the problem with Joan?',
+        questionTranslation: 'Что не так с Джоан?',
         options: ['Joan is angry.', "Joan's hair is white.", 'Joan is very hungry.'],
         correctIndex: 1,
       },

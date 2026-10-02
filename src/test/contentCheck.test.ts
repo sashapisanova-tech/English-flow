@@ -85,6 +85,11 @@ describe('checkCourse', () => {
     expect(messages(text({ comprehensionQuestions: [q] }))).toMatch(/copied from the text/);
   });
 
+  it('flags question words the learner has not met yet', () => {
+    const q = { question: 'Where is the garden?', questionTranslation: 'Где сад?', options: ['Here', 'In the room', 'Not here'], correctIndex: 0 };
+    expect(messages(text({ comprehensionQuestions: [q] }))).toMatch(/question 1 uses words not taught yet: garden/);
+  });
+
   it('requires Russian question translations at A1', () => {
     const q = { question: 'Who is he?', options: ['A', 'B', 'C'], correctIndex: 0 };
     expect(messages(text({ comprehensionQuestions: [q] }))).toMatch(/questionTranslation/);

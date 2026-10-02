@@ -330,6 +330,11 @@ export function checkCourse(modules: ReadingText[][], lists: WordLists): CheckRe
           if (correct.split(/\s+/).length >= 3 && lowerContent.includes(correct)) err(id, `question ${qi + 1}: correct answer is copied from the text; paraphrase it`);
         }
         if (parsed.level === 'a1' && !CYRILLIC.test(q.questionTranslation ?? '')) err(id, `question ${qi + 1} needs a Russian questionTranslation (A1)`);
+        // Questions may only use words the learner knows by now, plus this text's key items
+        const qUnknown = [q.question, ...q.options].flatMap(part => tokensOf(normaliseApostrophes(part)))
+          .filter(tok => !/^\d/.test(tok) && !names.has(tok.toLowerCase()) && !isKnown(tok) && !lemmas(tok).some(c => keyParts.has(c)))
+          .map(tok => tok.toLowerCase());
+        if (qUnknown.length) err(id, `question ${qi + 1} uses words not taught yet: ${[...new Set(qUnknown)].join(', ')}`);
       });
 
       if (!CYRILLIC.test(t.grammarNote ?? '')) err(id, 'grammarNote (in Russian) is missing');

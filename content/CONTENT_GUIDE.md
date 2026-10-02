@@ -70,6 +70,9 @@ Each text is one object in the module's file. What every field means:
   - **B1:** natural spoken English, phrasal verbs, light idioms. Texting
     abbreviations (*tbh, omw*) only inside message scenes, at most 2 per text,
     and **never** as key words. *They're easy to look up and have little learning value.*
+- **Vary the wording.** Don't lean on filler words (*OK, very, nice, good, so*) or
+  repeat the same sentence pattern; each module should sound richer than the
+  last as the grammar grows. *(Owner's feedback on the pilot.)*
 - **Never:** swearing, sexual content, politics, religion, alcohol as a main
   topic, mocking any nationality. Characters come from many countries; Russian-
   speaking characters appear regularly and are written with respect, without clichés.
@@ -154,6 +157,9 @@ if that's not possible, simplify the sentence.
 - **Budget:** `words` + `expressions` + `splitExpressions` together stay within
   the key-word limit in §6. Aim for **at least 1 expression per text at A1 and
   2–3 at A2–B1**.
+- Key-item slots are for **new vocabulary**. Grammar chunks made only of known
+  words (*there is, have got*) are practised through the grammar focus and
+  `grammarNote`, not taught as key items.
 - Never repeat a headword as a key word across the course. If a word was
   already taught, recycle it instead.
 
@@ -220,7 +226,7 @@ at least one of them, used correctly and naturally.
   misunderstanding), never silly.
 - The correct answer's position varies: across a module, each of 0, 1 and 2 is
   correct roughly a third of the time.
-- Questions use only known words and the text's key words.
+- Questions use only known words and the text's key words (the checker enforces this).
 - **Language:** simple English at all levels. At A1, each question also has a
   Russian translation (`questionTranslation`).
 
