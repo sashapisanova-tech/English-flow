@@ -32,10 +32,10 @@ describe('userStorage', () => {
   });
 
   it('keeps device settings on sign-out', () => {
-    localStorage.setItem('dutch-theme', 'dark');
+    localStorage.setItem('english-theme', 'dark');
     localStorage.setItem(VOCAB, 'x');
     clearUserData();
-    expect(localStorage.getItem('dutch-theme')).toBe('dark');
+    expect(localStorage.getItem('english-theme')).toBe('dark');
     expect(localStorage.getItem(VOCAB)).toBeNull();
   });
 });

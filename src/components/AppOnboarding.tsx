@@ -1,17 +1,16 @@
 import { useState, useEffect } from 'react';
 import { X, BookOpen, Brain, Target, Sparkles, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BrandLogo } from '@/components/BrandLogo';
 
-export const APP_ONBOARDING_KEY = 'dutch-app-onboarded-v1';
+export const APP_ONBOARDING_KEY = 'english-app-onboarded-v1';
 
 // ─── Step visuals ──────────────────────────────────────────────────────────────
 
 function StepWelcome() {
   return (
     <div className="flex flex-col items-center gap-5 py-2">
-      <div className="h-24 w-24 rounded-3xl bg-primary/10 flex items-center justify-center">
-        <span className="text-5xl">🇳🇱</span>
-      </div>
+      <BrandLogo variant="icon" size={96} />
       <div className="flex items-center gap-2">
         <div className="flex items-center gap-1.5 rounded-full bg-secondary px-3 py-1.5">
           <BookOpen className="h-3 w-3 text-primary" />
@@ -42,8 +41,8 @@ function StepLevels() {
   return (
     <div className="w-full space-y-2">
       {[
-        { label: 'A1 — Beginner', sub: '50 texts · 5 modules', highlight: true },
-        { label: 'A2 — Elementary', sub: '50 texts · 5 modules', highlight: false },
+        { label: 'A1 — Beginner', sub: '40 texts · 5 modules', highlight: true },
+        { label: 'A2 — Elementary', sub: '48 texts · 6 modules', highlight: false },
       ].map(({ label, sub, highlight }) => (
         <div
           key={label}
@@ -253,12 +252,12 @@ const STEPS = [
   },
   {
     title: 'Read English texts at your level',
-    body: 'Pick A1 for complete beginners, A2 if you already know some basics. Each level has 50 texts across 5 modules, ordered easiest to hardest.',
+    body: 'Pick A1 for complete beginners, A2 if you already know some basics. Each level has short stories in modules of 8 episodes, ordered easiest to hardest.',
     Visual: StepLevels,
   },
   {
     title: 'Tap any word to save it',
-    body: 'Orange words are key vocabulary. Tap one to see its translation, then press Save. It joins your personal flashcard deck instantly.',
+    body: "Red words are the story's new words. Tap one to see its translation, then press Save. It joins your personal flashcard deck instantly.",
     Visual: StepSaveWords,
   },
   {

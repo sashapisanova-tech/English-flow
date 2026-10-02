@@ -788,7 +788,7 @@ Return ONLY valid JSON, no markdown:
               <button
                 onPointerDown={e => {
                   e.stopPropagation();
-                  window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this English phrase for me: "${popup.text}"` } }));
+                  window.dispatchEvent(new CustomEvent('english-chat-open', { detail: { message: `Explain this English phrase for me: "${popup.text}"` } }));
                   dismissPopup();
                 }}
                 className="flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-accent text-sm font-semibold text-accent-foreground transition-all hover:bg-accent/80"
@@ -872,7 +872,7 @@ Return ONLY valid JSON, no markdown:
               })()}
               <button
                 onClick={() => {
-                  window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this English expression for me: "${exprPopup.phrase}"` } }));
+                  window.dispatchEvent(new CustomEvent('english-chat-open', { detail: { message: `Explain this English expression for me: "${exprPopup.phrase}"` } }));
                   setExprPopup(null);
                 }}
                 className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-xl bg-accent text-sm font-semibold text-accent-foreground transition-all hover:bg-accent/80"
@@ -1556,7 +1556,7 @@ Return ONLY valid JSON, no markdown:
               </button>
               <button
                 type="button"
-                onClick={() => window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this English expression for me: "${panelItem.phrase}"` } }))}
+                onClick={() => window.dispatchEvent(new CustomEvent('english-chat-open', { detail: { message: `Explain this English expression for me: "${panelItem.phrase}"` } }))}
                 className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-accent text-sm font-semibold text-accent-foreground transition-colors hover:bg-accent/80"
               >
                 <MessageCircleMore className="h-4 w-4" /> Ask Emma

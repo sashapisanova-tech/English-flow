@@ -72,8 +72,8 @@ export function AIChat() {
       setOpen(true);
       if (msg) setInput(msg);
     }
-    window.addEventListener('dutch-chat-open', handleOpen as EventListener);
-    return () => window.removeEventListener('dutch-chat-open', handleOpen as EventListener);
+    window.addEventListener('english-chat-open', handleOpen as EventListener);
+    return () => window.removeEventListener('english-chat-open', handleOpen as EventListener);
   }, []);
 
   useEffect(() => {

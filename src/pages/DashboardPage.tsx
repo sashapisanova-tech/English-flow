@@ -99,7 +99,8 @@ export default function DashboardPage() {
 
   // No shell title on Home (own header), on Me (MeView has its own header) or
   // while a text is open (ReadingView shows its own title).
-  const showPageTitle = activeTab !== 'home' && activeTab !== 'progress' && !(activeTab === 'reading' && selectedText) && !(activeTab === 'tasks' && taskOpen);
+  // Cards has its own heading on the overview and none during practice
+  const showPageTitle = activeTab !== 'home' && activeTab !== 'progress' && activeTab !== 'flashcards' && !(activeTab === 'reading' && selectedText) && !(activeTab === 'tasks' && taskOpen);
 
   function goTab(key: Tab) {
     setTabResetKeys(prev => ({ ...prev, [key]: prev[key] + 1 }));

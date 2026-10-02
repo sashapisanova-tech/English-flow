@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { isLegacyPracticeSession } from './legacyDutch';
 
 export interface PracticeSessionRow {
   id?: string;
@@ -29,5 +30,6 @@ export async function getRecentSessions(userId: string, limit = 20): Promise<Pra
     .eq('user_id', userId)
     .order('created_at', { ascending: false })
     .limit(limit);
-  return (data ?? []) as PracticeSessionRow[];
+  // Sessions from Dutch Flow (Dutch grammar topics) are left over from before the switch
+  return ((data ?? []) as PracticeSessionRow[]).filter(row => !isLegacyPracticeSession(row));
 }

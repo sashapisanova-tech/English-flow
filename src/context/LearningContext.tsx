@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode } from 'react';
+import { isLegacyDutchWord, isLegacyTextId } from '@/lib/legacyDutch';
 import { DutchWord, WordStatus, DailyGoal, ReadingText } from '@/types/dutch';
 import { generateExampleSentence } from '@/utils/sentenceUtils';
 import { sampleTexts } from '@/data/texts';
@@ -119,6 +120,11 @@ const LearningContext = createContext<LearningState | null>(null);
 
 // ── Provider ─────────────────────────────────────────────────────────────────
 
+/** Drops saved words left over from Dutch Flow (see src/lib/legacyDutch.ts). */
+function withoutLegacyWords(vocab: Record<string, DutchWord>): Record<string, DutchWord> {
+  return Object.fromEntries(Object.entries(vocab).filter(([key, w]) => !isLegacyDutchWord(w.dutch ?? key, w.english, w.example)));
+}
+
 export function LearningProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth();
   const userRef = useRef(user);
@@ -168,7 +174,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     if (typeof window === 'undefined') return {};
     try {
       const raw = localStorage.getItem(VOCAB_STORAGE_KEY);
-      return raw ? JSON.parse(raw) : {};
+      return raw ? withoutLegacyWords(JSON.parse(raw)) : {};
     } catch { return {}; }
   });
 
@@ -195,7 +201,17 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         }
 
         // ── Text progress ──
-        const remoteTextProgress = statsRes.data?.text_progress as Record<string, { completed: boolean; lastRead: string }> | null;
+        const storedTextProgress = statsRes.data?.text_progress as Record<string, { completed: boolean; lastRead: string }> | null;
+        // Progress on Dutch Flow texts (left over from before the switch) is dropped
+        const remoteTextProgress = storedTextProgress
+          ? Object.fromEntries(Object.entries(storedTextProgress).filter(([id]) => !isLegacyTextId(id)))
+          : null;
+        if (storedTextProgress && remoteTextProgress && Object.keys(remoteTextProgress).length < Object.keys(storedTextProgress).length) {
+          supabase.from('user_stats').upsert(
+            { user_id: user.id, text_progress: remoteTextProgress, updated_at: new Date().toISOString() },
+            { onConflict: 'user_id' },
+          ).then(({ error }) => { if (error) console.error('[cleanup] text_progress error:', error); });
+        }
         if (remoteTextProgress && Object.keys(remoteTextProgress).length > 0) {
           setTexts(sampleTexts.map(t =>
             remoteTextProgress[t.id]
@@ -206,7 +222,9 @@ export function LearningProvider({ children }: { children: ReactNode }) {
           try { localStorage.setItem(TEXT_PROGRESS_KEY, JSON.stringify(remoteTextProgress)); } catch {}
         } else {
           // No remote text progress yet — push local progress to Supabase
-          const localProgress = (() => { try { return JSON.parse(localStorage.getItem(TEXT_PROGRESS_KEY) || '{}'); } catch { return {}; } })();
+          const localProgress = Object.fromEntries(Object.entries(
+            (() => { try { return JSON.parse(localStorage.getItem(TEXT_PROGRESS_KEY) || '{}'); } catch { return {}; } })() as Record<string, unknown>,
+          ).filter(([id]) => !isLegacyTextId(id)));
           if (Object.keys(localProgress).length > 0) {
             const { error } = await supabase.from('user_stats').upsert({
               user_id: user.id,
@@ -225,11 +243,20 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         if (vocabData && vocabData.length > 0) {
           // Supabase is source of truth — load all rows including ignored ones
           const remoteVocab: Record<string, DutchWord> = {};
-          for (const row of vocabData) remoteVocab[row.dutch] = rowToWord(row);
+          const legacyKeys: string[] = [];
+          for (const row of vocabData) {
+            if (isLegacyDutchWord(row.dutch, row.english, row.example)) legacyKeys.push(row.dutch);
+            else remoteVocab[row.dutch] = rowToWord(row);
+          }
           setVocabulary(remoteVocab);
+          // Dutch words saved before English Flow had its own content are deleted for good
+          if (legacyKeys.length > 0) {
+            const { error } = await supabase.from('vocabulary').delete().eq('user_id', user.id).in('dutch', legacyKeys);
+            if (error) console.error('[cleanup] legacy vocab delete error:', error);
+          }
         } else {
           // Nothing in Supabase yet — push local vocabulary up
-          const localWords = Object.values((() => { try { const r = localStorage.getItem(VOCAB_STORAGE_KEY); return r ? JSON.parse(r) : {}; } catch { return {}; } })()) as DutchWord[];
+          const localWords = Object.values(withoutLegacyWords((() => { try { const r = localStorage.getItem(VOCAB_STORAGE_KEY); return r ? JSON.parse(r) : {}; } catch { return {}; } })()));
           if (localWords.length > 0) {
             const { error } = await supabase.from('vocabulary').upsert(localWords.map(w => wordToRow(user.id, w)), { onConflict: 'user_id,dutch' });
             if (error) console.error('[sync] initial vocab push error:', error);

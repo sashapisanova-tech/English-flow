@@ -14,14 +14,15 @@ const USER_DATA_KEYS = [
   'english-daily-goal-minutes-v1',
   'english-past-errors-v1',
   'english-tutor-daily-cache',
-  'dutch-translate-last-hard-grammar',
-  'dutch-custom-sets-v1',
-  'dutch-text-reads',
-  'dutch-detected-level-history',
-  'dutch-challenge-streak',
-  'dutch-challenge-last',
-  'dutch-app-onboarded-v1',
-  'dutch-reading-onboarded-v2',
+  'english-tutor-daily-cache-v2',
+  'english-translate-last-hard-grammar',
+  'english-custom-sets-v1',
+  'english-text-reads',
+  'english-detected-level-history',
+  'english-challenge-streak',
+  'english-challenge-last',
+  'english-app-onboarded-v1',
+  'english-reading-onboarded-v2',
 ];
 
 export function clearUserData() {

@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'dutch-text-reads';
+const STORAGE_KEY = 'english-text-reads';
 
 export interface TextReadRecord {
   textId: string;

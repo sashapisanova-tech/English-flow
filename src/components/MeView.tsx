@@ -147,7 +147,7 @@ function useDarkMode() {
   function set(next: boolean) {
     setDark(next);
     document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('dutch-theme', next ? 'dark' : 'light');
+    localStorage.setItem('english-theme', next ? 'dark' : 'light');
   }
   return { dark, set };
 }

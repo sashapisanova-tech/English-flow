@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { isLegacyDutchWord } from '@/lib/legacyDutch';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 
@@ -16,13 +17,20 @@ export interface CustomSet {
   words: CustomWord[];
 }
 
-const STORAGE_KEY = 'dutch-custom-sets-v1';
+const STORAGE_KEY = 'english-custom-sets-v1';
 
 function load(): CustomSet[] {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch { return []; }
 }
 function saveLocal(sets: CustomSet[]) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(sets)); } catch {}
+}
+
+/** Removes Dutch words left over from Dutch Flow; sets that only held Dutch words go too. */
+function withoutLegacySets(sets: CustomSet[]): CustomSet[] {
+  return sets
+    .map(set => ({ ...set, words: set.words.filter(w => !isLegacyDutchWord(w.dutch, w.english, w.example)) }))
+    .filter((set, i) => set.words.length > 0 || sets[i].words.length === 0);
 }
 
 export function useCustomSets() {
@@ -42,8 +50,15 @@ export function useCustomSets() {
 
         if (data?.custom_sets && Array.isArray(data.custom_sets) && data.custom_sets.length > 0) {
           // Supabase is source of truth — merge: keep local sets not in Supabase, add remote ones
-          const remote = data.custom_sets as CustomSet[];
-          const local = load();
+          const stored = data.custom_sets as CustomSet[];
+          const remote = withoutLegacySets(stored);
+          if (JSON.stringify(remote) !== JSON.stringify(stored)) {
+            await supabase.from('user_stats').upsert(
+              { user_id: user.id, custom_sets: remote, updated_at: new Date().toISOString() },
+              { onConflict: 'user_id' }
+            );
+          }
+          const local = withoutLegacySets(load());
           const remoteIds = new Set(remote.map((s: CustomSet) => s.id));
           const localOnly = local.filter(s => !remoteIds.has(s.id));
           const merged = [...remote, ...localOnly];
@@ -51,7 +66,7 @@ export function useCustomSets() {
           saveLocal(merged);
         } else {
           // Nothing in Supabase yet — push local sets up
-          const local = load();
+          const local = withoutLegacySets(load());
           if (local.length > 0) {
             await supabase.from('user_stats').upsert(
               { user_id: user.id, custom_sets: local, updated_at: new Date().toISOString() },

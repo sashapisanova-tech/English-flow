@@ -8,7 +8,7 @@ import { getTextReadHistory, daysSince } from '@/lib/textReadHistory';
 import { getGrammarTags } from '@/data/textGrammarTags';
 import { claudeFetch } from '@/lib/ai';
 
-const CACHE_KEY = 'english-tutor-daily-cache';
+const CACHE_KEY = 'english-tutor-daily-cache-v2';
 
 
 interface TutorActivity {
@@ -191,7 +191,7 @@ Rules:
       onGoToFlashcards();
     } else {
       if (activity.grammarFocus) {
-        localStorage.setItem('dutch-translate-last-hard-grammar', activity.grammarFocus);
+        localStorage.setItem('english-translate-last-hard-grammar', activity.grammarFocus);
       }
       onLaunchTask(activity.type as 'translate' | 'dialogue', activity.grammarFocus, activity.level);
     }

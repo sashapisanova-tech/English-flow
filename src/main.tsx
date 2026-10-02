@@ -3,7 +3,7 @@ import App from "./App.tsx";
 import "./index.css";
 
 // Apply saved theme before first render to avoid flash
-const savedTheme = localStorage.getItem('dutch-theme');
+const savedTheme = localStorage.getItem('english-theme');
 if (savedTheme === 'dark') document.documentElement.classList.add('dark');
 
 createRoot(document.getElementById("root")!).render(<App />);

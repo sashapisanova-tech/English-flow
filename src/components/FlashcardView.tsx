@@ -16,7 +16,7 @@ import { NEW_CARDS_DAILY_LIMIT } from '@/context/LearningContext';
 type SRSRating = 'again' | 'hard' | 'good' | 'easy';
 
 type FlashcardMode = 'browse' | 'my-words' | 'set-practice' | 'learned' | 'word-list' | 'archive' | 'custom-editor' | 'create-set';
-type Direction = 'dutch-to-english' | 'english-to-dutch';
+type Direction = 'en-to-ru' | 'ru-to-en';
 
 /** Wrap occurrences of `word` in the sentence with <strong> for emphasis. */
 function highlightWord(sentence: string, word: string): ReactNode {
@@ -51,7 +51,7 @@ export function FlashcardView() {
   const [flipped, setFlipped]           = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying]       = useState(false);
-  const [direction, setDirection]       = useState<Direction>('english-to-dutch');
+  const [direction, setDirection]       = useState<Direction>('ru-to-en');
   const [mode, setMode]                 = useState<FlashcardMode>('browse');
   const [activeSet, setActiveSet]       = useState<FlashcardSet | null>(null);
   const [activeCustomSet, setActiveCustomSet] = useState<CustomSet | null>(null);
@@ -244,7 +244,7 @@ export function FlashcardView() {
   const openCreateSet    = () => setMode('create-set');
 
   function toggleDirection() {
-    setDirection(d => d === 'dutch-to-english' ? 'english-to-dutch' : 'dutch-to-english');
+    setDirection(d => d === 'en-to-ru' ? 'ru-to-en' : 'en-to-ru');
   }
 
   // Preview next interval using FSRS for a given rating
@@ -397,7 +397,7 @@ export function FlashcardView() {
     return (
       <div className="animate-fade-in mx-auto flex max-w-md flex-col gap-[22px] pb-6 lg:grid lg:max-w-none lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start lg:gap-10 lg:pb-28 lg:pt-1">
         <div className="flex flex-col gap-[22px] lg:gap-6">
-        <h1 className="hidden font-heading text-4xl font-semibold tracking-[-0.02em] text-foreground lg:block">Cards</h1>
+        <h1 className="font-heading text-[28px] font-semibold leading-tight tracking-[-0.015em] text-foreground lg:text-4xl lg:tracking-[-0.02em]">Cards</h1>
 
         {/* Due cards (spaced repetition) */}
         {allWords.length > 0 && (
@@ -1045,7 +1045,7 @@ export function FlashcardView() {
           aria-label="Switch card direction"
         >
           <ArrowLeftRight className="h-3.5 w-3.5 text-primary" />
-          {direction === 'dutch-to-english' ? 'EN → RU' : 'RU → EN'}
+          {direction === 'en-to-ru' ? 'EN → RU' : 'RU → EN'}
         </button>
       </div>
       <div className="h-1 overflow-hidden rounded-full bg-track">
@@ -1100,7 +1100,7 @@ export function FlashcardView() {
               {/* Front and back each show one language only: English word + English example,
                   or Russian word + Russian example. */}
               {([false, true] as const).map(isBack => {
-                const showEnglish = (direction === 'dutch-to-english') !== isBack;
+                const showEnglish = (direction === 'en-to-ru') !== isBack;
                 const word = showEnglish ? displayWord.dutch : displayWord.english;
                 const example = showEnglish ? exampleSentence : displayWord.exampleTranslation;
                 return (

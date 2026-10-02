@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { X, ChevronRight, BookOpen, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const STORAGE_KEY = 'dutch-reading-onboarded-v2';
+const STORAGE_KEY = 'english-reading-onboarded-v2';
 
 // ─── Reusable animated finger ────────────────────────────────────────────────
 function Finger({ className = '' }: { className?: string }) {
@@ -28,8 +28,8 @@ function StepLevelPick() {
   return (
     <div className="w-full space-y-2">
       {[
-        { label: 'A1 — Beginner', sub: '50 texts · 5 modules', highlight: true },
-        { label: 'A2 — Elementary', sub: '50 texts · 5 modules', highlight: false },
+        { label: 'A1 — Beginner', sub: '40 texts · 5 modules', highlight: true },
+        { label: 'A2 — Elementary', sub: '48 texts · 6 modules', highlight: false },
       ].map(({ label, sub, highlight }) => (
         <div
           key={label}
@@ -311,12 +311,12 @@ function StepExercises() {
 const STEPS = [
   {
     title: 'Choose your level',
-    body: 'Start by picking A1 (beginner) or A2 (elementary). Each level has 5 modules with 10 texts each, ordered easiest to hardest.',
+    body: 'Start by picking A1 (beginner) or A2 (elementary). Each module is a short story in 8 episodes, ordered easiest to hardest.',
     Visual: StepLevelPick,
   },
   {
     title: 'Open a module',
-    body: 'Each module is a folder of 10 texts. A progress bar shows how many you have completed. Tap one to browse its texts.',
+    body: 'Each module is a story in 8 episodes. A progress bar shows how many you have completed. Tap one to browse its texts.',
     Visual: StepModulePick,
   },
   {
