@@ -46,6 +46,7 @@
     --highlight: 354 72% 46%;
     --highlight-soft: 354 72% 93%;
     --highlight-ink: 354 72% 34%;
+    --highlight-foreground: 0 0% 100%;
     --track: 30 20% 91%;
 
     --sidebar-background: 40 33% 96%;
@@ -84,6 +85,7 @@
     --highlight: 354 80% 62%;
     --highlight-soft: 354 40% 22%;
     --highlight-ink: 354 85% 78%;
+    --highlight-foreground: 20 14% 9%;
     --track: 20 10% 19%;
     --sidebar-background: 20 14% 9%;
     --sidebar-foreground: 35 30% 92%;
@@ -152,22 +154,20 @@
 
   .word-separable {
     @apply font-semibold;
-    color: hsl(220 90% 55%);
+    color: hsl(var(--primary));
   }
 
+  /* Fixed and split expressions: green, as in the reading legend */
   .word-expression {
     @apply font-semibold cursor-pointer;
-    color: hsl(142 60% 38%);
+    color: hsl(var(--success));
     transition: color 0.15s;
   }
   .dark .word-expression {
     color: hsl(142 60% 55%);
   }
   .word-expression:hover {
-    color: hsl(142 60% 28%);
-  }
-  .dark .word-expression:hover {
-    color: hsl(142 60% 68%);
+    @apply underline decoration-2 underline-offset-4;
   }
 
   .level-badge {
@@ -204,7 +204,7 @@
   }
 
   .flashcard-face {
-    @apply absolute w-full h-full flex items-center justify-center rounded-2xl p-8;
+    @apply absolute w-full h-full flex items-center justify-center rounded-xl p-8;
     backface-visibility: hidden;
   }
 

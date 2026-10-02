@@ -371,7 +371,7 @@ export function FlashcardView() {
         {/* Learning card */}
         {allWords.filter(w => w.status !== 'known' && w.status !== 'ignored').length > 0 && (
           <Card
-            className="card-hover cursor-pointer p-4 flex items-center justify-between border-amber-200/60 bg-amber-50/40"
+            className="card-hover cursor-pointer p-4 flex items-center justify-between"
             onClick={() => { setWordListSearch(''); setEditingWord(null); setConfirmDeleteWord(null); setMode('word-list'); }}
           >
             <div className="flex items-center gap-3">
@@ -441,7 +441,7 @@ export function FlashcardView() {
         {/* Learned Words */}
         {learnedWords.length > 0 && (
           <Card
-            className="card-hover cursor-pointer p-4 flex items-center justify-between border-green-200 bg-green-50"
+            className="card-hover cursor-pointer p-4 flex items-center justify-between"
             onClick={startLearned}
           >
             <div className="flex items-center gap-3">
@@ -1049,13 +1049,13 @@ export function FlashcardView() {
             <ArrowLeft className="h-4 w-4" /> Back
           </button>
           <div className="flex items-center gap-1.5">
-            <GraduationCap className="h-4 w-4 text-green-600" />
-            <span className="text-sm font-semibold text-green-700">Learned Words</span>
+            <GraduationCap className="h-4 w-4 text-primary" />
+            <span className="text-sm font-semibold text-foreground">Learned Words</span>
           </div>
         </div>
 
-        <Card className="p-4 bg-green-50 border-green-200">
-          <p className="text-sm text-green-700">
+        <Card className="p-4 bg-accent border-transparent">
+          <p className="text-sm text-accent-foreground">
             {learnedWords.length === 0
               ? 'No learned words yet — keep reviewing your flashcards!'
               : `${learnedWords.length} word${learnedWords.length !== 1 ? 's' : ''} mastered. These have been removed from your daily review.`}
@@ -1210,104 +1210,126 @@ export function FlashcardView() {
   const front = direction === 'dutch-to-english' ? displayWord.dutch : displayWord.english;
   const back  = direction === 'dutch-to-english' ? displayWord.english : displayWord.dutch;
   const exampleSentence = displayWord.example;
+  const englishWord = displayWord.dutch;
+  const cardTag = displayWord.verbType === 'sep' || /\s/.test(englishWord.trim()) ? 'Phrase' : 'Word';
+  const sourceLabel = mode === 'set-practice' && activeSet ? activeSet.title : 'My words';
+  const progressPct = totalCards > 0 ? Math.min(100, ((currentIndex + 1) / totalCards) * 100) : 0;
 
   return (
-    <div className="animate-fade-in space-y-6">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 min-w-0">
-          <Button variant="ghost" size="sm" onClick={goBack} className="p-1 shrink-0">
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-sm text-muted-foreground truncate">
-            {currentIndex + 1} / {totalCards}
-            {mode === 'set-practice' && activeSet && ` · ${activeSet.title}`}
-          </span>
-        </div>
-        <div className="flex items-center gap-1.5 shrink-0">
-          <button
-            onClick={toggleDirection}
-            className="flex items-center gap-1.5 rounded-full border-2 border-primary/40 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary transition-all hover:bg-primary/10"
-          >
-            <ArrowLeftRight className="h-3.5 w-3.5" />
-            {direction === 'dutch-to-english' ? 'EN → RU' : 'RU → EN'}
-          </button>
-        </div>
+    <div className="animate-fade-in mx-auto max-w-md space-y-5">
+      {/* Header: close · count · direction (design: 'cards') */}
+      <div className="-mx-2.5 flex items-center justify-between gap-2">
+        <button
+          type="button"
+          onClick={goBack}
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-foreground transition-colors hover:bg-secondary"
+          aria-label="Close practice"
+        >
+          <X className="h-6 w-6" />
+        </button>
+        <span className="truncate text-[13px] text-muted-foreground">
+          {Math.min(currentIndex + 1, totalCards)} of {totalCards}
+        </span>
+        <button
+          type="button"
+          onClick={toggleDirection}
+          className="flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-semibold text-foreground transition-colors hover:bg-secondary"
+          aria-label="Switch card direction"
+        >
+          <ArrowLeftRight className="h-3.5 w-3.5 text-primary" />
+          {direction === 'dutch-to-english' ? 'EN → RU' : 'RU → EN'}
+        </button>
+      </div>
+      <div className="h-1 overflow-hidden rounded-full bg-track">
+        <div className="h-full rounded-full bg-highlight transition-[width] duration-300" style={{ width: `${progressPct}%` }} />
       </div>
 
       <div
-        className="relative"
+        className="relative pt-4"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        {/* Permanent soft color cues — left = red (Again), right = green (Got it) */}
-        <div className="pointer-events-none absolute inset-0 z-10 rounded-2xl"
-          style={{ background: 'linear-gradient(to right, rgba(239,68,68,0.08) 0%, transparent 35%, transparent 65%, rgba(34,197,94,0.08) 100%)' }}
-        />
-        {/* Active swipe overlays */}
-        {swipeDeltaX < -40 && (
-          <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-start pl-5 rounded-2xl bg-destructive/15">
-            <span className="text-sm font-bold text-destructive">← Again</span>
-          </div>
-        )}
-        {swipeDeltaX > 40 && (
-          <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-end pr-5 rounded-2xl bg-success/15">
-            <span className="text-sm font-bold text-success">Got it →</span>
-          </div>
-        )}
-        {/* Single listen button — always top-right, never duplicated */}
-        <button
-          onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
-          className={`absolute top-3 right-3 z-30 p-2 rounded-full transition-all active:scale-90 ${
-            isPlaying ? 'text-primary bg-primary/15' : 'text-muted-foreground/60 hover:text-primary hover:bg-primary/10'
-          }`}
-          aria-label="Listen"
-        >
-          <Volume2 className="h-5 w-5" />
-        </button>
-        <div
-          className="flashcard mx-auto h-64 max-w-md cursor-pointer"
-          style={{ transform: swipeDeltaX !== 0 ? `translateX(${swipeDeltaX * 0.2}px) rotate(${swipeDeltaX * 0.015}deg)` : undefined, transition: swipeDeltaX === 0 ? 'transform 0.2s ease' : 'none' }}
-          onClick={() => { setFlipped(!flipped); }}
-        >
-          <div className={`flashcard-inner ${flipped ? 'flipped' : ''} ${noFlipAnim ? '!transition-none' : ''}`}>
-            <Card className="flashcard-face bg-card border-2">
-              <div className="text-center">
-                <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
-                  {direction === 'dutch-to-english' ? 'English' : 'Russian'}
-                </p>
-                <p className="font-heading text-3xl font-bold text-foreground">{front}</p>
-                {direction === 'dutch-to-english' && exampleSentence && (
-                  <p className="mt-2 text-sm italic text-muted-foreground leading-snug">
-                    {highlightWord(exampleSentence, displayWord.dutch)}
+        {/* Stacked cards behind */}
+        <div className="pointer-events-none absolute inset-x-6 top-0 h-[22rem] rounded-xl border border-border bg-card opacity-50" />
+        <div className="pointer-events-none absolute inset-x-3 top-2 h-[22rem] rounded-xl border border-border bg-card opacity-80" />
+
+        <div className="relative">
+          {/* Soft swipe cues — left = Again, right = Good */}
+          <div className="pointer-events-none absolute inset-0 z-10 rounded-xl"
+            style={{ background: 'linear-gradient(to right, hsl(var(--highlight) / 0.06) 0%, transparent 35%, transparent 65%, hsl(var(--primary) / 0.06) 100%)' }}
+          />
+          {/* Active swipe overlays */}
+          {swipeDeltaX < -40 && (
+            <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-start rounded-xl bg-highlight/15 pl-5">
+              <span className="text-sm font-bold text-highlight-ink">← Again</span>
+            </div>
+          )}
+          {swipeDeltaX > 40 && (
+            <div className="pointer-events-none absolute inset-0 z-20 flex items-center justify-end rounded-xl bg-primary/15 pr-5">
+              <span className="text-sm font-bold text-primary">Got it →</span>
+            </div>
+          )}
+          {/* Tag + listen sit above both faces so they never flip or duplicate */}
+          <span className="pointer-events-none absolute left-[22px] top-[22px] z-30 rounded-full bg-highlight-soft px-2.5 py-0.5 text-xs font-semibold text-highlight-ink">
+            {cardTag}
+          </span>
+          <button
+            onClick={e => { e.stopPropagation(); handleListen(displayWord.dutch); }}
+            className={`absolute right-3 top-3 z-30 grid h-11 w-11 place-items-center rounded-full transition-all active:scale-90 ${
+              isPlaying ? 'bg-accent text-primary' : 'text-primary hover:bg-accent'
+            }`}
+            aria-label="Listen"
+          >
+            <Volume2 className="h-[22px] w-[22px]" />
+          </button>
+          <div
+            className="flashcard h-[22rem] cursor-pointer"
+            style={{ transform: swipeDeltaX !== 0 ? `translateX(${swipeDeltaX * 0.2}px) rotate(${swipeDeltaX * 0.015}deg)` : undefined, transition: swipeDeltaX === 0 ? 'transform 0.2s ease' : 'none' }}
+            onClick={() => { setFlipped(!flipped); }}
+          >
+            <div className={`flashcard-inner ${flipped ? 'flipped' : ''} ${noFlipAnim ? '!transition-none' : ''}`}>
+              {/* Front */}
+              <Card className="flashcard-face flex-col rounded-xl border bg-card p-[22px] shadow-[0_12px_30px_-16px_hsl(var(--foreground)/0.3)]">
+                <div className="flex flex-1 flex-col items-center justify-center gap-1.5 text-center">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+                    {direction === 'dutch-to-english' ? 'English' : 'Russian'}
                   </p>
-                )}
-                <p className="mt-3 text-xs text-muted-foreground">Tap to reveal</p>
-              </div>
-            </Card>
-            <Card className="flashcard-face flashcard-back bg-accent border-2 border-primary/20">
-              <div className="text-center">
-                <p className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
-                  {direction === 'dutch-to-english' ? 'Russian' : 'English'}
-                </p>
-                <p className="font-heading text-3xl font-bold text-accent-foreground">{back}</p>
-                {direction === 'english-to-dutch' && exampleSentence && (
-                  <p className="mt-2 text-sm italic text-muted-foreground leading-snug">
-                    {highlightWord(exampleSentence, displayWord.dutch)}
-                  </p>
-                )}
-              </div>
-            </Card>
+                  <p className={`font-heading text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground ${direction === 'english-to-dutch' ? 'italic' : ''}`}>{front}</p>
+                  {direction === 'dutch-to-english' && exampleSentence && (
+                    <p className="mt-3 text-[15px] leading-normal text-muted-foreground">
+                      {highlightWord(exampleSentence, displayWord.dutch)}
+                    </p>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground">Tap to reveal</p>
+              </Card>
+              {/* Back: English word, divider, Russian, example (design: 'cards') */}
+              <Card className="flashcard-face flashcard-back flex-col rounded-xl border bg-card p-[22px] shadow-[0_12px_30px_-16px_hsl(var(--foreground)/0.3)]">
+                <div className="flex flex-1 flex-col items-center justify-center gap-1.5 overflow-y-auto text-center">
+                  <p className="font-heading text-[32px] font-semibold leading-tight tracking-[-0.015em] text-foreground">{englishWord}</p>
+                  <div className="my-3.5 h-0.5 w-8 rounded-full bg-highlight" />
+                  <p className="font-heading text-[21px] italic text-foreground">{displayWord.english}</p>
+                  {exampleSentence && (
+                    <p className="mt-4 text-[15px] leading-normal text-foreground">"{exampleSentence}"</p>
+                  )}
+                  {displayWord.exampleTranslation && (
+                    <p className="text-sm text-muted-foreground">{displayWord.exampleTranslation}</p>
+                  )}
+                </div>
+                <p className="truncate text-xs text-muted-foreground">From {sourceLabel}</p>
+              </Card>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Action row: ← Prev  ·  Shuffle  ·  → Next */}
-      <div className="flex items-center justify-center gap-8 -mt-2">
+      <div className="flex items-center justify-center gap-6">
         <button
           onClick={goPrevCard}
           disabled={currentIndex === 0}
-          className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-25"
+          className="grid h-10 w-10 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground disabled:opacity-25"
           aria-label="Previous card"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -1315,10 +1337,11 @@ export function FlashcardView() {
         {mode === 'set-practice' && (
           <button
             onClick={toggleShuffle}
-            className={`flex items-center gap-1 rounded-full border p-1.5 transition-all ${
-              isShuffled ? 'border-primary/40 bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/40 hover:text-primary'
+            className={`grid h-10 w-10 place-items-center rounded-full border transition-all ${
+              isShuffled ? 'border-primary/40 bg-accent text-primary' : 'border-border bg-card text-muted-foreground hover:text-primary'
             }`}
             aria-label="Shuffle"
+            aria-pressed={isShuffled}
           >
             <Shuffle className="h-4 w-4" />
           </button>
@@ -1327,7 +1350,7 @@ export function FlashcardView() {
           <button
             onClick={() => advanceCard(currentIndex < totalCards - 1 ? currentIndex + 1 : totalCards)}
             disabled={currentIndex >= totalCards - 1}
-            className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-25"
+            className="grid h-10 w-10 place-items-center rounded-full text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground disabled:opacity-25"
             aria-label="Next card"
           >
             <ArrowRight className="h-4 w-4" />
@@ -1336,7 +1359,7 @@ export function FlashcardView() {
       </div>
 
       {flipped && (displayWord.plural || displayWord.exampleTranslation || displayWord.nounTip) && (
-        <Card className="animate-fade-in p-3 bg-muted/40 border-border space-y-1.5 text-sm">
+        <Card className="animate-fade-in space-y-1.5 rounded-xl p-4 text-sm">
           {displayWord.plural && (
             <div className="flex gap-2 items-center">
               <span className="text-xs text-muted-foreground w-14 shrink-0">plural</span>
@@ -1360,14 +1383,13 @@ export function FlashcardView() {
 
       {/* Verb details: English verbs carry type, note and past forms (no conjugation table) */}
       {flipped && (displayWord.verbType || displayWord.pastTense || displayWord.verbNote) && (
-        <Card className="animate-fade-in p-3 bg-muted/40 border-border">
+        <Card className="animate-fade-in rounded-xl p-4">
           {displayWord.verbType && (
             <div className="flex items-center gap-2">
               <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${
-                displayWord.verbType === 'reg' ? 'bg-green-100 text-green-700' :
-                displayWord.verbType === 'irr' ? 'bg-red-100 text-red-700' :
-                displayWord.verbType === 'sep' ? 'bg-blue-100 text-blue-700' :
-                'bg-purple-100 text-purple-700'
+                displayWord.verbType === 'irr' ? 'bg-highlight-soft text-highlight-ink' :
+                displayWord.verbType === 'mod' ? 'bg-secondary text-secondary-foreground' :
+                'bg-accent text-accent-foreground'
               }`}>
                 {displayWord.verbType === 'reg' ? 'regular' : displayWord.verbType === 'irr' ? 'irregular' : displayWord.verbType === 'sep' ? 'phrasal' : 'modal'}
               </span>
@@ -1397,69 +1419,40 @@ export function FlashcardView() {
       )}
 
 
-      {flipped && (
-        <div className="flex flex-col items-center gap-3 animate-fade-in">
-          {mode === 'my-words' && currentWord && (() => {
-            const againDays = previewInterval(currentWord, 1);
-            const hardDays  = previewInterval(currentWord, 2);
-            const goodDays  = previewInterval(currentWord, 3);
-            const easyDays  = previewInterval(currentWord, 4);
-            return (
-              <div className="flex items-center justify-center gap-3 text-[11px] text-muted-foreground flex-wrap">
-                <span>Again → {formatDays(againDays)}</span>
-                <span className="text-muted-foreground/30">·</span>
-                <span>Hard → {formatDays(hardDays)}</span>
-                <span className="text-muted-foreground/30">·</span>
-                <span>Good → {formatDays(goodDays)}</span>
-                <span className="text-muted-foreground/30">·</span>
-                <span>Easy → {formatDays(easyDays)}</span>
-              </div>
-            );
-          })()}
-          {(mode === 'my-words' || mode === 'set-practice') && (
-            <div className="flex flex-col items-center gap-2 w-full">
-              {mode === 'set-practice' && (
-                <p className="text-xs text-muted-foreground text-center">
-                  Rate a card to add it to your spaced repetition queue
-                </p>
-              )}
-              <div className="flex justify-center gap-2 w-full">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleSRSRating('again')}
-                  className="gap-1 border-destructive/30 text-destructive hover:bg-destructive/10 text-xs px-3 flex-1"
-                >
-                  Again
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleSRSRating('hard')}
-                  className="gap-1 border-highlight/40 text-highlight-ink hover:bg-highlight-soft text-xs px-3 flex-1"
-                >
-                  Hard
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleSRSRating('good')}
-                  className="gap-1 border-primary/30 text-primary hover:bg-primary/10 text-xs px-3 flex-1"
-                >
-                  Good
-                </Button>
-                <Button
-                  size="sm"
-                  onClick={() => handleSRSRating('easy')}
-                  className="gap-1 bg-success text-success-foreground hover:bg-success/90 text-xs px-3 flex-1"
-                >
-                  Easy
-                </Button>
-              </div>
+      {flipped && (mode === 'my-words' || mode === 'set-practice') && (() => {
+        const showIntervals = mode === 'my-words' && !!currentWord;
+        const ratings: { key: SRSRating; label: string; fsrs: FSRSRating; className: string }[] = [
+          { key: 'again', label: 'Again', fsrs: 1, className: 'bg-highlight text-highlight-foreground hover:bg-highlight/90' },
+          { key: 'hard',  label: 'Hard',  fsrs: 2, className: 'border-[1.5px] border-highlight bg-card text-highlight-ink hover:bg-highlight-soft' },
+          { key: 'good',  label: 'Good',  fsrs: 3, className: 'border-[1.5px] border-primary bg-card text-accent-foreground hover:bg-accent' },
+          { key: 'easy',  label: 'Easy',  fsrs: 4, className: 'bg-primary text-primary-foreground hover:bg-primary/90' },
+        ];
+        return (
+          <div className="animate-fade-in space-y-2">
+            {mode === 'set-practice' && (
+              <p className="text-center text-xs text-muted-foreground">
+                Rate a card to add it to your spaced repetition queue
+              </p>
+            )}
+            <div className="grid grid-cols-4 gap-2">
+              {ratings.map(r => (
+                <div key={r.key} className="flex flex-col items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => handleSRSRating(r.key)}
+                    className={`flex h-[52px] w-full items-center justify-center rounded-xl text-[15px] font-semibold transition-all active:scale-95 ${r.className}`}
+                  >
+                    {r.label}
+                  </button>
+                  {showIntervals && (
+                    <span className="text-xs text-muted-foreground">{formatDays(previewInterval(currentWord, r.fsrs))}</span>
+                  )}
+                </div>
+              ))}
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        );
+      })()}
     </div>
   );
 }

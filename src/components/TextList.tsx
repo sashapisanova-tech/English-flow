@@ -1,9 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { useLearning } from '@/context/LearningContext';
-import { BookOpen, CheckCircle2, ChevronRight, ArrowLeft, Folder, GraduationCap, Lock, Sparkles } from 'lucide-react';
+import { BookOpen, CheckCircle2, ChevronRight, ChevronLeft, Folder, GraduationCap, Lock, Sparkles } from 'lucide-react';
 import { ReadingText, Module, Level } from '@/types/dutch';
 import { GenerateTextView } from '@/components/GenerateTextView';
 
@@ -62,55 +59,60 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
       texts: texts.filter(t => t.module === mod.key),
     }));
 
+  const eyebrow = 'text-[11px] font-semibold uppercase tracking-[0.06em] text-muted-foreground';
+  const rowCard = 'flex w-full items-center gap-3 rounded-xl border border-border bg-card px-3.5 py-3 text-left transition-colors';
+  const rowInteractive = 'card-hover cursor-pointer active:scale-[0.99]';
+  const iconTile = 'grid h-[38px] w-[38px] shrink-0 place-items-center rounded-[10px] bg-accent';
+  const backButton = 'flex items-center gap-1 self-start -ml-1 rounded-lg px-1 py-1 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground';
+
   // ===== TEXT LIST INSIDE A MODULE =====
   if (openLevel && openModule) {
     const mod = modules.find(m => m.key === openModule);
     if (!mod) return null;
+    const done = mod.texts.filter(t => t.completed).length;
 
     return (
-      <div className="animate-fade-in space-y-4">
-        <Button variant="ghost" size="sm" onClick={() => setOpenModule(null)} className="-ml-2 gap-1">
-          <ArrowLeft className="h-4 w-4" /> All modules
-        </Button>
+      <div className="animate-fade-in flex flex-col gap-4">
+        <button onClick={() => setOpenModule(null)} className={backButton}>
+          <ChevronLeft className="h-4 w-4" /> All modules
+        </button>
 
-        <div className="flex items-center gap-3">
-          <div>
-            <p className="text-xs uppercase tracking-wider text-muted-foreground">
-              {openLevel} · Module {mod.number}
-            </p>
-            <h2 className="font-heading text-xl font-bold text-foreground">{mod.label}</h2>
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-highlight-soft px-[9px] py-[3px] text-xs font-semibold text-highlight-ink">{openLevel}</span>
+            <span className="text-[13px] text-muted-foreground">Module {mod.number}{mod.texts.length > 0 ? ` · ${done} of ${mod.texts.length} read` : ''}</span>
           </div>
+          <h2 className="font-heading text-[22px] font-semibold leading-tight text-foreground">{mod.label}</h2>
         </div>
 
         {mod.texts.length === 0 ? (
-          <Card className="p-6 text-center">
+          <div className="rounded-xl border border-border bg-card p-6 text-center">
             <p className="text-sm text-muted-foreground">Texts for this module are coming soon.</p>
-          </Card>
+          </div>
         ) : (
-          <div className="space-y-2">
-            {mod.texts.map(text => (
-              <Card
+          <div className="flex flex-col gap-2">
+            {mod.texts.map((text, i) => (
+              <button
                 key={text.id}
                 onClick={() => onSelect(text)}
-                className="card-hover cursor-pointer p-4 flex items-center justify-between active:scale-[0.98] transition-transform"
+                className={`${rowCard} ${rowInteractive}`}
               >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent">
-                    {text.completed ? (
-                      <CheckCircle2 className="h-5 w-5 text-success" />
-                    ) : (
-                      <BookOpen className="h-5 w-5 text-accent-foreground" />
-                    )}
-                  </div>
-                  <div>
-                    <p className="font-heading font-semibold text-foreground">{text.title}</p>
-                    <p className="text-xs text-muted-foreground">{text.titleTranslation}</p>
-                  </div>
+                <div className={iconTile}>
+                  {text.completed ? (
+                    <CheckCircle2 className="h-5 w-5 text-success" strokeWidth={1.75} />
+                  ) : (
+                    <BookOpen className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  )}
                 </div>
-                <span className="text-xs text-muted-foreground">
-                  {text.content.split(' ').length} words
-                </span>
-              </Card>
+                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                  <span className={eyebrow}>Story {i + 1} · {text.content.split(' ').length} words</span>
+                  <span className="font-heading text-base font-semibold leading-tight text-foreground">{text.title}</span>
+                  {text.titleTranslation && (
+                    <span className="truncate text-[13px] text-muted-foreground">{text.titleTranslation}</span>
+                  )}
+                </div>
+                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" strokeWidth={2.5} />
+              </button>
             ))}
           </div>
         )}
@@ -132,114 +134,109 @@ export function TextList({ onSelect, openLevel, setOpenLevel, openModule, setOpe
     );
   }
 
-  // ===== MODULE FOLDERS GRID (inside a level) =====
+  // ===== MODULE LIST (inside a level) =====
   if (openLevel) {
     return (
-      <div className="animate-fade-in space-y-3">
-        <Button variant="ghost" size="sm" onClick={() => { setOpenLevel(null); setShowGenerator(false); }} className="-ml-2 gap-1">
-          <ArrowLeft className="h-4 w-4" /> All levels
-        </Button>
+      <div className="animate-fade-in flex flex-col gap-4">
+        <button onClick={() => { setOpenLevel(null); setShowGenerator(false); }} className={backButton}>
+          <ChevronLeft className="h-4 w-4" /> All levels
+        </button>
 
-        <div className="flex items-center gap-3 pb-1">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-            <GraduationCap className="h-6 w-6 text-primary" />
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-2">
+            <span className="rounded-full bg-highlight-soft px-[9px] py-[3px] text-xs font-semibold text-highlight-ink">{openLevel}</span>
+            <span className="text-[13px] text-muted-foreground">Level</span>
           </div>
-          <div>
-            <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Level</p>
-            <h2 className="font-heading text-xl font-bold text-foreground">{openLevel} — {levelMeta[openLevel]?.subtitle ?? openLevel}</h2>
-          </div>
+          <h2 className="font-heading text-[22px] font-semibold leading-tight text-foreground">{levelMeta[openLevel]?.subtitle ?? openLevel}</h2>
         </div>
 
-        {modules.map((mod, idx) => {
-          const total = mod.texts.length;
-          const done = mod.texts.filter(t => t.completed).length;
-          const progressPct = total > 0 ? (done / total) * 100 : 0;
+        <div className="flex flex-col gap-2">
+          {modules.map(mod => {
+            const total = mod.texts.length;
+            const done = mod.texts.filter(t => t.completed).length;
+            const progressPct = total > 0 ? (done / total) * 100 : 0;
 
-          return (
-            <Card
-              key={mod.key}
-              onClick={() => total > 0 && setOpenModule(mod.key)}
-              className={`p-4 relative overflow-hidden ${total > 0 ? 'card-hover cursor-pointer active:scale-[0.98] transition-transform' : 'opacity-60'}`}
-            >
-              <div className="absolute top-0 left-4 h-1.5 w-12 rounded-b-md bg-primary/40" />
-              <div className="flex items-center gap-3 pt-1">
-                <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-accent">
-                  <Folder className="h-6 w-6 text-accent-foreground" strokeWidth={1.75} />
+            return (
+              <button
+                key={mod.key}
+                onClick={() => total > 0 && setOpenModule(mod.key)}
+                disabled={total === 0}
+                className={`${rowCard} ${total > 0 ? rowInteractive : 'cursor-default opacity-60'}`}
+              >
+                <div className={iconTile}>
+                  <Folder className="h-5 w-5 text-primary" strokeWidth={1.75} />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">
-                    Module {mod.number}
-                  </p>
-                  <p className="font-heading font-semibold text-foreground truncate">{mod.label}</p>
-                  <div className="mt-1.5 flex items-center gap-2">
-                    <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary max-w-[140px]">
-                      <div className="h-full bg-primary transition-all" style={{ width: `${progressPct}%` }} />
+                <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+                  <span className={eyebrow}>Module {mod.number}</span>
+                  <span className="truncate font-heading text-base font-semibold leading-tight text-foreground">{mod.label}</span>
+                  <div className="mt-1 flex items-center gap-2.5">
+                    <div className="h-1.5 max-w-[160px] flex-1 overflow-hidden rounded-full bg-track">
+                      <div className="h-full rounded-full bg-highlight transition-all" style={{ width: `${progressPct}%` }} />
                     </div>
-                    <Badge variant="secondary" className="text-[10px] px-1.5 py-0 h-4">
-                      {total > 0 ? `${done}/${total}` : 'Coming soon'}
-                    </Badge>
+                    <span className="text-xs text-muted-foreground">
+                      {total > 0 ? `${done} of ${total}` : 'Coming soon'}
+                    </span>
                   </div>
                 </div>
                 {total > 0
-                  ? <ChevronRight className="h-5 w-5 text-muted-foreground shrink-0" />
-                  : <Lock className="h-4 w-4 text-muted-foreground shrink-0" />}
-              </div>
-            </Card>
-          );
-        })}
+                  ? <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" strokeWidth={2.5} />
+                  : <Lock className="h-4 w-4 shrink-0 text-muted-foreground" />}
+              </button>
+            );
+          })}
+        </div>
 
         {/* Generate your own text — below the last module */}
-        <Card
+        <button
           onClick={() => setShowGenerator(true)}
-          className="card-hover cursor-pointer p-4 active:scale-[0.98] transition-transform border-dashed border-primary/30 bg-primary/5"
+          className={`${rowCard} ${rowInteractive} border-dashed border-primary/40`}
         >
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-              <Sparkles className="h-6 w-6 text-primary" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-heading font-semibold text-primary">Generate your own text</p>
-              <p className="text-xs text-muted-foreground">AI writes a custom {openLevel} text for you</p>
-            </div>
-            <ChevronRight className="h-5 w-5 text-primary/60 shrink-0" />
+          <div className={iconTile}>
+            <Sparkles className="h-5 w-5 text-primary" strokeWidth={1.75} />
           </div>
-        </Card>
+          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <span className="font-heading text-base font-semibold leading-tight text-foreground">Generate your own text</span>
+            <span className="text-[13px] text-muted-foreground">AI writes a custom {openLevel} text for you</span>
+          </div>
+          <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" strokeWidth={2.5} />
+        </button>
       </div>
     );
   }
 
-  // ===== LEVEL FOLDERS (top) =====
+  // ===== LEVELS (top) =====
   return (
-    <div className="animate-fade-in space-y-3">
-      <p className="text-xs uppercase tracking-wider text-muted-foreground font-medium">
-        Choose your level
-      </p>
-      {levels.map(lvl => (
-        <Card
-          key={lvl.key}
-          onClick={() => lvl.available && setOpenLevel(lvl.key)}
-          className={`p-4 flex items-center justify-between transition-transform ${
-            lvl.available
-              ? 'card-hover cursor-pointer active:scale-[0.98]'
-              : 'opacity-60 cursor-not-allowed'
-          }`}
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
+    <div className="animate-fade-in flex flex-col gap-2">
+      <span className={`${eyebrow} pb-1 text-xs`}>Choose your level</span>
+      {levels.map(lvl => {
+        const levelModules = new Set(moduleInfo.filter(m => m.level === lvl.key).map(m => m.key));
+        const levelTexts = texts.filter(t => t.module && levelModules.has(t.module));
+        const done = levelTexts.filter(t => t.completed).length;
+        return (
+          <button
+            key={lvl.key}
+            onClick={() => lvl.available && setOpenLevel(lvl.key)}
+            disabled={!lvl.available}
+            className={`${rowCard} ${lvl.available ? rowInteractive : 'cursor-not-allowed opacity-60'}`}
+          >
+            <div className={iconTile}>
               {lvl.available ? (
-                <GraduationCap className="h-6 w-6 text-primary" />
+                <GraduationCap className="h-5 w-5 text-primary" strokeWidth={1.75} />
               ) : (
                 <Lock className="h-5 w-5 text-muted-foreground" />
               )}
             </div>
-            <div>
-              <p className="font-heading font-semibold text-foreground">{lvl.label}</p>
-              <p className="text-xs text-muted-foreground">{lvl.description}</p>
+            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className={eyebrow}>{lvl.description}</span>
+              <span className="font-heading text-base font-semibold leading-tight text-foreground">{lvl.label}</span>
+              {levelTexts.length > 0 && (
+                <span className="text-[13px] text-muted-foreground">{done} of {levelTexts.length} read</span>
+              )}
             </div>
-          </div>
-          {lvl.available && <ChevronRight className="h-5 w-5 text-muted-foreground" />}
-        </Card>
-      ))}
+            {lvl.available && <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" strokeWidth={2.5} />}
+          </button>
+        );
+      })}
     </div>
   );
 }

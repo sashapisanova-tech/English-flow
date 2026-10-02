@@ -4,10 +4,9 @@ import { recordTextRead } from '@/lib/textReadHistory';
 import { WordPopover } from '@/components/WordPopover';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  ArrowLeft, ArrowRight, Volume2, BookmarkPlus, Bookmark, Check,
+  ArrowLeft, ArrowRight, Volume2, Check, Plus, ChevronLeft, Pause, Lightbulb, MessageCircleMore,
   Mic, Loader2, Star, RotateCcw,
   CheckCircle, XCircle, Brain, ClipboardCheck,
   PenLine, Shuffle, Eye, Sparkles, X,
@@ -660,42 +659,49 @@ Return ONLY valid JSON, no markdown:
     ? Object.entries(retrievalAnswers).filter(([qi, ans]) => retrievalQuestions[+qi]?.correct === ans).length
     : 0;
 
+  const wordCount = text.content.split(/\s+/).filter(Boolean).length;
+  const readMinutes = Math.max(1, Math.round(wordCount / 100));
+  const keyWordCount = Object.keys(keywords).length;
+
   return (
     <div className="animate-fade-in space-y-6">
-      {/* Back + level + next/prev */}
-      <div className="flex items-center gap-2">
-        <Button variant="ghost" size="sm" onClick={onBack} className="gap-1.5">
-          <ArrowLeft className="h-4 w-4" /> Back
-        </Button>
-        <Badge className={`level-badge level-${text.level.toLowerCase()}`}>{text.level}</Badge>
-        <div className="ml-auto flex items-center gap-1">
-          {onPrev && (
-            <Button variant="ghost" size="sm" onClick={onPrev} className="gap-1 text-muted-foreground">
-              <ArrowLeft className="h-3.5 w-3.5" /> Prev
-            </Button>
-          )}
-          {onNext && (
-            <Button variant="ghost" size="sm" onClick={onNext} className="gap-1 text-muted-foreground">
-              Next <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
-          )}
-        </div>
+      {/* Header: back · listen (design: 'text') */}
+      <div className="-mx-2.5 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={onBack}
+          className="grid h-11 w-11 place-items-center rounded-full text-foreground transition-colors hover:bg-secondary"
+          aria-label="Back to texts"
+        >
+          <ChevronLeft className="h-6 w-6" />
+        </button>
+        <button
+          type="button"
+          onClick={handlePlayText}
+          className={`flex h-10 items-center gap-1.5 rounded-full border px-4 text-sm font-semibold transition-colors ${
+            isPlaying
+              ? 'border-primary bg-accent text-accent-foreground'
+              : 'border-border bg-card text-foreground hover:bg-secondary'
+          }`}
+          aria-pressed={isPlaying}
+        >
+          {isPlaying ? <Pause className="h-4 w-4" /> : <Volume2 className="h-4 w-4 text-primary" />}
+          {isPlaying ? 'Stop' : 'Listen'}
+        </button>
       </div>
 
-      {/* Title + Listen */}
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <h2 className="font-heading text-2xl font-bold text-foreground">{text.title}</h2>
-          <p className="text-sm text-muted-foreground">{text.titleTranslation}</p>
+      {/* Meta + title */}
+      <div className="flex flex-col gap-3.5">
+        <div className="flex items-center gap-2 text-[13px] text-muted-foreground">
+          <span className={`level-${text.level.toLowerCase()} rounded-full px-2.5 py-0.5 text-xs font-semibold`}>{text.level}</span>
+          <span>
+            {readMinutes} min read{keyWordCount > 0 && ` · ${keyWordCount} key word${keyWordCount !== 1 ? 's' : ''}`}
+          </span>
         </div>
-        <Button
-          variant="outline" size="sm"
-          onClick={handlePlayText}
-          className={`shrink-0 gap-1.5 ${isPlaying ? 'border-primary text-primary' : ''}`}
-        >
-          <Volume2 className="h-4 w-4" />
-          {isPlaying ? 'Stop' : 'Listen'}
-        </Button>
+        <div className="space-y-1">
+          <h2 className="font-heading text-[26px] font-semibold leading-tight tracking-[-0.015em] text-foreground">{text.title}</h2>
+          {text.titleTranslation && <p className="text-sm text-muted-foreground">{text.titleTranslation}</p>}
+        </div>
       </div>
 
       {/* Floating phrase-save popup */}
@@ -716,39 +722,37 @@ Return ONLY valid JSON, no markdown:
                 style={{ filter: 'drop-shadow(0 -1px 0 hsl(var(--border)))' }} />
             </div>
           )}
-          <div className="rounded-2xl bg-card border border-border shadow-xl overflow-hidden">
-            <div className="px-3 pt-3 pb-1.5">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">English</p>
-              <p className="text-sm font-medium text-foreground leading-snug line-clamp-2">{popup.text}</p>
-            </div>
-            <div className="px-3 pb-3 border-b border-border">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-0.5">Russian</p>
+          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
+            <div className="space-y-2 p-4">
+              <p className="line-clamp-2 font-heading text-lg font-semibold leading-snug text-foreground">{popup.text}</p>
               {popup.translating
-                ? <p className="text-sm text-muted-foreground italic animate-pulse">Translating…</p>
-                : <p className="text-sm text-foreground leading-snug">{popup.translation || '—'}</p>
+                ? <p className="flex items-center gap-1.5 text-sm text-muted-foreground"><Loader2 className="h-3.5 w-3.5 animate-spin" /> Translating…</p>
+                : <p className="font-heading text-base italic leading-snug text-foreground">{popup.translation || '—'}</p>
               }
             </div>
-            <button
-              onPointerDown={e => { e.stopPropagation(); handleSavePhrase(); }}
-              className={`w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm font-semibold transition-all active:scale-95 ${
-                saveState === 'saved' ? 'bg-secondary text-foreground' : 'bg-primary text-primary-foreground hover:opacity-90'
-              }`}
-            >
-              {saveState === 'saved'
-                ? <><Bookmark className="h-4 w-4 fill-current" /> Saved</>
-                : <><BookmarkPlus className="h-4 w-4" /> Save to flashcards</>
-              }
-            </button>
-            <button
-              onPointerDown={e => {
-                e.stopPropagation();
-                window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this English phrase for me: "${popup.text}"` } }));
-                dismissPopup();
-              }}
-              className="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-semibold bg-secondary text-foreground hover:bg-accent transition-all"
-            >
-              Ask Daan about this
-            </button>
+            <div className="flex flex-col gap-2 px-4 pb-4">
+              <button
+                onPointerDown={e => { e.stopPropagation(); handleSavePhrase(); }}
+                className={`flex h-11 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold transition-all active:scale-95 ${
+                  saveState === 'saved' ? 'border border-border bg-card text-foreground' : 'bg-primary text-primary-foreground hover:bg-primary/90'
+                }`}
+              >
+                {saveState === 'saved'
+                  ? <><Check className="h-4 w-4" /> Saved to cards</>
+                  : <><Plus className="h-4 w-4" /> Add to cards</>
+                }
+              </button>
+              <button
+                onPointerDown={e => {
+                  e.stopPropagation();
+                  window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this English phrase for me: "${popup.text}"` } }));
+                  dismissPopup();
+                }}
+                className="flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-accent text-sm font-semibold text-accent-foreground transition-all hover:bg-accent/80"
+              >
+                <MessageCircleMore className="h-4 w-4" /> Ask Emma about this
+              </button>
+            </div>
           </div>
           {/* Right arrow when popup is to the left of the selection (desktop) */}
           {popup.position === 'left' && (
@@ -785,19 +789,15 @@ Return ONLY valid JSON, no markdown:
                 style={{ filter: 'drop-shadow(0 -1px 0 hsl(var(--border)))' }} />
             </div>
           )}
-          <div className="rounded-2xl bg-card border border-border shadow-2xl overflow-hidden">
-            <div className="px-4 pt-4 pb-2 flex items-center gap-2">
-              <span className="rounded bg-green-100 px-1.5 py-0.5 text-xs font-semibold text-green-700">fixed expression</span>
+          <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
+            <div className="space-y-2 p-4 pb-3">
+              <span className="inline-block rounded-full bg-highlight-soft px-2.5 py-0.5 text-xs font-semibold text-highlight-ink">Expression</span>
+              <p className="font-heading text-[22px] font-semibold leading-tight text-foreground">{exprPopup.phrase}</p>
+              <p className="font-heading text-[17px] italic text-foreground">{exprPopup.english}</p>
+              {exprPopup.sentence && (
+                <p className="text-sm leading-relaxed text-muted-foreground">"{exprPopup.sentence}"</p>
+              )}
             </div>
-            <div className="px-4 pb-3">
-              <p className="font-heading text-lg font-bold text-foreground">{exprPopup.phrase}</p>
-              <p className="text-base text-muted-foreground mt-0.5">{exprPopup.english}</p>
-            </div>
-            {exprPopup.sentence && (
-              <div className="mx-4 mb-3 rounded-md bg-secondary p-3">
-                <p className="text-sm font-medium italic text-secondary-foreground">"{exprPopup.sentence}"</p>
-              </div>
-            )}
             <div className="flex gap-2 px-4 pb-4">
               {(() => {
                 const exprKey = exprPopup.phrase.toLowerCase();
@@ -816,13 +816,13 @@ Return ONLY valid JSON, no markdown:
                         });
                       }
                     }}
-                    className={`flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all active:scale-95 ${
-                      exprSaved ? 'bg-secondary text-foreground' : 'bg-primary text-primary-foreground hover:opacity-90'
+                    className={`flex h-11 flex-1 items-center justify-center gap-1.5 rounded-xl text-sm font-semibold transition-all active:scale-95 ${
+                      exprSaved ? 'border border-border bg-card text-foreground' : 'bg-primary text-primary-foreground hover:bg-primary/90'
                     }`}
                   >
                     {exprSaved
-                      ? <><Bookmark className="h-4 w-4 fill-current" /> Saved</>
-                      : '＋ Save to flashcards'
+                      ? <><Check className="h-4 w-4" /> Saved</>
+                      : <><Plus className="h-4 w-4" /> Add to cards</>
                     }
                   </button>
                 );
@@ -832,9 +832,9 @@ Return ONLY valid JSON, no markdown:
                   window.dispatchEvent(new CustomEvent('dutch-chat-open', { detail: { message: `Explain this English expression for me: "${exprPopup.phrase}"` } }));
                   setExprPopup(null);
                 }}
-                className="flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold bg-secondary text-foreground hover:bg-accent transition-all"
+                className="flex h-11 flex-1 items-center justify-center gap-1.5 rounded-xl bg-accent text-sm font-semibold text-accent-foreground transition-all hover:bg-accent/80"
               >
-                Ask Daan
+                <MessageCircleMore className="h-4 w-4" /> Ask Emma
               </button>
             </div>
           </div>
@@ -858,32 +858,34 @@ Return ONLY valid JSON, no markdown:
       {/* Reading text */}
       <div className="relative">
         <Card
-          className={`p-6 md:p-8${activeTab !== null ? ' select-none' : ''}${activeTab !== null && !isTextRevealed ? ' cursor-pointer' : ''}`}
+          className={`rounded-xl px-5 py-6 md:p-8${activeTab !== null ? ' select-none' : ''}${activeTab !== null && !isTextRevealed ? ' cursor-pointer' : ''}`}
           onMouseDown={() => { if (activeTab !== null) setIsTextRevealed(true); }}
           onTouchStart={() => { if (activeTab !== null) setIsTextRevealed(true); }}
           onMouseUp={() => { setIsTextRevealed(false); handleSelectionEnd(); }}
           onTouchEnd={() => { setIsTextRevealed(false); handleSelectionEnd(); }}
           onMouseLeave={() => setIsTextRevealed(false)}
         >
-          <div className={`reading-text leading-[2.2] transition-[filter] duration-150${activeTab !== null && !isTextRevealed ? ' blur-sm' : ''}`}>
+          <div className={`font-heading text-lg leading-[1.9] text-foreground transition-[filter] duration-150${activeTab !== null && !isTextRevealed ? ' blur-sm' : ''}`}>
             {renderText()}
           </div>
           {text.grammarNote && (
-            <div className="mt-5 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-primary">Grammar spotlight</p>
-              <p className="mt-1 text-sm leading-relaxed text-foreground">{text.grammarNote}</p>
+            <div className="mt-6 flex gap-3 rounded-xl bg-accent px-4 py-3.5">
+              <Lightbulb className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+              <div>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-accent-foreground">Grammar spotlight</p>
+                <p className="mt-1 text-sm leading-relaxed text-foreground">{text.grammarNote}</p>
+              </div>
             </div>
           )}
         </Card>
         {activeTab !== null && !isTextRevealed && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none rounded-xl">
-            <span className="flex items-center gap-1.5 rounded-full border border-border/50 bg-background/90 px-3 py-1.5 text-sm italic text-muted-foreground shadow-sm">
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-xl">
+            <span className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-muted-foreground">
               <Eye className="h-3.5 w-3.5" /> Press to read
             </span>
           </div>
         )}
       </div>
-
 
       {/* ── Practice exercises ────────────────────────────────────────────── */}
       <div className="space-y-3">
@@ -911,7 +913,7 @@ Return ONLY valid JSON, no markdown:
             >
               <ClipboardCheck className="h-5 w-5" />
               <span className="text-[11px] font-semibold leading-tight">Quiz</span>
-              {quizSubmitted && <span className="text-[10px] text-emerald-600 font-bold">✓</span>}
+              {quizSubmitted && <span className="text-[10px] text-success font-bold">✓</span>}
             </button>
           )}
 
@@ -925,7 +927,7 @@ Return ONLY valid JSON, no markdown:
             >
               <Brain className="h-5 w-5" />
               <span className="text-[11px] font-semibold leading-tight">Words</span>
-              {retrievalSubmitted && <span className="text-[10px] text-emerald-600 font-bold">{retrievalScore}/{retrievalTotal}</span>}
+              {retrievalSubmitted && <span className="text-[10px] text-success font-bold">{retrievalScore}/{retrievalTotal}</span>}
             </button>
           )}
 
@@ -934,12 +936,12 @@ Return ONLY valid JSON, no markdown:
             <button
               onClick={() => setActiveTab(activeTab === 'cloze' ? null : 'cloze')}
               className={`flex flex-col items-center gap-1 rounded-xl border-2 py-3 px-3 text-center transition-all shrink-0 min-w-[72px] ${
-                activeTab === 'cloze' ? 'border-violet-500 bg-violet-50 text-violet-600' : 'border-border hover:border-violet-300 text-muted-foreground'
+                activeTab === 'cloze' ? 'border-primary bg-primary/10 text-primary' : 'border-border hover:border-primary/40 text-muted-foreground'
               }`}
             >
               <PenLine className="h-5 w-5" />
               <span className="text-[11px] font-semibold leading-tight">Fill Gap</span>
-              {clozeSubmitted && <span className="text-[10px] text-emerald-600 font-bold">✓</span>}
+              {clozeSubmitted && <span className="text-[10px] text-success font-bold">✓</span>}
             </button>
           )}
 
@@ -948,12 +950,12 @@ Return ONLY valid JSON, no markdown:
             <button
               onClick={() => setActiveTab(activeTab === 'builder' ? null : 'builder')}
               className={`flex flex-col items-center gap-1 rounded-xl border-2 py-3 px-3 text-center transition-all shrink-0 min-w-[72px] ${
-                activeTab === 'builder' ? 'border-amber-500 bg-amber-50 text-amber-600' : 'border-border hover:border-amber-300 text-muted-foreground'
+                activeTab === 'builder' ? 'border-primary bg-primary/10 text-primary' : 'border-border hover:border-primary/40 text-muted-foreground'
               }`}
             >
               <Shuffle className="h-5 w-5" />
               <span className="text-[11px] font-semibold leading-tight">Order</span>
-              {builderDone && <span className="text-[10px] text-emerald-600 font-bold">✓</span>}
+              {builderDone && <span className="text-[10px] text-success font-bold">✓</span>}
             </button>
           )}
 
@@ -964,12 +966,12 @@ Return ONLY valid JSON, no markdown:
               if (activeTab !== 'retell' && retellingPhase === 'idle') startRetelling();
             }}
             className={`flex flex-col items-center gap-1 rounded-xl border-2 py-3 px-3 text-center transition-all shrink-0 min-w-[72px] ${
-              activeTab === 'retell' ? 'border-rose-400 bg-rose-50 text-rose-600' : 'border-border hover:border-rose-300 text-muted-foreground'
+              activeTab === 'retell' ? 'border-primary bg-primary/10 text-primary' : 'border-border hover:border-primary/40 text-muted-foreground'
             }`}
           >
             <Mic className="h-5 w-5" />
             <span className="text-[11px] font-semibold leading-tight">Retell</span>
-            {retellingPhase === 'feedback' && <span className="text-[10px] text-emerald-600 font-bold">✓</span>}
+            {retellingPhase === 'feedback' && <span className="text-[10px] text-success font-bold">✓</span>}
           </button>
         </div>
 
@@ -1117,13 +1119,13 @@ Return ONLY valid JSON, no markdown:
                         spellCheck={false}
                         disabled={clozeSubmitted}
                         className={`w-20 rounded border-b-2 bg-transparent px-1 py-0 text-sm text-center outline-none transition-colors placeholder:text-[10px] placeholder:text-muted-foreground/60 ${
-                          isCorrect ? 'border-emerald-500 text-emerald-700' :
-                          isWrong   ? 'border-red-400 text-red-700' :
+                          isCorrect ? 'border-success text-success' :
+                          isWrong   ? 'border-destructive text-destructive' :
                           'border-primary/60 focus:border-primary'
                         }`}
                       />
                       {isWrong && (
-                        <span className="text-[10px] font-semibold text-emerald-600 leading-none mt-0.5">{seg.content}</span>
+                        <span className="text-[10px] font-semibold text-success leading-none mt-0.5">{seg.content}</span>
                       )}
                     </span>
                   );
@@ -1140,7 +1142,7 @@ Return ONLY valid JSON, no markdown:
                 </Button>
               ) : (
                 <div className="space-y-2">
-                  <p className={`text-sm font-semibold ${correctCount === blanks.length ? 'text-emerald-600' : 'text-foreground'}`}>
+                  <p className={`text-sm font-semibold ${correctCount === blanks.length ? 'text-success' : 'text-foreground'}`}>
                     {correctCount === blanks.length ? 'Perfect!' : `${correctCount} / ${blanks.length} correct`}
                   </p>
                   <Button variant="outline" size="sm" className="gap-2" onClick={() => { setClozeAnswers({}); setClozeSubmitted(false); }}>
@@ -1208,17 +1210,17 @@ Return ONLY valid JSON, no markdown:
               <p className="text-xs text-muted-foreground -mt-2">Tap the words in the correct order.</p>
 
               {/* Answer area */}
-              <div className="min-h-[52px] rounded-xl border-2 border-dashed border-amber-300 bg-amber-50 p-3 flex flex-wrap gap-1.5 items-center">
+              <div className="min-h-[52px] rounded-xl border-2 border-dashed border-primary/30 bg-accent/40 p-3 flex flex-wrap gap-1.5 items-center">
                 {selectedWords.length === 0
-                  ? <span className="text-xs text-amber-400 italic">Tap words below to build the sentence…</span>
+                  ? <span className="text-xs text-muted-foreground italic">Tap words below to build the sentence…</span>
                   : selectedWords.map((w, pos) => (
                     <button
                       key={pos}
                       onClick={() => handleAnswerTap(pos)}
                       className={`rounded-lg px-2.5 py-1 text-sm font-medium border transition-all active:scale-95 ${
                         builderChecked
-                          ? isCorrect ? 'bg-emerald-100 border-emerald-400 text-emerald-800' : 'bg-red-100 border-red-400 text-red-800'
-                          : 'bg-amber-100 border-amber-400 text-amber-800 hover:bg-amber-200'
+                          ? isCorrect ? 'bg-success/10 border-success text-success' : 'bg-destructive/10 border-destructive text-destructive'
+                          : 'bg-accent border-primary/40 text-accent-foreground hover:bg-accent/70'
                       }`}
                     >
                       {w}
@@ -1244,7 +1246,7 @@ Return ONLY valid JSON, no markdown:
                 <div className="space-y-2">
                   {!isCorrect && (
                     <p className="text-xs text-foreground">
-                      <span className="font-semibold text-emerald-700">Correct: </span>
+                      <span className="font-semibold text-success">Correct: </span>
                       {current.original.join(' ')}.
                     </p>
                   )}
@@ -1285,7 +1287,7 @@ Return ONLY valid JSON, no markdown:
                 {retellingTranslation && (
                   <div>
                     <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Russian translation</p>
-                    <div className="rounded-xl border border-blue-100 bg-blue-50/50 p-3">
+                    <div className="rounded-xl border border-border bg-background p-3">
                       <p className="text-sm text-foreground/80 leading-relaxed">{retellingTranslation}</p>
                     </div>
                   </div>
@@ -1342,7 +1344,7 @@ Return ONLY valid JSON, no markdown:
                 {/* Unblurred original */}
                 <div>
                   <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wide mb-1.5">Original</p>
-                  <div className="rounded-xl border border-emerald-200 bg-emerald-50/40 p-3">
+                  <div className="rounded-xl border border-success/30 bg-success/5 p-3">
                     <p className="text-sm text-foreground leading-relaxed whitespace-pre-wrap">{text.content}</p>
                   </div>
                 </div>
@@ -1381,7 +1383,7 @@ Return ONLY valid JSON, no markdown:
                 <div className="flex items-center gap-3">
                   <div className="flex gap-0.5">
                     {[1,2,3,4,5].map(n => (
-                      <Star key={n} className={`h-5 w-5 ${n <= retellingFeedback.score ? 'fill-amber-400 text-amber-400' : 'text-border'}`} />
+                      <Star key={n} className={`h-5 w-5 ${n <= retellingFeedback.score ? 'fill-highlight text-highlight' : 'text-border'}`} />
                     ))}
                   </div>
                   <span className="text-sm text-muted-foreground">{retellingFeedback.score}/5</span>
@@ -1389,7 +1391,7 @@ Return ONLY valid JSON, no markdown:
 
                 {retellingFeedback.covered_points.length > 0 && (
                   <div className="space-y-1">
-                    <p className="text-xs font-semibold text-emerald-700 flex items-center gap-1"><CheckCircle className="h-3.5 w-3.5" /> What you covered</p>
+                    <p className="text-xs font-semibold text-success flex items-center gap-1"><CheckCircle className="h-3.5 w-3.5" /> What you covered</p>
                     {retellingFeedback.covered_points.map((p, i) => (
                       <p key={i} className="text-xs text-foreground ml-4">✓ {p}</p>
                     ))}
@@ -1398,7 +1400,7 @@ Return ONLY valid JSON, no markdown:
 
                 {retellingFeedback.missing_points.length > 0 && (
                   <div className="space-y-1">
-                    <p className="text-xs font-semibold text-amber-700 flex items-center gap-1"><XCircle className="h-3.5 w-3.5" /> To work on</p>
+                    <p className="text-xs font-semibold text-highlight-ink flex items-center gap-1"><XCircle className="h-3.5 w-3.5" /> To work on</p>
                     {retellingFeedback.missing_points.map((p, i) => (
                       <p key={i} className="text-xs text-foreground ml-4">→ {p}</p>
                     ))}
@@ -1438,6 +1440,31 @@ Return ONLY valid JSON, no markdown:
           </Card>
         )}
       </div>
+
+      {/* Previous / next text (design: 'text' — "Next page" bar) */}
+      {(onPrev || onNext) && (
+        <div className="flex items-center gap-3 pt-2">
+          {onPrev && (
+            <button
+              type="button"
+              onClick={onPrev}
+              className="grid h-[50px] w-[50px] shrink-0 place-items-center rounded-xl border border-border bg-card text-foreground transition-colors hover:bg-secondary"
+              aria-label="Previous text"
+            >
+              <ArrowLeft className="h-4 w-4" />
+            </button>
+          )}
+          {onNext && (
+            <button
+              type="button"
+              onClick={onNext}
+              className="flex h-[50px] flex-1 items-center justify-center gap-2 rounded-xl border border-border bg-card text-[15px] font-semibold text-foreground transition-colors hover:bg-secondary"
+            >
+              Next text <ArrowRight className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

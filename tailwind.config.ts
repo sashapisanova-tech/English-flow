@@ -63,6 +63,7 @@ export default {
           DEFAULT: "hsl(var(--highlight))",
           soft: "hsl(var(--highlight-soft))",
           ink: "hsl(var(--highlight-ink))",
+          foreground: "hsl(var(--highlight-foreground))",
         },
         track: "hsl(var(--track))",
         sidebar: {

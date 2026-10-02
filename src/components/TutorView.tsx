@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Star, RefreshCw, BookOpen, MessageCircle, Brain, FileText, AlertCircle, Sparkles } from 'lucide-react';
+import { Star, RefreshCw, BookOpen, MessageCircleMore, Layers, Languages, AlertCircle, GraduationCap, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useLearning } from '@/context/LearningContext';
 import { getRecentSessions, PracticeSessionRow } from '@/lib/practiceSession';
@@ -58,13 +57,6 @@ const FOCUS_LABELS: Record<string, string> = {
   vocabulary: 'Vocabulary day',
   production: 'Speaking day',
   review: 'Review day',
-};
-
-const FOCUS_COLORS: Record<string, string> = {
-  grammar: 'bg-indigo-100 text-indigo-700',
-  vocabulary: 'bg-amber-100 text-amber-700',
-  production: 'bg-emerald-100 text-emerald-700',
-  review: 'bg-blue-100 text-blue-700',
 };
 
 export interface TutorViewProps {
@@ -205,157 +197,209 @@ Rules:
     }
   }
 
-  function ActivityIcon({ type }: { type: TutorActivity['type'] }) {
-    if (type === 'translate')  return <BookOpen      className="h-3.5 w-3.5 text-indigo-500 shrink-0" />;
-    if (type === 'dialogue')   return <MessageCircle className="h-3.5 w-3.5 text-emerald-500 shrink-0" />;
-    if (type === 'flashcards') return <Brain         className="h-3.5 w-3.5 text-amber-500 shrink-0" />;
-    return                            <FileText      className="h-3.5 w-3.5 text-blue-500 shrink-0" />;
+  function ActivityIcon({ type, className }: { type: TutorActivity['type']; className?: string }) {
+    const Icon = type === 'translate' ? Languages
+      : type === 'dialogue' ? MessageCircleMore
+      : type === 'flashcards' ? Layers
+      : BookOpen;
+    return <Icon className={className} strokeWidth={1.75} />;
   }
+
+  const ACTIVITY_KIND: Record<TutorActivity['type'], string> = {
+    translate: 'Translate',
+    dialogue: 'Dialogue',
+    flashcards: 'Flashcards',
+    'text-review': 'Reading',
+  };
+
+  function activityMeta(a: TutorActivity): string {
+    const parts = [a.textTitle && a.type === 'text-review' ? a.textTitle : ACTIVITY_KIND[a.type], a.level];
+    return parts.filter(Boolean).join(' · ');
+  }
+
+  const eyebrow = 'text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground';
+
+  const tutorAvatar = (size: 'sm' | 'lg') => (
+    <div className={`grid shrink-0 place-items-center rounded-full bg-highlight-soft ${size === 'lg' ? 'h-14 w-14' : 'h-10 w-10'}`}>
+      <GraduationCap className={`text-highlight ${size === 'lg' ? 'h-7 w-7' : 'h-[22px] w-[22px]'}`} strokeWidth={1.75} />
+    </div>
+  );
 
   if (!user) return null;
 
   if (noKey) {
     return (
-      <Card className="p-4 space-y-1.5 border-amber-200 bg-amber-50">
-        <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">AI Tutor</p>
-        <p className="text-xs text-amber-700">Add your Anthropic API key in Me → Settings to unlock personalised tutor analysis.</p>
-      </Card>
+      <div className="flex items-start gap-3 rounded-xl border border-border bg-card p-4">
+        {tutorAvatar('sm')}
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[13px] font-semibold text-muted-foreground">AI tutor</span>
+          <p className="text-sm leading-normal text-foreground">
+            Add your Anthropic API key in Me → Settings to unlock your personal study plan.
+          </p>
+        </div>
+      </div>
     );
   }
 
   if (loading) {
     return (
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <Skeleton className="h-3 w-24" />
-          <Skeleton className="h-3.5 w-3.5 rounded-full" />
+      <div className="flex flex-col gap-4" aria-busy="true">
+        <div className="flex gap-3">
+          <Skeleton className="h-10 w-10 shrink-0 rounded-full" />
+          <div className="flex-1 space-y-2 pt-1">
+            <Skeleton className="h-3 w-20" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-2/3" />
+          </div>
         </div>
-        <Skeleton className="h-4 w-3/4" />
-        <Skeleton className="h-16 w-full rounded-xl" />
-        <Skeleton className="h-4 w-1/3" />
-        <Skeleton className="h-14 w-full rounded-2xl" />
-        <Skeleton className="h-14 w-full rounded-2xl" />
-        <Skeleton className="h-14 w-full rounded-2xl" />
-        <div className="space-y-2 pt-1">
-          <Skeleton className="h-3 w-20" />
-          <Skeleton className="h-2 w-full rounded-full" />
-          <Skeleton className="h-2 w-full rounded-full" />
-          <Skeleton className="h-2 w-full rounded-full" />
-        </div>
+        <Skeleton className="h-5 w-1/3" />
+        <Skeleton className="h-[136px] w-full rounded-xl" />
+        <Skeleton className="h-12 w-full rounded-xl" />
+        <Skeleton className="h-12 w-full rounded-xl" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <Card className="p-4 space-y-2 border-destructive/20 bg-destructive/5">
+      <div className="flex flex-col gap-2 rounded-xl border border-destructive/30 bg-destructive/5 p-4">
         <div className="flex items-center gap-1.5">
-          <AlertCircle className="h-3.5 w-3.5 text-destructive" />
-          <p className="text-xs text-destructive">{error}</p>
+          <AlertCircle className="h-4 w-4 text-destructive" />
+          <p className="text-sm text-destructive">{error}</p>
         </div>
-        <button onClick={() => load(true)} className="flex items-center gap-1 text-xs text-primary hover:opacity-80 transition-colors">
-          <RefreshCw className="h-3 w-3" /> Try again
+        <button onClick={() => load(true)} className="flex items-center gap-1 self-start text-sm font-semibold text-primary hover:opacity-80 transition-opacity">
+          <RefreshCw className="h-3.5 w-3.5" /> Try again
         </button>
-      </Card>
+      </div>
     );
   }
 
-  // No cached analysis yet — show the CTA button
+  // No cached analysis yet — show the CTA
   if (!analysis) {
     return (
-      <Card className="p-6 space-y-4 text-center">
-        <div className="w-12 h-12 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
-          <Sparkles className="h-6 w-6 text-primary" />
-        </div>
-        <div className="space-y-1">
-          <p className="font-heading font-semibold text-foreground">Get today's study plan</p>
-          <p className="text-xs text-muted-foreground leading-relaxed">
-            AI analyses your reading, vocabulary, and practice history to tell you exactly what to focus on today.
-          </p>
-        </div>
+      <div className="flex flex-col items-center gap-2.5 rounded-xl border border-border bg-card px-5 py-[22px] text-center">
+        {tutorAvatar('lg')}
+        <p className="mt-1 font-heading text-xl font-semibold text-foreground">Get today's study plan</p>
+        <p className="text-sm leading-normal text-muted-foreground text-pretty">
+          Your AI tutor looks at your reading, words and practice, then tells you what to focus on today.
+        </p>
         <button
           onClick={() => load(false)}
-          className="w-full rounded-xl bg-primary text-primary-foreground py-2.5 text-sm font-semibold hover:opacity-90 transition-opacity active:scale-[0.99]"
+          className="mt-1.5 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 active:scale-[0.99]"
         >
-          Get today's suggestions
+          Get today's plan <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
         </button>
-        <p className="text-[10px] text-muted-foreground">Results are saved for the day — tap once, use all day</p>
-      </Card>
+        <p className="text-xs text-muted-foreground">Saved for the rest of the day</p>
+      </div>
     );
   }
 
-  const focusBadge = FOCUS_COLORS[analysis.dailyFocus] ?? 'bg-muted text-muted-foreground';
+  const [first, ...rest] = analysis.activities;
 
   return (
-    <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">English Coach</p>
-        <button onClick={() => load(true)} className="text-muted-foreground hover:text-foreground transition-colors" title="Refresh — generates a new analysis">
-          <RefreshCw className="h-3.5 w-3.5" />
-        </button>
-      </div>
-
-      {/* Encouragement */}
-      <p className="text-sm italic text-muted-foreground leading-relaxed">{analysis.encouragement}</p>
-
-      {/* Strength */}
-      <Card className="p-3 space-y-1 border-emerald-200 bg-emerald-50/70">
-        <div className="flex items-center gap-1.5">
-          <Star className="h-3.5 w-3.5 text-emerald-600 fill-emerald-400" />
-          <p className="text-[10px] font-bold text-emerald-700 uppercase tracking-widest">Doing well</p>
+    <div className="flex flex-col gap-[18px]">
+      {/* Tutor message */}
+      <div className="flex items-start gap-3">
+        {tutorAvatar('sm')}
+        <div className="flex min-w-0 flex-1 flex-col gap-[3px] pt-px">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[13px] font-semibold text-muted-foreground">Your tutor</span>
+            <button
+              onClick={() => load(true)}
+              className="-m-2 p-2 text-muted-foreground transition-colors hover:text-foreground"
+              title="Refresh — generates a new plan"
+              aria-label="Refresh plan"
+            >
+              <RefreshCw className="h-3.5 w-3.5" />
+            </button>
+          </div>
+          <p className="text-[15px] leading-normal text-foreground text-pretty">{analysis.encouragement}</p>
+          <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span className="rounded-full bg-highlight-soft px-[9px] py-[3px] text-xs font-semibold text-highlight-ink">
+              {FOCUS_LABELS[analysis.dailyFocus] ?? analysis.dailyFocus}
+            </span>
+            <span className="text-[13px] leading-snug text-muted-foreground">{analysis.focusReason}</span>
+          </div>
         </div>
-        <p className="text-xs text-emerald-900 leading-snug">{analysis.strength}</p>
-      </Card>
-
-      {/* Daily focus */}
-      <div className="flex items-start gap-2.5">
-        <span className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${focusBadge}`}>
-          {FOCUS_LABELS[analysis.dailyFocus] ?? analysis.dailyFocus}
-        </span>
-        <p className="text-xs text-muted-foreground leading-snug pt-0.5">{analysis.focusReason}</p>
       </div>
 
-      {/* Activities */}
-      <div className="space-y-2">
-        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Today's practice</p>
-        {analysis.activities.map((a, i) => (
-          <button
-            key={i}
-            onClick={() => handleActivity(a)}
-            className="w-full text-left group rounded-2xl border border-border bg-card px-4 py-3 transition-all hover:border-primary/40 hover:shadow-sm active:scale-[0.99]"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex-1 min-w-0 space-y-0.5">
-                <div className="flex items-center gap-2">
-                  <ActivityIcon type={a.type} />
-                  <span className="text-sm font-semibold text-foreground leading-tight truncate">{a.title}</span>
-                  <span className="text-[10px] font-medium text-muted-foreground/50 uppercase shrink-0">{a.level}</span>
-                </div>
-                <p className="text-xs text-muted-foreground leading-snug pl-[22px]">{a.reason}</p>
+      {/* Doing well */}
+      <div className="flex items-start gap-2.5 rounded-xl border border-border bg-card px-4 py-3">
+        <Star className="mt-0.5 h-4 w-4 shrink-0 text-primary" strokeWidth={2} />
+        <div className="flex flex-col gap-0.5">
+          <span className={eyebrow}>Doing well</span>
+          <p className="text-sm leading-snug text-foreground">{analysis.strength}</p>
+        </div>
+      </div>
+
+      {/* Today's plan */}
+      {first && (
+        <div className="flex flex-col gap-2.5">
+          <div className="flex items-baseline justify-between">
+            <span className="font-heading text-[19px] font-semibold text-foreground">Today's plan</span>
+            <span className="text-[13px] text-muted-foreground">
+              {analysis.activities.length} step{analysis.activities.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+
+          {/* Step 1: highlighted card */}
+          <div className="flex flex-col gap-3.5 rounded-xl border border-border bg-card p-4">
+            <div className="flex items-center gap-3.5">
+              <div className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-highlight text-[13px] font-bold text-highlight-foreground">1</div>
+              <div className="flex min-w-0 flex-1 flex-col gap-px">
+                <span className="font-heading text-lg font-semibold leading-snug text-foreground">{first.title}</span>
+                <span className="text-[13px] text-muted-foreground">{activityMeta(first)}</span>
+                {first.reason && <span className="text-[13px] leading-snug text-muted-foreground">{first.reason}</span>}
               </div>
-              <svg className="h-4 w-4 text-muted-foreground/30 group-hover:text-primary shrink-0 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-              </svg>
             </div>
-          </button>
-        ))}
-      </div>
+            <button
+              onClick={() => handleActivity(first)}
+              className="flex h-12 items-center justify-center gap-2 rounded-xl bg-primary text-[15px] font-semibold text-primary-foreground transition-opacity hover:opacity-90 active:scale-[0.99]"
+            >
+              Start <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+            </button>
+          </div>
 
-      {/* Skill balance */}
-      <div className="space-y-2.5">
-        <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Skill snapshot</p>
-        {([
-          { label: 'Grammar',    value: analysis.skillBalance.grammar,    color: 'bg-indigo-400' },
-          { label: 'Vocabulary', value: analysis.skillBalance.vocabulary, color: 'bg-amber-400'  },
-          { label: 'Production', value: analysis.skillBalance.production, color: 'bg-emerald-400'},
-        ] as const).map(({ label, value, color }) => (
-          <div key={label} className="flex items-center gap-3">
-            <span className="text-xs text-muted-foreground w-20 shrink-0">{label}</span>
-            <div className="flex-1 rounded-full bg-muted h-2 overflow-hidden">
-              <div className={`h-full rounded-full ${color} transition-all duration-700`} style={{ width: `${value}%` }} />
+          {/* Later steps */}
+          {rest.length > 0 && (
+            <div className="flex flex-col px-3">
+              {rest.map((a, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleActivity(a)}
+                  className="group flex items-center gap-3.5 rounded-lg px-1 py-3 text-left transition-colors hover:bg-accent/50"
+                >
+                  <div className="grid h-7 w-7 shrink-0 place-items-center rounded-full border-[1.5px] border-border text-[13px] font-semibold text-muted-foreground">
+                    {i + 2}
+                  </div>
+                  <div className="flex min-w-0 flex-1 flex-col gap-px">
+                    <span className="text-[15px] font-semibold leading-snug text-foreground">{a.title}</span>
+                    <span className="text-[13px] leading-snug text-muted-foreground">
+                      {activityMeta(a)}{a.reason ? ` · ${a.reason}` : ''}
+                    </span>
+                  </div>
+                  <ActivityIcon type={a.type} className="h-[22px] w-[22px] shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
+                </button>
+              ))}
             </div>
-            <span className="text-xs font-mono text-muted-foreground w-7 text-right">{value}%</span>
+          )}
+        </div>
+      )}
+
+      {/* Skill snapshot */}
+      <div className="flex flex-col gap-2.5 rounded-xl border border-border bg-card px-4 py-3.5">
+        <span className={eyebrow}>Skill snapshot</span>
+        {([
+          { label: 'Grammar',    value: analysis.skillBalance.grammar },
+          { label: 'Vocabulary', value: analysis.skillBalance.vocabulary },
+          { label: 'Production', value: analysis.skillBalance.production },
+        ] as const).map(({ label, value }) => (
+          <div key={label} className="flex items-center gap-3">
+            <span className="w-20 shrink-0 text-[13px] text-muted-foreground">{label}</span>
+            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-track">
+              <div className="h-full rounded-full bg-primary transition-all duration-700" style={{ width: `${value}%` }} />
+            </div>
+            <span className="w-9 text-right text-[13px] tabular-nums text-muted-foreground">{value}%</span>
           </div>
         ))}
       </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
-import { Settings2, Volume2, CheckCircle2, Loader2 } from 'lucide-react';
+import { Settings2, Volume2, Check, Loader2, X } from 'lucide-react';
 import {
   getVoicePreset, setVoicePreset,
   VOICE_LABELS, type VoicePreset,
@@ -40,65 +40,73 @@ export function VoiceSettings({ visible = false }: { visible?: boolean }) {
       {visible && (
         <button
           onClick={() => setOpen(true)}
-          className="fixed bottom-36 right-4 z-40 flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border shadow-md hover:bg-secondary transition-all active:scale-95"
+          className="fixed bottom-36 right-4 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-border bg-card shadow-sm transition-all hover:bg-secondary active:scale-95"
           aria-label="Voice settings"
         >
-          <Settings2 className="h-4.5 w-4.5 text-muted-foreground" style={{ width: 18, height: 18 }} />
+          <Settings2 className="h-[18px] w-[18px] text-foreground" />
         </button>
       )}
 
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent side="bottom" className="h-auto max-h-[85vh] flex flex-col p-0 rounded-t-2xl overflow-y-auto">
-          <SheetHeader className="px-5 pt-5 pb-4 border-b border-border shrink-0">
+        <SheetContent side="bottom" className="mx-auto flex h-auto max-h-[85vh] max-w-lg flex-col overflow-y-auto rounded-t-2xl bg-background p-0">
+          <SheetHeader className="shrink-0 px-5 pt-5 pb-3 text-left">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Volume2 className="h-5 w-5 text-primary" />
-                <SheetTitle className="text-base font-bold">Voice Settings</SheetTitle>
-              </div>
-              <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground">
-                ✕
+              <SheetTitle className="font-heading text-[22px] font-semibold tracking-[-0.01em]">Voice settings</SheetTitle>
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close"
+                className="-mr-2 rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground"
+              >
+                <X className="h-5 w-5" />
               </button>
             </div>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Natural AI voices
-            </p>
+            <p className="text-[13px] text-muted-foreground">Natural AI voices</p>
           </SheetHeader>
 
-          <div className="px-5 py-5 space-y-6 overflow-y-auto">
-
-            {/* Voice picker */}
-            <div className="space-y-3">
-              <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Choose a voice</p>
-              <div className="flex flex-col gap-2">
-                {(Object.entries(VOICE_LABELS) as [VoicePreset, typeof VOICE_LABELS[VoicePreset]][]).map(([id, info]) => (
+          <div className="flex flex-col gap-2 px-5 pb-6">
+            <span className="pl-1 text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+              Choose a voice
+            </span>
+            <div className="flex flex-col gap-2" role="radiogroup" aria-label="Voice">
+              {(Object.entries(VOICE_LABELS) as [VoicePreset, typeof VOICE_LABELS[VoicePreset]][]).map(([id, info]) => {
+                const selected = preset === id;
+                return (
                   <div
                     key={id}
-                    className={`flex items-center gap-3 rounded-xl border-2 p-3 transition-all cursor-pointer ${
-                      preset === id ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/40'
-                    }`}
+                    role="radio"
+                    aria-checked={selected}
+                    tabIndex={0}
                     onClick={() => handleSelectPreset(id)}
+                    onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleSelectPreset(id); } }}
+                    className={`flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition-colors ${
+                      selected ? 'border-primary bg-accent' : 'border-border bg-card hover:border-primary/40'
+                    }`}
                   >
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground">{info.name}</p>
-                      <p className="text-xs text-muted-foreground">{info.desc}</p>
+                    <div className={`grid h-5 w-5 shrink-0 place-items-center rounded-full ${
+                      selected ? 'bg-primary text-primary-foreground' : 'border-2 border-border'
+                    }`}>
+                      {selected && <Check className="h-3 w-3" strokeWidth={3} />}
                     </div>
-                    {preset === id && <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />}
+                    <div className="min-w-0 flex-1">
+                      <p className={`text-[15px] font-semibold ${selected ? 'text-accent-foreground' : 'text-foreground'}`}>{info.name}</p>
+                      <p className="text-[13px] text-muted-foreground">{info.desc}</p>
+                    </div>
                     <button
                       onClick={e => { e.stopPropagation(); handlePreview(id); }}
                       disabled={!!previewing}
-                      className="shrink-0 flex items-center gap-1 rounded-full border border-border bg-secondary px-2.5 py-1 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors disabled:opacity-50"
+                      className="flex shrink-0 items-center gap-1 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-secondary disabled:opacity-50"
                     >
                       {previewing === id
-                        ? <><Loader2 className="h-3 w-3 animate-spin" /> Playing…</>
-                        : <><Volume2 className="h-3 w-3" /> Preview</>
+                        ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Playing…</>
+                        : <><Volume2 className="h-3.5 w-3.5 text-primary" /> Preview</>
                       }
                     </button>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
 
-            <p className="text-xs text-muted-foreground text-center pb-2">
+            <p className="pt-2 text-center text-xs text-muted-foreground">
               Audio is cached per session — each text is only fetched once.
             </p>
           </div>
