@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Pip } from '@/components/Pip';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
@@ -128,9 +129,12 @@ export function AuthScreen() {
           </div>
         ) : (
           <>
-            <h2 className="font-heading text-[22px] font-semibold">
-              {mode === 'login' ? 'Welcome back' : 'Create your account'}
-            </h2>
+            <div className="flex items-center gap-3">
+              <Pip pose="wave" size={56} decorative />
+              <h2 className="font-heading text-[22px] font-semibold">
+                {mode === 'login' ? 'Welcome back' : 'Create your account'}
+              </h2>
+            </div>
 
             <form onSubmit={handle} className="flex flex-col gap-3">
               <label className="flex flex-col gap-1.5">

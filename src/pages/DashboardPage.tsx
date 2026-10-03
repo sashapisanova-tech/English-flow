@@ -1,4 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
+import { Pip } from '@/components/Pip';
+import { PipCelebration } from '@/components/PipCelebration';
+import { homeGreeting } from '@/lib/pip';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useLearning } from '@/context/LearningContext';
 import { useAuth } from '@/context/AuthContext';
@@ -232,6 +235,7 @@ export default function DashboardPage() {
           />
         )}
         {activeTab === 'progress' && <MeView key={tabResetKeys.progress} />}
+        <PipCelebration />
       </div>
 
       {/* Reading onboarding — shown once on first visit to the Read tab */}
@@ -291,6 +295,14 @@ function toLocalYMD(d: Date): string {
   return d.toLocaleDateString('en-CA');
 }
 
+/** Whole days between a YYYY-MM-DD date and today (local), or null when there is none. */
+function daysSince(date: string | null, now: Date): number | null {
+  if (!date) return null;
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const [y, m, d] = date.split('-').map(Number);
+  return Math.round((today.getTime() - new Date(y, m - 1, d).getTime()) / 86_400_000);
+}
+
 function greetingFor(hour: number): string {
   if (hour < 12) return 'Good morning';
   if (hour < 18) return 'Good afternoon';
@@ -325,6 +337,13 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
   const dateLabel = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
   const firstName = firstNameOf(user?.user_metadata);
   const greeting = `${greetingFor(now.getHours())}${firstName ? `, ${firstName}` : ''}`;
+  const pip = homeGreeting({
+    hour: now.getHours(),
+    minutesToday: activeSecondsToday / 60,
+    goalMinutes: dailyGoalMinutes,
+    streak: streak.currentStreak,
+    daysSinceGoal: daysSince(streak.lastActivityDate, now),
+  });
 
   // Today's goal: active minutes vs the daily time goal; cards and words as a secondary line
   const activeMinutes = Math.floor(activeSecondsToday / 60);
@@ -389,6 +408,15 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
       <div className="flex flex-col gap-0.5 lg:gap-1">
         <span className="text-[13px] text-muted-foreground lg:text-sm">{dateLabel}</span>
         <h1 className="font-heading text-[28px] font-semibold leading-tight tracking-[-0.015em] text-foreground lg:text-[40px] lg:tracking-[-0.02em]">{greeting}</h1>
+      </div>
+
+      {/* Pip's line for today */}
+      <div className="flex items-center gap-3">
+        <Pip pose={pip.pose} size={64} decorative />
+        <div className="relative rounded-xl border bg-card/90 px-3.5 py-2.5 backdrop-blur-[4px]">
+          <p className="text-sm font-medium leading-snug text-foreground">{pip.line.en}</p>
+          <p className="text-xs leading-snug text-muted-foreground">{pip.line.ru}</p>
+        </div>
       </div>
 
       {/* Phones: one column (goal, streak, reading, tutor).

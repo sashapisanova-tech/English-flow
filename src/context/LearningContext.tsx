@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode } from 'react';
+import { celebrate, STREAK_MILESTONES } from '@/lib/pip';
 import { isLegacyDutchWord, isLegacyTextId } from '@/lib/legacyDutch';
 import { DutchWord, WordStatus, DailyGoal, ReadingText } from '@/types/dutch';
 import { generateExampleSentence } from '@/utils/sentenceUtils';
@@ -139,15 +140,12 @@ export function LearningProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (!goalMetToday || streakState.lastActivityDate === activeTime.today) return;
-    recordGoalMet().then(({ recorded, freezeConsumed }) => {
+    recordGoalMet().then(({ recorded, freezeConsumed, currentStreak }) => {
       if (!recorded) return;
-      toast('Daily goal reached — streak +1', { duration: 4000 });
-      if (freezeConsumed) {
-        toast('🧊 Streak saved by freeze!', {
-          description: 'A freeze was automatically used to protect your streak.',
-          duration: 6000,
-        });
-      }
+      // Pip celebrates: freeze first (it explains the streak), then milestone or goal
+      if (freezeConsumed) celebrate({ kind: 'freeze', streak: currentStreak });
+      if (STREAK_MILESTONES.includes(currentStreak)) celebrate({ kind: 'milestone', streak: currentStreak });
+      else celebrate({ kind: 'goal', minutes: activeTime.goalMinutes, streak: currentStreak });
     });
   }, [goalMetToday, activeTime.today, activeTime.todaySeconds, streakState.lastActivityDate, recordGoalMet]);
 

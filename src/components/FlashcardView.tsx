@@ -1,4 +1,5 @@
 import { useState, useMemo, useRef, type ReactNode } from 'react';
+import { Pip } from '@/components/Pip';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check, X, RotateCcw, ArrowLeft, ArrowRight, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2, Pencil, Search, Bookmark, Archive, Folder, FolderOpen, CircleCheck } from 'lucide-react';
@@ -909,7 +910,7 @@ export function FlashcardView() {
           <Button variant="ghost" className="self-start mb-4" onClick={goBack}>
             <ArrowLeft className="h-4 w-4 mr-1" /> Back
           </Button>
-          <div className="rounded-2xl bg-accent p-6 mb-4"></div>
+          <Pip pose="think" size={128} className="mb-3" decorative />
           <h3 className="font-heading text-xl font-semibold text-foreground">No words yet</h3>
           <p className="mt-2 max-w-sm text-muted-foreground">
             Practice any flashcard set below — every card you rate will be automatically added to your spaced repetition queue.
@@ -953,8 +954,7 @@ export function FlashcardView() {
           <Button variant="ghost" className="self-start mb-4" onClick={goBack}>
             <ArrowLeft className="h-4 w-4 mr-1" /> Back
           </Button>
-          <div className="rounded-2xl bg-success/10 p-6 mb-4">
-          </div>
+          <Pip pose={nothingWasDue ? 'sleepy' : 'happy'} size={128} className="mb-3" decorative />
           <h3 className="font-heading text-xl font-semibold text-foreground">
             {nothingWasDue ? 'Nothing due today' : 'All caught up!'}
           </h3>
@@ -996,7 +996,7 @@ export function FlashcardView() {
         <Button variant="ghost" className="self-start mb-4" onClick={goBack}>
           <ArrowLeft className="h-4 w-4 mr-1" /> Back
         </Button>
-        <div className="rounded-2xl bg-success/10 p-6 mb-4"></div>
+        <Pip pose="happy" size={128} className="mb-3" decorative />
         <h3 className="font-heading text-xl font-semibold text-foreground">Set complete!</h3>
         <p className="mt-2 max-w-sm text-muted-foreground">
           You've finished "{activeSet?.title}".

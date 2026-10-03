@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
+import { celebrate } from '@/lib/pip';
 import { ReadingText } from '@/types/dutch';
 import { recordTextRead } from '@/lib/textReadHistory';
 import { WordPopover, WordDetails, WordSelectionContext } from '@/components/WordPopover';
@@ -626,6 +627,8 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
 
   function handleSubmitQuiz() {
     setQuizSubmitted(true);
+    // Pip celebrates the first time an episode is finished
+    if (!text.completed) celebrate({ kind: 'story', title: text.title, onNext });
     markTextCompleted(text.id);
   }
 

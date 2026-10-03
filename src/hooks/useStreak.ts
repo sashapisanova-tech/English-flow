@@ -84,8 +84,8 @@ export function useStreak(userId: string | null) {
    * Call when today's active time reaches the daily goal.
    * Safe to call repeatedly — the streak changes at most once per day.
    */
-  const recordGoalMet = useCallback(async (): Promise<{ recorded: boolean; freezeConsumed: boolean }> => {
-    const none = { recorded: false, freezeConsumed: false };
+  const recordGoalMet = useCallback(async (): Promise<{ recorded: boolean; freezeConsumed: boolean; currentStreak: number }> => {
+    const none = { recorded: false, freezeConsumed: false, currentStreak: 0 };
     if (!userId) return none;
 
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -151,7 +151,7 @@ export function useStreak(userId: string | null) {
         };
       });
 
-      return { recorded: true, freezeConsumed };
+      return { recorded: true, freezeConsumed, currentStreak: next.currentStreak };
     } catch {
       return none;
     } finally {

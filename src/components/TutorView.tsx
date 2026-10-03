@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Pip } from '@/components/Pip';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Star, RefreshCw, BookOpen, MessageCircleMore, Layers, Languages, AlertCircle, GraduationCap, ArrowRight } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -278,7 +279,7 @@ Rules:
   if (!analysis) {
     return (
       <div className="flex flex-col items-center gap-2.5 rounded-xl border border-border bg-card px-5 py-[22px] text-center lg:px-8 lg:py-7">
-        {tutorAvatar('lg')}
+        <Pip pose="think" size={88} decorative />
         <p className="mt-1 font-heading text-xl font-semibold text-foreground">Get today's study plan</p>
         <p className="max-w-[440px] text-sm leading-normal text-muted-foreground text-pretty">
           Your AI tutor looks at your reading, words and practice, then tells you what to focus on today.
