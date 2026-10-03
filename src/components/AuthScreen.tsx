@@ -49,6 +49,17 @@ const inputClass =
   'h-[50px] w-full rounded-xl border border-border bg-card px-3.5 text-[15px] text-foreground lg:bg-background ' +
   'placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-[0.5px] focus:ring-primary';
 
+/** Supabase auth errors are technical; show learners what happened and what to do. */
+function friendlyAuthError(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes('rate limit')) return 'Too many sign-up emails were sent in the last hour. Please try again later, or continue with Google.';
+  if (m.includes('invalid login credentials')) return 'Wrong email or password.';
+  if (m.includes('email not confirmed')) return 'Please confirm your email first: check your inbox for our link.';
+  if (m.includes('already registered')) return 'This email already has an account. Log in instead.';
+  if (m.includes('password should be at least')) return 'The password needs at least 6 characters.';
+  return message;
+}
+
 export function AuthScreen() {
   const { signIn, signUp, signInWithGoogle } = useAuth();
 
@@ -67,10 +78,10 @@ export function AuthScreen() {
 
     if (mode === 'login') {
       const { error } = await signIn(email, password);
-      if (error) setError(error);
+      if (error) setError(friendlyAuthError(error));
     } else {
       const { error } = await signUp(email, password);
-      if (error) setError(error);
+      if (error) setError(friendlyAuthError(error));
       else setSuccess(true);
     }
 
