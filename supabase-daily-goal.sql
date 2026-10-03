@@ -29,6 +29,10 @@ END $$;
 
 ALTER TABLE public.user_stats ADD COLUMN IF NOT EXISTS daily_goal_minutes INTEGER;
 
+-- user_stats.daily_expression: the "expression of the day" (today's item, its date and
+-- the last 30 expressions), so the once-a-day limit and the result follow the account.
+ALTER TABLE public.user_stats ADD COLUMN IF NOT EXISTS daily_expression JSONB;
+
 -- Check
 SELECT table_name, column_name, data_type, column_default
 FROM information_schema.columns

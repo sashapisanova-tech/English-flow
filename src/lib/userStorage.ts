@@ -15,6 +15,7 @@ const USER_DATA_KEYS = [
   'english-past-errors-v1',
   'english-tutor-daily-cache',
   'english-tutor-daily-cache-v2',
+  'english-daily-expression-v1',
   'english-translate-last-hard-grammar',
   'english-custom-sets-v1',
   'english-text-reads',

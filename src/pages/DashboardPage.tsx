@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import { DailyExpressionCard } from '@/components/DailyExpressionCard';
 import { Pip } from '@/components/Pip';
 import { PipCelebration } from '@/components/PipCelebration';
 import { homeGreeting } from '@/lib/pip';
@@ -517,6 +518,9 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
           </button>
         </div>
       )}
+
+      {/* Expression of the day */}
+      <DailyExpressionCard />
 
       {/* AI tutor */}
       <TutorView
