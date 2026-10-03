@@ -130,7 +130,7 @@ export function AuthScreen() {
         ) : (
           <>
             <div className="flex items-center gap-3">
-              <Pip pose="wave" size={56} decorative />
+              <Pip pose="flag" size={72} decorative />
               <h2 className="font-heading text-[22px] font-semibold">
                 {mode === 'login' ? 'Welcome back' : 'Create your account'}
               </h2>

@@ -6,7 +6,7 @@ import { homeGreeting } from '@/lib/pip';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useLearning } from '@/context/LearningContext';
 import { useAuth } from '@/context/AuthContext';
-import { getTextReadHistory } from '@/lib/textReadHistory';
+import { getContinueText } from '@/lib/continueReading';
 import { BookOpen, Layers, Target, House, Cloud, User, Flame, Check, ArrowRight, Snowflake } from 'lucide-react';
 import { TextList } from '@/components/TextList';
 import { ReadingView } from '@/components/ReadingView';
@@ -15,8 +15,12 @@ import { ProgressView } from '@/components/ProgressView';
 import { TasksView } from '@/components/TasksView';
 import { MeView } from '@/components/MeView';
 import { VoiceSettings } from '@/components/VoiceSettings';
-import { ReadingText, Level, Module } from '@/types/dutch';
-import { ReadingOnboarding, useReadingOnboarding } from '@/components/ReadingOnboarding';
+import { ReadingText, Level } from '@/types/dutch';
+import { AppOnboarding } from '@/components/AppOnboarding';
+import { CoachMark } from '@/components/CoachMark';
+import { useCoachMark } from '@/hooks/useCoachMark';
+import { firstStoryFor, getStartLevel, isTourDone, resetTour, type TourLevel } from '@/lib/tour';
+import { setTipsBlocked, TIP_KEYS } from '@/lib/coachMarks';
 import { TutorView } from '@/components/TutorView';
 import { DailyGoalPicker } from '@/components/DailyGoalPicker';
 
@@ -30,7 +34,6 @@ export default function DashboardPage() {
   // A task open in the Tasks tab shows its own header (back arrow + task title)
   const [taskOpen, setTaskOpen] = useState(false);
   const [readingLevel, setReadingLevel] = useState<Level | null>(null);
-  const [readingModule, setReadingModule] = useState<Module | null>(null);
   const [tutorLaunch, setTutorLaunch] = useState<TutorLaunch>(null);
   const { syncing, dueCount, vocabulary, streak } = useLearning();
   const { user } = useAuth();
@@ -61,7 +64,25 @@ export default function DashboardPage() {
   ];
 
   const { texts } = useLearning();
-  const { show: showReadingOnboarding, dismiss: dismissReadingOnboarding } = useReadingOnboarding();
+
+  // First-run tour (also replayed from Me → Show app tour). No tips while it is open.
+  const [showTour, setShowTour] = useState(() => !isTourDone());
+  useEffect(() => {
+    const replay = () => { resetTour(); setShowTour(true); };
+    window.addEventListener('show-app-tour', replay);
+    return () => window.removeEventListener('show-app-tour', replay);
+  }, []);
+  useEffect(() => { setTipsBlocked(showTour); }, [showTour]);
+
+  function handleTourDone({ story }: { story: TourLevel | null }) {
+    setShowTour(false);
+    if (!story) return;
+    const text = firstStoryFor(texts, story);
+    if (!text) return;
+    setReadingLevel(text.level);
+    setSelectedText(text);
+    setActiveTab('reading');
+  }
 
   function handleTutorLaunch(task: 'translate' | 'dialogue', grammarFocus?: string, level?: string) {
     setTutorLaunch({ task, grammarFocus, level });
@@ -80,6 +101,8 @@ export default function DashboardPage() {
   }
 
   const handleSelectText = (text: ReadingText) => {
+    // Back from the text returns to the library at the text's level
+    setReadingLevel(text.level);
     setSelectedText(text);
     setActiveTab('reading');
   };
@@ -96,21 +119,18 @@ export default function DashboardPage() {
     if (idx > 0) setSelectedText(texts[idx - 1]);
   };
 
-  const pageTitle =
-    activeTab === 'reading' ? 'Reading Library' :
-    activeTab === 'flashcards' ? 'Flashcards' :
-    'Tasks';
+  const pageTitle = 'Tasks';
 
-  // No shell title on Home (own header), on Me (MeView has its own header) or
-  // while a text is open (ReadingView shows its own title).
-  // Cards has its own heading on the overview and none during practice
-  const showPageTitle = activeTab !== 'home' && activeTab !== 'progress' && activeTab !== 'flashcards' && !(activeTab === 'reading' && selectedText) && !(activeTab === 'tasks' && taskOpen);
+  // Only Tasks uses the shell title. Home, Read (Library), Cards and Me have their
+  // own headers, and an open task shows its own back arrow + title.
+  const showPageTitle = activeTab === 'tasks' && !taskOpen;
 
   function goTab(key: Tab) {
     setTabResetKeys(prev => ({ ...prev, [key]: prev[key] + 1 }));
     setActiveTab(key);
     setSelectedText(null);
-    if (key === 'reading') { setReadingLevel(null); setReadingModule(null); }
+    // The library opens at the level picked in the tour (if any)
+    if (key === 'reading') setReadingLevel(getStartLevel());
   }
 
   const dueBadge = dueCount > 99 ? '99+' : String(dueCount);
@@ -204,6 +224,7 @@ export default function DashboardPage() {
             onTutorLaunch={handleTutorLaunch}
             onTutorOpenText={handleTutorOpenText}
             onGoToFlashcards={handleGoToFlashcards}
+            tipsAllowed={!showTour}
           />
         )}
 
@@ -221,8 +242,6 @@ export default function DashboardPage() {
             onSelect={handleSelectText}
             openLevel={readingLevel}
             setOpenLevel={setReadingLevel}
-            openModule={readingModule}
-            setOpenModule={setReadingModule}
           />
         )}
 
@@ -239,10 +258,7 @@ export default function DashboardPage() {
         <PipCelebration />
       </div>
 
-      {/* Reading onboarding — shown once on first visit to the Read tab */}
-      {activeTab === 'reading' && showReadingOnboarding && (
-        <ReadingOnboarding onDone={dismissReadingOnboarding} />
-      )}
+      {showTour && <AppOnboarding onDone={handleTourDone} />}
 
       {/* Voice settings — only visible while reading a text */}
       <VoiceSettings visible={(activeTab === 'reading' && !!selectedText) || activeTab === 'flashcards'} />
@@ -288,6 +304,8 @@ interface HomeScreenProps {
   onTutorLaunch: (task: 'translate' | 'dialogue', grammarFocus?: string, level?: string) => void;
   onTutorOpenText: (textId: string) => void;
   onGoToFlashcards: () => void;
+  /** False while the tour is open. */
+  tipsAllowed: boolean;
 }
 
 const WEEKDAY_LETTERS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
@@ -329,10 +347,12 @@ function firstNameOf(metadata: unknown): string | undefined {
   return rawName?.trim().split(/\s+/)[0];
 }
 
-function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOpenText, onGoToFlashcards }: HomeScreenProps) {
+function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOpenText, onGoToFlashcards, tipsAllowed }: HomeScreenProps) {
   const { user } = useAuth();
   const { texts, dailyGoal, streak, activeSecondsToday, dailyGoalMinutes, setDailyGoalMinutes } = useLearning();
   const [goalPickerOpen, setGoalPickerOpen] = useState(false);
+  // Tip on the goal ring, the first time Home shows after the tour
+  const goalTip = useCoachMark(TIP_KEYS.homeGoal, tipsAllowed);
 
   const now = new Date();
   const dateLabel = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
@@ -364,21 +384,7 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
     return { letter, ymd, done: activeDays.has(ymd), today: ymd === todayYMD };
   });
 
-  // Continue reading: the most recently opened text; if finished, the next unfinished one
-  const reading = useMemo(() => {
-    const history = getTextReadHistory();
-    let lastIdx = -1;
-    let lastAt = '';
-    texts.forEach((t, i) => {
-      const rec = history[t.id];
-      if (rec && rec.lastReadAt > lastAt) { lastAt = rec.lastReadAt; lastIdx = i; }
-    });
-    if (lastIdx >= 0 && !texts[lastIdx].completed) {
-      return { text: texts[lastIdx], label: 'Continue reading', cta: 'Continue' };
-    }
-    const next = texts.slice(lastIdx + 1).find(t => !t.completed) ?? texts.find(t => !t.completed);
-    return next ? { text: next, label: lastIdx >= 0 ? 'Up next' : 'Start reading', cta: 'Start reading' } : null;
-  }, [texts]);
+  const reading = useMemo(() => getContinueText(texts), [texts]);
 
   return (
     <div className="relative -mx-5 -mt-4 px-5 pt-4 lg:mx-auto lg:mt-0 lg:max-w-[1000px] lg:px-0 lg:pt-0">
@@ -424,6 +430,17 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
           Laptops: reading + tutor on the left (1.5fr), goal + streak on the right (1fr). */}
       <div className="contents lg:grid lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] lg:items-start lg:gap-5">
       <div className="contents lg:col-start-2 lg:row-start-1 lg:flex lg:flex-col lg:gap-5">
+      {goalTip.show && (
+        <CoachMark
+          icon={Target}
+          title="Your goal ring fills as you practise"
+          ru="Кольцо заполняется, пока вы занимаетесь."
+          arrow="bottom"
+          align="end"
+          onDismiss={goalTip.dismiss}
+        />
+      )}
+
       {/* Today's goal — tap to change the daily goal */}
       <div className={`relative shrink-0 overflow-hidden ${cardSurface}`}>
         <button
@@ -519,15 +536,15 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
         </div>
       )}
 
-      {/* Expression of the day */}
-      <DailyExpressionCard />
-
       {/* AI tutor */}
       <TutorView
         onLaunchTask={onTutorLaunch}
         onOpenText={onTutorOpenText}
         onGoToFlashcards={onGoToFlashcards}
       />
+
+      {/* Expression of the day */}
+      <DailyExpressionCard />
       </div>
       </div>
     </div>

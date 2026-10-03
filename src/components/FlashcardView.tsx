@@ -1,8 +1,10 @@
 import { useState, useMemo, useRef, type ReactNode } from 'react';
 import { Pip } from '@/components/Pip';
 import { Card } from '@/components/ui/card';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
-import { Check, X, RotateCcw, ArrowLeft, ArrowRight, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2, Pencil, Search, Bookmark, Archive, Folder, FolderOpen, CircleCheck } from 'lucide-react';
+import { Check, X, RotateCcw, ArrowLeft, ArrowRight, ChevronRight, ArrowLeftRight, GraduationCap, Plus, ChevronDown, Shuffle, BookmarkPlus, RefreshCw, Volume2, Trash2, Pencil, Search, Bookmark, Archive, Folder, FolderOpen, CircleCheck, BookOpen, SlidersHorizontal } from 'lucide-react';
 import { playDutch, stopDutch } from '@/utils/playDutch';
 import { useLearning } from '@/context/LearningContext';
 import { flashcardSets } from '@/data/flashcardSets';
@@ -13,6 +15,9 @@ import type { CustomSet } from '@/hooks/useCustomSets';
 import { CustomSetEditor, CreateSetModal } from '@/components/CustomSetEditor';
 import { fsrsPreviewInterval, FSRSCard, FSRSRating } from '@/utils/fsrs';
 import { NEW_CARDS_DAILY_LIMIT } from '@/context/LearningContext';
+import { CoachMark } from '@/components/CoachMark';
+import { useCoachMark } from '@/hooks/useCoachMark';
+import { TIP_KEYS } from '@/lib/coachMarks';
 
 type SRSRating = 'again' | 'hard' | 'good' | 'easy';
 
@@ -34,6 +39,78 @@ const LEVELS = ['A1', 'A2', 'B1'] as const;
 // Folders shown as collapsible groups inside an opened level; 'Core' sets are listed directly.
 const FOLDERS = ['Verbs', 'Nouns', 'Adjectives'] as const;
 const LEVEL_NAMES: Record<string, string> = { A1: 'Beginner', A2: 'Elementary', B1: 'Intermediate' };
+// Level badges: navy, red, gold (as the story covers in Read)
+const LEVEL_TONES: Record<string, { bg: string; ink: string; bar: string }> = {
+  A1: { bg: 'bg-accent', ink: 'text-primary', bar: 'bg-primary' },
+  A2: { bg: 'bg-highlight-soft', ink: 'text-highlight', bar: 'bg-highlight' },
+  B1: { bg: 'bg-gold-soft', ink: 'text-gold-ink', bar: 'bg-gold-ink' },
+};
+
+/** About 17 seconds a card. */
+function reviewMinutes(cards: number): string {
+  const min = Math.max(1, Math.round((cards * 17) / 60));
+  return `About ${min} minute${min !== 1 ? 's' : ''}`;
+}
+
+/** Three stacked cards with the next word on top (Cards hero). */
+function CardStack({ word }: { word: string }) {
+  return (
+    <div className="relative h-[104px] w-24 shrink-0" aria-hidden="true">
+      <div className="absolute left-3.5 top-0.5 h-[92px] w-[70px] rotate-[10deg] rounded-[10px] bg-white/[0.18]" />
+      <div className="absolute left-2 top-1.5 h-[92px] w-[70px] rotate-[4deg] rounded-[10px] bg-white/35" />
+      <div className="absolute left-1 top-2.5 flex h-[92px] w-[70px] -rotate-[4deg] flex-col items-center justify-center gap-1 rounded-[10px] bg-white px-1.5 shadow-[0_8px_16px_-8px_hsl(220_62%_10%/0.5)]">
+        <span className="max-w-full truncate font-heading text-sm font-semibold text-[hsl(20_20%_14%)]">{word}</span>
+        <span className="h-0.5 w-[18px] rounded-sm bg-[hsl(354_72%_46%)]" />
+      </div>
+    </div>
+  );
+}
+
+/** Sliders button → card direction and shuffle. */
+function CardSettings({ direction, onDirectionChange, shuffle, onShuffleChange }: {
+  direction: Direction;
+  onDirectionChange: (d: Direction) => void;
+  shuffle: boolean;
+  onShuffleChange: (on: boolean) => void;
+}) {
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <button type="button" aria-label="Card settings" className="-mr-2.5 rounded-xl p-2.5 text-foreground transition-colors hover:bg-secondary">
+          <SlidersHorizontal className="h-[22px] w-[22px]" strokeWidth={2.25} />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent align="end" className="flex w-72 flex-col gap-4 rounded-xl p-4">
+        <div className="flex flex-col gap-2">
+          <span className="text-[13px] font-semibold text-foreground">Card front shows</span>
+          <div className="grid grid-cols-2 gap-1 rounded-lg bg-secondary p-1" role="radiogroup" aria-label="Card front shows">
+            {([['ru-to-en', 'Russian'], ['en-to-ru', 'English']] as const).map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                role="radio"
+                aria-checked={direction === value}
+                onClick={() => onDirectionChange(value)}
+                className={`h-8 rounded-md text-[13px] font-semibold transition-colors ${
+                  direction === value ? 'bg-card text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <label className="flex items-center justify-between gap-3">
+          <span className="flex flex-col">
+            <span className="text-[13px] font-semibold text-foreground">Shuffle sets</span>
+            <span className="text-xs text-muted-foreground">Mix the order of words in a set</span>
+          </span>
+          <Switch checked={shuffle} onCheckedChange={onShuffleChange} />
+        </label>
+      </PopoverContent>
+    </Popover>
+  );
+}
 
 /** Toggle `key` in a Set held in state. */
 function toggleIn(setter: (fn: (prev: Set<string>) => Set<string>) => void, key: string) {
@@ -58,9 +135,14 @@ export function FlashcardView() {
   const [activeCustomSet, setActiveCustomSet] = useState<CustomSet | null>(null);
   const [openLevels, setOpenLevels]   = useState<Set<string>>(new Set());
   const [openFolders, setOpenFolders] = useState<Set<string>>(new Set());
+  // Tip, once, on the overview when nothing is due
+  // (needs saved words: "All caught up" means nothing left to review, not an empty deck)
+  const caughtUpTip = useCoachMark(TIP_KEYS.cardsCaughtUp, mode === 'browse' && dueCount === 0 && Object.keys(vocabulary).length > 0);
   const [selectedLevel, setSelectedLevel] = useState<string | null>(null); // laptop: level shown in the side panel
   const [practiceQueue, setPracticeQueue] = useState<FlashcardSetWord[]>([]);
   const [isShuffled, setIsShuffled]     = useState(false);
+  // Settings sheet: start prepared and custom sets shuffled
+  const [shufflePref, setShufflePref]   = useState(false);
   const [savedWords, setSavedWords]     = useState<Set<string>>(new Set());
   // My-Words session state
   const [sessionQueue,    setSessionQueue]    = useState<DutchWord[]>([]);
@@ -151,8 +233,8 @@ export function FlashcardView() {
 
   const startSet = (set: FlashcardSet) => {
     setActiveSet(set);
-    setPracticeQueue([...set.words]);
-    setIsShuffled(false);
+    setPracticeQueue(shufflePref ? [...set.words].sort(() => Math.random() - 0.5) : [...set.words]);
+    setIsShuffled(shufflePref);
     setSavedWords(new Set());
     setMode('set-practice');
     setCurrentIndex(0);
@@ -360,7 +442,12 @@ export function FlashcardView() {
       </div>
     );
     const plural = (n: number, word: string) => `${n} ${word}${n !== 1 ? 's' : ''}`;
-    const hasMySets = activeWords.length > 0 || customSets.length > 0 || learnedWords.length > 0 || ignoredWords.length > 0;
+    // Vocabulary keeps insertion order, so the last saved words come last
+    const recentWords = activeWords.slice(-6).reverse();
+    const dueSample = getWordsDueForReview()[0]?.dutch ?? recentWords[0]?.dutch ?? 'flatmate';
+    const openWordList = (search: string) => {
+      setWordListSearch(search); setEditingWord(null); setConfirmDeleteWord(null); setMode('word-list');
+    };
 
     // Laptop (lg): the selected level's sets are shown in a panel next to the level cards.
     const deskLevel = levels.find(l => l.level === selectedLevel) ?? levels[0];
@@ -398,65 +485,129 @@ export function FlashcardView() {
     return (
       <div className="animate-fade-in mx-auto flex max-w-md flex-col gap-[22px] pb-6 lg:grid lg:max-w-none lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start lg:gap-10 lg:pb-28 lg:pt-1">
         <div className="flex flex-col gap-[22px] lg:gap-6">
-        <h1 className="font-heading text-[28px] font-semibold leading-tight tracking-[-0.015em] text-foreground lg:text-4xl lg:tracking-[-0.02em]">Cards</h1>
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="font-heading text-[28px] font-semibold leading-tight tracking-[-0.015em] text-foreground lg:text-4xl lg:tracking-[-0.02em]">Cards</h1>
+          <CardSettings
+            direction={direction}
+            onDirectionChange={setDirection}
+            shuffle={shufflePref}
+            onShuffleChange={setShufflePref}
+          />
+        </div>
 
-        {/* Due cards (spaced repetition) */}
-        {allWords.length > 0 && (
-          <Card
-            className="card-hover flex cursor-pointer items-center gap-3.5 p-4 lg:flex-col lg:items-stretch lg:p-[22px]"
-            onClick={startMyWords}
-          >
-            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-              <span className="font-heading text-[22px] font-semibold leading-tight text-foreground lg:text-[26px]">
-                {dueCount > 0 ? `${dueCount} card${dueCount !== 1 ? 's' : ''} due` : 'All caught up'}
-              </span>
-              <span className="text-[13px] text-muted-foreground">
-                {dueCount > 0
-                  ? `${reviewDue} to review · ${newDue} new`
-                  : `${plural(activeWords.length, 'word')} in review · come back tomorrow`}
-              </span>
+        {/* Due today (spaced repetition) */}
+        {allWords.length === 0 ? (
+          <div className="flex items-center gap-3.5 rounded-[14px] bg-hero px-[18px] py-4 text-hero-foreground">
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <span className="text-[11px] font-bold uppercase tracking-[0.08em] opacity-80">Your cards</span>
+              <span className="font-heading text-[22px] font-semibold leading-tight">No words yet</span>
+              <span className="text-[13px] leading-snug opacity-85">Tap a word while reading and press Save, or start a prepared set below.</span>
             </div>
-            {dueCount > 0 ? (
-              <span className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-lg bg-primary px-[18px] text-[15px] font-semibold text-primary-foreground lg:h-12 lg:rounded-xl">
-                <span className="lg:hidden">Review</span>
-                <span className="hidden lg:inline">Review now</span>
-                <ArrowRight className="hidden h-4 w-4 lg:block" strokeWidth={2.5} />
+            <CardStack word="flatmate" />
+          </div>
+        ) : dueCount > 0 ? (
+          <div className="flex items-center gap-3.5 rounded-[14px] bg-hero px-[18px] py-3.5 text-hero-foreground lg:p-[22px]">
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <span className="text-[11px] font-bold uppercase tracking-[0.08em] opacity-80">Due today</span>
+              <span className="font-heading text-[30px] font-semibold leading-none">{plural(dueCount, 'card')}</span>
+              <span className="text-[13px] opacity-85">
+                {reviewMinutes(dueCount)} · {reviewDue} to review, {newDue} new
               </span>
-            ) : (
-              <ChevronRight className="h-5 w-5 shrink-0 text-muted-foreground lg:hidden" />
-            )}
-          </Card>
+              <button
+                type="button"
+                onClick={startMyWords}
+                className="mt-1 flex h-9 items-center gap-1.5 self-start rounded-[10px] bg-white px-4 text-sm font-semibold text-[hsl(220_62%_28%)] transition-opacity hover:opacity-90 active:scale-[0.98]"
+              >
+                Review <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+              </button>
+            </div>
+            <CardStack word={dueSample} />
+          </div>
+        ) : (
+          <div className="flex items-center gap-3 rounded-[14px] bg-hero px-[18px] py-3.5 text-hero-foreground lg:p-[22px]">
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <span className="text-[11px] font-bold uppercase tracking-[0.08em] opacity-80">Due today</span>
+              <span className="font-heading text-[26px] font-semibold leading-none">All caught up</span>
+              <span className="text-[13px] opacity-85">{plural(activeWords.length, 'word')} in review · come back tomorrow</span>
+              {activeWords.length > 0 && (
+                <button
+                  type="button"
+                  onClick={startLearningAll}
+                  className="mt-1 flex h-9 items-center gap-1.5 self-start rounded-[10px] bg-white px-4 text-sm font-semibold text-[hsl(220_62%_28%)] transition-opacity hover:opacity-90 active:scale-[0.98]"
+                >
+                  Practise anyway <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                </button>
+              )}
+            </div>
+            <Pip pose="sleepy" size={96} className="-my-2 -mr-2" decorative />
+          </div>
         )}
 
-        {/* My sets: saved words, custom sets, learned, archive (phone: above prepared sets; laptop: below) */}
-        <div className="flex flex-col gap-2.5 lg:order-last">
-          <div className="flex items-center justify-between">
-            <span className={sectionLabel}>My sets</span>
-            <button
-              type="button"
-              onClick={openCreateSet}
-              className="flex items-center gap-1 text-sm font-semibold text-accent-foreground transition-opacity hover:opacity-80"
-            >
-              <Plus className="h-3.5 w-3.5" strokeWidth={2.5} /> New set
-            </button>
-          </div>
+        {/* Tip, once: nothing due → new words come from stories */}
+        {caughtUpTip.show && (
+          <CoachMark
+            icon={BookOpen}
+            title="All caught up. New words come from your stories"
+            ru="Всё повторено. Новые слова — из ваших историй."
+            arrow="top"
+            onDismiss={caughtUpTip.dismiss}
+          />
+        )}
 
-          {!hasMySets ? (
-            <div className="flex items-center gap-3 rounded-lg border border-dashed border-border px-3.5 py-3">
-              <Bookmark className="h-[22px] w-[22px] shrink-0 text-muted-foreground" />
-              <span className="text-sm leading-snug text-muted-foreground">
-                Words you add while reading land in “My words”. Or make your own set.
-              </span>
+        {/* My words: recent saved words as chips; then custom sets, learned, archive */}
+        <div className="flex flex-col gap-2.5">
+          <Card className="flex flex-col gap-3 px-4 py-3.5">
+            <div className="flex items-center justify-between gap-2">
+              <button
+                type="button"
+                onClick={() => openWordList('')}
+                disabled={activeWords.length === 0}
+                className="flex min-w-0 items-center gap-2.5 text-left disabled:cursor-default"
+              >
+                <Bookmark className="h-[22px] w-[22px] shrink-0 text-highlight" strokeWidth={1.75} />
+                <span className="font-heading text-[17px] font-semibold text-foreground">My words</span>
+                <span className="text-[13px] text-muted-foreground">{activeWords.length}</span>
+                {activeWords.length > 0 && <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" strokeWidth={2.5} />}
+              </button>
+              <button
+                type="button"
+                onClick={openCreateSet}
+                className="flex shrink-0 items-center gap-1 text-[13px] font-semibold text-accent-foreground transition-opacity hover:opacity-80"
+              >
+                <Plus className="h-3.5 w-3.5" strokeWidth={2.5} /> New set
+              </button>
             </div>
-          ) : (
+            {activeWords.length > 0 ? (
+              <div className="flex flex-wrap gap-1.5">
+                {recentWords.map(w => (
+                  <button
+                    key={w.dutch}
+                    type="button"
+                    onClick={() => openWordList(w.dutch)}
+                    className="flex h-8 items-center whitespace-nowrap rounded-full border border-border bg-card px-3 font-heading text-sm text-foreground transition-colors hover:bg-secondary"
+                  >
+                    {w.dutch}
+                  </button>
+                ))}
+                {activeWords.length > recentWords.length && (
+                  <button
+                    type="button"
+                    onClick={() => openWordList('')}
+                    className="flex h-8 items-center rounded-full px-2 text-[13px] font-semibold text-accent-foreground hover:opacity-80"
+                  >
+                    +{activeWords.length - recentWords.length} more
+                  </button>
+                )}
+              </div>
+            ) : (
+              <span className="text-sm leading-snug text-muted-foreground">
+                Words you save while reading land here. Or make your own set.
+              </span>
+            )}
+          </Card>
+
+          {(customSets.length > 0 || learnedWords.length > 0 || ignoredWords.length > 0) && (
             <Card className="flex flex-col px-4 py-1">
-              {activeWords.length > 0 && myRow(
-                'my-words',
-                <Bookmark className="h-[19px] w-[19px]" />,
-                'My words',
-                `${plural(activeWords.length, 'saved word')} · view & edit`,
-                () => { setWordListSearch(''); setEditingWord(null); setConfirmDeleteWord(null); setMode('word-list'); },
-              )}
               {customSets.map(cs => confirmDeleteId === cs.id ? (
                 <div key={cs.id} className={`${rowClass} justify-between`}>
                   <p className="min-w-0 truncate text-sm font-medium text-destructive">Delete “{cs.title}”?</p>
@@ -510,16 +661,19 @@ export function FlashcardView() {
             const folders = FOLDERS
               .map(folder => ({ folder, sets: sets.filter(s => s.folder === folder) }))
               .filter(f => f.sets.length > 0);
+            const tone = LEVEL_TONES[level] ?? LEVEL_TONES.A1;
             const levelHeader = (
               <>
-                <span className="w-[34px] shrink-0 font-heading text-xl font-semibold text-foreground lg:w-9 lg:text-[22px]">{level}</span>
+                <div className={`grid h-11 w-11 shrink-0 place-items-center rounded-[11px] ${tone.bg}`}>
+                  <span className={`font-heading text-[19px] font-semibold leading-none ${tone.ink}`}>{level}</span>
+                </div>
                 <div className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <div className="flex justify-between text-[13px] text-muted-foreground">
-                    <span>{total} words</span>
-                    <span>{learned} learned</span>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="text-[15px] font-semibold text-foreground">{LEVEL_NAMES[level] ?? level}</span>
+                    <span className="shrink-0 whitespace-nowrap text-xs text-muted-foreground">{learned} / {total}</span>
                   </div>
                   <div className="h-[5px] overflow-hidden rounded-full bg-track">
-                    <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
+                    <div className={`h-full rounded-full ${tone.bar}`} style={{ width: `${Math.max(pct, learned > 0 ? 2 : 0)}%` }} />
                   </div>
                 </div>
               </>
@@ -540,7 +694,7 @@ export function FlashcardView() {
                 </button>
 
                 {/* Phone: expandable level card */}
-                <Card className="flex flex-col gap-2.5 px-4 py-3.5 lg:hidden">
+                <Card className="flex flex-col gap-2.5 px-3.5 py-2.5 lg:hidden">
                 <button
                   type="button"
                   onClick={() => toggleIn(setOpenLevels, level)}

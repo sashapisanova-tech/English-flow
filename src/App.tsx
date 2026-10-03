@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/context/AuthContext";
 import { LearningProvider } from "@/context/LearningContext";
 import { AuthScreen } from "@/components/AuthScreen";
-import { AppOnboarding, APP_ONBOARDING_KEY } from "@/components/AppOnboarding";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
@@ -112,25 +111,6 @@ const queryClient = new QueryClient();
 
 function AppContent() {
   const { user, loading } = useAuth();
-  const [showOnboarding, setShowOnboarding] = useState(false);
-
-  // Show onboarding on first login after email is confirmed
-  useEffect(() => {
-    if (user?.email_confirmed_at && !localStorage.getItem(APP_ONBOARDING_KEY)) {
-      setShowOnboarding(true);
-    }
-  }, [user]);
-
-  // Listen for replay trigger dispatched from MeView
-  useEffect(() => {
-    const handler = () => {
-      localStorage.removeItem(APP_ONBOARDING_KEY);
-      setShowOnboarding(true);
-    };
-    window.addEventListener('show-app-tour', handler);
-    return () => window.removeEventListener('show-app-tour', handler);
-  }, []);
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
@@ -159,9 +139,6 @@ function AppContent() {
         </Routes>
       </BrowserRouter>
       <AIChat />
-      {showOnboarding && (
-        <AppOnboarding onDone={() => setShowOnboarding(false)} />
-      )}
     </LearningProvider>
   );
 }

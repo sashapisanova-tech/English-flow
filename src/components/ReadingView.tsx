@@ -11,7 +11,7 @@ import {
   ArrowLeft, ArrowRight, Volume2, Check, Plus, ChevronLeft, Pause, Lightbulb, MessageCircleMore,
   Mic, Loader2, Star, RotateCcw,
   CheckCircle, XCircle, Brain, ClipboardCheck,
-  PenLine, Shuffle, Eye, Sparkles, X,
+  PenLine, Shuffle, Eye, Sparkles, X, CircleHelp,
 } from 'lucide-react';
 import { useLearning } from '@/context/LearningContext';
 import { toast } from 'sonner';
@@ -21,6 +21,9 @@ import type { Level } from '@/types/dutch';
 import { playDutch, stopDutch } from '@/utils/playDutch';
 import { lookupWord } from '@/lib/dictionary';
 import { claudeFetch } from '@/lib/ai';
+import { CoachMark } from '@/components/CoachMark';
+import { useCoachMark } from '@/hooks/useCoachMark';
+import { TIP_KEYS, tipSeen } from '@/lib/coachMarks';
 
 interface ReadingViewProps {
   text: ReadingText;
@@ -221,6 +224,30 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
 
   // Track every text open in localStorage for the AI tutor
   useEffect(() => { recordTextRead(text.id); }, [text.id]);
+
+  // ── Tip "Questions check you understood": the first time a reader reaches
+  // the end of a text (scrolled to it, or it has been on screen for a while) ──
+  const textEndRef = useRef<HTMLDivElement>(null);
+  const [reachedEnd, setReachedEnd] = useState(false);
+  useEffect(() => {
+    setReachedEnd(false);
+    const el = textEndRef.current;
+    if (!el || tipSeen(TIP_KEYS.textFinished)) return;
+    const openedAt = Date.now();
+    let visible = false;
+    const check = () => {
+      if (visible && (window.scrollY > 80 || Date.now() - openedAt > 30_000)) setReachedEnd(true);
+    };
+    const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; check(); });
+    io.observe(el);
+    window.addEventListener('scroll', check, { passive: true });
+    const timer = window.setInterval(check, 5_000);
+    return () => { io.disconnect(); window.removeEventListener('scroll', check); window.clearInterval(timer); };
+  }, [text.id]);
+  const questionsTip = useCoachMark(
+    TIP_KEYS.textFinished,
+    reachedEnd && activeTab === null && !quizSubmitted && !!text.comprehensionQuestions?.length,
+  );
 
   // ── Reset all exercise state when the text changes ──
   useEffect(() => {
@@ -924,6 +951,7 @@ Return ONLY valid JSON, no markdown:
             </div>
           )}
         </Card>
+        <div ref={textEndRef} className="absolute bottom-0 h-px w-full" aria-hidden="true" />
         {activeTab !== null && !isTextRevealed && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center rounded-xl">
             <span className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-muted-foreground">
@@ -982,7 +1010,7 @@ Return ONLY valid JSON, no markdown:
               onClick={() => setActiveTab(activeTab === 'quiz' ? null : 'quiz')}
               className={`flex flex-col items-center gap-1 rounded-xl border-2 py-3 px-3 text-center transition-all shrink-0 min-w-[72px] ${
                 activeTab === 'quiz' ? 'border-primary bg-primary/10 text-primary' : 'border-border hover:border-primary/40 text-muted-foreground'
-              }`}
+              }${questionsTip.show ? ' border-highlight text-highlight-ink ring-2 ring-highlight/25' : ''}`}
             >
               <ClipboardCheck className="h-5 w-5" />
               <span className="text-[11px] font-semibold leading-tight">Quiz</span>
@@ -1047,6 +1075,19 @@ Return ONLY valid JSON, no markdown:
             {retellingPhase === 'feedback' && <span className="text-[10px] text-success font-bold">✓</span>}
           </button>
         </div>
+
+        {/* Tip: the questions check understanding (shown once, points at the Quiz) */}
+        {questionsTip.show && (
+          <CoachMark
+            icon={CircleHelp}
+            title="Questions check you understood"
+            ru="Вопросы проверят, всё ли понятно."
+            arrow="top"
+            align="center"
+            onDismiss={questionsTip.dismiss}
+            className="mx-auto max-w-md"
+          />
+        )}
 
         {/* ── Tab content ── */}
 

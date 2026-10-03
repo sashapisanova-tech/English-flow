@@ -66,6 +66,14 @@ export default {
           foreground: "hsl(var(--highlight-foreground))",
         },
         track: "hsl(var(--track))",
+        hero: {
+          DEFAULT: "hsl(var(--hero))",
+          foreground: "hsl(var(--hero-foreground))",
+        },
+        gold: {
+          soft: "hsl(var(--gold-soft))",
+          ink: "hsl(var(--gold-ink))",
+        },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
           foreground: "hsl(var(--sidebar-foreground))",

@@ -24,6 +24,11 @@ const USER_DATA_KEYS = [
   'english-challenge-last',
   'english-app-onboarded-v1',
   'english-reading-onboarded-v2',
+  'english-start-level-v1',
+  'english-study-time-v1',
+  'english-tip-text-finished-v1',
+  'english-tip-cards-caught-up-v1',
+  'english-tip-home-goal-v1',
 ];
 
 export function clearUserData() {

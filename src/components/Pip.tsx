@@ -12,9 +12,11 @@ import sleepyCream from '@/assets/mascot/pip-sleepy-cream.svg';
 import sleepyDark from '@/assets/mascot/pip-sleepy-dark.svg';
 import snowCream from '@/assets/mascot/pip-snow-cream.svg';
 import snowDark from '@/assets/mascot/pip-snow-dark.svg';
+import flagCream from '@/assets/mascot/pip-flag-cream.svg';
+import flagDark from '@/assets/mascot/pip-flag-dark.svg';
 import { cn } from '@/lib/utils';
 
-export type PipPose = 'wave' | 'happy' | 'celebrate' | 'think' | 'sleepy' | 'snow';
+export type PipPose = 'wave' | 'happy' | 'celebrate' | 'think' | 'sleepy' | 'snow' | 'flag';
 
 const POSES: Record<PipPose, { cream: string; dark: string; alt: string }> = {
   wave:      { cream: waveCream,      dark: waveDark,      alt: 'Pip the fox waving' },
@@ -23,6 +25,7 @@ const POSES: Record<PipPose, { cream: string; dark: string; alt: string }> = {
   think:     { cream: thinkCream,     dark: thinkDark,     alt: 'Pip the fox thinking' },
   sleepy:    { cream: sleepyCream,    dark: sleepyDark,    alt: 'Pip the fox resting' },
   snow:      { cream: snowCream,      dark: snowDark,      alt: 'Pip the fox holding a snowflake' },
+  flag:      { cream: flagCream,      dark: flagDark,      alt: 'Pip the fox waving a Union Jack' },
 };
 
 interface PipProps {

@@ -52,6 +52,13 @@
     --highlight-foreground: 0 0% 100%;
     --track: 30 20% 91%;
 
+    /* Tab heroes (design "Richer screens"): deep navy panel with white text,
+       and a gold third tone for story covers and level badges. */
+    --hero: 220 62% 34%;
+    --hero-foreground: 0 0% 100%;
+    --gold-soft: 40 70% 88%;
+    --gold-ink: 30 60% 32%;
+
     --sidebar-background: 40 33% 96%;
     --sidebar-foreground: 20 20% 14%;
     --sidebar-primary: 220 62% 34%;
@@ -90,6 +97,10 @@
     --highlight-ink: 354 85% 78%;
     --highlight-foreground: 20 14% 9%;
     --track: 20 10% 19%;
+    --hero: 220 50% 26%;
+    --hero-foreground: 35 30% 96%;
+    --gold-soft: 35 30% 20%;
+    --gold-ink: 40 75% 70%;
     --sidebar-background: 20 14% 9%;
     --sidebar-foreground: 35 30% 92%;
     --sidebar-primary: 220 70% 62%;
