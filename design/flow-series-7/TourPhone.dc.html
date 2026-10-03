@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/duotone/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/bold/style.css">
+</helmet>
+<div style="--bg:hsl(40 33% 96%);--card:hsl(40 40% 98%);--border:hsl(30 20% 87%);--text:hsl(20 20% 14%);--muted:hsl(20 10% 46%);--line:hsl(20 20% 14% / 0.38);--track:hsl(30 20% 91%);--accent:hsl(220 62% 34%);--accent-2:hsl(354 72% 46%);--accent-2-soft:hsl(354 72% 93%);--accent-2-ink:hsl(354 72% 34%);--accent-2-logo:hsl(354 90% 72%);--accent-soft:hsl(220 60% 92%);--accent-ink:hsl(220 62% 28%);width:390px;height:844px;border-radius:52px;background:hsl(20 12% 12%);padding:10px;box-sizing:border-box;box-shadow:0 30px 60px -20px hsl(20 30% 20% / 0.35);">
+  <div style="position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 30px 0;font-size:15px;font-weight:600;height:32px;flex-shrink:0;"><span>9:41</span><div style="width:110px;height:30px;border-radius:20px;background:hsl(20 12% 8%);"></div><span style="display:flex;gap:5px;font-size:14px;"><i class="ph-fill ph-cell-signal-full"></i><i class="ph-fill ph-wifi-high"></i><i class="ph-fill ph-battery-full"></i></span></div>
+    <sc-if value="{{ is_s1 }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;">
+        <div style="flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;"><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div></div>
+        <span style="font-size:13px;color:var(--muted);white-space:nowrap;">1 of 6</span>
+        
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;padding:20px 24px 30px;gap:22px;overflow:hidden;">
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);overflow:hidden;position:relative;height:300px;">
+          <div style="position:absolute;inset:0;"><svg viewBox="0 0 390 300" width="100%" height="300" preserveAspectRatio="xMidYMax slice" style="display:block;opacity:0.8;">
+          <rect width="390" height="300" fill="color-mix(in oklab, var(--accent) 16%, var(--bg))" fill-opacity="0.5"></rect>
+          <g fill="color-mix(in oklab, var(--accent) 26%, var(--bg))" stroke="color-mix(in oklab, var(--accent) 45%, var(--bg))" stroke-width="1.2" stroke-linejoin="round">
+            <path d="M300 270V96h-10V60h10V40l22-34 22 34v20h10v36h-10v174z"></path>
+            <path d="M150 270v-70h12v-16h10v16h22v-16h10v16h22v-16h10v16h22v-16h10v16h30v70z"></path>
+            <path d="M354 270v-62h18v-14h10v14h30v62z"></path>
+            <path d="M-10 270v-50h20v-14h12v14h22v50z"></path>
+          </g>
+          <circle cx="322" cy="78" r="12" fill="var(--bg)" fill-opacity="0.8" stroke="color-mix(in oklab, var(--accent) 45%, var(--bg))" stroke-width="1.2"></circle>
+          <path d="M322 78v-7M322 78l5 3" stroke="color-mix(in oklab, var(--accent) 45%, var(--bg))" stroke-width="1.2" stroke-linecap="round"></path>
+          <g fill="color-mix(in oklab, var(--accent) 45%, var(--bg))" fill-opacity="0.55"><rect x="172" y="212" width="7" height="14" rx="1"></rect><rect x="196" y="212" width="7" height="14" rx="1"></rect><rect x="220" y="212" width="7" height="14" rx="1"></rect><rect x="244" y="212" width="7" height="14" rx="1"></rect><rect x="268" y="212" width="7" height="14" rx="1"></rect><rect x="316" y="110" width="12" height="16" rx="1"></rect><rect x="316" y="140" width="12" height="16" rx="1"></rect><rect x="316" y="170" width="12" height="16" rx="1"></rect></g>
+          <circle cx="92" cy="170" r="82" fill="none" stroke="color-mix(in oklab, var(--accent) 45%, var(--bg))" stroke-width="1.4"></circle>
+          <circle cx="92" cy="170" r="74" fill="none" stroke="color-mix(in oklab, var(--accent) 45%, var(--bg))" stroke-width="0.6"></circle>
+          <path d="M92 88v164M10 170h164M34 112l116 116M150 112L34 228M50 99l84 142M134 99L50 241M21 128l142 84M163 128L21 212" stroke="color-mix(in oklab, var(--accent) 45%, var(--bg))" stroke-width="0.6"></path>
+          <circle cx="92" cy="170" r="6" fill="color-mix(in oklab, var(--accent) 45%, var(--bg))"></circle>
+          <path d="M92 170l-28 100M92 170l28 100" stroke="color-mix(in oklab, var(--accent) 45%, var(--bg))" stroke-width="1.6"></path>
+          <path d="M-10 270h410" stroke="color-mix(in oklab, var(--accent) 45%, var(--bg))" stroke-width="1.4"></path>
+          <rect x="196" y="236" width="62" height="32" rx="4" fill="var(--accent-2, var(--accent))" fill-opacity="0.45"></rect>
+          <path d="M196 250h62" stroke="var(--bg)" stroke-opacity="0.7" stroke-width="1.4"></path>
+        </svg><div style="position:absolute;inset:0;background:linear-gradient(to bottom, transparent 30%, var(--card) 100%);"></div></div>
+          <div style="position:absolute;left:0;right:0;bottom:24px;display:flex;flex-direction:column;align-items:center;gap:10px;"><svg width="72" height="72" viewBox="0 0 64 64"><rect width="64" height="64" rx="15" fill="var(--accent)"></rect><g transform="translate(6.4 6.4) scale(0.8)"><text x="7" y="39" font-family="Lora, serif" font-size="38" font-weight="700" fill="#fff">E</text><path d="M37 15h19M37 26h19M37 37h13" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-opacity="0.55"></path><path d="M8 49c5.3 4.4 10.7 4.4 16 0s10.7-4.4 16 0 10.7 4.4 16 0" fill="none" stroke="var(--accent-2-logo)" stroke-width="5.4" stroke-linecap="round"></path></g></svg><span style="font-family:Lora,serif;font-size:22px;font-weight:600;">English Flow</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <span style="font-family:Lora,serif;font-size:27px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;text-wrap:pretty;">Learn English through short stories</span>
+          <span style="font-size:16px;line-height:1.5;text-wrap:pretty;">Ten minutes a day. Funny stories, real British English, and everything translated when you need it.</span>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);text-wrap:pretty;">Десять минут в день. Смешные истории, настоящий британский английский и перевод — когда он нужен.</span>
+          
+        </div>
+        <div style="flex:1;"></div>
+        <div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Let's start<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+        <span style="font-size:14px;font-weight:600;color:var(--muted);text-align:center;margin-top:-8px;">Skip tour</span>
+      </div>
+    </sc-if>
+    <sc-if value="{{ is_s2 }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;">
+        <div style="flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;"><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div></div>
+        <span style="font-size:13px;color:var(--muted);white-space:nowrap;">2 of 6</span>
+        <span style="font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;">Skip tour</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;padding:20px 24px 30px;gap:22px;overflow:hidden;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <span style="font-family:Lora,serif;font-size:27px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;text-wrap:pretty;">Where are you starting?</span>
+          <span style="font-size:16px;line-height:1.5;text-wrap:pretty;">Pick a level. You can change it any time.</span>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);text-wrap:pretty;">Выберите уровень. Его можно поменять в любой момент.</span>
+          <span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-ink);"><i class="ph-duotone ph-lightbulb" style="font-size:16px;"></i>Why this works<i class="ph-bold ph-caret-down" style="font-size:12px;"></i></span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:16px 18px;display:flex;align-items:center;gap:14px;"><span style="font-family:Lora,serif;font-size:24px;font-weight:600;width:40px;color:var(--accent);">A1</span><div style="flex:1;display:flex;flex-direction:column;gap:2px;"><span style="font-size:16px;font-weight:600;">Beginner</span><span style="font-size:13px;color:var(--muted);">«Я только начинаю»</span></div><span style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--border);box-sizing:border-box;"></span></div>
+          <div style="border-radius:12px;background:var(--accent);padding:16px 18px;display:flex;align-items:center;gap:14px;color:#fff;"><span style="font-family:Lora,serif;font-size:24px;font-weight:600;width:40px;">A2</span><div style="flex:1;display:flex;flex-direction:column;gap:2px;"><span style="font-size:16px;font-weight:600;">Elementary</span><span style="font-size:13px;opacity:0.85;">«Знаю основы»</span></div><i class="ph-fill ph-check-circle" style="font-size:22px;"></i></div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:16px 18px;display:flex;align-items:center;gap:14px;"><span style="font-family:Lora,serif;font-size:24px;font-weight:600;width:40px;color:var(--accent);">B1</span><div style="flex:1;display:flex;flex-direction:column;gap:2px;"><span style="font-size:16px;font-weight:600;">Intermediate</span><span style="font-size:13px;color:var(--muted);">«Могу читать простые тексты»</span></div><span style="width:22px;height:22px;border-radius:999px;border:1.5px solid var(--border);box-sizing:border-box;"></span></div>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Continue<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ is_s3a }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;">
+        <div style="flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;"><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div></div>
+        <span style="font-size:13px;color:var(--muted);white-space:nowrap;">3 of 6</span>
+        <span style="font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;">Skip tour</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;padding:20px 24px 30px;gap:22px;overflow:hidden;">
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:18px 18px 20px;position:relative;overflow:hidden;height:220px;box-sizing:border-box;">
+          <div style="display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px;"><span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--accent-2-soft);color:var(--accent-2-ink);">A1</span>Episode 1 · My new flat</div>
+          <div style="font-family:Lora,serif;font-size:19px;line-height:1.75;">Tom and Priya are my <span style="background:var(--accent-2-soft);border-radius:4px;padding:0 3px;color:var(--accent-2-ink);">flatmates</span>. <span style="border-bottom:2px solid hsl(142 60% 40%);">By the way</span>, our kitchen is tiny.</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:hsl(142 60% 26%);"><span style="width:14px;height:2px;background:hsl(142 60% 40%);border-radius:2px;"></span>phrase</div>
+          
+          <div style="position:absolute;left:232px;top:82px;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:999px;background:hsl(220 62% 34% / 0.18);border:2px solid hsl(220 62% 34% / 0.5);box-sizing:border-box;display:grid;place-items:center;pointer-events:none;"><div style="width:14px;height:14px;border-radius:999px;background:var(--accent);"></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <span style="font-family:Lora,serif;font-size:27px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;text-wrap:pretty;">Tap a word you don't know</span>
+          <span style="font-size:16px;line-height:1.5;text-wrap:pretty;">Red words are this story’s new words. Tap any word for its Russian translation.</span>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);text-wrap:pretty;">Красным выделены новые слова истории. Нажмите на любое слово — появится перевод.</span>
+          <span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-ink);"><i class="ph-duotone ph-lightbulb" style="font-size:16px;"></i>Why this works<i class="ph-bold ph-caret-down" style="font-size:12px;"></i></span>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="height:52px;border-radius:12px;border:1.5px dashed var(--border);display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;color:var(--muted);"><i class="ph-duotone ph-hand-tap" style="font-size:20px;"></i>Tap “flatmates” to continue</div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ is_s3b }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;">
+        <div style="flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;"><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div></div>
+        <span style="font-size:13px;color:var(--muted);white-space:nowrap;">3 of 6</span>
+        <span style="font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;">Skip tour</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;padding:20px 24px 30px;gap:22px;overflow:hidden;">
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:18px 18px 20px;position:relative;overflow:hidden;height:300px;box-sizing:border-box;">
+          <div style="display:flex;gap:8px;align-items:center;font-size:12px;color:var(--muted);margin-bottom:10px;"><span style="font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--accent-2-soft);color:var(--accent-2-ink);">A1</span>Episode 1 · My new flat</div>
+          <div style="font-family:Lora,serif;font-size:19px;line-height:1.75;">Tom and Priya are my <span style="background:var(--accent-2-soft);border-radius:4px;padding:0 3px;box-shadow:inset 0 -2px 0 var(--accent-2);color:var(--accent-2-ink);">flatmates</span>. <span style="border-bottom:2px solid hsl(142 60% 40%);">By the way</span>, our kitchen is tiny.</div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:8px;font-size:12px;color:hsl(142 60% 26%);"><span style="width:14px;height:2px;background:hsl(142 60% 40%);border-radius:2px;"></span>phrase</div>
+          <div style="position:absolute;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--border);border-radius:16px 16px 0 0;padding:10px 18px 16px;display:flex;flex-direction:column;gap:8px;box-shadow:0 -8px 20px -10px hsl(20 30% 20% / 0.25);">
+            <div style="width:34px;height:4px;border-radius:999px;background:var(--border);align-self:center;"></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;flex-direction:column;"><span style="font-family:Lora,serif;font-size:21px;font-weight:600;">flatmate</span><span style="font-size:12px;color:var(--muted);">/ˈflæt.meɪt/ · noun</span></div><i class="ph-duotone ph-speaker-high" style="font-size:22px;color:var(--accent);"></i></div>
+            <span style="font-family:Lora,serif;font-style:italic;font-size:17px;">сосед по квартире</span>
+            <div style="height:42px;border-radius:10px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-size:14px;"><i class="ph-bold ph-plus" style="font-size:14px;"></i>Add to cards</div>
+          </div>
+          
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <span style="font-family:Lora,serif;font-size:27px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;text-wrap:pretty;">Tap a word you don't know</span>
+          <span style="font-size:16px;line-height:1.5;text-wrap:pretty;">Red words are this story’s new words. Tap any word for its Russian translation.</span>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);text-wrap:pretty;">Красным выделены новые слова истории. Нажмите на любое слово — появится перевод.</span>
+          
+        </div>
+        <div style="flex:1;"></div>
+        <div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Next<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ is_s4a }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;">
+        <div style="flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;"><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div></div>
+        <span style="font-size:13px;color:var(--muted);white-space:nowrap;">4 of 6</span>
+        <span style="font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;">Skip tour</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;padding:26px 24px 30px;gap:22px;overflow:hidden;">
+        <div style="position:relative;height:250px;">
+          <div style="position:absolute;left:16px;right:16px;top:-10px;height:100%;border-radius:12px;background:var(--card);border:1px solid var(--border);opacity:0.6;"></div>
+          <div style="position:absolute;inset:0;border-radius:12px;background:var(--card);border:1px solid var(--border);box-shadow:0 12px 30px -16px hsl(20 30% 20% / 0.3);padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
+            <span style="font-family:Lora,serif;font-size:30px;font-weight:600;">flatmate</span>
+            <span style="font-size:13px;color:var(--muted);">/ˈflæt.meɪt/</span><span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);margin-top:22px;"><i class="ph-duotone ph-arrows-clockwise" style="font-size:16px;"></i>Tap to flip</span>
+          </div>
+        </div>
+        
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <span style="font-family:Lora,serif;font-size:27px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;text-wrap:pretty;">Your words come back before you forget them</span>
+          <span style="font-size:16px;line-height:1.5;text-wrap:pretty;">Add words to your cards. The app shows each one again just before you’d forget it. A few minutes a day is enough.</span>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);text-wrap:pretty;">Добавляйте слова в карточки. Приложение покажет каждое слово снова как раз перед тем, как вы бы его забыли. Хватит нескольких минут в день.</span>
+          
+        </div>
+        <div style="flex:1;"></div>
+        <div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Next<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ is_s4b }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;">
+        <div style="flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;"><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div></div>
+        <span style="font-size:13px;color:var(--muted);white-space:nowrap;">4 of 6</span>
+        <span style="font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;">Skip tour</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;padding:26px 24px 30px;gap:22px;overflow:hidden;">
+        <div style="position:relative;height:250px;">
+          <div style="position:absolute;left:16px;right:16px;top:-10px;height:100%;border-radius:12px;background:var(--card);border:1px solid var(--border);opacity:0.6;"></div>
+          <div style="position:absolute;inset:0;border-radius:12px;background:var(--card);border:1px solid var(--border);box-shadow:0 12px 30px -16px hsl(20 30% 20% / 0.3);padding:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;">
+            <span style="font-family:Lora,serif;font-size:30px;font-weight:600;">flatmate</span>
+            <div style="width:30px;height:2px;border-radius:999px;background:var(--accent-2);margin:10px 0;"></div><span style="font-family:Lora,serif;font-style:italic;font-size:21px;">сосед по квартире</span><span style="font-size:13px;color:var(--muted);margin-top:8px;">“Tom and Priya are my flatmates.”</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:-8px;"><div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:100%;height:42px;border-radius:10px;box-sizing:border-box;background:var(--accent-2);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:600;">Again</div><span style="font-size:11px;color:var(--muted);">1 min</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:100%;height:42px;border-radius:10px;box-sizing:border-box;border:1.5px solid var(--accent-2);color:var(--accent-2-ink);background:var(--card);display:grid;place-items:center;font-size:13px;font-weight:600;">Hard</div><span style="font-size:11px;color:var(--muted);">2 days</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:100%;height:42px;border-radius:10px;box-sizing:border-box;border:2px solid var(--accent);color:var(--accent-ink);background:var(--accent-soft);display:grid;place-items:center;font-size:13px;font-weight:600;">Good</div><span style="font-size:11px;color:var(--accent-ink);font-weight:700;">in 10 days</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:4px;"><div style="width:100%;height:42px;border-radius:10px;box-sizing:border-box;background:var(--accent);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:600;">Easy</div><span style="font-size:11px;color:var(--muted);">3 weeks</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <span style="font-family:Lora,serif;font-size:27px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;text-wrap:pretty;">Your words come back before you forget them</span>
+          <span style="font-size:16px;line-height:1.5;text-wrap:pretty;">Add words to your cards. The app shows each one again just before you’d forget it. A few minutes a day is enough.</span>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);text-wrap:pretty;">Добавляйте слова в карточки. Приложение покажет каждое слово снова как раз перед тем, как вы бы его забыли. Хватит нескольких минут в день.</span>
+          <div style="display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:12px;background:var(--accent-soft);"><span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-ink);"><i class="ph-duotone ph-lightbulb" style="font-size:16px;"></i>Why this works<i class="ph-bold ph-caret-up" style="font-size:12px;margin-left:auto;"></i></span><span style="font-size:13px;line-height:1.5;color:var(--accent-ink);">Spaced repetition is one of the best-proven ways to remember words. A word usually needs many meetings, so your words also return in later stories. Rate honestly: “Hard” brings a word back sooner.</span></div>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Next<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ is_s5 }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;">
+        <div style="flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;"><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--track);"></div></div>
+        <span style="font-size:13px;color:var(--muted);white-space:nowrap;">5 of 6</span>
+        <span style="font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;">Skip tour</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;padding:20px 24px 30px;gap:22px;overflow:hidden;">
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:8px;"><div style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;"><i class="ph-duotone ph-translate" style="font-size:18px;color:var(--accent);"></i></div><span style="font-size:14px;font-weight:600;line-height:1.25;">Translate to English</span></div>
+            <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:12px;display:flex;flex-direction:column;gap:8px;"><div style="width:34px;height:34px;border-radius:10px;background:var(--accent-soft);display:grid;place-items:center;"><i class="ph-duotone ph-chat-circle-dots" style="font-size:18px;color:var(--accent);"></i></div><span style="font-size:14px;font-weight:600;line-height:1.25;">Chat with Emma</span></div>
+          </div>
+          <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:14px;display:flex;flex-direction:column;gap:10px;">
+            <div style="align-self:flex-end;max-width:75%;padding:9px 12px;border-radius:14px 14px 4px 14px;background:var(--accent);color:#fff;font-size:14px;">Yesterday I have went to the shop.</div>
+            <div style="display:flex;gap:8px;align-items:flex-end;"><div style="width:28px;height:28px;border-radius:999px;background:var(--accent-2-soft);color:var(--accent-2-ink);display:grid;place-items:center;font-family:Lora,serif;font-weight:600;font-size:13px;flex-shrink:0;">E</div>
+              <div style="max-width:82%;padding:9px 12px;border-radius:14px 14px 14px 4px;background:var(--bg);border:1px solid var(--border);font-size:14px;line-height:1.45;">Nearly! <b>Yesterday I went</b> to the shop.<br><span style="color:var(--muted);font-size:13px;">С «yesterday» используем Past Simple.</span></div></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <span style="font-family:Lora,serif;font-size:27px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;text-wrap:pretty;">Then use your English</span>
+          <span style="font-size:16px;line-height:1.5;text-wrap:pretty;">Translate short texts and chat with Emma, your AI tutor. She corrects you kindly and explains in Russian.</span>
+          <span style="font-size:14px;line-height:1.5;color:var(--muted);text-wrap:pretty;">Переводите короткие тексты и общайтесь с Эммой — вашим ИИ-репетитором. Она мягко исправляет ошибки и объясняет по-русски.</span>
+          <span style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--accent-ink);"><i class="ph-duotone ph-lightbulb" style="font-size:16px;"></i>Why this works<i class="ph-bold ph-caret-down" style="font-size:12px;"></i></span>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Next<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ is_s6 }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;align-items:center;gap:14px;padding:14px 24px 0;">
+        <div style="flex:1;display:grid;grid-template-columns:repeat(6,1fr);gap:5px;"><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div><div style="height:4px;border-radius:999px;background:var(--accent-2);"></div></div>
+        <span style="font-size:13px;color:var(--muted);white-space:nowrap;">6 of 6</span>
+        <span style="font-size:13px;font-weight:600;color:var(--muted);white-space:nowrap;">Skip tour</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;padding:18px 24px 30px;gap:18px;overflow:hidden;">
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <span style="font-family:Lora,serif;font-size:27px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;">How much time a day?</span>
+          <span style="font-size:15px;line-height:1.5;">Choose a goal you can keep even on a busy day. Only active minutes count.</span>
+          <span style="font-size:13px;line-height:1.5;color:var(--muted);">Выберите цель, которую сможете выполнять даже в загруженный день. Считаются только активные минуты.</span>
+        </div>
+        <div style="display:flex;gap:8px;padding-top:4px;"><div style="flex:1;height:58px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;"><span style="font-family:Lora,serif;font-size:20px;font-weight:600;line-height:1;">5</span><span style="font-size:11px;color:var(--muted);">min</span></div><div style="flex:1;height:58px;border-radius:12px;background:var(--accent);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;position:relative;"><span style="font-family:Lora,serif;font-size:20px;font-weight:600;line-height:1;">10</span><span style="font-size:11px;opacity:0.85;">min</span><span style="position:absolute;top:-9px;padding:1px 7px;border-radius:999px;background:var(--accent-2);font-size:10px;font-weight:700;letter-spacing:0.03em;">Recommended</span></div><div style="flex:1;height:58px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;"><span style="font-family:Lora,serif;font-size:20px;font-weight:600;line-height:1;">15</span><span style="font-size:11px;color:var(--muted);">min</span></div><div style="flex:1;height:58px;border-radius:12px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;"><span style="font-family:Lora,serif;font-size:20px;font-weight:600;line-height:1;">20</span><span style="font-size:11px;color:var(--muted);">min</span></div></div>
+        <div style="display:flex;flex-direction:column;gap:8px;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">When will you study?</span><div style="display:flex;flex-wrap:wrap;gap:6px;"><span style="height:34px;padding:0 12px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:13px;display:flex;align-items:center;">After breakfast</span><span style="height:34px;padding:0 12px;border-radius:999px;background:var(--accent-2-soft);border:1.5px solid var(--accent-2);box-sizing:border-box;color:var(--accent-2-ink);font-size:13px;font-weight:600;display:flex;align-items:center;">On the way</span><span style="height:34px;padding:0 12px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:13px;display:flex;align-items:center;">Lunch break</span><span style="height:34px;padding:0 12px;border-radius:999px;background:var(--card);border:1px solid var(--border);box-sizing:border-box;font-size:13px;display:flex;align-items:center;">Evening</span></div></div>
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:14px;">
+          <div style="position:relative;width:76px;height:76px;flex-shrink:0;"><svg width="76" height="76" viewBox="0 0 76 76" style="display:block;transform:rotate(-90deg);"><circle cx="38" cy="38" r="34" fill="none" stroke="var(--track)" stroke-width="8"></circle><circle cx="38" cy="38" r="34" fill="none" stroke="var(--accent-2)" stroke-width="8" stroke-linecap="round" stroke-dasharray="21.4 213.6"></circle></svg><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;"><span style="font-family:Lora,serif;font-size:18px;font-weight:600;line-height:1;">1</span><span style="font-size:10px;color:var(--muted);">of 10 min</span></div></div>
+          <div style="display:flex;flex-direction:column;gap:3px;"><span style="font-family:Lora,serif;font-size:17px;font-weight:600;">You’ve started!</span><span style="font-size:13px;line-height:1.4;color:var(--muted);">Reach your goal to grow your streak. Miss a day? A streak freeze has your back.</span></div>
+        </div>
+        <div style="flex:1;"></div>
+        <div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Read my first story<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ is_cText }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:12px 24px 0;gap:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin:0 -10px;"><i class="ph-bold ph-caret-left" style="font-size:22px;padding:10px;"></i><span style="font-size:13px;color:var(--muted);">Page 5 of 5</span><span style="width:42px;"></span></div>
+        <div style="font-family:Lora,serif;font-size:18px;line-height:1.7;display:flex;flex-direction:column;gap:12px;"><p style="margin:0;">Priya opens the fridge. There is one egg and a lot of cheese.</p><p style="margin:0;">'Pizza?' says Tom. 'Pizza,' says Priya. The end.</p></div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:13px;color:hsl(142 60% 26%);font-weight:600;"><i class="ph-fill ph-check-circle" style="font-size:18px;color:hsl(142 60% 40%);"></i>Story finished</div>
+        <div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Answer 3 questions<i class="ph-bold ph-arrow-right" style="font-size:16px;"></i></div>
+        <div style="position:relative;border-radius:12px;background:var(--text);color:hsl(40 33% 96%);padding:14px 16px;display:flex;gap:12px;box-shadow:0 14px 30px -12px hsl(20 30% 10% / 0.5);">
+          <span style="position:absolute;top:-7px;left:28px;width:14px;height:14px;background:var(--text);transform:rotate(45deg);border-radius:2px;"></span>
+          <i class="ph-duotone ph-question" style="font-size:22px;color:var(--accent-2-logo);flex-shrink:0;margin-top:1px;"></i>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px;"><span style="font-size:15px;font-weight:600;line-height:1.35;">Questions check you understood</span><span style="font-size:13px;line-height:1.4;opacity:0.75;">Вопросы проверят, всё ли понятно.</span></div>
+          <span style="font-size:13px;font-weight:600;align-self:flex-end;color:var(--accent-2-logo);white-space:nowrap;">Got it</span>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;flex-shrink:0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-house" style="font-size:24px;"></i>Home</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-book-open" style="font-size:24px;color:var(--accent);"></i>Read</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-cards" style="font-size:24px;"></i>Cards</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-target" style="font-size:24px;"></i>Tasks</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div></div>
+    </sc-if>
+    <sc-if value="{{ is_cCard }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:14px 20px 0;gap:18px;overflow:hidden;">
+        <span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;">Cards</span>
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:18px;display:flex;align-items:center;gap:14px;"><div style="width:48px;height:48px;border-radius:12px;background:hsl(142 45% 94%);display:grid;place-items:center;"><i class="ph-fill ph-check-circle" style="font-size:26px;color:hsl(142 60% 40%);"></i></div><div style="display:flex;flex-direction:column;gap:2px;"><span style="font-family:Lora,serif;font-size:21px;font-weight:600;">0 cards due</span><span style="font-size:13px;color:var(--muted);">Next review tomorrow</span></div></div>
+        <div style="position:relative;border-radius:12px;background:var(--text);color:hsl(40 33% 96%);padding:14px 16px;display:flex;gap:12px;box-shadow:0 14px 30px -12px hsl(20 30% 10% / 0.5);">
+          <span style="position:absolute;top:-7px;left:28px;width:14px;height:14px;background:var(--text);transform:rotate(45deg);border-radius:2px;"></span>
+          <i class="ph-duotone ph-book-open" style="font-size:22px;color:var(--accent-2-logo);flex-shrink:0;margin-top:1px;"></i>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px;"><span style="font-size:15px;font-weight:600;line-height:1.35;">All caught up. New words come from your stories</span><span style="font-size:13px;line-height:1.4;opacity:0.75;">Всё повторено. Новые слова — из ваших историй.</span></div>
+          <span style="font-size:13px;font-weight:600;align-self:flex-end;color:var(--accent-2-logo);white-space:nowrap;">Got it</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;opacity:0.5;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Prepared sets</span><div style="border-radius:12px;background:var(--card);border:1px solid var(--border);height:62px;"></div><div style="border-radius:12px;background:var(--card);border:1px solid var(--border);height:62px;"></div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;flex-shrink:0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-house" style="font-size:24px;"></i>Home</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-cards" style="font-size:24px;color:var(--accent);"></i>Cards</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-target" style="font-size:24px;"></i>Tasks</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div></div>
+    </sc-if>
+    <sc-if value="{{ is_cHome }}" hint-placeholder-val="{{ false }}">
+      <div style="flex:1;display:flex;flex-direction:column;padding:14px 20px 0;gap:16px;overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;"><div style="display:flex;align-items:center;gap:10px;"><svg width="34" height="34" viewBox="0 0 64 64"><rect width="64" height="64" rx="15" fill="var(--accent)"></rect><g transform="translate(6.4 6.4) scale(0.8)"><text x="7" y="39" font-family="Lora, serif" font-size="38" font-weight="700" fill="#fff">E</text><path d="M37 15h19M37 26h19M37 37h13" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-opacity="0.55"></path><path d="M8 49c5.3 4.4 10.7 4.4 16 0s10.7-4.4 16 0 10.7 4.4 16 0" fill="none" stroke="var(--accent-2-logo)" stroke-width="5.4" stroke-linecap="round"></path></g></svg><span style="font-family:Lora,serif;font-size:20px;font-weight:600;">English Flow</span></div><div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--card);border:1px solid var(--border);font-weight:600;font-size:14px;"><i class="ph-duotone ph-flame" style="font-size:18px;color:var(--accent-2);"></i>2</div></div>
+        <div style="display:flex;flex-direction:column;gap:2px;"><span style="font-size:13px;color:var(--muted);">Friday, 2 October</span><span style="font-family:Lora,serif;font-size:28px;font-weight:600;letter-spacing:-0.015em;">Good morning, Masha</span></div>
+        <div style="position:relative;border-radius:12px;background:var(--text);color:hsl(40 33% 96%);padding:14px 16px;display:flex;gap:12px;box-shadow:0 14px 30px -12px hsl(20 30% 10% / 0.5);">
+          <span style="position:absolute;bottom:-7px;left:50%;margin-left:-7px;width:14px;height:14px;background:var(--text);transform:rotate(45deg);border-radius:2px;"></span>
+          <i class="ph-duotone ph-flame" style="font-size:22px;color:var(--accent-2-logo);flex-shrink:0;margin-top:1px;"></i>
+          <div style="flex:1;display:flex;flex-direction:column;gap:3px;"><span style="font-size:15px;font-weight:600;line-height:1.35;">Welcome back. 2 days in a row</span><span style="font-size:13px;line-height:1.4;opacity:0.75;">С возвращением! Уже 2 дня подряд.</span></div>
+          <span style="font-size:13px;font-weight:600;align-self:flex-end;color:var(--accent-2-logo);white-space:nowrap;">Got it</span>
+        </div>
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);padding:18px;display:flex;align-items:center;gap:18px;"><div style="position:relative;width:96px;height:96px;flex-shrink:0;"><svg width="96" height="96" viewBox="0 0 96 96" style="display:block;transform:rotate(-90deg);"><circle cx="48" cy="48" r="43" fill="none" stroke="var(--track)" stroke-width="10"></circle><circle cx="48" cy="48" r="43" fill="none" stroke="var(--accent-2)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0.0 270.2"></circle></svg><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;"><span style="font-family:Lora,serif;font-size:22px;font-weight:600;line-height:1;">0</span><span style="font-size:11px;color:var(--muted);">of 10 min</span></div></div><div style="display:flex;flex-direction:column;gap:4px;"><span style="font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);">Today's goal</span><span style="font-family:Lora,serif;font-size:20px;font-weight:600;">10 minutes to go</span></div></div>
+        <div style="border-radius:12px;background:var(--card);border:1px solid var(--border);height:150px;opacity:0.5;"></div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);padding:10px 8px 26px;background:var(--card);border-top:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);text-align:center;flex-shrink:0;"><div style="display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--accent-ink);font-weight:600;"><i class="ph-duotone ph-house" style="font-size:24px;color:var(--accent);"></i>Home</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-book-open" style="font-size:24px;"></i>Read</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-cards" style="font-size:24px;"></i>Cards</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-target" style="font-size:24px;"></i>Tasks</div><div style="display:flex;flex-direction:column;align-items:center;gap:3px;"><i class="ph-duotone ph-user" style="font-size:24px;"></i>Me</div></div>
+    </sc-if>
+    <sc-if value="{{ is_goalDone }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;flex:1;display:flex;flex-direction:column;align-items:center;padding:30px 28px 34px;gap:18px;text-align:center;overflow:hidden;">
+        <div style="position:absolute;inset:0;pointer-events:none;"><span style="position:absolute;left:40px;top:90px;width:8px;height:8px;border-radius:2px;background:var(--accent-2);transform:rotate(40deg);"></span><span style="position:absolute;left:320px;top:70px;width:6px;height:6px;border-radius:2px;background:var(--accent);transform:rotate(5deg);"></span><span style="position:absolute;left:70px;top:250px;width:5px;height:5px;border-radius:999px;background:var(--accent);transform:rotate(25deg);"></span><span style="position:absolute;left:300px;top:220px;width:7px;height:7px;border-radius:2px;background:var(--accent-2);transform:rotate(30deg);"></span><span style="position:absolute;left:180px;top:50px;width:6px;height:6px;border-radius:2px;background:var(--accent-2-logo);transform:rotate(0deg);"></span><span style="position:absolute;left:340px;top:330px;width:5px;height:5px;border-radius:999px;background:var(--accent-2-logo);transform:rotate(25deg);"></span><span style="position:absolute;left:30px;top:380px;width:4px;height:4px;border-radius:999px;background:var(--accent-2);transform:rotate(30deg);"></span><span style="position:absolute;left:260px;top:120px;width:4px;height:4px;border-radius:999px;background:var(--accent);transform:rotate(35deg);"></span></div>
+        <div style="flex:1;"></div>
+        <div style="position:relative;width:150px;height:150px;flex-shrink:0;"><svg width="150" height="150" viewBox="0 0 150 150" style="display:block;transform:rotate(-90deg);"><circle cx="75" cy="75" r="69" fill="none" stroke="var(--track)" stroke-width="12"></circle><circle cx="75" cy="75" r="69" fill="none" stroke="var(--accent-2)" stroke-width="12" stroke-linecap="round" stroke-dasharray="433.5 433.5"></circle></svg><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;"><i class="ph-bold ph-check" style="font-size:44px;color:var(--accent-2);"></i></div></div>
+        <span style="font-family:Lora,serif;font-size:30px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;">Goal reached!</span>
+        <span style="font-size:15px;color:var(--muted);margin-top:-10px;">Цель выполнена! Серия +1</span>
+        <span style="font-size:15px;line-height:1.5;max-width:290px;text-wrap:pretty;">10 of 10 minutes today. Your streak is now <b>3 days</b>.</span>
+        <div style="flex:1.3;"></div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:12px;"><div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Continue</div><span style="font-size:14px;font-weight:600;color:var(--muted);">Keep reading</span></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ is_week }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;flex:1;display:flex;flex-direction:column;align-items:center;padding:30px 28px 34px;gap:18px;text-align:center;overflow:hidden;">
+        <div style="position:absolute;inset:0;pointer-events:none;"><span style="position:absolute;left:40px;top:90px;width:8px;height:8px;border-radius:2px;background:var(--accent-2);transform:rotate(40deg);"></span><span style="position:absolute;left:320px;top:70px;width:6px;height:6px;border-radius:2px;background:var(--accent);transform:rotate(5deg);"></span><span style="position:absolute;left:70px;top:250px;width:5px;height:5px;border-radius:999px;background:var(--accent);transform:rotate(25deg);"></span><span style="position:absolute;left:300px;top:220px;width:7px;height:7px;border-radius:2px;background:var(--accent-2);transform:rotate(30deg);"></span><span style="position:absolute;left:180px;top:50px;width:6px;height:6px;border-radius:2px;background:var(--accent-2-logo);transform:rotate(0deg);"></span><span style="position:absolute;left:340px;top:330px;width:5px;height:5px;border-radius:999px;background:var(--accent-2-logo);transform:rotate(25deg);"></span><span style="position:absolute;left:30px;top:380px;width:4px;height:4px;border-radius:999px;background:var(--accent-2);transform:rotate(30deg);"></span><span style="position:absolute;left:260px;top:120px;width:4px;height:4px;border-radius:999px;background:var(--accent);transform:rotate(35deg);"></span></div>
+        <div style="flex:1;"></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:18px;"><div style="position:relative;width:120px;height:120px;border-radius:999px;background:var(--accent-2-soft);display:grid;place-items:center;"><i class="ph-fill ph-flame" style="font-size:60px;color:var(--accent-2);"></i><span style="position:absolute;bottom:-6px;right:-6px;width:46px;height:46px;border-radius:999px;background:hsl(205 70% 92%);border:3px solid var(--bg);display:grid;place-items:center;"><i class="ph-bold ph-snowflake" style="font-size:22px;color:hsl(205 70% 36%);"></i></span></div><div style="display:grid;grid-template-columns:repeat(7,34px);gap:8px;"><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--accent);color:#fff;display:grid;place-items:center;"><i class="ph-fill ph-check" style="font-size:13px;"></i></div><span style="font-size:11px;color:var(--muted);">M</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--accent);color:#fff;display:grid;place-items:center;"><i class="ph-fill ph-check" style="font-size:13px;"></i></div><span style="font-size:11px;color:var(--muted);">T</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--accent);color:#fff;display:grid;place-items:center;"><i class="ph-fill ph-check" style="font-size:13px;"></i></div><span style="font-size:11px;color:var(--muted);">W</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--accent);color:#fff;display:grid;place-items:center;"><i class="ph-fill ph-check" style="font-size:13px;"></i></div><span style="font-size:11px;color:var(--muted);">T</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--accent);color:#fff;display:grid;place-items:center;"><i class="ph-fill ph-check" style="font-size:13px;"></i></div><span style="font-size:11px;color:var(--muted);">F</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--accent);color:#fff;display:grid;place-items:center;"><i class="ph-fill ph-check" style="font-size:13px;"></i></div><span style="font-size:11px;color:var(--muted);">S</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;border:2px solid var(--accent-2);box-sizing:border-box;color:var(--accent-2);display:grid;place-items:center;"><i class="ph-fill ph-flame" style="font-size:15px;"></i></div><span style="font-size:11px;color:var(--muted);">S</span></div></div></div>
+        <span style="font-family:Lora,serif;font-size:30px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;">One week!</span>
+        <span style="font-size:15px;color:var(--muted);margin-top:-10px;">Неделя! Вы получили заморозку серии.</span>
+        <span style="font-size:15px;line-height:1.5;max-width:290px;text-wrap:pretty;">7 days in a row. You earned a <b>streak freeze</b>: if you miss a day, it keeps your streak safe.</span>
+        <div style="flex:1.3;"></div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:12px;"><div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Continue</div></div>
+      </div>
+    </sc-if>
+    <sc-if value="{{ is_freeze }}" hint-placeholder-val="{{ false }}">
+      <div style="position:relative;flex:1;display:flex;flex-direction:column;align-items:center;padding:30px 28px 34px;gap:18px;text-align:center;overflow:hidden;">
+        <div style="position:absolute;inset:0;pointer-events:none;"><span style="position:absolute;left:40px;top:90px;width:8px;height:8px;border-radius:2px;background:var(--accent-2);transform:rotate(40deg);"></span><span style="position:absolute;left:320px;top:70px;width:6px;height:6px;border-radius:2px;background:var(--accent);transform:rotate(5deg);"></span><span style="position:absolute;left:70px;top:250px;width:5px;height:5px;border-radius:999px;background:var(--accent);transform:rotate(25deg);"></span><span style="position:absolute;left:300px;top:220px;width:7px;height:7px;border-radius:2px;background:var(--accent-2);transform:rotate(30deg);"></span><span style="position:absolute;left:180px;top:50px;width:6px;height:6px;border-radius:2px;background:var(--accent-2-logo);transform:rotate(0deg);"></span><span style="position:absolute;left:340px;top:330px;width:5px;height:5px;border-radius:999px;background:var(--accent-2-logo);transform:rotate(25deg);"></span><span style="position:absolute;left:30px;top:380px;width:4px;height:4px;border-radius:999px;background:var(--accent-2);transform:rotate(30deg);"></span><span style="position:absolute;left:260px;top:120px;width:4px;height:4px;border-radius:999px;background:var(--accent);transform:rotate(35deg);"></span></div>
+        <div style="flex:1;"></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:18px;"><div style="width:120px;height:120px;border-radius:999px;background:hsl(205 70% 92%);display:grid;place-items:center;"><i class="ph-bold ph-snowflake" style="font-size:58px;color:hsl(205 70% 36%);"></i></div><div style="display:grid;grid-template-columns:repeat(7,34px);gap:8px;"><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--accent);color:#fff;display:grid;place-items:center;"><i class="ph-fill ph-check" style="font-size:13px;"></i></div><span style="font-size:11px;color:var(--muted);">M</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--accent);color:#fff;display:grid;place-items:center;"><i class="ph-fill ph-check" style="font-size:13px;"></i></div><span style="font-size:11px;color:var(--muted);">T</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--accent);color:#fff;display:grid;place-items:center;"><i class="ph-fill ph-check" style="font-size:13px;"></i></div><span style="font-size:11px;color:var(--muted);">W</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:hsl(205 70% 92%);color:hsl(205 70% 36%);border:1.5px solid hsl(205 60% 70%);box-sizing:border-box;display:grid;place-items:center;"><i class="ph-bold ph-snowflake" style="font-size:15px;"></i></div><span style="font-size:11px;color:var(--muted);">T</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--track);display:grid;place-items:center;"></div><span style="font-size:11px;color:var(--muted);">F</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--track);display:grid;place-items:center;"></div><span style="font-size:11px;color:var(--muted);">S</span></div><div style="display:flex;flex-direction:column;align-items:center;gap:5px;"><div style="width:34px;height:34px;border-radius:999px;background:var(--track);display:grid;place-items:center;"></div><span style="font-size:11px;color:var(--muted);">S</span></div></div></div>
+        <span style="font-family:Lora,serif;font-size:30px;font-weight:600;letter-spacing:-0.015em;line-height:1.2;">Your streak is safe</span>
+        <span style="font-size:15px;color:var(--muted);margin-top:-10px;">Заморозка сохранила вашу серию. Продолжайте сегодня.</span>
+        <span style="font-size:15px;line-height:1.5;max-width:290px;text-wrap:pretty;">A freeze covered yesterday. Keep going today: <b>10 minutes</b> keeps your 4-day streak growing.</span>
+        <div style="flex:1.3;"></div>
+        <div style="width:100%;display:flex;flex-direction:column;gap:12px;"><div style="height:52px;border-radius:12px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;">Start today’s 10 minutes</div></div>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;screen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;s1&quot;,&quot;s2&quot;,&quot;s3a&quot;,&quot;s3b&quot;,&quot;s4a&quot;,&quot;s4b&quot;,&quot;s5&quot;,&quot;s6&quot;,&quot;cText&quot;,&quot;cCard&quot;,&quot;cHome&quot;,&quot;goalDone&quot;,&quot;week&quot;,&quot;freeze&quot;],&quot;default&quot;:&quot;s1&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.props.screen ?? 's1';
+    const o = {};
+    ["s1","s2","s3a","s3b","s4a","s4b","s5","s6","cText","cCard","cHome","goalDone","week","freeze"].forEach(k => { o['is_' + k] = s === k; });
+    return o;
+  }
+}
+</script>
+</body>
+</html>
