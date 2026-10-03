@@ -38,5 +38,5 @@ SELECT table_name, column_name, data_type, column_default
 FROM information_schema.columns
 WHERE table_schema = 'public'
   AND ((table_name = 'activity_log' AND column_name IN ('active_seconds', 'goal_met'))
-    OR (table_name = 'user_stats'   AND column_name = 'daily_goal_minutes'))
+    OR (table_name = 'user_stats'   AND column_name IN ('daily_goal_minutes', 'daily_expression')))
 ORDER BY table_name, column_name;
