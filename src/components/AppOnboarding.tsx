@@ -5,8 +5,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   ArrowRight, ChevronDown, ChevronUp, CircleCheck, Languages, Lightbulb, MessageCircleMore,
-  PanelRight, Plus, Pointer, RefreshCw, Volume2, Check,
-} from 'lucide-react';
+  PanelRight, Plus, Pointer, RefreshCw, Volume2, Check, ArrowLeft } from 'lucide-react';
 import { Pip } from '@/components/Pip';
 import { BrandLogo } from '@/components/BrandLogo';
 import { useLearning } from '@/context/LearningContext';
@@ -41,6 +40,7 @@ interface StepCopy {
   enLaptop?: string;
   ru: string;
   why?: string;
+  whyRu?: string;
 }
 
 const COPY: StepCopy[] = [
@@ -54,6 +54,7 @@ const COPY: StepCopy[] = [
     en: 'Pick a level. You can change it any time.',
     ru: 'Выберите уровень. Его можно поменять в любой момент.',
     why: 'Texts that are too hard kill motivation, and too easy feels pointless. Start where it feels comfortable: you can move up whenever you like.',
+    whyRu: 'Слишком сложные тексты отбивают желание, слишком простые — скучны. Начните там, где комфортно: перейти выше можно в любой момент.',
   },
   {
     title: "Tap a word you don't know",
@@ -61,18 +62,21 @@ const COPY: StepCopy[] = [
     enLaptop: 'Red words are this story’s new words. Click any word for its Russian translation.',
     ru: 'Красным выделены новые слова истории. Нажмите на любое слово — появится перевод.',
     why: 'Every story is written so that about 9 in 10 words are already familiar. The rest are one tap away, so you never get stuck.',
+    whyRu: 'Каждая история написана так, что примерно 9 слов из 10 вам уже знакомы. Остальные — в одно касание, так что вы не застрянете.',
   },
   {
     title: 'Your words come back before you forget them',
     en: 'Add words to your cards. The app shows each one again just before you’d forget it. A few minutes a day is enough.',
     ru: 'Добавляйте слова в карточки. Приложение покажет каждое слово снова как раз перед тем, как вы бы его забыли. Хватит нескольких минут в день.',
     why: 'Spaced repetition is one of the best-proven ways to remember words. A word usually needs many meetings, so your words also return in later stories. Rate honestly: “Hard” brings a word back sooner.',
+    whyRu: 'Интервальное повторение — один из самых проверенных способов запоминать слова. Слову обычно нужно много встреч, поэтому слова возвращаются и в следующих историях. Оценивайте честно: «Hard» вернёт слово раньше.',
   },
   {
     title: 'Then use your English',
     en: 'Translate short texts and chat with Emma, your AI tutor. She corrects you kindly and explains in Russian.',
     ru: 'Переводите короткие тексты и общайтесь с Эммой — вашим ИИ-репетитором. Она мягко исправляет ошибки и объясняет по-русски.',
     why: 'Reading builds understanding; writing and speaking make it usable. Feedback in Russian takes the fear out of making mistakes.',
+    whyRu: 'Чтение развивает понимание, а письмо и речь делают язык рабочим. Объяснения по-русски снимают страх ошибиться.',
   },
   {
     title: 'How much time a day?',
@@ -122,12 +126,12 @@ function StepText({ copy, laptop, compact = false }: { copy: StepCopy; laptop: b
       </h2>
       <p className={cn('leading-normal text-foreground [text-wrap:pretty]', compact ? 'text-[15px]' : 'text-base')}>{laptop && copy.enLaptop ? copy.enLaptop : copy.en}</p>
       <p lang="ru" className={cn('leading-normal text-muted-foreground [text-wrap:pretty]', compact ? 'text-[13px]' : 'text-sm')}>{copy.ru}</p>
-      {copy.why && <WhyThisWorks text={copy.why} />}
+      {copy.why && <WhyThisWorks text={copy.why} textRu={copy.whyRu} />}
     </div>
   );
 }
 
-function WhyThisWorks({ text }: { text: string }) {
+function WhyThisWorks({ text, textRu }: { text: string; textRu?: string }) {
   const [open, setOpen] = useState(false);
   const label = (
     <>
@@ -160,6 +164,7 @@ function WhyThisWorks({ text }: { text: string }) {
         <ChevronUp className="ml-auto h-3 w-3" strokeWidth={3} />
       </button>
       <p className="text-[13px] leading-normal text-accent-foreground">{text}</p>
+      {textRu && <p lang="ru" className="text-[13px] leading-normal text-accent-foreground/80">{textRu}</p>}
     </div>
   );
 }
@@ -566,6 +571,10 @@ export function AppOnboarding({ onDone }: AppOnboardingProps) {
     onDone({ story: openStory ? level : null });
   }
 
+  function back() {
+    if (step > 0) setStep(s => s - 1);
+  }
+
   function next() {
     if (!canContinue) return;
     if (step === 1) setStartLevel(level);
@@ -574,12 +583,13 @@ export function AppOnboarding({ onDone }: AppOnboardingProps) {
   }
 
   // Keep the latest handlers for the key listener
-  const keys = useRef({ next, skip: () => finish(false) });
-  keys.current = { next, skip: () => finish(false) };
+  const keys = useRef({ next, back, skip: () => finish(false) });
+  keys.current = { next, back, skip: () => finish(false) };
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { e.preventDefault(); keys.current.skip(); return; }
+      if (e.key === 'ArrowLeft' && !(e.target as HTMLElement | null)?.closest('input, textarea')) { keys.current.back(); return; }
       if (e.key !== 'Enter' || e.repeat) return;
       // A focused button handles Enter itself (no double step)
       const target = e.target as HTMLElement | null;
@@ -706,6 +716,11 @@ export function AppOnboarding({ onDone }: AppOnboardingProps) {
               ))}
               {canContinue ? (
                 <div className="flex items-center gap-2.5">
+                  {step > 0 && (
+                    <button type="button" onClick={back} className="mr-1 flex h-[46px] items-center gap-1.5 rounded-xl px-3 text-[15px] font-semibold text-muted-foreground hover:bg-secondary hover:text-foreground">
+                      <ArrowLeft className="h-4 w-4" strokeWidth={2.5} /> Back
+                    </button>
+                  )}
                   <kbd className="rounded-md border border-border bg-background px-[7px] py-0.5 font-body text-[11px] font-semibold text-muted-foreground">Enter</kbd>
                   {primaryButton('h-[46px] px-5 text-[15px]')}
                 </div>
@@ -743,6 +758,11 @@ export function AppOnboarding({ onDone }: AppOnboardingProps) {
       className="fixed inset-0 z-[80] flex h-[100dvh] flex-col bg-background outline-none motion-safe:animate-in motion-safe:fade-in-0"
     >
       <div className="mx-auto flex w-full max-w-[480px] items-center gap-3.5 px-6 pt-[max(14px,env(safe-area-inset-top))]">
+        {step > 0 && (
+          <button type="button" onClick={back} aria-label="Back" className="-ml-2 grid h-9 w-9 shrink-0 place-items-center rounded-full text-muted-foreground hover:bg-secondary hover:text-foreground">
+            <ArrowLeft className="h-5 w-5" strokeWidth={2} />
+          </button>
+        )}
         <ProgressBar step={step} className="flex-1" />
         {step > 0 && skipButton('whitespace-nowrap text-[13px]')}
       </div>

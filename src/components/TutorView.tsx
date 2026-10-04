@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useCoachMark } from '@/hooks/useCoachMark';
+import { TIP_KEYS } from '@/lib/coachMarks';
+import { CoachMark } from '@/components/CoachMark';
 import { Pip } from '@/components/Pip';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Star, RefreshCw, BookOpen, MessageCircleMore, Layers, Languages, AlertCircle, GraduationCap, ArrowRight } from 'lucide-react';
+import { Star, RefreshCw, BookOpen, MessageCircleMore, Layers, Languages, AlertCircle, GraduationCap, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useLearning } from '@/context/LearningContext';
 import { getRecentSessions, PracticeSessionRow } from '@/lib/practiceSession';
@@ -226,6 +229,8 @@ Rules:
     </div>
   );
 
+  const planTip = useCoachMark(TIP_KEYS.tutorPlan, !!analysis && !loading);
+
   if (!user) return null;
 
   if (noKey) {
@@ -332,6 +337,18 @@ Rules:
           <p className="text-sm leading-snug text-foreground">{analysis.strength}</p>
         </div>
       </div>
+
+      {/* One-time tip: the plan is personal */}
+      {planTip.show && (
+        <CoachMark
+          icon={Sparkles}
+          title="Your plan is based on what you've done"
+          ru="План составлен по вашим результатам."
+          arrow="bottom"
+          align="start"
+          onDismiss={planTip.dismiss}
+        />
+      )}
 
       {/* Today's plan */}
       {first && (

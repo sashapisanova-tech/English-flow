@@ -8,6 +8,12 @@ export const TIP_KEYS = {
   cardsCaughtUp: 'english-tip-cards-caught-up-v1',
   /** Home goal ring, the first time Home shows after the tour. */
   homeGoal: 'english-tip-home-goal-v1',
+  /** Grammar spotlight under a text, the first time one is shown. */
+  grammarSpotlight: 'english-tip-grammar-spotlight-v1',
+  /** The first green expression the learner taps. */
+  expression: 'english-tip-expression-v1',
+  /** The AI tutor's first daily plan. */
+  tutorPlan: 'english-tip-tutor-plan-v1',
 } as const;
 
 export type TipKey = (typeof TIP_KEYS)[keyof typeof TIP_KEYS];

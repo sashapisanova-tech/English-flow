@@ -244,6 +244,10 @@ export function ReadingView({ text, onBack, onNext, onPrev }: ReadingViewProps) 
     const timer = window.setInterval(check, 5_000);
     return () => { io.disconnect(); window.removeEventListener('scroll', check); window.clearInterval(timer); };
   }, [text.id]);
+  // One-time tips: the grammar spotlight, and the first expression the learner taps
+  const grammarTip = useCoachMark(TIP_KEYS.grammarSpotlight, !!text.grammarNote && activeTab === null && !reachedEnd);
+  const expressionTip = useCoachMark(TIP_KEYS.expression, !!exprPopup || panelItem?.kind === 'expr');
+
   const questionsTip = useCoachMark(
     TIP_KEYS.textFinished,
     reachedEnd && activeTab === null && !quizSubmitted && !!text.comprehensionQuestions?.length,
@@ -864,6 +868,15 @@ Return ONLY valid JSON, no markdown:
           )}
           <div className="overflow-hidden rounded-xl border border-border bg-card shadow-lg">
             <div className="space-y-2 p-4 pb-3">
+{expressionTip.show && (
+                <div className="flex items-start gap-2 rounded-lg bg-accent px-3 py-2">
+                  <p className="flex-1 text-xs leading-snug text-accent-foreground">
+                    <span className="font-semibold">Phrases are learned as a whole.</span>{' '}
+                    <span lang="ru" className="opacity-80">Выражения учат целиком.</span>
+                  </p>
+                  <button onClick={expressionTip.dismiss} className="text-xs font-semibold text-accent-foreground hover:opacity-80">Got it</button>
+                </div>
+              )}
               <span className="inline-block rounded-full bg-highlight-soft px-2.5 py-0.5 text-xs font-semibold text-highlight-ink">Expression</span>
               <p className="font-heading text-[22px] font-semibold leading-tight text-foreground">{exprPopup.phrase}</p>
               <p className="font-heading text-[17px] italic text-foreground">{exprPopup.english}</p>
@@ -949,6 +962,17 @@ Return ONLY valid JSON, no markdown:
                 <p className="mt-1 text-sm leading-relaxed text-foreground">{text.grammarNote}</p>
               </div>
             </div>
+          )}
+          {grammarTip.show && (
+            <CoachMark
+              icon={Lightbulb}
+              title="One grammar idea per story, explained in Russian"
+              ru="Одна грамматическая тема на историю — с объяснением по-русски."
+              arrow="top"
+              align="start"
+              onDismiss={grammarTip.dismiss}
+              className="mt-3"
+            />
           )}
         </Card>
         <div ref={textEndRef} className="absolute bottom-0 h-px w-full" aria-hidden="true" />
@@ -1569,6 +1593,15 @@ Return ONLY valid JSON, no markdown:
           const exprSaved = !!vocabulary[exprKey] && vocabulary[exprKey]?.status !== 'ignored';
           return (
             <div key={panelItem.id} className="flex flex-col gap-3">
+{expressionTip.show && (
+                <div className="flex items-start gap-2 rounded-lg bg-accent px-3 py-2">
+                  <p className="flex-1 text-xs leading-snug text-accent-foreground">
+                    <span className="font-semibold">Phrases are learned as a whole.</span>{' '}
+                    <span lang="ru" className="opacity-80">Выражения учат целиком.</span>
+                  </p>
+                  <button onClick={expressionTip.dismiss} className="text-xs font-semibold text-accent-foreground hover:opacity-80">Got it</button>
+                </div>
+              )}
               <span className="self-start rounded-full bg-highlight-soft px-2.5 py-0.5 text-xs font-semibold text-highlight-ink">Expression</span>
               <span className="break-words font-heading text-[26px] font-semibold leading-tight text-foreground">{panelItem.phrase}</span>
               <span className="font-heading text-[19px] italic text-foreground">{panelItem.english}</span>

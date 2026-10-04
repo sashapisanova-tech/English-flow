@@ -29,6 +29,9 @@ const USER_DATA_KEYS = [
   'english-tip-text-finished-v1',
   'english-tip-cards-caught-up-v1',
   'english-tip-home-goal-v1',
+  'english-tip-grammar-spotlight-v1',
+  'english-tip-expression-v1',
+  'english-tip-tutor-plan-v1',
 ];
 
 export function clearUserData() {
