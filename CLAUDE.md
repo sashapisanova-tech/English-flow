@@ -1,5 +1,7 @@
 # English Flow
 
+Current status and next steps: see `HANDOVER.md`.
+
 App for Russian speakers learning British English, A1 → B1. React + Vite + Supabase.
 Sister app: Dutch Flow (`~/Desktop/go-dutch-flow-main`), same codebase and design, teaches Dutch.
 
