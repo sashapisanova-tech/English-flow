@@ -16,8 +16,8 @@ New modules go in `src/data/english/` and are registered in order in
 `src/data/english/index.ts`. Check them with `npx vitest run src/test/content.test.ts`
 (rules in `src/lib/contentCheck.ts`).
 
-`src/data/` still contains the Dutch content copied from Dutch Flow. It is being
-replaced module by module; don't edit the Dutch files except to remove them.
+English Flow must contain no Dutch anywhere (UI, data, prompts, storage keys).
+Old Dutch-era account data is removed on load by `src/lib/legacyDutch.ts`.
 
 ## Gotchas
 
