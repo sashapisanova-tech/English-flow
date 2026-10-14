@@ -333,7 +333,7 @@ export const moduleA2_3Texts: ReadingText[] = [
       },
       {
         question: 'Why does Anya delete the app?',
-        options: ['Her profile is too boring.', 'Chloe tells her to.', 'She has found the right person.'],
+        options: ['Her profile is too boring.', 'Chloe tells her to.', 'She is with the right person now.'],
         correctIndex: 2,
       },
     ],
