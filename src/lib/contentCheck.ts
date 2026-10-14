@@ -41,6 +41,15 @@ const LEVEL_RULES: Record<LevelKey, { words: [number, number]; avgSentence: numb
   b1: { words: [250, 400], avgSentence: 20, keys: [7, 9], paragraphs: [4, 7] },
 };
 
+// Later A2 modules may be longer, to leave room for recycled words (guide §6)
+const A2_LONGER_FROM_MODULE = 4;
+const A2_LONGER_MAX = 300;
+
+// Soft targets (warnings): sentences long enough to show how ideas connect,
+// and at least half of a text's key words used twice in it (guide §6, §7)
+const TARGET_AVG_SENTENCE: Record<LevelKey, number> = { a1: 5, a2: 8, b1: 11 };
+const MIN_KEYS_REPEATED = 0.5;
+
 // A1 ramp (guide §6): absolute beginners start with much shorter texts
 const A1_RAMP: Record<number, { words: [number, number]; avgSentence: number }> = {
   1: { words: [40, 80], avgSentence: 7 },
@@ -235,12 +244,14 @@ export function checkCourse(modules: ReadingText[][], lists: WordLists): CheckRe
 
       // ── Level rules ──
       const rules = { ...LEVEL_RULES[parsed.level], ...(parsed.level === 'a1' ? A1_RAMP[parsed.module] : {}) };
+      if (parsed.level === 'a2' && parsed.module >= A2_LONGER_FROM_MODULE) rules.words = [rules.words[0], A2_LONGER_MAX];
       const sentences = sentencesOf(t.content);
       const tokens = sentences.flatMap(tokensOf);
       const wordCount = tokens.length;
       if (wordCount < rules.words[0] || wordCount > rules.words[1]) err(id, `${wordCount} words; must be ${rules.words[0]}–${rules.words[1]}`);
       const avg = wordCount / Math.max(1, sentences.length);
       if (avg > rules.avgSentence) err(id, `average sentence is ${avg.toFixed(1)} words; max ${rules.avgSentence}`);
+      if (avg < TARGET_AVG_SENTENCE[parsed.level]) warn(id, `average sentence is ${avg.toFixed(1)} words; target ${TARGET_AVG_SENTENCE[parsed.level]}+ (join ideas with connectors)`);
       const paragraphs = t.content.split(/\n\s*\n/).filter(p => p.trim()).length;
       if (paragraphs < rules.paragraphs[0] || paragraphs > rules.paragraphs[1]) err(id, `${paragraphs} paragraphs; must be ${rules.paragraphs[0]}–${rules.paragraphs[1]}`);
 
@@ -311,6 +322,13 @@ export function checkCourse(modules: ReadingText[][], lists: WordLists): CheckRe
       coverage[id] = { known: pk, knownOrKey: pkk, unknown: unknownList };
       if (pk < MIN_KNOWN[parsed.level]) err(id, `${(pk * 100).toFixed(1)}% known without help; need ${MIN_KNOWN[parsed.level] * 100}%`);
       if (pkk < MIN_KNOWN_OR_KEY) err(id, `${(pkk * 100).toFixed(1)}% known or key; need ${MIN_KNOWN_OR_KEY * 100}%. Unknown: ${unknownList.join(', ')}`);
+
+      // Key words used a second time in their own text
+      const singleWords = keys.words.filter(w => !w.includes(' '));
+      const repeated = singleWords.filter(w => tokens.filter(tok => lemmas(tok).includes(canon(w)) || tok.toLowerCase() === w).length >= 2);
+      if (singleWords.length && repeated.length / singleWords.length < MIN_KEYS_REPEATED) {
+        warn(id, `${repeated.length}/${singleWords.length} key words appear twice in the text; target half`);
+      }
 
       // ── Recycling ──
       const idx = textIndex.get(id)!;

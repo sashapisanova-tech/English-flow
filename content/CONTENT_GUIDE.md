@@ -96,8 +96,9 @@ Each text is one object in the module's file. What every field means:
 
 | | A1 | A2 | B1 |
 |---|---|---|---|
-| Text length | see the A1 ramp below | 150–250 words | 250–400 words |
+| Text length | see the A1 ramp below | 150–250 words (A2-4 to A2-6: up to 300) | 250–400 words |
 | Average sentence | ≤ 10 words | ≤ 14 words | ≤ 20 words |
+| Average sentence, target | 5–8 | 8–11 | 11–15 |
 | Key words per text | 4–6 | 6–8 | 7–9 |
 | Paragraphs | 2–4 | 3–5 | 4–7 |
 | Dialogue | short lines | allowed freely | allowed freely, incl. text messages |
@@ -106,6 +107,14 @@ Each text is one object in the module's file. What every field means:
 - A1-1: 40–80 words, sentences ≤ 7 words.
 - A1-2: 60–100 words.
 - A1-3 to A1-5: 80–150 words.
+
+**Sentence length.** The maximum stops texts getting too hard; the target stops them
+getting choppy. Dialogue lines stay short, the way people talk, but narration joins
+ideas with simple connectors (*and, but, because, so, when, while, after, although*)
+instead of cutting them into fragments. *"He was tired, so he went home" is easier to
+follow than "He was tired. He went home.": the link is spelled out. Joining ideas
+with connectors is itself an A2 skill. Graded readers at A2 average about 9–11 words
+per sentence.* What makes a sentence hard is nesting (clauses inside clauses), not length.
 
 ### The coverage rule
 
@@ -174,6 +183,11 @@ it's really learned. One appearance is almost useless.*
 - Every key word must appear again in **at least 3 later texts**: at least once
   in the same module and at least once in a later module.
 - Each text reuses **at least 3 key words from the previous two episodes**.
+- **Within the text**, at least half of the key words appear **twice**: once where
+  they're glossed, once again a few lines later. *The cheapest repetition there is.*
+- **Across modules**, check the recycling report (`npx vitest run src/test/content.test.ts`
+  prints the words that come back in fewer than 3 later texts) and weave the
+  weakest earlier words into each new module.
 - Each module reuses **at least 8 key words from earlier modules**.
 - Recycled words appear in a slightly different form or context when possible
   (*flatmate → my flatmates*, *look for my keys → look for a job*).
