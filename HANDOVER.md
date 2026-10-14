@@ -1,6 +1,10 @@
 # English Flow — Status and next steps
 
-Last updated: 2026-10-14. Read this together with CLAUDE.md.
+Last updated: 2026-10-14.
+
+A2 quality pass done (see git log "A2 quality pass"): narration joined (A2 ≈ 9–10 words per
+narration sentence, B1-1 ≈ 12), key words used twice in their text, and A2 key words recycled
+across modules (words never reused: A2-1 0, A2-2/3/4 3 each, down from 11–21). Read this together with CLAUDE.md.
 
 ## Where things stand (all published to GitHub `main`)
 
@@ -40,7 +44,10 @@ Last updated: 2026-10-14. Read this together with CLAUDE.md.
 ## Open items
 
 1. Owner reviews A1-2 … A1-5 in the app; apply feedback to `content/CONTENT_GUIDE.md`.
-2. Write B1, module by module: B1-2 *Mystery at the Hostel* next. The owner has no time to review
+2. Write B1, module by module: B1-2 *Mystery at the Hostel* next. Every B1 module should
+   recycle A2-5 and A2-6 key words (they have the fewest later texts): run the content test
+   and look at the "appears in N later texts" warnings. Narration target at B1: 12+ words
+   per sentence, joined with connectors; no relative clauses before B1-6. The owner has no time to review
    everything: Claude reviews each text critically as the owner would (guide + checklist),
    fixes, then reports.
 3. "Richer Screens" design (Claude Design, file `Richer Screens.dc.html`) not implemented yet.
