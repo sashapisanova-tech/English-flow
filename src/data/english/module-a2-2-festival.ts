@@ -13,7 +13,7 @@ export const moduleA2_2Texts: ReadingText[] = [
       "It's Thursday evening, and Leo is standing in our kitchen with a long list in his hand. 'This is the plan,' he says. 'We're leaving at eight tomorrow morning. The train gets in at eleven. At twelve, we're going to put up the tent, and at one, we're having lunch.' Leo always has a plan, and last year he made one for his birthday party.\n\n" +
       "I'm Alina. I'm 22, I'm from Riga, and I study in Manchester. Tomorrow, my flatmates and I are going to our first festival. Three days of music, and three nights in a tent! I'm really looking forward to it. My favourite band is playing on Sunday, and I'm going to be at the front.\n\n" +
       "Sam isn't listening to Leo, because he's looking at his phone. 'Bad news. The forecast says rain. All weekend.' 'Then we'll buy wellies,' Leo says, and he writes it on his plan. 'How about umbrellas too?' I say. 'Good idea.' 'Fancy a cup of tea before bed?' Sam asks. 'Wait,' I say. 'Sam, is your phone OK?' He shows us: 4%. 'It's fine,' he says. 'It's always at 4%.'\n\n" +
-      "'And who's bringing the tent?' I ask. 'My cousin,' Leo says. 'It's OK. She'll be there.' Sam looks up from his phone. 'Your cousin? The one who loses everything?'",
+      "'And who's bringing the tent?' I ask. 'My cousin,' Leo says. 'It's OK. She'll be there.' Sam looks up from his phone. 'Your cousin? She loses everything!'",
     words: {
       festival: { english: 'фестиваль' },
       band: { english: 'группа (музыкальная)' },

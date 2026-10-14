@@ -93,6 +93,9 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Story:** Anya (28) tries a dating app for the first time, with very honest
   commentary from her best friend Chloe. Three dates; one is a disaster, one is
   surprising.
+  Anya (28, from Yekaterinburg, works in a bank in Liverpool, a bit shy), Chloe
+  (28, nurse, honest), Ryan (31, handsome, shows off), Marcus (30, doctor, polite,
+  boring), Ben (29, works in a park, no profile photo, dog Biscuit), Lucy (Ben's sister).
 - **Topics:** describing people, personality, feelings, food and restaurants.
 - **Grammar:** comparatives and superlatives, *too / enough*, adjectives -ed / -ing (*bored / boring*).
 - **Review:** future forms (A2-2), past simple (A2-1).

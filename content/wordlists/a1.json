@@ -3846,5 +3846,23 @@
     "pos": "noun",
     "ru": "план; планировать",
     "topic": "general"
+  },
+  {
+    "word": "most",
+    "pos": "adverb",
+    "ru": "самый (the most interesting); больше всего",
+    "topic": "general"
+  },
+  {
+    "word": "worse",
+    "pos": "adjective",
+    "ru": "хуже (сравн. от bad)",
+    "topic": "general"
+  },
+  {
+    "word": "worst",
+    "pos": "adjective",
+    "ru": "худший; хуже всего",
+    "topic": "general"
   }
 ]
