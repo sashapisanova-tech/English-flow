@@ -145,6 +145,10 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Module ID:** `b1-startup` (texts `b1m1-1` … `-8`)
 - **Story:** Three friends quit their jobs to build an app. Investors,
   deadlines, an argument that might end the friendship.
+  Hannah (30, narrator, money), Timur (29, from Ufa, developer, quiet), Josh (28,
+  sales, talks big); friends from university in Leeds for a decade. The app:
+  Leftovers (restaurants sell unsold food cheaply at closing time). Diane Clarke
+  (about 50, investor), Priti (reporter).
 - **Topics:** work, meetings, emails, money, teamwork.
 - **Grammar:** present perfect vs past simple, present perfect continuous.
 - **Review:** first conditional (A2-6), present perfect basics (A2-5).
