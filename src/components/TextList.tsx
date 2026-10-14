@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useMemo, useRef, useState } from 'react';
 import { useLearning } from '@/context/LearningContext';
-import { ArrowRight, ChevronRight, CircleCheck, Search, Sparkles, X } from 'lucide-react';
+import { ArrowRight, ChevronDown, ChevronRight, CircleCheck, PenTool, Search, X } from 'lucide-react';
 import { ReadingText, Module, Level } from '@/types/dutch';
 import { GenerateTextView } from '@/components/GenerateTextView';
 import { getContinueText } from '@/lib/continueReading';
@@ -47,6 +47,8 @@ export function TextList({ onSelect, openLevel, setOpenLevel }: TextListProps) {
   const [showGenerator, setShowGenerator] = useState(false);
   const [searching, setSearching] = useState(false);
   const [query, setQuery] = useState('');
+  // One module open at a time; null = the default (the one you're reading in), '' = all closed
+  const [openModule, setOpenModule] = useState<Module | '' | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
 
   const level = openLevel ?? 'A1';
@@ -55,6 +57,9 @@ export function TextList({ onSelect, openLevel, setOpenLevel }: TextListProps) {
   const modules = moduleInfo
     .filter(mod => mod.level === level)
     .map(mod => ({ ...mod, texts: texts.filter(t => t.module === mod.key) }));
+
+  const continueModule = modules.find(m => m.key === continueText?.text.module);
+  const expanded = openModule ?? continueModule?.key ?? modules[0]?.key ?? null;
 
   // ===== AI TEXT GENERATOR =====
   if (showGenerator) {
@@ -162,53 +167,76 @@ export function TextList({ onSelect, openLevel, setOpenLevel }: TextListProps) {
             />
           )}
 
-          {/* Modules: numbered story lists */}
-          {modules.map(mod => {
-            const done = mod.texts.filter(t => t.completed).length;
-            return (
-              <section key={mod.key} className="flex flex-col gap-1" aria-label={mod.label}>
-                <div className="flex items-baseline justify-between gap-3">
-                  <h2 className="min-w-0 font-heading text-lg font-semibold leading-tight text-foreground">{mod.label}</h2>
-                  <span className="shrink-0 text-[13px] text-muted-foreground">
-                    {mod.texts.length ? `${done} of ${mod.texts.length} read` : 'Coming soon'}
-                  </span>
-                </div>
-                {mod.texts.length > 0 && (
-                  <div className="flex flex-col">
-                    {mod.texts.map((text, i) => (
-                      <button
-                        key={text.id}
-                        onClick={() => onSelect(text)}
-                        className="group flex items-center gap-3.5 border-t border-border px-0.5 py-3.5 text-left first:border-t-0"
-                      >
-                        <span className="w-[22px] shrink-0 font-heading text-[15px] text-muted-foreground">{number(i)}</span>
-                        <span className="flex min-w-0 flex-1 flex-col gap-px">
-                          <span className="truncate text-[15px] font-semibold text-foreground group-hover:text-primary">{text.title}</span>
-                          <span className="text-xs text-muted-foreground">{readingMinutes(text)} min</span>
-                        </span>
-                        {text.completed ? (
-                          <CircleCheck className="h-5 w-5 shrink-0 fill-success text-card" aria-label="Read" />
-                        ) : text.id === continueText?.text.id ? (
-                          <span className="shrink-0 rounded-full bg-highlight-soft px-2 py-[3px] text-[11px] font-semibold text-highlight-ink">New</span>
-                        ) : null}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </section>
-            );
-          })}
+          {/* Modules: one open at a time */}
+          <div className="flex flex-col gap-2">
+            {modules.map(mod => {
+              const done = mod.texts.filter(t => t.completed).length;
+              const isOpen = expanded === mod.key;
+              return (
+                <section key={mod.key} className="flex flex-col" aria-label={mod.label}>
+                  <button
+                    onClick={() => setOpenModule(isOpen ? '' : mod.key)}
+                    aria-expanded={isOpen}
+                    className="flex min-h-11 items-center gap-3 py-1 text-left"
+                  >
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <span className="text-xs font-semibold uppercase tracking-[0.06em] text-muted-foreground">
+                        Module {mod.number}
+                      </span>
+                      <span className="truncate font-heading text-lg font-semibold text-foreground">{mod.label}</span>
+                    </span>
+                    <span className="shrink-0 whitespace-nowrap text-[13px] text-muted-foreground">
+                      {mod.texts.length ? `${done} of ${mod.texts.length} read` : 'Coming soon'}
+                    </span>
+                    <ChevronDown
+                      className={`h-4 w-4 shrink-0 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                      strokeWidth={2.5}
+                    />
+                  </button>
+                  {isOpen && (
+                    mod.texts.length === 0 ? (
+                      <p className="py-3 text-sm text-muted-foreground">Stories for this module are coming soon.</p>
+                    ) : (
+                      <div className="flex flex-col">
+                        {mod.texts.map((text, i) => (
+                          <button
+                            key={text.id}
+                            onClick={() => onSelect(text)}
+                            className="group flex items-center gap-3.5 border-t border-border px-0.5 py-3.5 text-left first:border-t-0"
+                          >
+                            <span className="w-[22px] shrink-0 font-heading text-[15px] text-muted-foreground">{number(i)}</span>
+                            <span className="flex min-w-0 flex-1 flex-col gap-px">
+                              <span className="truncate text-[15px] font-semibold text-foreground group-hover:text-primary">{text.title}</span>
+                              <span className="text-xs text-muted-foreground">{readingMinutes(text)} min</span>
+                            </span>
+                            {text.completed ? (
+                              <CircleCheck className="h-5 w-5 shrink-0 fill-success text-card" aria-label="Read" />
+                            ) : text.id === continueText?.text.id ? (
+                              <span className="shrink-0 rounded-full bg-highlight-soft px-2 py-[3px] text-[11px] font-semibold text-highlight-ink">New</span>
+                            ) : null}
+                          </button>
+                        ))}
+                      </div>
+                    )
+                  )}
+                </section>
+              );
+            })}
+          </div>
 
           {/* Generate your own text */}
           <button
             onClick={() => setShowGenerator(true)}
-            className="flex items-center gap-3 self-start rounded-xl border border-dashed border-primary/40 bg-card px-4 py-3 text-left transition-colors hover:bg-secondary/50"
+            className="flex items-center gap-3.5 rounded-xl border border-border bg-card p-4 text-left transition-colors hover:bg-secondary/50"
           >
-            <Sparkles className="h-5 w-5 shrink-0 text-primary" strokeWidth={1.75} />
-            <span className="flex flex-col">
-              <span className="text-[15px] font-semibold text-foreground">Generate your own text</span>
-              <span className="text-[13px] text-muted-foreground">AI writes a {level} story for you</span>
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground">
+              <PenTool className="h-[22px] w-[22px]" strokeWidth={1.75} />
             </span>
+            <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="font-heading text-[17px] font-semibold text-foreground">Write a text for me</span>
+              <span className="text-[13px] text-muted-foreground">AI writes a {level} story on any topic you pick</span>
+            </span>
+            <ArrowRight className="h-[18px] w-[18px] shrink-0 text-muted-foreground" strokeWidth={2.5} />
           </button>
         </>
       )}

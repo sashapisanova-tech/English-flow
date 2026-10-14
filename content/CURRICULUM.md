@@ -67,8 +67,9 @@ earlier modules. "Traps" refer to section 7 of the guide.
 ### A2-1 · The Job Interview
 - **Module ID:** `a2-interview` (texts `a2m1-1` … `-8`)
 - **Story:** Kirill (26, from St Petersburg, developer) has a week to prepare for
-  his first interview at a London company. His flatmate coaches him; the
-  interview goes very differently from the plan.
+  his first interview at a London company. His flatmate Femi (29, from Leeds,
+  helps people find jobs) coaches him; the interview goes very differently
+  from the plan.
 - **Topics:** jobs, skills, CV, describing experience, workplaces.
 - **Grammar:** past simple (all common irregular verbs), *could / couldn't*, past time expressions (*ago, last…*).
 - **Review:** frequency adverbs and *was / were* (A1-5), present continuous (A1-4).

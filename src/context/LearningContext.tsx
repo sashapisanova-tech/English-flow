@@ -6,6 +6,7 @@ import { generateExampleSentence } from '@/utils/sentenceUtils';
 import { sampleTexts } from '@/data/texts';
 import { getLevelInfo, XP } from '@/utils/levels';
 import { fsrsReview, FSRSCard, FSRSRating } from '@/utils/fsrs';
+import { isDueForReview } from '@/lib/reviewQueue';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/context/AuthContext';
 import { useStreak, StreakState } from '@/hooks/useStreak';
@@ -437,7 +438,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
     const newAllowed = Math.max(0, NEW_CARDS_DAILY_LIMIT - newCardsToday);
 
     const dueReviews = Object.values(vocabulary)
-      .filter(w => w.stability != null && w.dueDate && w.dueDate <= today && w.status !== 'known' && w.status !== 'ignored')
+      .filter(w => isDueForReview(w, today))
       .sort((a, b) => {
         const aRelearn = a.fsrsState === 'relearning' ? 0 : 1;
         const bRelearn = b.fsrsState === 'relearning' ? 0 : 1;
@@ -656,7 +657,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   const dueCount = React.useMemo(() => {
     const today = todayUTC();
     const reviews = Object.values(vocabulary).filter(
-      w => w.stability != null && w.dueDate && w.dueDate <= today && w.status !== 'known' && w.status !== 'ignored'
+      w => isDueForReview(w, today)
     ).length;
     const newWords = Object.values(vocabulary).filter(w => !w.stability && w.status !== 'known' && w.status !== 'ignored').length;
     const newAllowed = Math.max(0, NEW_CARDS_DAILY_LIMIT - newCardsToday);
