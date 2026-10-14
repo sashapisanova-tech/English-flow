@@ -129,6 +129,9 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Story:** Three colleagues drive from London to the Highlands for a work
   event: a tiny car, a wrong turn, sheep on the road, and a secret one of them
   is keeping.
+  Vera (32, from Tashkent, narrator, keeps the secret), Kevin (60, the boss; the
+  'work event' is his surprise retirement party), Amara (26, owns the tiny yellow
+  car), Linda (Kevin's wife), Mrs MacLeod (runs the B&B).
 - **Topics:** travel, nature, food, accidents and problems, accommodation.
 - **Grammar:** past continuous vs past simple (*I was driving when…*), first conditional, *might* for possibility.
 - **Review:** present perfect (A2-5), uncountables (A2-4).
