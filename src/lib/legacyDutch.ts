@@ -31,6 +31,17 @@ export function isLegacyTextId(id: string): boolean {
   return !englishTextIds.has(id);
 }
 
+// Dutch Flow also had A2 and B1 texts with IDs like a2m1-1 and b1m1-1, which English
+// Flow now reuses. English A2/B1 texts were first published on this day, so progress
+// on those IDs from before it is Dutch-era progress.
+const ENGLISH_A2_B1_SINCE = '2026-10-14';
+
+/** Saved progress that belongs to a Dutch Flow text, not to an English Flow one. */
+export function isLegacyTextProgress(id: string, lastRead: string | undefined): boolean {
+  if (isLegacyTextId(id)) return true;
+  return /^(a2|b1)m/.test(id) && (!lastRead || lastRead < ENGLISH_A2_B1_SINCE);
+}
+
 export function isLegacyPracticeSession(row: Pick<PracticeSessionRow, 'grammar_focus' | 'hard_grammar_targets'>): boolean {
   return [row.grammar_focus ?? '', ...(row.hard_grammar_targets ?? [])].some(t => DUTCH_GRAMMAR.test(t));
 }

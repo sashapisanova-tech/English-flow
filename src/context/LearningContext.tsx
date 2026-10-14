@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode } from 'react';
 import { celebrate, STREAK_MILESTONES } from '@/lib/pip';
-import { isLegacyDutchWord, isLegacyTextId } from '@/lib/legacyDutch';
+import { isLegacyDutchWord, isLegacyTextProgress } from '@/lib/legacyDutch';
 import { DutchWord, WordStatus, DailyGoal, ReadingText } from '@/types/dutch';
 import { generateExampleSentence } from '@/utils/sentenceUtils';
 import { sampleTexts } from '@/data/texts';
@@ -203,7 +203,7 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         const storedTextProgress = statsRes.data?.text_progress as Record<string, { completed: boolean; lastRead: string }> | null;
         // Progress on Dutch Flow texts (left over from before the switch) is dropped
         const remoteTextProgress = storedTextProgress
-          ? Object.fromEntries(Object.entries(storedTextProgress).filter(([id]) => !isLegacyTextId(id)))
+          ? Object.fromEntries(Object.entries(storedTextProgress).filter(([id, p]) => !isLegacyTextProgress(id, p?.lastRead)))
           : null;
         if (storedTextProgress && remoteTextProgress && Object.keys(remoteTextProgress).length < Object.keys(storedTextProgress).length) {
           supabase.from('user_stats').upsert(
@@ -222,8 +222,8 @@ export function LearningProvider({ children }: { children: ReactNode }) {
         } else {
           // No remote text progress yet — push local progress to Supabase
           const localProgress = Object.fromEntries(Object.entries(
-            (() => { try { return JSON.parse(localStorage.getItem(TEXT_PROGRESS_KEY) || '{}'); } catch { return {}; } })() as Record<string, unknown>,
-          ).filter(([id]) => !isLegacyTextId(id)));
+            (() => { try { return JSON.parse(localStorage.getItem(TEXT_PROGRESS_KEY) || '{}'); } catch { return {}; } })() as Record<string, { lastRead?: string }>,
+          ).filter(([id, p]) => !isLegacyTextProgress(id, p?.lastRead)));
           if (Object.keys(localProgress).length > 0) {
             const { error } = await supabase.from('user_stats').upsert({
               user_id: user.id,
@@ -481,7 +481,9 @@ export function LearningProvider({ children }: { children: ReactNode }) {
   const [texts, setTexts] = useState<ReadingText[]>(() => {
     try {
       const saved = JSON.parse(localStorage.getItem(TEXT_PROGRESS_KEY) || '{}') as Record<string, { completed: boolean; lastRead: string }>;
-      return sampleTexts.map(t => saved[t.id] ? { ...t, completed: true, lastRead: new Date(saved[t.id].lastRead) } : t);
+      return sampleTexts.map(t => saved[t.id] && !isLegacyTextProgress(t.id, saved[t.id].lastRead)
+        ? { ...t, completed: true, lastRead: new Date(saved[t.id].lastRead) }
+        : t);
     } catch { return sampleTexts; }
   });
   const [dailyGoal, setDailyGoal] = useState<DailyGoal>(() => {
