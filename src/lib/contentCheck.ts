@@ -42,7 +42,7 @@ const LEVEL_RULES: Record<LevelKey, { words: [number, number]; avgSentence: numb
 };
 
 // Later A2 modules may be longer, to leave room for recycled words (guide §6)
-const A2_LONGER_FROM_MODULE = 4;
+const A2_LONGER_FROM_MODULE = 3;
 const A2_LONGER_MAX = 300;
 
 // Soft targets (warnings): sentences long enough to show how ideas connect,

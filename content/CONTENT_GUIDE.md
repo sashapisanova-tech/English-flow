@@ -96,7 +96,7 @@ Each text is one object in the module's file. What every field means:
 
 | | A1 | A2 | B1 |
 |---|---|---|---|
-| Text length | see the A1 ramp below | 150–250 words (A2-4 to A2-6: up to 300) | 250–400 words |
+| Text length | see the A1 ramp below | 150–250 words (A2-3 to A2-6: up to 300) | 250–400 words |
 | Average sentence | ≤ 10 words | ≤ 14 words | ≤ 20 words |
 | Average narration sentence, target | 5–8 | 9–12 | 12–16 |
 | Key words per text | 4–6 | 6–8 | 7–9 |
