@@ -44,7 +44,10 @@ across modules (words never reused: A2-1 0, A2-2/3/4 3 each, down from 11–21).
 ## Open items
 
 1. Owner reviews A1-2 … A1-5 in the app; apply feedback to `content/CONTENT_GUIDE.md`.
-2. Write B1, module by module: B1-3 *Burnout* next. Every B1 module should
+2. Write B1, module by module: B1-3 *Burnout* next, to the B1 rules agreed on 2026-10-14
+   (CURRICULUM.md, top of the B1 section: simple relative clauses and passive allowed for
+   reading, narration 14–18 words, 2–3 episodes in another text type, one opinion/purpose
+   question). B1-1 and B1-2 already follow them. Every B1 module should
    recycle A2-5 and A2-6 key words (they have the fewest later texts): run the content test
    and look at the "appears in N later texts" warnings. Narration target at B1: 12+ words
    per sentence, joined with connectors; no relative clauses before B1-6. The owner has no time to review
