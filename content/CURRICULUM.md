@@ -117,6 +117,8 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Module ID:** `a2-influencer` (texts `a2m5-1` … `-8`)
 - **Story:** Nastya (20, student) bets her brother she can get 10,000 followers
   in a month. Fake trends, a viral mistake, and the question of what's real.
+  Nastya (20, from Omsk, studies fashion in Newcastle, narrator), Misha (24, her
+  brother, works with computers), Grace (her flatmate, films the videos).
 - **Topics:** social media, phones, online shopping, apps, the internet.
 - **Grammar:** present perfect with *ever / never / just / already / yet*.
 - **Review:** *should / have to* (A2-4), comparatives (A2-3).

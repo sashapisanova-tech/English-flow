@@ -5,7 +5,8 @@ Last updated: 2026-10-14. Read this together with CLAUDE.md.
 ## Where things stand (all published to GitHub `main`)
 
 - **Content:** A1 complete, 5 modules × 8 episodes = 40 texts (`src/data/english/`).
-  A2-1 *The Job Interview*, A2-2 *Festival Weekend*, A2-3 *Swipe Right*, A2-4 *Flat Hunting* written (8 texts each,
+  A2-1 *The Job Interview*, A2-2 *Festival Weekend*, A2-3 *Swipe Right*, A2-4 *Flat Hunting*, A2-5 *The Influencer
+  Experiment* written (8 texts each,
   self-reviewed by Claude, pass the checker).
   Missing basic words added to the lists: minute, into, better, best, end, plan, most, worse,
   worst (`a1.json`), will, should (`starter.json`).
@@ -38,7 +39,7 @@ Last updated: 2026-10-14. Read this together with CLAUDE.md.
 ## Open items
 
 1. Owner reviews A1-2 … A1-5 in the app; apply feedback to `content/CONTENT_GUIDE.md`.
-2. Write A2, module by module: A2-5 *The Influencer Experiment* next. The owner has no time to review
+2. Write A2, module by module: A2-6 *Road Trip to Scotland* next. The owner has no time to review
    everything: Claude reviews each text critically as the owner would (guide + checklist),
    fixes, then reports.
 3. "Richer Screens" design (Claude Design, file `Richer Screens.dc.html`) not implemented yet.
