@@ -80,6 +80,10 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Module ID:** `a2-festival` (texts `a2m2-1` … `-8`)
 - **Story:** Four friends at a music festival in the rain: a lost tent, a band
   that might be famous, and a phone with 4% battery.
+  Alina (22, from Riga, studies in Manchester, narrator, music fan), Leo (23,
+  plans everything), Sam (24, from Cardiff, phone always at 4%), Jess (23, Leo's
+  cousin from Glasgow, relaxed, loses things). Kat Rivers is the singer of
+  Blue Harbour, Alina's favourite band.
 - **Topics:** music, camping, weather, plans, problems.
 - **Grammar:** future forms: *going to* (plans), present continuous (arrangements: *We're meeting at six*), *will* (decisions and predictions).
 - **Traps:** 6 no future after *when / if*.
