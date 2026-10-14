@@ -98,7 +98,7 @@ Each text is one object in the module's file. What every field means:
 |---|---|---|---|
 | Text length | see the A1 ramp below | 150–250 words (A2-4 to A2-6: up to 300) | 250–400 words |
 | Average sentence | ≤ 10 words | ≤ 14 words | ≤ 20 words |
-| Average sentence, target | 5–8 | 8–11 | 11–15 |
+| Average narration sentence, target | 5–8 | 9–12 | 12–16 |
 | Key words per text | 4–6 | 6–8 | 7–9 |
 | Paragraphs | 2–4 | 3–5 | 4–7 |
 | Dialogue | short lines | allowed freely | allowed freely, incl. text messages |
@@ -108,8 +108,9 @@ Each text is one object in the module's file. What every field means:
 - A1-2: 60–100 words.
 - A1-3 to A1-5: 80–150 words.
 
-**Sentence length.** The maximum stops texts getting too hard; the target stops them
-getting choppy. Dialogue lines stay short, the way people talk, but narration joins
+**Sentence length.** The maximum stops texts getting too hard; the target (measured on
+narration, not on spoken lines) stops them getting choppy. Dialogue lines stay short,
+the way people talk, but narration joins
 ideas with simple connectors (*and, but, because, so, when, while, after, although*)
 instead of cutting them into fragments. *"He was tired, so he went home" is easier to
 follow than "He was tired. He went home.": the link is spelled out. Joining ideas

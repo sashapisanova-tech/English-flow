@@ -47,7 +47,8 @@ const A2_LONGER_MAX = 300;
 
 // Soft targets (warnings): sentences long enough to show how ideas connect,
 // and at least half of a text's key words used twice in it (guide §6, §7)
-const TARGET_AVG_SENTENCE: Record<LevelKey, number> = { a1: 5, a2: 8, b1: 11 };
+// Measured on narration only: spoken lines stay short, the way people talk
+const TARGET_NARRATION_SENTENCE: Record<LevelKey, number> = { a1: 5, a2: 9, b1: 12 };
 const MIN_KEYS_REPEATED = 0.5;
 
 // A1 ramp (guide §6): absolute beginners start with much shorter texts
@@ -251,7 +252,11 @@ export function checkCourse(modules: ReadingText[][], lists: WordLists): CheckRe
       if (wordCount < rules.words[0] || wordCount > rules.words[1]) err(id, `${wordCount} words; must be ${rules.words[0]}–${rules.words[1]}`);
       const avg = wordCount / Math.max(1, sentences.length);
       if (avg > rules.avgSentence) err(id, `average sentence is ${avg.toFixed(1)} words; max ${rules.avgSentence}`);
-      if (avg < TARGET_AVG_SENTENCE[parsed.level]) warn(id, `average sentence is ${avg.toFixed(1)} words; target ${TARGET_AVG_SENTENCE[parsed.level]}+ (join ideas with connectors)`);
+      const narration = sentences.filter(sen => !sen.startsWith("'"));
+      const narrationAvg = narration.flatMap(tokensOf).length / Math.max(1, narration.length);
+      if (narration.length && narrationAvg < TARGET_NARRATION_SENTENCE[parsed.level]) {
+        warn(id, `narration sentences average ${narrationAvg.toFixed(1)} words; target ${TARGET_NARRATION_SENTENCE[parsed.level]}+ (join ideas with connectors)`);
+      }
       const paragraphs = t.content.split(/\n\s*\n/).filter(p => p.trim()).length;
       if (paragraphs < rules.paragraphs[0] || paragraphs > rules.paragraphs[1]) err(id, `${paragraphs} paragraphs; must be ${rules.paragraphs[0]}–${rules.paragraphs[1]}`);
 
