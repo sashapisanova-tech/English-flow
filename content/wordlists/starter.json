@@ -1251,5 +1251,11 @@
     "pos": "verb",
     "ru": "может быть, возможно (I might be late — я, может, опоздаю)",
     "topic": "general"
+  },
+  {
+    "word": "must",
+    "pos": "verb",
+    "ru": "должен; (о выводе) наверное, точно: she must be tired — она, должно быть, устала",
+    "topic": "general"
   }
 ]

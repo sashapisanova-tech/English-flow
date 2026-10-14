@@ -158,6 +158,10 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Module ID:** `b1-hostel` (texts `b1m2-1` … `-8`)
 - **Story:** At a hostel in Edinburgh, a guest's passport disappears. Ruslan (29,
   traveller from Almaty) decides to find out who took it.
+  Ines (24, from Porto, her passport goes missing), Fergus (hostel manager, red beard),
+  Henrik (Swedish, plays guitar, out all night), Maya (from Toronto, afraid of flying),
+  Dougie (cleaner, about 60), PC Grant (police officer). Solution: Maya took the wrong
+  passport by accident (two identical red covers with a Scottish flag; locker six didn't lock).
 - **Topics:** travel, people and descriptions, crime vocabulary (light), routines.
 - **Grammar:** modals of deduction (*must / might / can't be*), past perfect.
 - **Review:** present perfect vs past simple (B1-1), past continuous (A2-6).

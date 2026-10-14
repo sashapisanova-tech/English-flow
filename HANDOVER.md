@@ -9,10 +9,10 @@ across modules (words never reused: A2-1 0, A2-2/3/4 3 each, down from 11–21).
 ## Where things stand (all published to GitHub `main`)
 
 - **Content:** A1 complete, 5 modules × 8 episodes = 40 texts (`src/data/english/`).
-  A2 complete: 6 modules × 8 episodes = 48 texts (A2-1 … A2-6). B1-1 *The Startup* written,
+  A2 complete: 6 modules × 8 episodes = 48 texts (A2-1 … A2-6). B1-1 *The Startup* and B1-2 *Mystery at the Hostel* written,
   self-reviewed by Claude, pass the checker).
   Missing basic words added to the lists: minute, into, better, best, end, plan, most, worse,
-  worst (`a1.json`), will, should, might (`starter.json`).
+  worst (`a1.json`), will, should, might, must (`starter.json`).
   English A2/B1 text IDs reuse Dutch Flow IDs; `isLegacyTextProgress` drops Dutch-era
   progress on them (anything saved before 2026-10-14).
   All pass the automatic checker. Only A1-1 has been read and approved by the owner;
@@ -44,7 +44,7 @@ across modules (words never reused: A2-1 0, A2-2/3/4 3 each, down from 11–21).
 ## Open items
 
 1. Owner reviews A1-2 … A1-5 in the app; apply feedback to `content/CONTENT_GUIDE.md`.
-2. Write B1, module by module: B1-2 *Mystery at the Hostel* next. Every B1 module should
+2. Write B1, module by module: B1-3 *Burnout* next. Every B1 module should
    recycle A2-5 and A2-6 key words (they have the fewest later texts): run the content test
    and look at the "appears in N later texts" warnings. Narration target at B1: 12+ words
    per sentence, joined with connectors; no relative clauses before B1-6. The owner has no time to review
