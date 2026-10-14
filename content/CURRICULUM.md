@@ -141,6 +141,12 @@ earlier modules. "Traps" refer to section 7 of the guide.
 
 ## B1 — independence (56 texts)
 
+**B1 rules in addition to the guide** (from the B1 analysis, 2026-10-14):
+simple relative clauses and the simple passive may appear from B1-1 for reading;
+narration averages 14–18 words per sentence; 2–3 episodes per module use another
+text type inside the story (listed under each module); one question per text asks
+about opinion or purpose; every module recycles A2-5 and A2-6 key words.
+
 ### B1-1 · The Startup
 - **Module ID:** `b1-startup` (texts `b1m1-1` … `-8`)
 - **Story:** Three friends quit their jobs to build an app. Investors,
@@ -152,6 +158,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Topics:** work, meetings, emails, money, teamwork.
 - **Grammar:** present perfect vs past simple, present perfect continuous.
 - **Review:** first conditional (A2-6), present perfect basics (A2-5).
+- **Text types:** emails (the investor, the job offer), the newspaper article, app reviews.
 - **Traps:** 2, 7 *say vs tell*, 9 false friends (*decade*).
 
 ### B1-2 · Mystery at the Hostel
@@ -165,6 +172,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Topics:** travel, people and descriptions, crime vocabulary (light), routines.
 - **Grammar:** modals of deduction (*must / might / can't be*), past perfect.
 - **Review:** present perfect vs past simple (B1-1), past continuous (A2-6).
+- **Text types:** online hostel reviews, a message from the plane, the police officer's notes.
 - **Traps:** 10 *police are*, 1 articles.
 
 ### B1-3 · Burnout
@@ -174,6 +182,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Topics:** mental health, sleep, stress, habits, work-life balance.
 - **Grammar:** *used to*, gerunds and infinitives (*stop doing / try to do*).
 - **Review:** past perfect (B1-2), present perfect continuous (B1-1).
+- **Text types:** diary entries, a health advice article, work emails.
 - **Traps:** 5 *agree*, 4 *advice*.
 
 ### B1-4 · Podcast Hosts
@@ -183,6 +192,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Topics:** media, news, fake news, interviews, opinions.
 - **Grammar:** passive (present and past simple), reported speech (statements and questions).
 - **Review:** *used to* (B1-3), modals of deduction (B1-2).
+- **Text types:** podcast transcripts, a fake news article, listeners' comments.
 - **Traps:** 7 *say vs tell*, 10 *news is*, 9 *magazine*.
 
 ### B1-5 · The Green Street
@@ -192,6 +202,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Topics:** environment, city change, community, local politics (non-partisan).
 - **Grammar:** second conditional, *wish + past simple*, zero conditional.
 - **Review:** passive (B1-4), gerunds and infinitives (B1-3).
+- **Text types:** a letter from the council, a petition, a local news article, the street's group chat.
 - **Traps:** 6 *if*, 8 *depend on*.
 
 ### B1-6 · Family Dinner
@@ -201,6 +212,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Topics:** family, relationships, generations, cultural differences, food traditions.
 - **Grammar:** relative clauses (*who / which / that / where*), common phrasal verbs (about 20, recycled through the module).
 - **Review:** second conditional (B1-5), reported speech (B1-4).
+- **Text types:** a family recipe with its story, text messages, a letter from a grandmother.
 - **Traps:** 1 articles, 9 false friends (*sympathetic*), 3 questions.
 
 ### B1-7 · One Year Abroad
@@ -209,6 +221,7 @@ earlier modules. "Traps" refer to section 7 of the guide.
   culture shock, homesickness, small victories, and deciding whether to stay.
 - **Topics:** bureaucracy, banks and doctors, culture, identity, the future.
 - **Grammar:** *should have / could have* (regret), plus a planned review of every earlier grammar focus (each episode revisits 2–3).
+- **Text types:** blog posts (one month, six months, one year), official letters and forms, an opinion piece.
 - **Traps:** all 10, as a final review.
 
 ---

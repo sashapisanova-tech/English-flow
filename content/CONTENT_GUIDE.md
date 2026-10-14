@@ -98,7 +98,7 @@ Each text is one object in the module's file. What every field means:
 |---|---|---|---|
 | Text length | see the A1 ramp below | 150–250 words (A2-3 to A2-6: up to 300) | 250–400 words |
 | Average sentence | ≤ 10 words | ≤ 14 words | ≤ 20 words |
-| Average narration sentence, target | 5–8 | 9–12 | 12–16 |
+| Average narration sentence, target | 5–8 | 9–12 | 14–18 |
 | Key words per text | 4–6 | 6–8 | 7–9 |
 | Paragraphs | 2–4 | 3–5 | 4–7 |
 | Dialogue | short lines | allowed freely | allowed freely, incl. text messages |
@@ -116,6 +116,14 @@ instead of cutting them into fragments. *"He was tired, so he went home" is easi
 follow than "He was tired. He went home.": the link is spelled out. Joining ideas
 with connectors is itself an A2 skill. Graded readers at A2 average about 9–11 words
 per sentence.* What makes a sentence hard is nesting (clauses inside clauses), not length.
+
+**Text types at B1.** B1 readers handle emails, articles, reviews, blog posts, notices
+and opinion pieces, not only stories (CEFR B1; Cambridge B1 Preliminary). Each B1
+module keeps its story, but **2–3 episodes are told partly or fully through another
+text type inside the story**: the newspaper article about the characters, an online
+review, an official email, a diary entry, a podcast transcript. The module's plan in
+CURRICULUM.md lists them. At B1, about 20–35% of narration sentences may run past 20
+words; the average stays at or under 20.
 
 ### The coverage rule
 
@@ -203,6 +211,13 @@ it's really learned. One appearance is almost useless.*
   unless it comes back.*
 - No grammar from later modules, except fixed chunks a learner can memorise as
   a whole (*Would you like…?*, *I'd love to*, *I've got*).
+- **Exception from B1-1:** simple defining relative clauses (*the man who…, the
+  app that…*) and the present/past simple passive (*it was stolen, it is made*)
+  may appear in any B1 text, for reading. Each module still *teaches* only its own
+  focus (B1-4 the passive in depth, B1-6 relative clauses in depth). *Every real B1
+  text uses them (British Council B1 articles and stories, Cambridge B1 Preliminary);
+  learner corpora place simple relative clauses at A2–B1. Banning them makes B1
+  texts choppy and unnatural.*
 - **Grammar spotlight (`grammarNote`):** each episode has a 1–3 sentence note
   **in Russian** that points at one sentence from the text and explains it,
   **comparing with Russian where they differ**. For example:
@@ -240,6 +255,9 @@ at least one of them, used correctly and naturally.
 - At least one question per text is about **why** something happened or **how
   someone feels**. *Inference questions make the learner process the meaning,
   which improves both comprehension and memory.*
+- **At B1, one question asks about opinion or purpose**: what a character or writer
+  thinks, or why someone wrote a message, review or article. *CEFR B1 readers
+  "recognise the line of argument" and the writer's point of view.*
 - Wrong options are believable (mentioned in the text, or a likely
   misunderstanding), never silly.
 - The correct answer's position varies: across a module, each of 0, 1 and 2 is

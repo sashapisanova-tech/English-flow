@@ -48,7 +48,7 @@ const A2_LONGER_MAX = 300;
 // Soft targets (warnings): sentences long enough to show how ideas connect,
 // and at least half of a text's key words used twice in it (guide §6, §7)
 // Measured on narration only: spoken lines stay short, the way people talk
-const TARGET_NARRATION_SENTENCE: Record<LevelKey, number> = { a1: 5, a2: 9, b1: 12 };
+const TARGET_NARRATION_SENTENCE: Record<LevelKey, number> = { a1: 5, a2: 9, b1: 14 };
 const MIN_KEYS_REPEATED = 0.5;
 
 // A1 ramp (guide §6): absolute beginners start with much shorter texts
