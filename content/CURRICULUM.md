@@ -105,6 +105,9 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Module ID:** `a2-flat-hunting` (texts `a2m4-1` … `-8`)
 - **Story:** Jake and Mira (both 25) need a flat in Bristol in two weeks. A
   landlord who never answers, a flat that is too good to be true, and bills.
+  Mira (25, from Moldova, designer, narrator) and Jake (25, English teacher, her
+  friend from university). Mrs Okafor (about 60, kind neighbour), Mr Price (about
+  70, landlord, never answers his phone), 'Mr Smith' (a fake landlord, a scam).
 - **Topics:** renting, money, bills, problems in the home, neighbours.
 - **Grammar:** countable / uncountable, *some / any / much / many / a lot of*, *should / have to / don't have to*.
 - **Review:** comparatives (A2-3), future forms (A2-2).

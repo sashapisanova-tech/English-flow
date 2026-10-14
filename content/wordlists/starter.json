@@ -1239,5 +1239,11 @@
     "pos": "verb",
     "ru": "будет / буду (вспомогательный глагол будущего времени): I'll, won't",
     "topic": "general"
+  },
+  {
+    "word": "should",
+    "pos": "verb",
+    "ru": "следует, стоит (совет): you should — тебе стоит",
+    "topic": "general"
   }
 ]

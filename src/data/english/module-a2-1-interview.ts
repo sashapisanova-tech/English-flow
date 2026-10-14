@@ -247,7 +247,7 @@ export const moduleA2_1Texts: ReadingText[] = [
       },
       {
         question: 'What does Kirill do with the app?',
-        options: ["He finds the problem that Daniel's team couldn't find.", 'He makes it look nicer.', 'He makes it into a game.'],
+        options: ["He finds the problem. Daniel's team couldn't find it.", 'He makes it look nicer.', 'He makes it into a game.'],
         correctIndex: 0,
       },
       {
