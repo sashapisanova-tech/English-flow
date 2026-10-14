@@ -69,7 +69,8 @@ earlier modules. "Traps" refer to section 7 of the guide.
 - **Story:** Kirill (26, from St Petersburg, developer) has a week to prepare for
   his first interview at a London company. His flatmate Femi (29, from Leeds,
   helps people find jobs) coaches him; the interview goes very differently
-  from the plan.
+  from the plan. Daniel (about 40, has two children) leads the app team and
+  does the interview.
 - **Topics:** jobs, skills, CV, describing experience, workplaces.
 - **Grammar:** past simple (all common irregular verbs), *could / couldn't*, past time expressions (*ago, last…*).
 - **Review:** frequency adverbs and *was / were* (A1-5), present continuous (A1-4).

@@ -3810,5 +3810,41 @@
     "pos": "noun",
     "ru": "приложение",
     "topic": "technology"
+  },
+  {
+    "word": "minute",
+    "pos": "noun",
+    "ru": "минута",
+    "topic": "time"
+  },
+  {
+    "word": "into",
+    "pos": "preposition",
+    "ru": "в (внутрь): go into the kitchen",
+    "topic": "general"
+  },
+  {
+    "word": "better",
+    "pos": "adjective",
+    "ru": "лучше (сравн. от good)",
+    "topic": "general"
+  },
+  {
+    "word": "best",
+    "pos": "adjective",
+    "ru": "лучший; лучше всего",
+    "topic": "general"
+  },
+  {
+    "word": "end",
+    "pos": "noun",
+    "ru": "конец",
+    "topic": "general"
+  },
+  {
+    "word": "plan",
+    "pos": "noun",
+    "ru": "план; планировать",
+    "topic": "general"
   }
 ]

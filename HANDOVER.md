@@ -1,10 +1,12 @@
 # English Flow — Status and next steps
 
-Last updated: 2026-10-13. Read this together with CLAUDE.md.
+Last updated: 2026-10-14. Read this together with CLAUDE.md.
 
 ## Where things stand (all published to GitHub `main`)
 
 - **Content:** A1 complete, 5 modules × 8 episodes = 40 texts (`src/data/english/`).
+  A2-1 *The Job Interview* written (8 texts, self-reviewed by Claude, passes the checker).
+  Six basic words were missing from `a1.json` and were added: minute, into, better, best, end, plan.
   All pass the automatic checker. Only A1-1 has been read and approved by the owner;
   A1-2 to A1-5 still need the owner's read-through (especially Russian translations
   and grammar notes). A2 (6 modules) and B1 (7 modules) are planned in
@@ -34,7 +36,9 @@ Last updated: 2026-10-13. Read this together with CLAUDE.md.
 ## Open items
 
 1. Owner reviews A1-2 … A1-5 in the app; apply feedback to `content/CONTENT_GUIDE.md`.
-2. Write A2, module by module (A2-1 *The Job Interview* first), owner reviews each.
+2. Write A2, module by module: A2-2 *Festival Weekend* next. The owner has no time to review
+   everything: Claude reviews each text critically as the owner would (guide + checklist),
+   fixes, then reports.
 3. "Richer Screens" design (Claude Design, file `Richer Screens.dc.html`) not implemented yet.
 4. Dutch Flow (`~/Desktop/go-dutch-flow-main`) still has the old design; port the
    redesign with Hugo the heron when the owner asks.
