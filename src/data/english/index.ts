@@ -13,9 +13,10 @@ import { moduleA2_6Texts } from './module-a2-6-road-trip';
 import { moduleB1_1Texts } from './module-b1-1-startup';
 import { moduleB1_2Texts } from './module-b1-2-hostel';
 import { moduleB1_3Texts } from './module-b1-3-burnout';
+import { moduleB1_4Texts } from './module-b1-4-podcast';
 
 // English Flow reading modules, in course order. The order matters: the content
 // checker treats words taught in earlier modules as known in later ones.
-export const englishModules: ReadingText[][] = [moduleA1_1Texts, moduleA1_2Texts, moduleA1_3Texts, moduleA1_4Texts, moduleA1_5Texts, moduleA2_1Texts, moduleA2_2Texts, moduleA2_3Texts, moduleA2_4Texts, moduleA2_5Texts, moduleA2_6Texts, moduleB1_1Texts, moduleB1_2Texts, moduleB1_3Texts];
+export const englishModules: ReadingText[][] = [moduleA1_1Texts, moduleA1_2Texts, moduleA1_3Texts, moduleA1_4Texts, moduleA1_5Texts, moduleA2_1Texts, moduleA2_2Texts, moduleA2_3Texts, moduleA2_4Texts, moduleA2_5Texts, moduleA2_6Texts, moduleB1_1Texts, moduleB1_2Texts, moduleB1_3Texts, moduleB1_4Texts];
 
 export const englishTexts: ReadingText[] = englishModules.flat();

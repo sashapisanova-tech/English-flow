@@ -192,6 +192,10 @@ about opinion or purpose; every module recycles A2-5 and A2-6 key words.
 - **Module ID:** `b1-podcast` (texts `b1m4-1` … `-8`)
 - **Story:** Two students start a podcast about strange news stories. Their
   episode about a local legend gets them into trouble.
+  Zara (21, wants to be a journalist, York) and Nikita (22, from Riga, the computer);
+  podcast Strange But True. Jean (about 60, café owner in Whitby) fakes a photo of the
+  Black Dog legend with Mr Harris's gentle dog Bruno; a fake news site turns it into
+  'monster attacks'; Professor Okoro (head of their course); the correction episode.
 - **Topics:** media, news, fake news, interviews, opinions.
 - **Grammar:** passive (present and past simple), reported speech (statements and questions).
 - **Review:** *used to* (B1-3), modals of deduction (B1-2).
