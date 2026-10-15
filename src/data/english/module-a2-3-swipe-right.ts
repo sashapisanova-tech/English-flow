@@ -236,7 +236,7 @@ export const moduleA2_3Texts: ReadingText[] = [
       "i'd love to": { english: 'с удовольствием!' },
     },
     grammarNote:
-      "«He wasn't the most handsome… But he was the easiest to talk to» — у прилагательных на -y: easy → easier → the easiest, funny → the funniest. А «I'm too shy» — too + прилагательное: «слишком». По-русски «слишком застенчивый» — и в английском порядок такой же, но с enough наоборот: brave enough — «достаточно смелый».",
+      "«Ben wasn't the most handsome… But he was the easiest to talk to» — у прилагательных на -y: easy → easier → the easiest, funny → the funniest. А «I'm too shy» — too + прилагательное: «слишком». По-русски «слишком застенчивый» — и в английском порядок такой же, но с enough наоборот: brave enough — «достаточно смелый».",
     comprehensionQuestions: [
       {
         question: 'Why does Anya know the dog?',
@@ -278,7 +278,7 @@ export const moduleA2_3Texts: ReadingText[] = [
       'someone else': { english: 'кто-то другой' },
     },
     grammarNote:
-      "«Anya was happier than ever» — happy → happier: у прилагательных на -y буква y меняется на i. А «You're the most worried person I know» — worried длинное (по смыслу -ed), поэтому the most, а не worriedest. По-русски «самый тревожный человек из всех, кого я знаю», а в английском просто the most worried person I know — без «из всех, кого».",
+      "«Anya felt relaxed and happier than in years» — happy → happier: у прилагательных на -y буква y меняется на i. А «You're the most worried person I know» — worried длинное (по смыслу -ed), поэтому the most, а не worriedest. По-русски «самый тревожный человек из всех, кого я знаю», а в английском просто the most worried person I know — без «из всех, кого».",
     comprehensionQuestions: [
       {
         question: 'How does Anya feel about Ben at the start?',

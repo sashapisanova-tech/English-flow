@@ -72,7 +72,7 @@ export const moduleB1_1Texts: ReadingText[] = [
       'under pressure': { english: 'под давлением, в напряжении' },
     },
     grammarNote:
-      "«She has invested in more than thirty startups» — Present Perfect: опыт за всю жизнь, без даты. А «Diane's office was high up in a glass building» — Past Simple: рассказ о конкретном дне. И «Have you been talking to yourself again?» — Present Perfect Continuous: действие длилось до сих пор, и это видно. По-русски везде «ты разговаривал», а в английском три разные формы.",
+      "«She has invested in more than thirty startups» — Present Perfect: опыт за всю жизнь, без даты. А «Diane Clarke's office was high up in a glass building» — Past Simple: рассказ о конкретном дне. И «Have you been talking to yourself again?» — Present Perfect Continuous: действие длилось до сих пор, и это видно. По-русски везде «ты разговаривал», а в английском три разные формы.",
     comprehensionQuestions: [
       {
         question: 'Why does Josh look at Hannah when Diane asks about users?',

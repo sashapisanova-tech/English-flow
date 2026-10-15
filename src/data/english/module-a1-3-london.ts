@@ -329,7 +329,7 @@ export const moduleA1_3Texts: ReadingText[] = [
       'take a photo': { english: 'сфотографироваться / сделать фото' },
     },
     grammarNote:
-      "«On Monday, we go home» — перед home не нужен предлог to: go home, а не go to home (сравните: go to the theatre). По-русски «едем домой» — тоже без предлога, так что здесь русское чутьё подсказывает верно.",
+      "«On Monday afternoon, we go home» — перед home не нужен предлог to: go home, а не go to home (сравните: go to the theatre). По-русски «едем домой» — тоже без предлога, так что здесь русское чутьё подсказывает верно.",
     comprehensionQuestions: [
       {
         question: 'Who is the man with the red umbrella?',

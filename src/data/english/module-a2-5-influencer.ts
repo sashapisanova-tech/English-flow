@@ -27,7 +27,7 @@ export const moduleA2_5Texts: ReadingText[] = [
       'have a go': { english: 'попробовать, рискнуть' },
     },
     grammarNote:
-      "«I've posted photos for years, but I've never really tried» — Present Perfect (have + третья форма): опыт до сегодняшнего дня, без точного «когда». А «That evening, I told my flatmate» — Past Simple: есть конкретное время (that evening). По-русски в обоих случаях прошедшее время, а в английском выбор зависит от того, сказано ли «когда».",
+      "«I've posted photos of my fashion ideas for years, but I've never really tried» — Present Perfect (have + третья форма): опыт до сегодняшнего дня, без точного «когда». А «That evening, I told my flatmate» — Past Simple: есть конкретное время (that evening). По-русски в обоих случаях прошедшее время, а в английском выбор зависит от того, сказано ли «когда».",
     comprehensionQuestions: [
       {
         question: 'Why does Misha laugh at Nastya?',

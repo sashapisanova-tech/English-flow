@@ -115,7 +115,7 @@ export const moduleB1_5Texts: ReadingText[] = [
       'as well as': { english: 'а также, как и' },
     },
     grammarNote:
-      "«It depends on the council» — depend on: только с on, а не from или of. По-русски «зависит от», и хочется сказать depends from, но в английском — всегда on. А «If we did this, nobody would lose everything» — второе условное: воображаемый план, которого пока нет. По-русски «если бы мы так сделали, никто бы не потерял всё».",
+      "«It depends on the council» — depend on: только с on, а не from или of. По-русски «зависит от», и хочется сказать depends from, но в английском — всегда on. А «If we did this, no one would lose everything» — второе условное: воображаемый план, которого пока нет. По-русски «если бы мы так сделали, никто бы не потерял всё».",
     comprehensionQuestions: [
       {
         question: "What is Kwame's idea?",
@@ -160,7 +160,7 @@ export const moduleB1_5Texts: ReadingText[] = [
       'cut down': { english: 'срубить (дерево)' },
     },
     grammarNote:
-      "«If you cut down trees, the air gets dirtier» — нулевое условное: if + настоящее время в обеих частях. Так говорят о том, что верно всегда, как закон природы. По-русски тоже «если рубить деревья, воздух становится грязнее». А «many of them said that they wished somebody had done this years ago» — wish + had done: сожаление о прошлом, которое уже не изменить.",
+      "«If you cut down trees, the air gets dirtier» — нулевое условное: if + настоящее время в обеих частях. Так говорят о том, что верно всегда, как закон природы. По-русски тоже «если рубить деревья, воздух становится грязнее». А «many of them said that they wished the city had more places like it» — wish + прошедшее время (had): хотелось бы, но пока не так.",
     comprehensionQuestions: [
       {
         question: 'What does the petition ask the council to do?',
@@ -203,7 +203,7 @@ export const moduleB1_5Texts: ReadingText[] = [
       'on average': { english: 'в среднем' },
     },
     grammarNote:
-      "«If there were more places like this corner, our cities would be healthier» — второе условное с were: в формальной речи were используют для всех лиц (if there were, if I were). По-русски «если бы таких мест было больше, города были бы здоровее». А «She wished that every decision had a simple answer» — wish + прошедшее: хотелось бы, но в реальности не так.",
+      "«If there were more places like this corner, our cities would be better places to live» — второе условное с were: в формальной речи were используют для всех лиц (if there were, if I were). По-русски «если бы таких мест было больше, в городах было бы лучше жить». А «She wished that every decision had a simple answer» — wish + прошедшее: хотелось бы, но в реальности не так.",
     comprehensionQuestions: [
       {
         question: 'What does Simon Hale say in the article?',

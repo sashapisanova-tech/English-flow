@@ -233,6 +233,9 @@ about opinion or purpose; every module recycles A2-5 and A2-6 key words.
 - **Module ID:** `b1-year-abroad` (texts `b1m7-1` … `-8`)
 - **Story:** A year in the life of Ilya (30), who moved to the UK: paperwork,
   culture shock, homesickness, small victories, and deciding whether to stay.
+  Ilya (30, from Perm, researcher at a university in Glasgow, narrator via blog posts),
+  Ruth (34, bus driver, his flatmate), Dev (colleague from Chennai), Professor Reid (boss),
+  Katya (his girlfriend in Perm; they stay friends). He stays.
 - **Topics:** bureaucracy, banks and doctors, culture, identity, the future.
 - **Grammar:** *should have / could have* (regret), plus a planned review of every earlier grammar focus (each episode revisits 2–3).
 - **Text types:** blog posts (one month, six months, one year), official letters and forms, an opinion piece.

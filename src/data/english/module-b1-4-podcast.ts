@@ -72,7 +72,7 @@ export const moduleB1_4Texts: ReadingText[] = [
       'take place': { english: 'происходить, состояться' },
     },
     grammarNote:
-      "«The Black Dog was first described by a fisherman in 1720. It was said to be as big as a horse» — пассивный залог: was + третья форма. Важно, что случилось, а не кто это сделал. По-русски часто «его описал рыбак» или «говорили, что…», а в английском пассив звучит естественно: it was described, it was said to be. А «the article described three people who said they had seen» — косвенная речь со сдвигом времени.",
+      "«The Black Dog was first written about by a fisherman in 1720. It was said to be as big as a cow» — пассивный залог: was + третья форма. Важно, что случилось, а не кто это сделал. По-русски часто «о нём написал рыбак» или «говорили, что…», а в английском пассив звучит естественно: it was written about, it was said to be. А «the article was about three people who said they had seen» — косвенная речь со сдвигом времени.",
     comprehensionQuestions: [
       {
         question: 'Why do Zara and Nikita go to the library?',
@@ -116,7 +116,7 @@ export const moduleB1_4Texts: ReadingText[] = [
       'sooner or later': { english: 'рано или поздно' },
     },
     grammarNote:
-      "«An old fisherman said that he had worked by the sea for fifty years… A teenager asked if we were from the television» — косвенная речь: утверждения с said / told us that, вопросы — с asked if и прямым порядком слов (if we were, а не if were we). По-русски вопрос в косвенной речи вводится частицей «ли» («спросил, с телевидения ли мы»), а в английском — словом if или whether.",
+      "«An old fisherman said that he had worked by the sea for fifty years… A young man asked if we were from TV» — косвенная речь: утверждения с said / told us that, вопросы — с asked if и прямым порядком слов (if we were, а не if were we). По-русски вопрос в косвенной речи вводится частицей «ли» («спросил, с телевидения ли мы»), а в английском — словом if или whether.",
     comprehensionQuestions: [
       {
         question: 'What do the interviews show?',
@@ -205,7 +205,7 @@ export const moduleB1_4Texts: ReadingText[] = [
       'take advantage of': { english: 'воспользоваться (часто нечестно)' },
     },
     grammarNote:
-      "«Visitors… have been warned to stay away… a giant black dog was seen near the harbour» — так пишут новости: пассив (have been warned, was seen) скрывает, кто предупреждал и кто видел. Именно поэтому фейковые новости любят пассив — он звучит официально, но ничего не доказывает. А «She wrote that two students had taken advantage of an old legend» — косвенная речь: had taken вместо took.",
+      "«Visitors… have been warned to stay away… a huge black dog was seen near the harbour» — так пишут новости: пассив (have been warned, was seen) скрывает, кто предупреждал и кто видел. Именно поэтому фейковые новости любят пассив — он звучит официально, но ничего не доказывает. А «She wrote that two students wanted to take advantage of an old legend to get famous, and that real people in a real town were paying for it» — косвенная речь: are paying → were paying.",
     comprehensionQuestions: [
       {
         question: 'What is wrong with the article?',

@@ -242,7 +242,7 @@ export const moduleA1_2Texts: ReadingText[] = [
       "i'm not sure": { english: 'я не уверен(а) / не знаю…' },
     },
     grammarNote:
-      "«The critic doesn't like your coffee» — по-русски просто «Критику не нравится твой кофе». В английском отрицание строят через doesn't (с he/she/it), а глагол остаётся без -s: doesn't like, а не doesn't likes.",
+      "«he doesn't like your coffee» — по-русски просто «Критику не нравится твой кофе». В английском отрицание строят через doesn't (с he/she/it), а глагол остаётся без -s: doesn't like, а не doesn't likes.",
     comprehensionQuestions: [
       {
         question: 'What does Rosa want on Friday?',
@@ -285,7 +285,7 @@ export const moduleA1_2Texts: ReadingText[] = [
       'excuse me': { english: 'извините (чтобы обратиться к кому-то)' },
     },
     grammarNote:
-      "«Does he like the cake?» — по-русски «Ему нравится торт?», вопрос только интонацией. В английском с he/she вопрос начинают с does, а -s у глагола исчезает: Does he like…?, а не Does he likes… и не He likes…?",
+      "«Does he like it?» — по-русски «Ему нравится торт?», вопрос только интонацией. В английском с he/she вопрос начинают с does, а -s у глагола исчезает: Does he like…?, а не Does he likes… и не He likes…?",
     comprehensionQuestions: [
       {
         question: 'How are Max and Rosa on Saturday?',

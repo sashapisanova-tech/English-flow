@@ -254,7 +254,7 @@ export const moduleB1_3Texts: ReadingText[] = [
       'from time to time': { english: 'время от времени, иногда' },
     },
     grammarNote:
-      "«I've started to remember why I became a nurse» — после start можно и to, и -ing: start to remember = start remembering. А «I like helping people» — после like обычно -ing, когда речь о том, что нравится вообще. По-русски после «начать» и «любить» — всегда инфинитив, а в английском форма зависит от глагола, и её надо запоминать вместе с ним.",
+      "«I've started to remember why I wanted to be a nurse» — после start можно и to, и -ing: start to remember = start remembering. А «I like helping people» — после like обычно -ing, когда речь о том, что нравится вообще. По-русски после «начать» и «любить» — всегда инфинитив, а в английском форма зависит от глагола, и её надо запоминать вместе с ним.",
     comprehensionQuestions: [
       {
         question: 'Why is resting difficult for Emma at first?',
@@ -298,7 +298,7 @@ export const moduleB1_3Texts: ReadingText[] = [
       'change my mind': { english: 'передумать (change your mind)' },
     },
     grammarNote:
-      "«He used to love numbers… my grandmother used to say» — used to для того, что было раньше и прошло. А «I've been avoiding it for a year» — после avoid всегда -ing: avoid doing, а не avoid to do. Так же после enjoy, finish, mind, give up. По-русски «избегать делать» — инфинитив, поэтому такие глаголы стоит запомнить списком.",
+      "«I used to love numbers… my grandmother used to say» — used to для того, что было раньше и прошло. А «I've been avoiding it for a year» — после avoid всегда -ing: avoid doing, а не avoid to do. Так же после enjoy, finish, mind, give up. По-русски «избегать делать» — инфинитив, поэтому такие глаголы стоит запомнить списком.",
     comprehensionQuestions: [
       {
         question: 'Why does Lev say that Emma won the bet?',

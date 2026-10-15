@@ -30,7 +30,7 @@ export const moduleB1_6Texts: ReadingText[] = [
       { word1: 'bring', word2: 'up', display: 'bring … up', english: 'воспитывать, растить' },
     ],
     grammarNote:
-      "«Callum is a teacher from Manchester whose family is very different from mine» — whose — «чей, у которого»: относится к человеку. А «the museum where I work» — where для мест: «где». По-русски «музей, где я работаю», «учитель, чья семья…» — те же слова, и это одно из мест, где английский и русский похожи. И «my parents wanted to bring me up in Moscow» — фразовый глагол bring up («воспитывать»): дополнение-местоимение стоит между частями — bring me up, а не bring up me.",
+      "«My boyfriend, Callum, is a teacher from Manchester whose family is very different from mine» — whose — «чей, у которого»: относится к человеку. А «the museum where I work» — where для мест: «где». По-русски «музей, где я работаю», «учитель, чья семья…» — те же слова, и это одно из мест, где английский и русский похожи. И «my parents wanted to bring me up in Moscow» — фразовый глагол bring up («воспитывать»): дополнение-местоимение стоит между частями — bring me up, а не bring up me.",
     comprehensionQuestions: [
       {
         question: "What do Mum's messages show about her?",
@@ -336,7 +336,7 @@ export const moduleB1_6Texts: ReadingText[] = [
       'up to date': { english: 'в курсе: keep me up to date — держи меня в курсе' },
     },
     grammarNote:
-      "«you are a teacher, which is the most important job in the world» — which с запятой может относиться ко всей мысли: «что является самой важной работой». По-русски здесь тоже «что» или «а это», а не «который». И «the notebook where he wrote down my family's rules» — where для места. Весь модуль в одной фразе: who — люди, which — вещи и целые мысли, where — места, whose — «чей».",
+      "«you are a teacher, which is the most important job in the world» — which с запятой может относиться ко всей мысли: «что является самой важной работой». По-русски здесь тоже «что» или «а это», а не «который». И «the small book where he wrote down my family's rules» — where для места. Весь модуль в одной фразе: who — люди, which — вещи и целые мысли, where — места, whose — «чей».",
     comprehensionQuestions: [
       {
         question: 'Why does Grandma write to Callum?',
