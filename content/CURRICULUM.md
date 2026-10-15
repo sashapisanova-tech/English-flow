@@ -179,6 +179,9 @@ about opinion or purpose; every module recycles A2-5 and A2-6 key words.
 - **Module ID:** `b1-burnout` (texts `b1m3-1` … `-8`)
 - **Story:** Emma (33, nurse) and Lev (35, accountant) are neighbours who both hit
   a wall at work. They try to change their lives in very different ways.
+  Sheffield, flats opposite each other. Emma rests (allotment, walks near Edale); Lev
+  (from Novosibirsk) tries to be more efficient (5 a.m., meditation app). Graham (Lev's
+  boss), Maria (Emma's manager). They bet two weeks; Emma wins; Lev writes to Graham.
 - **Topics:** mental health, sleep, stress, habits, work-life balance.
 - **Grammar:** *used to*, gerunds and infinitives (*stop doing / try to do*).
 - **Review:** past perfect (B1-2), present perfect continuous (B1-1).
