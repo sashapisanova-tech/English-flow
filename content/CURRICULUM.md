@@ -220,6 +220,9 @@ about opinion or purpose; every module recycles A2-5 and A2-6 key words.
 - **Module ID:** `b1-family-dinner` (texts `b1m6-1` … `-8`)
 - **Story:** Masha (27) brings her British boyfriend to meet her family, who have
   moved from Moscow to London. Three generations, one table, many opinions.
+  Masha (27, works at a museum, narrator), Callum (29, teacher from Manchester, parents
+  divorced), Sergei (Dad, engineer, drove a taxi in London), Irina (Mum, doctor),
+  Artyom (19, brother), Grandma Valentina (82, came from Moscow last year, pelmeni).
 - **Topics:** family, relationships, generations, cultural differences, food traditions.
 - **Grammar:** relative clauses (*who / which / that / where*), common phrasal verbs (about 20, recycled through the module).
 - **Review:** second conditional (B1-5), reported speech (B1-4).

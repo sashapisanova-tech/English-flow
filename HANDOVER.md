@@ -9,7 +9,7 @@ across modules (words never reused: A2-1 0, A2-2/3/4 3 each, down from 11–21).
 ## Where things stand (all published to GitHub `main`)
 
 - **Content:** A1 complete, 5 modules × 8 episodes = 40 texts (`src/data/english/`).
-  A2 complete: 6 modules × 8 episodes = 48 texts (A2-1 … A2-6). B1-1 *The Startup*, B1-2 *Mystery at the Hostel*, B1-3 *Burnout*, B1-4 *Podcast Hosts* and B1-5 *The Green Street* written,
+  A2 complete: 6 modules × 8 episodes = 48 texts (A2-1 … A2-6). B1-1 *The Startup*, B1-2 *Mystery at the Hostel*, B1-3 *Burnout*, B1-4 *Podcast Hosts*, B1-5 *The Green Street* and B1-6 *Family Dinner* written,
   self-reviewed by Claude, pass the checker).
   Missing basic words added to the lists: minute, into, better, best, end, plan, most, worse,
   worst, wish, build (`a1.json`), will, should, might, must (`starter.json`).
@@ -44,7 +44,7 @@ across modules (words never reused: A2-1 0, A2-2/3/4 3 each, down from 11–21).
 ## Open items
 
 1. Owner reviews A1-2 … A1-5 in the app; apply feedback to `content/CONTENT_GUIDE.md`.
-2. Write B1, module by module: B1-6 *Family Dinner* next, to the B1 rules agreed on 2026-10-14
+2. Write B1, module by module: B1-7 *One Year Abroad* next (the last module), to the B1 rules agreed on 2026-10-14
    (CURRICULUM.md, top of the B1 section: simple relative clauses and passive allowed for
    reading, narration 14–18 words, 2–3 episodes in another text type, one opinion/purpose
    question). B1-1 and B1-2 already follow them. Every B1 module should
