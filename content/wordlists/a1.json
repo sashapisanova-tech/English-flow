@@ -3864,5 +3864,19 @@
     "pos": "adjective",
     "ru": "худший; хуже всего",
     "topic": "general"
+  },
+  {
+    "word": "wish",
+    "pos": "verb",
+    "ru": "желать, хотеть (I wish… — жаль, что…; хотелось бы)",
+    "topic": "general"
+  },
+  {
+    "word": "build",
+    "pos": "verb",
+    "ru": "строить",
+    "topic": "general",
+    "past": "built",
+    "pp": "built"
   }
 ]

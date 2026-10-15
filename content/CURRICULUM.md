@@ -206,6 +206,10 @@ about opinion or purpose; every module recycles A2-5 and A2-6 key words.
 - **Module ID:** `b1-green-street` (texts `b1m5-1` … `-8`)
 - **Story:** Neighbours on one street in Leeds try to make it greener, against a
   developer who wants to build a car park.
+  Ash Street: Olga (38, teacher, from Samara, no. 14), Mr Patel (70, gardener, no. 9),
+  Kwame (17, wants to be an architect, no. 22), Sandra (no. 3, needs parking), Gary
+  (no. 17, opposes everything), Simon Hale (Brightway). Ends with a community garden
+  plus eight parking spaces.
 - **Topics:** environment, city change, community, local politics (non-partisan).
 - **Grammar:** second conditional, *wish + past simple*, zero conditional.
 - **Review:** passive (B1-4), gerunds and infinitives (B1-3).
