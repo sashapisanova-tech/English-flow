@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Flame, Moon, Settings, Snowflake, Sun } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Flame, Lightbulb, Settings, Snowflake } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { useLearning } from '@/context/LearningContext';
 import { ProgressView } from '@/components/ProgressView';
@@ -167,11 +167,6 @@ function SettingsPanel({ onBack }: { onBack: () => void }) {
   const { dark, set } = useDarkMode();
   const { dailyGoalMinutes, setDailyGoalMinutes } = useLearning();
 
-  const modes = [
-    { key: 'light', label: 'Light', icon: Sun,  on: !dark, select: () => set(false) },
-    { key: 'dark',  label: 'Dark',  icon: Moon, on: dark,  select: () => set(true)  },
-  ];
-
   return (
     <div className="animate-fade-in flex flex-col gap-[22px] lg:mx-auto lg:w-full lg:max-w-[640px]">
       <div className="-ml-2.5 flex items-center gap-1">
@@ -187,23 +182,32 @@ function SettingsPanel({ onBack }: { onBack: () => void }) {
 
       <div className="flex flex-col gap-2">
         <SectionLabel>Appearance</SectionLabel>
-        <div className="flex gap-1 rounded-xl bg-track p-1" role="radiogroup" aria-label="Appearance">
-          {modes.map(({ key, label, icon: Icon, on, select }) => (
-            <button
-              key={key}
-              role="radio"
-              aria-checked={on}
-              onClick={select}
-              className={`flex h-10 flex-1 items-center justify-center gap-1.5 rounded-[9px] text-sm transition-colors ${
-                on
-                  ? 'bg-card font-semibold text-foreground shadow-sm'
-                  : 'font-medium text-muted-foreground hover:text-foreground'
+        {/* Lamp toggle (design "Lamp Toggle Options", option 1a): lit in light mode, off in dark mode */}
+        <div className="flex items-center justify-between rounded-xl border border-border bg-card px-4 py-3">
+          <div className="flex flex-col gap-0.5">
+            <span className="text-[15px] font-medium">{dark ? 'Dark' : 'Light'}</span>
+            <span className="text-[13px] text-muted-foreground">
+              {dark ? 'Lamp off · tap to switch to light' : 'Lamp on · tap to switch to dark'}
+            </span>
+          </div>
+          <button
+            role="switch"
+            aria-checked={!dark}
+            aria-label="Light mode"
+            onClick={() => set(!dark)}
+            className={`grid h-12 w-12 shrink-0 place-items-center rounded-full transition-all duration-300 motion-reduce:transition-none ${
+              dark
+                ? 'bg-[hsl(20_10%_18%)] shadow-[inset_0_0_0_1px_hsl(20_10%_26%)]'
+                : 'bg-[hsl(48_100%_88%)] shadow-[0_0_0_6px_hsl(48_100%_70%/0.25),0_0_28px_6px_hsl(45_100%_60%/0.45)]'
+            }`}
+          >
+            <Lightbulb
+              className={`h-[26px] w-[26px] transition-colors duration-300 ${
+                dark ? 'text-[hsl(30_8%_55%)]' : 'fill-[hsl(48_100%_70%)] text-[hsl(38_95%_48%)]'
               }`}
-            >
-              <Icon className={`h-[18px] w-[18px] ${on ? 'text-highlight' : ''}`} />
-              {label}
-            </button>
-          ))}
+              strokeWidth={dark ? 1.75 : 2}
+            />
+          </button>
         </div>
       </div>
 
@@ -211,7 +215,7 @@ function SettingsPanel({ onBack }: { onBack: () => void }) {
         <SectionLabel>Daily goal</SectionLabel>
         <DailyGoalPicker value={dailyGoalMinutes} onChange={setDailyGoalMinutes} />
         <span className="pl-1 text-[13px] text-muted-foreground">
-          Minutes of active practice a day. Reaching it keeps your streak going.
+          Minutes of active practice a day — change it whenever you like. Reaching it keeps your streak going.
         </span>
       </div>
 

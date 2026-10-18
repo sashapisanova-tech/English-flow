@@ -5,7 +5,7 @@ import { LEVEL_TOPICS, TOPIC_ICONS } from './tasks/dialogueTopics';
 import type { Level } from './tasks/TaskFilters';
 import { Pip } from '@/components/Pip';
 import { getStartLevel } from '@/lib/tour';
-import { ArrowDown, ArrowRight, Languages, MessageCircleMore } from 'lucide-react';
+import { ArrowRight, Languages, MessageCircleMore } from 'lucide-react';
 
 type ActiveTask = 'translate' | 'dialogue' | null;
 
@@ -66,7 +66,6 @@ export function TasksView({ initialTask = null, onTaskLaunched, onActiveTaskChan
           <div className="flex w-full flex-col gap-2 bg-accent/70 px-4 py-3.5" aria-hidden="true">
             <span className="font-heading text-[15px] leading-snug text-foreground">Я живу в Лондоне уже два года.</span>
             <span className="flex items-center gap-1.5 text-sm text-accent-foreground">
-              <ArrowDown className="h-3.5 w-3.5 shrink-0" strokeWidth={2.5} />
               <span className="font-heading italic">I have lived in London for…</span>
               <span className="h-4 w-[1.5px] animate-pulse bg-primary" />
             </span>

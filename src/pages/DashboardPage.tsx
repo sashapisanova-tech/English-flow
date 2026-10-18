@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { DailyExpressionCard } from '@/components/DailyExpressionCard';
 import { Pip } from '@/components/Pip';
 import { PipCelebration } from '@/components/PipCelebration';
@@ -7,7 +7,7 @@ import { BrandLogo } from '@/components/BrandLogo';
 import { useLearning } from '@/context/LearningContext';
 import { useAuth } from '@/context/AuthContext';
 import { getContinueText } from '@/lib/continueReading';
-import { BookOpen, Layers, Target, House, Cloud, User, Flame, Check, ArrowRight, Snowflake } from 'lucide-react';
+import { BookOpen, Layers, Target, House, Cloud, User, Flame, Check, ArrowRight, Snowflake, Pencil } from 'lucide-react';
 import { TextList } from '@/components/TextList';
 import { ReadingView } from '@/components/ReadingView';
 import { FlashcardView } from '@/components/FlashcardView';
@@ -19,8 +19,12 @@ import { ReadingText, Level } from '@/types/dutch';
 import { AppOnboarding } from '@/components/AppOnboarding';
 import { CoachMark } from '@/components/CoachMark';
 import { useCoachMark } from '@/hooks/useCoachMark';
-import { firstStoryFor, getStartLevel, isTourDone, resetTour, type TourLevel } from '@/lib/tour';
-import { setTipsBlocked, TIP_KEYS } from '@/lib/coachMarks';
+import {
+  firstStoryFor, getStartLevel, isFirstSignIn, isTourDone, markTourDone, resetTour, shouldShowTour, ONBOARDED_META_KEY,
+  type TourLevel,
+} from '@/lib/tour';
+import { markAllTipsSeen, setTipsBlocked, TIP_KEYS } from '@/lib/coachMarks';
+import { supabase } from '@/lib/supabase';
 import { TutorView } from '@/components/TutorView';
 import { DailyGoalPicker } from '@/components/DailyGoalPicker';
 
@@ -65,8 +69,28 @@ export default function DashboardPage() {
 
   const { texts } = useLearning();
 
-  // First-run tour (also replayed from Me → Show app tour). No tips while it is open.
-  const [showTour, setShowTour] = useState(() => !isTourDone());
+  // First-run tour: only right after registering (also replayed from Me → Show app tour).
+  // No tips while it is open.
+  const [showTour, setShowTour] = useState(() => {
+    const localDone = isTourDone();
+    const show = shouldShowTour({
+      localDone,
+      onboarded: user?.user_metadata?.[ONBOARDED_META_KEY],
+      firstSignIn: isFirstSignIn(user),
+    });
+    // Returning account (new device or signed in again): skip the tour and the first-run tips
+    if (!show && !localDone) { markTourDone(); markAllTipsSeen(); }
+    return show;
+  });
+  // Mark the account as soon as the tour has opened (or was skipped as returning), so no
+  // device ever opens it by itself again
+  const flagSentRef = useRef(false);
+  useEffect(() => {
+    if (flagSentRef.current || !user || user.user_metadata?.[ONBOARDED_META_KEY] === true) return;
+    flagSentRef.current = true;
+    supabase.auth.updateUser({ data: { [ONBOARDED_META_KEY]: true } })
+      .then(({ error }) => { if (error) console.warn('[tour] onboarded flag not saved:', error.message); });
+  }, [user]);
   useEffect(() => {
     const replay = () => { resetTour(); setShowTour(true); };
     window.addEventListener('show-app-tour', replay);
@@ -356,8 +380,7 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
 
   const now = new Date();
   const dateLabel = now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
-  const firstName = firstNameOf(user?.user_metadata);
-  const greeting = `${greetingFor(now.getHours())}${firstName ? `, ${firstName}` : ''}`;
+  const greeting = greetingFor(now.getHours());
   const pip = homeGreeting({
     hour: now.getHours(),
     minutesToday: activeSecondsToday / 60,
@@ -450,7 +473,13 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
           className="flex w-full items-center justify-between gap-4 px-[18px] py-4 text-left transition-colors lg:px-[22px] lg:py-5 lg:hover:bg-secondary/40"
         >
           <div className="flex min-w-0 flex-col gap-1.5">
-            <span className={eyebrow}>Today's goal</span>
+            <span className="flex items-center gap-2">
+              <span className={eyebrow}>Today's goal</span>
+              <span className="flex items-center gap-1 rounded-full bg-track px-2 py-0.5 text-[11px] font-semibold text-foreground">
+                <Pencil className="h-3 w-3" strokeWidth={2.5} />
+                {goalPickerOpen ? 'Close' : 'Change'}
+              </span>
+            </span>
             <span className="font-heading text-[22px] font-semibold leading-tight text-foreground lg:text-2xl">
               {Math.min(activeMinutes, 999)} of {dailyGoalMinutes} min
             </span>
@@ -466,11 +495,14 @@ function HomeScreen({ syncing, wordCount, onSelectText, onTutorLaunch, onTutorOp
         </button>
         {goalPickerOpen && (
           <div className="flex flex-col gap-2 border-t border-border px-[18px] pb-4 pt-3 lg:px-[22px]">
-            <span className="text-[13px] text-muted-foreground">Daily goal · active practice time</span>
-            <DailyGoalPicker
-              value={dailyGoalMinutes}
-              onChange={m => { setDailyGoalMinutes(m); setGoalPickerOpen(false); }}
-            />
+            <span className="text-[13px] text-muted-foreground">Daily goal · active practice time. Change it any day.</span>
+            <DailyGoalPicker value={dailyGoalMinutes} onChange={setDailyGoalMinutes} />
+            <button
+              onClick={() => setGoalPickerOpen(false)}
+              className="h-10 rounded-xl bg-primary text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              Done
+            </button>
           </div>
         )}
       </div>

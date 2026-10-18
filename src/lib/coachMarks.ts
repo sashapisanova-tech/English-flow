@@ -35,6 +35,13 @@ export function setTipsBlocked(value: boolean) {
   emit();
 }
 
+/** A returning account signing in on a new device: no first-run tips. */
+export function markAllTipsSeen() {
+  try {
+    for (const key of Object.values(TIP_KEYS)) localStorage.setItem(key, 'true');
+  } catch { /* storage unavailable */ }
+}
+
 export function tipSeen(key: TipKey): boolean {
   try { return localStorage.getItem(key) !== null; } catch { return true; }
 }

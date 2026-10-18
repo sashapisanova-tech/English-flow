@@ -8,7 +8,7 @@
 --                               dots show only goal_met days. A separate flag is used
 --                               (instead of active_seconds >= goal) because the goal can
 --                               change and freeze-bridged days have no active time.
--- user_stats.daily_goal_minutes: 5 / 10 / 15 / 20; NULL means the app default (10).
+-- user_stats.daily_goal_minutes: 1–120 (any whole number); NULL means the app default (10).
 --
 -- RLS policies ("Users can manage their own rows") are unchanged.
 

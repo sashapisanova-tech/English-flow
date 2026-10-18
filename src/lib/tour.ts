@@ -36,6 +36,40 @@ export function resetTour() {
   write(APP_ONBOARDING_KEY, null);
 }
 
+/** Supabase user_metadata flag: the tour has opened once for this account (on any device). */
+export const ONBOARDED_META_KEY = 'app_onboarded';
+/** A login this close to the moment the account became usable is the registration itself. */
+export const FIRST_SIGN_IN_WINDOW_MS = 5 * 60 * 1000;
+
+/** The Supabase user fields the tour rule reads. */
+export interface TourAccount {
+  created_at?: string | null;
+  email_confirmed_at?: string | null;
+  last_sign_in_at?: string | null;
+}
+
+/**
+ * True for the session that starts right after registering. Supabase sets `last_sign_in_at`
+ * on every login (password or Google), not on reloads or token refreshes, so any later
+ * login is far from the registration time. With email confirmation on, the confirm link is
+ * the first login, so it is compared with `email_confirmed_at`.
+ */
+export function isFirstSignIn(account: TourAccount | null | undefined): boolean {
+  if (!account) return false;
+  const signIn = Date.parse(account.last_sign_in_at ?? '');
+  const ready = Date.parse(account.email_confirmed_at ?? account.created_at ?? '');
+  if (!Number.isFinite(signIn) || !Number.isFinite(ready)) return false;
+  return Math.abs(signIn - ready) < FIRST_SIGN_IN_WINDOW_MS;
+}
+
+/**
+ * The tour opens by itself only once, right after registering. Signing in again, on this
+ * or another device, never shows it (it can still be replayed from Settings).
+ */
+export function shouldShowTour(state: { localDone: boolean; onboarded?: unknown; firstSignIn: boolean }): boolean {
+  return !state.localDone && state.onboarded !== true && state.firstSignIn;
+}
+
 /** The level picked in the tour, or null when none was picked. */
 export function getStartLevel(): TourLevel | null {
   const v = read(START_LEVEL_KEY);

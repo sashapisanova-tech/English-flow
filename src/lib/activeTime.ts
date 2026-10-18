@@ -7,6 +7,9 @@ export const MAX_TICK_MS = 10_000;
 
 export const GOAL_OPTIONS = [5, 10, 15, 20] as const;
 export const DEFAULT_GOAL_MINUTES = 10;
+/** Any whole number of minutes in this range can be chosen as the goal. */
+export const MIN_GOAL_MINUTES = 1;
+export const MAX_GOAL_MINUTES = 120;
 
 /** Milliseconds of active time per local date (YYYY-MM-DD). */
 export type ActiveDays = Record<string, number>;
@@ -26,8 +29,9 @@ function nextLocalMidnight(t: number): number {
 }
 
 export function normaliseGoal(v: unknown): number {
-  const n = Number(v);
-  return (GOAL_OPTIONS as readonly number[]).includes(n) ? n : DEFAULT_GOAL_MINUTES;
+  if (v == null || v === '') return DEFAULT_GOAL_MINUTES;
+  const n = Math.round(Number(v));
+  return Number.isFinite(n) && n >= MIN_GOAL_MINUTES && n <= MAX_GOAL_MINUTES ? n : DEFAULT_GOAL_MINUTES;
 }
 
 export interface AccrueInput {

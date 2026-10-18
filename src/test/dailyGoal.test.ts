@@ -65,7 +65,10 @@ describe('active time accounting', () => {
   it('normalises the goal and checks it', () => {
     expect(normaliseGoal(15)).toBe(15);
     expect(normaliseGoal('20')).toBe(20);
-    expect(normaliseGoal(7)).toBe(10);
+    expect(normaliseGoal(7)).toBe(7);
+    expect(normaliseGoal(0)).toBe(10);
+    expect(normaliseGoal(500)).toBe(10);
+    expect(normaliseGoal('abc')).toBe(10);
     expect(normaliseGoal(null)).toBe(10);
     expect(goalReached(599, 10)).toBe(false);
     expect(goalReached(600, 10)).toBe(true);
