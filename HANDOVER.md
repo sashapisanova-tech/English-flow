@@ -1,25 +1,25 @@
 # English Flow — Status and next steps
 
-Last updated: 2026-10-14.
+Last updated: 2026-10-18.
 
-A2 quality pass done (see git log "A2 quality pass"): narration joined (A2 ≈ 9–10 words per
-narration sentence, B1-1 ≈ 12), key words used twice in their text, and A2 key words recycled
-across modules (words never reused: A2-1 0, A2-2/3/4 3 each, down from 11–21). Read this together with CLAUDE.md.
+All 144 texts are written. A2 quality pass done (see git log "A2 quality pass"), and the B1
+recycling pass done on 2026-10-18: key words never reused in a later text are now A2 0 in every
+module, B1-1 0, B1-2 2, B1-3 1, B1-4 0, B1-5 13, B1-6 11 (before: 24/16/31/25/33/33). B1-7 is the
+last module, so its words can only come back through the flashcards. Read this together with CLAUDE.md.
 
-## Where things stand (all published to GitHub `main`)
+## Where things stand
 
 - **Content:** A1 complete, 5 modules × 8 episodes = 40 texts (`src/data/english/`).
-  A2 complete: 6 modules × 8 episodes = 48 texts (A2-1 … A2-6). B1-1 *The Startup*, B1-2 *Mystery at the Hostel*, B1-3 *Burnout*, B1-4 *Podcast Hosts*, B1-5 *The Green Street*, B1-6 *Family Dinner* and B1-7 *One Year Abroad* written: the course is
-  complete (144 texts, all passing the checker),
-  self-reviewed by Claude, pass the checker).
+  A2 complete: 6 modules × 8 episodes = 48 texts (A2-1 … A2-6). B1 complete: 7 modules × 8
+  episodes = 56 texts (B1-1 *The Startup* … B1-7 *One Year Abroad*), self-reviewed by Claude.
+  The course is complete: 144 texts, all passing the checker.
   Missing basic words added to the lists: minute, into, better, best, end, plan, most, worse,
   worst, wish, build (`a1.json`), will, should, might, must (`starter.json`).
   English A2/B1 text IDs reuse Dutch Flow IDs; `isLegacyTextProgress` drops Dutch-era
   progress on them (anything saved before 2026-10-14).
   All pass the automatic checker. Only A1-1 has been read and approved by the owner;
   A1-2 to A1-5 still need the owner's read-through (especially Russian translations
-  and grammar notes). A2 (6 modules) and B1 (7 modules) are planned in
-  `content/CURRICULUM.md` but not written.
+  and grammar notes). A2 and B1 have been reviewed by Claude only.
 - **Design:** Flow series "Union" design (navy actions, UK-red details) on all
   screens, phone and laptop (`lg:` ≥1024px). Design exports live in `design/flow-series*`;
   newer designs come through the Claude Design MCP handoff.
@@ -45,17 +45,13 @@ across modules (words never reused: A2-1 0, A2-2/3/4 3 each, down from 11–21).
 ## Open items
 
 1. Owner reviews A1-2 … A1-5 in the app; apply feedback to `content/CONTENT_GUIDE.md`.
-2. B1 recycling pass (next): B1 key words come back within their own module but rarely in
-   later B1 modules (16–39 per module never reused). Do the same pass as the A2 one, and
-   keep to the B1 rules agreed on 2026-10-14
-   (CURRICULUM.md, top of the B1 section: simple relative clauses and passive allowed for
-   reading, narration 14–18 words, 2–3 episodes in another text type, one opinion/purpose
-   question). B1-1 and B1-2 already follow them. Every B1 module should
-   recycle A2-5 and A2-6 key words (they have the fewest later texts): run the content test
-   and look at the "appears in N later texts" warnings. Narration target at B1: 12+ words
-   per sentence, joined with connectors; no relative clauses before B1-6. The owner has no time to review
-   everything: Claude reviews each text critically as the owner would (guide + checklist),
-   fixes, then reports.
+2. Optional B1 polish (soft warnings from the content test, not errors): many B1-2 … B1-7 texts
+   average 10–13.9 words per narration sentence (target 14+), and several B1-5 … B1-7 texts use
+   fewer than half their key words twice. Most B1 texts are at the 400-word limit, so fixes must
+   rewrite, not add. When editing any text: grammar notes quote sentences from it word for word
+   (keep them matching), and a key word that is not in the word lists only counts as recycled in
+   its exact form (*dread*, not *dreaded*). Leftover never-reused words (mostly rare: dough,
+   solar, planning permission…) can stay.
 3. "Richer Screens" design (Claude Design, file `Richer Screens.dc.html`) not implemented yet.
 4. Dutch Flow (`~/Desktop/go-dutch-flow-main`) still has the old design; port the
    redesign with Hugo the heron when the owner asks.
